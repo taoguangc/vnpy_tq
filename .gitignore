@@ -1,0 +1,26 @@
+# Agent / 终端诊断临时输出（禁止提交）
+/_tmp_*
+/_tem_*
+
+# 环境与密钥
+.venv/
+.env
+
+# 离线数据（本地 download_rb_monthly / download_tick_monthly 生成，体积大）
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 回测产物 / 日志
+backtests/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

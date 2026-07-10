@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python scripts/run_pa_backtest.py --symbol rb888)",
+      "Bash(python scripts/diagnose_pa_macro_health.py --symbol rb888)",
+      "Bash(python scripts/optimize_pa_variants.py --symbol rb888 --variant V1_ATR_regime_widen)",
+      "Bash(python scripts/optimize_pa_variants.py --symbol rb888 --variant V8_combo_balanced)",
+      "Bash(mkdir -p .claude/skills/vnpy-quant-python .claude/skills/vnpy-cta-backtest .claude/skills/vnpy-rqdata-data-pipeline .claude/skills/quant-backtest-validation-tool)",
+      "Bash(cp .agents/skills/vnpy-quant-python/SKILL.md .claude/skills/vnpy-quant-python/SKILL.md)",
+      "Bash(cp .agents/skills/vnpy-cta-backtest/SKILL.md .claude/skills/vnpy-cta-backtest/SKILL.md)",
+      "Bash(cp .agents/skills/vnpy-rqdata-data-pipeline/SKILL.md .claude/skills/vnpy-rqdata-data-pipeline/SKILL.md)",
+      "Bash(cp .agents/skills/quant-backtest-validation-tool/SKILL.md .claude/skills/quant-backtest-validation-tool/SKILL.md)",
+      "Bash(python scripts/optimize_pa_variants.py --symbol rb888 --variant V2_VSA_persistence_on)",
+      "Bash(python scripts/optimize_pa_variants.py --symbol rb888 --variant V7_combo_aggressive)",
+      "WebSearch",
+      "Bash(xxd)",
+      "Bash(python scripts/opp06_loose_backtest.py)",
+      "Bash(python -c \"from strategies.pa_strategy import BrooksPaStrategy; print\\('Import OK'\\)\")",
+      "Bash(python scripts/multi_symbol_scan.py)",
+      "Read(//c/Users/tao/.claude/**)",
+      "Bash(mkdir -p C:/projects/vnpy_quant/.claude/skills/vnpy-multi-symbol)"
+    ]
+  }
+}
