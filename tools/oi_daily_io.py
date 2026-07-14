@@ -5,8 +5,16 @@ import os
 
 import pandas as pd
 
+from tools.tq_parquet_io import trim_czce_decade_collision
+
 OI_DAILY_DIR = "oi_daily"
 OI_DAILY_COLUMNS = ("datetime", "close", "close_oi")
+
+# 与 download_rb_monthly.CZCE_YYMM_LEN3 对齐：仅郑商所合约会十年撞键
+CZCE_OI_TRIM_PREFIXES = {
+    "MA", "TA", "SA", "FG", "SR", "RM", "PF", "SF", "SM", "ZC",
+    "CF", "CJ", "CY", "UR", "OI", "AP",
+}
 
 PARQUET_WRITE_KWARGS = {"index": False, "engine": "pyarrow", "compression": "zstd"}
 
@@ -43,13 +51,20 @@ def normalize_oi_daily(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def load_oi_daily_parquet(filepath: str, yymm: str | None = None) -> pd.DataFrame | None:
+def load_oi_daily_parquet(
+    filepath: str,
+    yymm: str | None = None,
+    *,
+    prefix: str | None = None,
+) -> pd.DataFrame | None:
     if not os.path.exists(filepath):
         return None
     df = pd.read_parquet(filepath)
     if len(df) == 0:
         return None
     df = normalize_oi_daily(df)
+    if yymm is not None and prefix in CZCE_OI_TRIM_PREFIXES:
+        df, _ = trim_czce_decade_collision(df, yymm)
     if len(df) == 0:
         return None
     df["dt"] = pd.to_datetime(df["datetime"], unit="ns", utc=True)
@@ -71,7 +86,9 @@ def load_oi_daily_dict(data_dir: str, prefix: str) -> dict[str, pd.DataFrame]:
         yymm = fname[len(prefix) + 1 : -8]
         if not yymm.isdigit():
             continue
-        df = load_oi_daily_parquet(os.path.join(odir, fname), yymm=yymm)
+        df = load_oi_daily_parquet(
+            os.path.join(odir, fname), yymm=yymm, prefix=prefix,
+        )
         if df is not None and len(df) > 5:
             out[yymm] = df
     return out

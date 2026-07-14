@@ -1,7 +1,7 @@
 ---
 name: vnpy-multi-symbol
 description: Run Brooks PA strategy across multiple futures symbols for generalization testing. Use for multi-symbol scans, cross-species parameter validation, or finding which symbols profit from the strategy.
-version: '1.0.0'
+version: '1.1.0'
 ---
 
 # vnpy-multi-symbol 多品种泛化回测
@@ -12,13 +12,22 @@ version: '1.0.0'
 - "跨品种对比"、"哪些品种赚钱"、"换个品种试试"
 - 新增 OPP 后验证跨品种表现
 
+## 固定品种池
+
+跨品种研究统一使用 `strategies/pa_cta/symbol_config.py` 中的 **`CROSS_SYMBOL_UNIVERSE`**：
+
+`i`, `jm`, `p`, `y`, `ag`, `rb`, `hc`, `ta`（8 品种）
+
+脚本内通过 `cross_symbol_list()` 读取（仅返回已在 `TQ_SYMBOL_ENGINE` 中配置的品种）。
+
 ## 执行方式
 
 ```bash
 python scripts/multi_symbol_scan.py
+python scripts/multi_symbol_scan.py --symbols i,jm,p,y,ag,rb,hc,ta
 ```
 
-脚本位于 `scripts/multi_symbol_scan.py`，向 `SYMBOL_PROFILES` 动态注入 19 个品种的通用配置后批量回测。
+脚本位于 `scripts/multi_symbol_scan.py`，向无 `SYMBOL_PROFILES` 的品种注入 rb lean 模板 + `TQ_SYMBOL_PARAM_OVERRIDES` 后批量回测。
 
 ## 输出格式
 
@@ -38,7 +47,7 @@ python scripts/multi_symbol_scan.py
 
 ## 注意事项
 
-- 通用配置**不含** rb888 的调参结果（disabled_setups、atr_regime 等），因此 rb888 在扫描中可能出现 LOSS。
+- 通用配置**不含** rb888 的调参结果（disabled_setups、atr_regime 等），因此 rb 在扫描中可能出现 LOSS。
 - 品种若交易笔数为 0，通常是因为 `rb_min_atr` 过高拦掉了所有信号。
-- 扫描耗时约 8–10 分钟（19 品种），使用 `run_in_background` 避免阻塞会话。
+- 8 品种扫描约 3–5 分钟；≥10 品种使用 `run_in_background` 避免阻塞会话。
 - 扫描结果写入 `backtests/multi_symbol_scan.json`。

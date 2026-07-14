@@ -10,7 +10,7 @@ import pandas as pd
 
 from tools.dominant_windows import build_segments_from_map, switch_cst
 from tools.tq_parquet_io import load_monthly_parquet
-from tools.tq_paths import symbol_dir
+from tools.tq_paths import resolve_symbol, symbol_dir
 from vnpy.trader.constant import Exchange, Interval
 from vnpy.trader.object import BarData
 
@@ -90,9 +90,9 @@ def build_rollover_events(
     start: datetime | None = None,
     end: datetime | None = None,
 ) -> list[RolloverEvent]:
-    data_dir = symbol_dir(prefix)
+    data_dir, file_prefix = resolve_symbol(prefix)
     rollover_map = pd.read_parquet(data_dir / "rollover_map.parquet")
-    monthly_cache = _load_monthly_cache(data_dir, prefix)
+    monthly_cache = _load_monthly_cache(data_dir, file_prefix)
     cost_path = data_dir / "rollover_cost_detail.parquet"
     cost_by_id = None
     if cost_path.exists():
@@ -158,8 +158,8 @@ def build_rollover_events(
 
 def build_stitched_raw_frame(prefix: str) -> pd.DataFrame:
     """拼接分月原始 OHLC（无复权），每行带 yymm。"""
-    data_dir = symbol_dir(prefix)
-    monthly_cache = _load_monthly_cache(data_dir, prefix)
+    data_dir, file_prefix = resolve_symbol(prefix)
+    monthly_cache = _load_monthly_cache(data_dir, file_prefix)
     rollover_map = pd.read_parquet(data_dir / "rollover_map.parquet")
     segments = build_segments_from_map(rollover_map)
 

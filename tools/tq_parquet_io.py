@@ -56,6 +56,38 @@ def normalize_monthly_klines(df: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def czce_decade_collision_cutoff_ns(yymm: str) -> int | None:
+    """郑商所十年撞键裁切下限（UTC 纳秒）。
+
+    合约代码只用年份末位（如 MA601 = 1601 或 2601），TQ 回测可能把上十年
+    历史混入。保留 datetime >= 交割年-1 同月 1 日 00:00 Asia/Shanghai。
+    """
+    if not yymm or not str(yymm).isdigit() or len(str(yymm)) != 4:
+        return None
+    yymm = str(yymm)
+    year = 2000 + int(yymm[:2])
+    month = int(yymm[2:])
+    if not 1 <= month <= 12:
+        return None
+    cutoff = pd.Timestamp(year=year - 1, month=month, day=1, tz="Asia/Shanghai")
+    return int(cutoff.tz_convert("UTC").value)
+
+
+def trim_czce_decade_collision(
+    df: pd.DataFrame, yymm: str,
+) -> tuple[pd.DataFrame, int]:
+    """丢弃郑商所撞键带来的上十年脏 K 线；返回 (裁切后 df, 丢弃行数)。"""
+    if df is None or len(df) == 0:
+        empty = pd.DataFrame(columns=list(MONTHLY_OHLCV_COLUMNS))
+        return empty if df is None else df, 0
+    cutoff_ns = czce_decade_collision_cutoff_ns(yymm)
+    if cutoff_ns is None:
+        return df, 0
+    before = len(df)
+    out = df.loc[df["datetime"] >= cutoff_ns].reset_index(drop=True)
+    return out, before - len(out)
+
+
 def load_monthly_parquet(filepath: str, yymm: str | None = None) -> pd.DataFrame | None:
     """加载分月 parquet 并规范化；文件不存在或为空时返回 None。"""
     if not os.path.exists(filepath):

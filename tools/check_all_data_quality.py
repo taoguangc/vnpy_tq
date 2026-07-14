@@ -250,25 +250,24 @@ def analyze_symbol(symbol_dir: str) -> dict | None:
     avg_overlap = sum(overlaps) / len(overlaps) if overlaps else 0
     min_overlap = min(overlaps) if overlaps else 0
 
-    has_continuous = os.path.exists(os.path.join(symbol_path, f"{symbol_dir}_continuous.parquet"))
     has_rollover = os.path.exists(os.path.join(symbol_path, "rollover_map.parquet"))
+    has_cost = os.path.exists(os.path.join(symbol_path, "rollover_cost_detail.parquet"))
 
-    continuous_stale = False
+    cost_stale = False
     manifest_path = os.path.join(symbol_path, "manifest.json")
-    if has_continuous and os.path.exists(manifest_path):
+    if has_cost and os.path.exists(manifest_path):
         try:
             import json
             with open(manifest_path, "r", encoding="utf-8") as mf:
                 manifest = json.load(mf)
-            derived = manifest.get("derived", {}).get(f"{symbol_dir}_continuous.parquet", {})
-            built_at = derived.get("built_at")
-            src_dl = derived.get("source_monthly_max_download_time")
+            derived = manifest.get("derived", {}).get("rollover_cost_detail.parquet", {})
+            map_derived = manifest.get("derived", {}).get("rollover_map.parquet", {})
+            built_at = derived.get("built_at") or map_derived.get("built_at")
+            src_dl = map_derived.get("source_monthly_max_download_time")
             if built_at and src_dl:
-                continuous_stale = src_dl > built_at
-            elif not derived:
-                continuous_stale = True
+                cost_stale = src_dl > built_at
         except Exception:
-            continuous_stale = True
+            cost_stale = True
 
     cst_1500_bars = 0
     if contracts:
@@ -294,11 +293,11 @@ def analyze_symbol(symbol_dir: str) -> dict | None:
         "bad_contracts": bad_contracts,
         "missing_contracts": len(missing),
         "missing_list": missing[:10],
-        "has_continuous": has_continuous,
         "has_rollover": has_rollover,
+        "has_cost": has_cost,
         "orphan_part_count": len(orphan_part_yymms),
         "orphan_part_list": orphan_part_yymms[:5],
-        "continuous_stale": continuous_stale,
+        "cost_stale": cost_stale,
         "cst_1500_bars_sample": cst_1500_bars,
     }
 
@@ -306,7 +305,7 @@ def analyze_symbol(symbol_dir: str) -> dict | None:
 def classify(r: dict) -> str:
     """评级: perfect / good / repair / severe"""
     if r["bad_contracts"] == 0 and r["total_gaps"] == 0 and r["missing_contracts"] == 0:
-        if r.get("orphan_part_count", 0) > 0 or r.get("continuous_stale"):
+        if r.get("orphan_part_count", 0) > 0 or r.get("cost_stale"):
             return "repair"
         return "perfect"
     if r["bad_contracts"] == 0 and r["missing_contracts"] == 0 and r["total_gaps"] < 20:
@@ -338,7 +337,11 @@ def main():
 
     # 打印汇总表
     logger.info("\n【全品种数据质量汇总】")
-    header = f"{'品种':<6} {'交易所':<7} {'文件数':<6} {'总行数':<10} {'日期范围':<26} {'重叠avg/min':<14} {'gap':<5} {'坏合约':<6} {'缺失':<5} {'连续':<5} {'换月表':<6} {'评级':<8}"
+    header = (
+        f"{'品种':<6} {'交易所':<7} {'文件数':<6} {'总行数':<10} {'日期范围':<26} "
+        f"{'重叠avg/min':<14} {'gap':<5} {'坏合约':<6} {'缺失':<5} "
+        f"{'换月表':<6} {'成本':<5} {'评级':<8}"
+    )
     logger.info(header)
     logger.info("-" * 120)
     for r in results:
@@ -352,8 +355,8 @@ def main():
             f"{r['total_gaps']:<5} "
             f"{r['bad_contracts']:<6} "
             f"{r['missing_contracts']:<5} "
-            f"{'Y' if r['has_continuous'] else 'N':<5} "
             f"{'Y' if r['has_rollover'] else 'N':<6} "
+            f"{'Y' if r['has_cost'] else 'N':<5} "
             f"{r['grade']:<8}"
         )
         logger.info(line)
@@ -361,8 +364,8 @@ def main():
             logger.info(f"       缺失合约: {r['missing_list']}")
         if r.get("orphan_part_count", 0) > 0:
             logger.info(f"       orphan 分片(无 canonical): {r.get('orphan_part_list')}")
-        if r.get("continuous_stale"):
-            logger.info("       continuous 过期，需 rebuild")
+        if r.get("cost_stale"):
+            logger.info("       移仓成本明细过期，需 rebuild")
         if r.get("cst_1500_bars_sample", 0) == 0:
             logger.info(f"       TQ 样本无 CST 15:00 bar（预期，{SESSION_NOTE[:40]}...）")
 
@@ -376,10 +379,12 @@ def main():
     logger.info("\n【下一步建议】")
     severe = [r for r in results if r["grade"] == "severe"]
     repair = [r for r in results if r["grade"] == "repair"]
-    no_cont = [r["symbol"] for r in results if not r["has_continuous"]]
+    no_map = [r["symbol"] for r in results if not r["has_rollover"]]
+    no_cost = [r["symbol"] for r in results if not r["has_cost"]]
     logger.info(f"  严重缺失，需重新下载: {[r['symbol'] for r in severe]}")
     logger.info(f"  需要修复: {[r['symbol'] for r in repair]}")
-    logger.info(f"  缺少连续合约/换月表，需运行 build_rollover_map.py: {no_cont}")
+    logger.info(f"  缺少换月表，需运行 build_rollover_map.py: {no_map}")
+    logger.info(f"  缺少移仓成本明细: {no_cost}")
 
 
 if __name__ == "__main__":

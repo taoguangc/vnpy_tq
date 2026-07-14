@@ -87,7 +87,41 @@ TQ_SYMBOL_ENGINE: dict[str, dict] = {
         "folder": "v", "file_stem": "v", "exchange": Exchange.DCE,
         "size": 5, "pricetick": 1.0, "slippage": 2,
     },
+    "al": {  # 沪铝 5t/手
+        "folder": "al", "file_stem": "al", "exchange": Exchange.SHFE,
+        "size": 5, "pricetick": 5.0, "slippage": 10,
+    },
+    "zn": {  # 沪锌 5t/手
+        "folder": "zn", "file_stem": "zn", "exchange": Exchange.SHFE,
+        "size": 5, "pricetick": 5.0, "slippage": 10,
+    },
+    "y": {  # 豆油 10t/手
+        "folder": "y", "file_stem": "y", "exchange": Exchange.DCE,
+        "size": 10, "pricetick": 2.0, "slippage": 4,
+    },
+    "p": {  # 棕榈油 10t/手
+        "folder": "p", "file_stem": "p", "exchange": Exchange.DCE,
+        "size": 10, "pricetick": 2.0, "slippage": 4,
+    },
+    "l": {  # 塑料 5t/手
+        "folder": "l", "file_stem": "l", "exchange": Exchange.DCE,
+        "size": 5, "pricetick": 1.0, "slippage": 2,
+    },
+    "fg": {  # 玻璃 20t/手（目录 FG）
+        "folder": "FG", "file_stem": "FG", "exchange": Exchange.CZCE,
+        "size": 20, "pricetick": 1.0, "slippage": 2,
+    },
 }
+
+# 跨品种研究 / 多品种扫描固定品种池（2026-07-13 定稿）
+CROSS_SYMBOL_UNIVERSE: tuple[str, ...] = (
+    "i", "jm", "p", "y", "ag", "rb", "hc", "ta",
+)
+
+
+def cross_symbol_list() -> list[str]:
+    """返回已配置 TQ 引擎的跨品种列表（保持 CROSS_SYMBOL_UNIVERSE 顺序）。"""
+    return [s for s in CROSS_SYMBOL_UNIVERSE if s in TQ_SYMBOL_ENGINE]
 
 LEAN_PROFILE_KEYS: tuple[str, ...] = (
     "rb_min_atr",
@@ -97,13 +131,27 @@ LEAN_PROFILE_KEYS: tuple[str, ...] = (
     "max_position",
     "use_compound_capital",
     "dual_core_enabled",
+    "dual_core_soft_enabled",
     "vwap_regime_lookback",
     "vwap_chop_min_crosses",
     "vwap_slope_thresh_ticks",
     "vwap_trend_deadband_ticks",
     "vwap_fade_max_atr",
+    "dual_core_exhaustion_atr",
+    "dual_core_exhaustion_min_atr",
+    "dual_core_soft_min_size_mult",
+    "dual_core_soft_min_target_mult",
+    "context_layers_enabled",
+    "context_layer_fast_bars",
+    "context_layer_slow_bars",
+    "context_layer_gate_enabled",
+    "context_layer_opp08_min_fit",
+    "context_layer_opp16_min_fit",
     "vsa_enabled",
     "vsa_volume_window",
+    "vsa_session_relative_enabled",
+    "vsa_session_lookback_days",
+    "vsa_session_min_samples",
     "vsa_low_volume_pct",
     "vsa_high_volume_pct",
     "vsa_spread_atr_mult",
@@ -166,6 +214,11 @@ LEAN_PROFILE_KEYS: tuple[str, ...] = (
     "symbol_liquidity_runtime_enabled",
     "symbol_liquidity_tier",
     "opening_rev_enabled",
+    "disabled_setups",
+    "setup_shrinkage_enabled",
+    "setup_shrinkage_overrides",
+    "setup_shrinkage_hard_disable",
+    "exit_family_v3_enabled",
 )
 
 TQ_LEAN_DEFAULT_MODE = "cbc"
@@ -175,6 +228,14 @@ TQ_ROLLOVER_SWITCH = "21:00"
 #   54RT/38.9%WR/-43,543/Sharpe-0.45/PF0.75/MDD-23.8%
 TQ_CBC_BASELINE_RB: dict[str, float | int] = {
     "rt": 54, "wr": 38.9, "pnl": -43_543, "sharpe": -0.45, "pf": 0.75,
+}
+
+# EXP-026 Phase-1 出场执行硬不变量基线（同上区间含成本；production profile）:
+#   39RT/43.6%WR/+9,647/Sharpe0.14/MDD-12.24%/最长持有5.6h/换月0
+# 状态：stop_price / stop_source / pending_exit_order / remaining_position
+# 注：旧 EXP-006 +20k~+23k 与 EXP-026 初修 +6.5k 均为旧语义参考，不可直接比 alpha。
+TQ_EXEC_BASELINE_RB: dict[str, float | int] = {
+    "rt": 39, "wr": 43.6, "pnl": 9_647, "sharpe": 0.14, "pf": 1.10,
 }
 
 TQ_LEAN_RB_OVERRIDES: dict[str, float | int | bool] = {
@@ -200,6 +261,38 @@ TQ_SYMBOL_PARAM_OVERRIDES: dict[str, dict[str, float | int]] = {
     "sa": {"rb_min_atr": 9.0, "ttr_rb_min_atr": 5.0, "max_position": 39},
     "ta": {"rb_min_atr": 16.0, "ttr_rb_min_atr": 10.0, "max_position": 43},
     "v": {"rb_min_atr": 13.0, "ttr_rb_min_atr": 9.0, "max_position": 43},
+    # EXP-024：新品种机械尺度（非网格搜；与 profile_symbol_params 分位法待补）
+    "al": {"rb_min_atr": 30.0, "ttr_rb_min_atr": 15.0, "max_position": 14},
+    "zn": {"rb_min_atr": 30.0, "ttr_rb_min_atr": 15.0, "max_position": 14},
+    "y": {"rb_min_atr": 10.0, "ttr_rb_min_atr": 6.0, "max_position": 25},
+    "p": {"rb_min_atr": 10.0, "ttr_rb_min_atr": 6.0, "max_position": 25},
+    "l": {"rb_min_atr": 8.0, "ttr_rb_min_atr": 5.0, "max_position": 43},
+    "fg": {"rb_min_atr": 9.0, "ttr_rb_min_atr": 5.0, "max_position": 39},
+}
+
+# EXP-024：跨品种扫描用干净 Base（无禁单 / 无 Setup AFF / 无 Router / 无 hc 特化）
+GENERIC_BASE_PROFILE: dict = {
+    "risk_capital": 10_000.0,
+    "risk_pct_per_trade": 0.05,
+    "max_position": 35,
+    "rb_min_atr": 7.0,
+    "ttr_rb_min_atr": 5.0,
+    "use_compound_capital": False,
+    "dual_core_enabled": True,
+    "vsa_enabled": True,
+    "vsa_persistence_enabled": False,
+    "setup_risk_mult_enabled": True,
+    "late_phase_gate_enabled": True,
+    "aff_gate_enabled": True,
+    "aff_gate_mode": "sizing",
+    "opp02_aff_gate_enabled": False,
+    "opp19_breakout_aff_gate_enabled": False,
+    "opp02_r2_gate_enabled": False,
+    "opp19_breakout_r2_gate_enabled": False,
+    "aff_archetype_router_enabled": False,
+    "symbol_adaptive_enabled": False,
+    "opp13_vol_filter_enabled": False,
+    "disabled_setups": "",
 }
 
 SYMBOL_PROFILES: dict[str, dict] = {
@@ -227,6 +320,7 @@ SYMBOL_PROFILES: dict[str, dict] = {
         "opp19_breakout_aff_gate_enabled": True,
         "opp02_r2_gate_enabled": False,
         "opp19_breakout_r2_gate_enabled": False,
+        # EXP-023 REVERT：OPP12_ OOS Δ=0（无效应）→ 撤禁单；见 experiments.md
     },
     "hc": {
         "exchange": Exchange.SHFE,
@@ -263,6 +357,74 @@ SYMBOL_PROFILES: dict[str, dict] = {
         "opp13_climax_volume_pct": 70.0,
         # hc 保留 FAST_TRACK OD_REV（组合层与 pending 模式不兼容）；空头降仓见 _SETUP_RISK_MULT
         "opp19_rev_arm_mode": "FAST_TRACK",
+        # EXP-009F KEEP（hc 样本内）；EXP-023 OOS HOLD（n 坍塌 6→1）
+        "disabled_setups": "OPP13_,OPP15_,OPP19_5M_OD_REV_SHORT",
+    },
+    "au": {
+        "exchange": Exchange.SHFE,
+        "size": 1000,
+        "pricetick": 0.02,
+        "slippage": 0.04,
+        "rb_min_atr": 1.28,
+        "ttr_rb_min_atr": 0.52,
+        "risk_capital": 10_000.0,
+        "risk_pct_per_trade": 0.05,
+        "max_position": 3,
+        "use_compound_capital": False,
+        "dual_core_enabled": True,
+        "vsa_enabled": True,
+        "setup_risk_mult_enabled": True,
+        "late_phase_gate_enabled": True,
+        "aff_gate_enabled": True,
+        "aff_gate_mode": "sizing",
+        "opp02_aff_gate_enabled": True,
+        "opp19_breakout_aff_gate_enabled": True,
+        # EXP-022 候选；EXP-023 OOS HOLD（极端单笔驱动嫌疑）
+        "disabled_setups": "OPP15_,OPP12_,OPP13_",
+    },
+    "ma": {
+        "exchange": Exchange.CZCE,
+        "size": 10,
+        "pricetick": 1.0,
+        "slippage": 2,
+        "rb_min_atr": 7.0,
+        "ttr_rb_min_atr": 5.0,
+        "risk_capital": 10_000.0,
+        "risk_pct_per_trade": 0.05,
+        "max_position": 47,
+        "use_compound_capital": False,
+        "dual_core_enabled": True,
+        "vsa_enabled": True,
+        "setup_risk_mult_enabled": True,
+        "late_phase_gate_enabled": True,
+        "aff_gate_enabled": True,
+        "aff_gate_mode": "sizing",
+        "opp02_aff_gate_enabled": True,
+        "opp19_breakout_aff_gate_enabled": True,
+        # EXP-022 候选；EXP-023 OOS HOLD（未过完整 KEEP-OOS gate）
+        "disabled_setups": "OPP15_,OPP13_",
+    },
+    "j": {
+        "exchange": Exchange.DCE,
+        "size": 100,
+        "pricetick": 0.5,
+        "slippage": 1,
+        "rb_min_atr": 8.5,
+        "ttr_rb_min_atr": 6.0,
+        "risk_capital": 10_000.0,
+        "risk_pct_per_trade": 0.05,
+        "max_position": 6,
+        "use_compound_capital": False,
+        "dual_core_enabled": True,
+        "vsa_enabled": True,
+        "setup_risk_mult_enabled": True,
+        "late_phase_gate_enabled": True,
+        "aff_gate_enabled": True,
+        "aff_gate_mode": "sizing",
+        "opp02_aff_gate_enabled": True,
+        "opp19_breakout_aff_gate_enabled": True,
+        # EXP-022 候选；EXP-023 OOS HOLD（IS/OOS 不同向 + PF 劣化）
+        "disabled_setups": "OPP15_",
     },
 }
 
@@ -288,6 +450,32 @@ def build_strategy_setting(
         if key in profile:
             setting[key] = profile[key]
     return setting
+
+
+def resolve_generic_base_profile(
+    symbol: str,
+    root: Path,
+    **_: object,
+) -> dict:
+    """干净 Base profile：不读 SYMBOL_PROFILES，仅合约规格 + 机械参数。"""
+    key = symbol.lower()
+    if key not in TQ_SYMBOL_ENGINE:
+        known = ", ".join(sorted(TQ_SYMBOL_ENGINE))
+        raise ValueError(f"未知品种 {symbol}，可选: {known}")
+
+    profile = GENERIC_BASE_PROFILE.copy()
+    profile["symbol"] = key
+    eng = TQ_SYMBOL_ENGINE[key]
+    profile["exchange"] = eng["exchange"]
+    profile["size"] = eng["size"]
+    profile["pricetick"] = eng["pricetick"]
+    profile["slippage"] = eng["slippage"]
+    data_dir = root / "data" / "tq" / eng["folder"]
+    profile["data_dir"] = data_dir
+    profile["file_stem"] = eng["file_stem"]
+    profile["rollover_map"] = data_dir / "rollover_map.parquet"
+    profile.update(TQ_SYMBOL_PARAM_OVERRIDES.get(key, {}))
+    return profile
 
 
 def resolve_symbol_profile(

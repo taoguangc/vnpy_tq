@@ -93,15 +93,15 @@ python -c "import vnpy, vnpy_ctastrategy, tqsdk; print('ok')"
 两阶段下载**已自动**生成 `rollover_map.parquet`；若使用 `--phase full` 或需重建：
 
 ```powershell
-# 回测主路径只需 rollover_map，无需构建 continuous
+# 回测主路径只需 rollover_map（+ 可选 cost_detail）；不写 continuous
 .venv\Scripts\python.exe tools\build_rollover_map.py -s rb --map-only
 ```
 
 生成 `data/tq/rb/rollover_map.parquet`。`scripts/tq_data_loader.py` 据此按换月日切 bar，
 将各分月 raw 序列拼接成主力 1m 流（CbC，无复权）。
 
-如需额外生成 `*_continuous.parquet`（含后复权列，供对照分析），可去掉 `--map-only` 全量构建。
-
+全量构建（去掉 `--map-only`）会额外写出 `rollover_cost_detail.parquet`（移仓滑点/手续费），
+**不**再生成 `*_continuous.parquet`。
 ### 3. 检查数据质量（可选）
 
 ```powershell
@@ -146,4 +146,4 @@ python -c "import vnpy, vnpy_ctastrategy, tqsdk; print('ok')"
 - **回测主路径（CbC）**：`tq_data_loader.load_bars_from_tq()` 读取分月 raw + `rollover_map.parquet`，
   按换月日拼接主力序列，**不做复权**；换月边界保留真实价格跳空。
 - **单合约回测**：`load_bars_from_tq(..., yymm="2410")` 仅加载指定分月文件。
-- **`*_continuous.parquet`**：由 `build_rollover_map.py` 全量构建时的可选衍生产物，回测主路径不再依赖。
+- **移仓成本**：`rollover_cost_detail.parquet` 供 `RolloverBacktestingEngine` 计入换月滑点/手续费；行情本身不做复权。

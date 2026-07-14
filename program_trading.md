@@ -212,4 +212,4 @@ autoresearch 用单一 `val_bpb`；交易用**主指标 + 硬门禁**。
 | 跑回测 | `vnpy-cta-backtest` |
 | 结果可疑 | `quant-backtest-validation-tool` |
 | 多品种泛化 | `vnpy-multi-symbol` |
-| TQ 数据 | `vnpy-rqdata-data-pipeline` / `scripts/tq_rollover_data.py` |
+| TQ 数据 | `vnpy-quant-python` §TQ 数据 / `tools/download_rb_monthly.py` |

@@ -13,6 +13,11 @@
 - 禁止煽动/讨好型措辞（「令人振奋」「终极形态」等）。
 - 区分「已证实」与「待验证假设」，后者不得写成既成事实。
 
+### 沟通表达
+
+- 面向用户优先通俗中文；英文术语/简称尽量用中文替代，或首次出现时括号附中文（如「OOS（样本外）」）。
+- 文件名、函数名、CLI 参数等代码标识保持原文。细则见 `AGENTS.md` §1.2。
+
 ## 编码底线
 
 - PEP 8；策略继承 `CtaTemplate`（`from vnpy_ctastrategy import CtaTemplate, ...`），**禁用** `vnpy.app.cta_strategy`。
@@ -112,13 +117,12 @@
 | 技能 | 触发场景 |
 |------|---------|
 | `vnpy-cta-backtest` | 跑回测、改策略、`run_parquet_backtest`、`--compare`、`--symbol` |
-| `vnpy-rqdata-data-pipeline` | 下载数据、RQData/米筐、Parquet 数据问题 |
+| `vnpy-quant-python` | 改 `scripts/` 工具、TQ 数据下载/Parquet 加载、诊断脚本（非 CTA 策略文件） |
 | `quant-backtest-validation-tool` | 结果可疑、零成交、查未来函数、外来代码审计 |
-| `vnpy-quant-python` | 改 `scripts/` 工具、加载器、诊断脚本（非 CTA 策略文件） |
 
-**选用顺序**：数据问题 → `vnpy-rqdata-data-pipeline`；跑回测 → `vnpy-cta-backtest`；结果审计 → `quant-backtest-validation-tool`；改 `scripts/` → `vnpy-quant-python`。
+**选用顺序**：数据问题 → `vnpy-quant-python`（TQ 下载/Parquet）；跑回测 → `vnpy-cta-backtest`；结果审计 → `quant-backtest-validation-tool`；改 `scripts/` → `vnpy-quant-python`。
 
-**已知工具**：`scripts/multi_symbol_scan.py` — 19 品种全量回测，向 `SYMBOL_PROFILES` 动态注入通用配置后批量跑。
+**已知工具**：`scripts/multi_symbol_scan.py` — 8 品种跨品种池（`CROSS_SYMBOL_UNIVERSE`：i/jm/p/y/ag/rb/hc/ta）批量回测。
 
 ## 自治策略实验
 

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from scripts.tq_rollover_data import RolloverEvent
-from strategies.brooks_scalp.brooks_scalp_v01 import BrooksScalpV01
+from strategies.brooks_scalp.brooks_scalp import BrooksScalpV01
 
 
 class BrooksScalpV01RolloverStrategy(BrooksScalpV01):

@@ -16,24 +16,25 @@ SLICE_BUFFER_DAYS = 5
 SYMBOL_ALLOWED_DELIVERY_MONTHS: dict[str, tuple[int, ...] | None] = {
     "rb": (1, 5, 10),
     "hc": (1, 5, 10),
-    "fu": (1, 5, 9),
-    "m": (1, 3, 5, 7, 8, 9, 11, 12),
-    "c": (1, 3, 5, 7, 9, 11),
+    "fu": None,  # 沪燃油：逐月活跃，不锁 1/5/9；数据层待 --all-months 对齐
+    "m": (1, 5, 9),   # 豆粕：趋势跟踪缩至习惯主力，跳过 7/8/11/12 过渡月
+    "c": (1, 5, 9),   # 玉米：同缩，跳过 3/7/11
     "p": (1, 5, 9),
-    "rm": (1, 3, 5, 7, 8, 9, 11),
-    "RM": (1, 3, 5, 7, 8, 9, 11),
-    "i": None,
-    "j": None,
-    "jm": None,
+    "y": (1, 5, 9),
+    "l": (1, 5, 9),
+    "RM": (1, 5, 9),  # 郑商所菜粕；resolve 大小写不敏感（rm/Rm 同命中）
+    "i": (1, 5, 9),   # DCE 铁矿：习惯主力 1/5/9，跳过 3/7/11 等过渡月
+    "j": (1, 5, 9),   # DCE 焦炭
+    "jm": (1, 5, 9),  # DCE 焦煤
     "MA": (1, 5, 9),
     "TA": (1, 5, 9),
     "SA": (1, 5, 9),
     "FG": (1, 5, 9),
     "SR": (1, 5, 9),
-    "ag": None,
-    "au": None,
-    "al": None,
-    "zn": None,
+    "ag": (6, 12),  # 实盘习惯主力：6/12 轮动，跳过 2/4/8/10 过渡月
+    "au": (6, 12),  # 沪金同 ag：习惯 6/12，跳过偶数过渡月
+    "al": None,  # 沪铝：有色做市后逐月换主力，跟 OI
+    "zn": None,  # 沪锌：同上
     "pb": None,
     "sn": None,
     "v": (1, 5, 9),
@@ -100,5 +101,32 @@ def filter_df_dict_by_delivery_months(
     return kept, excluded
 
 
+def resolve_rollover_symbol_key(symbol_key: str) -> str | None:
+    """大小写不敏感解析白名单品种键，返回字典中的规范键；未登记返回 None。
+
+    若大小写撞键（历史上曾有 rm/RM），优先返回全大写键（郑商所习惯）。
+    """
+    if not symbol_key:
+        return None
+    if symbol_key in SYMBOL_ALLOWED_DELIVERY_MONTHS:
+        return symbol_key
+    folded = symbol_key.casefold()
+    matches = [k for k in SYMBOL_ALLOWED_DELIVERY_MONTHS if k.casefold() == folded]
+    if not matches:
+        return None
+    for key in matches:
+        if key.isupper():
+            return key
+    return matches[0]
+
+
 def allowed_months_for_symbol(symbol_key: str) -> tuple[int, ...] | None:
-    return SYMBOL_ALLOWED_DELIVERY_MONTHS.get(symbol_key)
+    """查交割月白名单（键大小写不敏感）。
+
+    返回 None 表示不限制交割月：既可能是「已登记为 None」（如 fu），
+    也可能是「未登记品种」。调用方不必区分。
+    """
+    key = resolve_rollover_symbol_key(symbol_key)
+    if key is None:
+        return None
+    return SYMBOL_ALLOWED_DELIVERY_MONTHS[key]

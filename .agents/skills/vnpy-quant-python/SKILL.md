@@ -13,7 +13,7 @@ version: '2.0.0'
 | 任务 | 应优先使用的文档 |
 |------|------------------|
 | 策略逻辑、回测、风控 | `AGENTS.md` + `vnpy-cta-backtest` |
-| 数据下载、Parquet | `vnpy-rqdata-data-pipeline` |
+| 数据下载、Parquet | **本 skill**（见 §TQ 数据） |
 | 回测结果审计 | `quant-backtest-validation-tool` |
 | `scripts/`、`configs/`、加载器、诊断脚本 | **本 skill** |
 
@@ -50,7 +50,20 @@ if str(ROOT) not in sys.path:
 - **新写**的 `scripts/` 模块：推荐类型注解 + `from __future__ import annotations`（与 `backtest_trade_analysis.py` 一致）。
 - **既有策略文件**：不要求为旧代码批量补注解；修改时局部保持原风格即可。
 - 路径一律 **`pathlib.Path`**，数据/配置路径相对 `ROOT`，勿硬编码用户盘符。
-- 密钥：`configs/rq_config.py`、`.env` **勿提交**；示例用 `.env.example`。
+- 密钥：天勤账号 `.env` / 环境变量 **勿提交**；示例用 `.env.example`。
+
+## TQ 数据下载（Parquet）
+
+| 用途 | 路径/命令 |
+|------|-----------|
+| 分月 1m 下载 | `tools/download_rb_monthly.py -s SHFE.rb -y 2020 2026 --rebuild-continuous` |
+| 批量新品种 | `scripts/download_new_symbols_1m.py` |
+| 换月表/连续合约 | `tools/build_rollover_map.py -s {prefix}` |
+| 数据目录 | `data/tq/{prefix}/`（分月 parquet、rollover_map、rollover_cost_detail） |
+| CbC 回测加载 | `scripts/tq_rollover_data.py` |
+
+- 回测母版为 **TQ 分月 Parquet**，不存其它格式副本。
+- Phase-1 日频 OI → Phase-2 分月 1m；`dominant_windows.json` 须先于 1m 下载存在。
 
 ## 修改边界
 

@@ -1,12 +1,13 @@
-"""换月映射表生成 + 移仓滑点模拟脚本（支持多品种）。
+"""换月映射表生成 + 移仓成本明细（支持多品种）。
 
 功能:
   1. 分析分月合约数据，自动检测换月时间点（主力 OI 链 + whipsaw 过滤）
   2. 按品种交割月白名单（tools/rollover_rules.py）过滤候选合约，如 rb 仅 1/5/10
-  3. 生成换月映射表（Parquet）；切点执行时刻 21:00 CST（下游 build_tq_continuous）
-  4. 按换月日切 bar 拼接连续合约；close_adjusted=后复权(价差)，close_adjusted_cost=含移仓成本
-  5. 构建后校验: 分月 raw OHLCV、后复权连续性、与 RQ 888 日收益对齐
-  6. 写入 manifest.json derived 段
+  3. 生成换月映射表（Parquet）；切点执行时刻 21:00 CST（CbC 回测用）
+  4. 生成 rollover_cost_detail.parquet（移仓滑点/手续费，供 RolloverBacktestingEngine）
+  5. 写入 manifest.json derived 段
+
+回测主路径为分月 raw CbC 拼接（无复权），不写 *_continuous.parquet。
 
 使用方法:
     .\\.venv\\Scripts\\python.exe tools\\build_rollover_map.py -s rb
@@ -28,6 +29,7 @@ import pandas as pd
 import numpy as np
 
 from tools.dominant_windows import (
+    build_dominant_chain,
     build_dominant_windows,
     save_dominant_windows,
 )
@@ -44,13 +46,11 @@ from tools.rollover_rules import (
 from tools.tq_parquet_io import (
     SESSION_NOTE,
     VERIFY_OHLCV_COLUMNS,
-    compare_ohlcv,
     is_monthly_contract_file,
     load_monthly_parquet,
 )
 
 MANIFEST_FILE = "manifest.json"
-VERIFY_MIN_MATCH_RATE = 0.999
 
 # ========== 品种配置 ==========
 SYMBOL_CONFIG = {
@@ -153,6 +153,26 @@ SYMBOL_CONFIG = {
         "slippage_ticks": 1,
         "yymm_len": 4,
         "name": "棕榈油",
+    },
+    "y": {
+        "exchange": "DCE",
+        "prefix": "y",
+        "volume_multiple": 10,
+        "tick_value": 2.0,
+        "commission_per_lot": 2.0,
+        "slippage_ticks": 1,
+        "yymm_len": 4,
+        "name": "豆油",
+    },
+    "l": {
+        "exchange": "DCE",
+        "prefix": "l",
+        "volume_multiple": 5,
+        "tick_value": 1.0,
+        "commission_per_lot": 2.0,
+        "slippage_ticks": 1,
+        "yymm_len": 4,
+        "name": "塑料",
     },
     "SR": {
         "exchange": "CZCE",
@@ -288,13 +308,12 @@ SYMBOL_CONFIG = {
 
 ROLLOVER_DAYS = 5
 ROLLOVER_CURVE = "linear"
-GENERATE_CSV = False
 ROLLOVER_METHOD = "dominant_oi"
 DOMINANT_OI_PARAMS = {
     "min_oi_ratio": 0.05,
     "min_confirmation_days": ROLLOVER_CONFIRM_DAYS,
     "exclude_delivery_month": True,
-    "whipsaw_min_gap_days": 5,
+    "whipsaw_min_gap_days": 45,
 }
 
 
@@ -303,7 +322,10 @@ def _filter_whipsaw_events(
     first_dominant: str | None,
     min_gap_days: int,
 ) -> tuple[list[dict], int]:
-    """去掉短间隔 A→B 后又 B→A 的回切；并忽略与已确认主力不一致的噪声切换。"""
+    """去掉短间隔 A→B 后又 B→A 的回切；并忽略与已确认主力不一致的噪声切换。
+
+    检测到回切时撤销上一笔换月（pop），避免 effective 仍停在中间合约导致后续链条断裂。
+    """
     if not events or not first_dominant:
         return events, 0
 
@@ -324,7 +346,9 @@ def _filter_whipsaw_events(
                 and ev["to_yymm"] == last["from_yymm"]
                 and ev["from_yymm"] == last["to_yymm"]
             ):
-                skipped += 1
+                filtered.pop()
+                effective = last["from_yymm"]
+                skipped += 2
                 continue
 
         filtered.append(ev)
@@ -338,15 +362,24 @@ DATA_DIR: str
 
 def _configure(symbol_key: str) -> None:
     global CONFIG, DATA_DIR
+    resolved = symbol_key
     if symbol_key not in SYMBOL_CONFIG:
-        print(f"错误: 不支持的品种 '{symbol_key}'")
-        print(f"支持的品种: {', '.join(SYMBOL_CONFIG.keys())}")
-        sys.exit(1)
-    CONFIG = SYMBOL_CONFIG[symbol_key].copy()
-    allowed = allowed_months_for_symbol(symbol_key)
+        folded = symbol_key.casefold()
+        matches = [k for k in SYMBOL_CONFIG if k.casefold() == folded]
+        if not matches:
+            print(f"错误: 不支持的品种 '{symbol_key}'")
+            print(f"支持的品种: {', '.join(SYMBOL_CONFIG.keys())}")
+            sys.exit(1)
+        # 郑商所键优先全大写（MA/RM）；否则取首个
+        resolved = next((k for k in matches if k.isupper()), matches[0])
+        if resolved != symbol_key:
+            print(f"  品种键规范化: {symbol_key!r} → {resolved!r}")
+    CONFIG = SYMBOL_CONFIG[resolved].copy()
+    allowed = allowed_months_for_symbol(resolved)
     CONFIG["allowed_delivery_months"] = allowed
     CONFIG["rollover_switch_time"] = ROLLOVER_SWITCH_TIME
-    DATA_DIR = os.path.join(ROOT, "data", "tq", symbol_key)
+    # 数据目录跟落盘 prefix（CZCE 为大写），不跟 CLI 原样
+    DATA_DIR = os.path.join(ROOT, "data", "tq", CONFIG["prefix"])
 
 
 def parse_contract_code(filename: str) -> str | None:
@@ -378,26 +411,6 @@ def _ordered_rollover_events(rollover_map: pd.DataFrame) -> list[dict]:
         return []
     df = rollover_map.sort_values("rollover_date").reset_index(drop=True)
     return df.to_dict("records")
-
-
-def slice_dominant_segment(
-    df: pd.DataFrame,
-    idx: int,
-    chain_yymm: list[str],
-    rollover_events: list[dict],
-) -> pd.DataFrame:
-    """按换月日切主力合约 bar：events[k] 对应 chain[k]->chain[k+1]。"""
-    out = df.copy()
-
-    if idx > 0 and idx - 1 < len(rollover_events):
-        start_date = _rollover_event_date(rollover_events[idx - 1])
-        out = out[out["dt"].dt.date >= start_date]
-
-    if idx < len(chain_yymm) - 1 and idx < len(rollover_events):
-        end_date = _rollover_event_date(rollover_events[idx])
-        out = out[out["dt"].dt.date < end_date]
-
-    return out.sort_values("datetime").reset_index(drop=True)
 
 
 def get_rollover_weights(days: int, curve: str = "linear") -> np.ndarray:
@@ -766,7 +779,9 @@ def detect_dominant_chain(
     changes = pivot[(pivot["dominant"] != pivot["prev_dominant"]) & pivot["prev_dominant"].notna()].copy()
 
     rollover_events = []
-    first_dominant = pivot["dominant"].iloc[0] if not pd.isna(pivot["dominant"].iloc[0]) else None
+    # 序列开头可能缺 OI（ffill 后仍为 NaN）；取首个有效主力，勿用 iloc[0]
+    _dom_valid = pivot["dominant"].dropna()
+    first_dominant = str(_dom_valid.iloc[0]) if len(_dom_valid) else None
 
     for _, row in changes.iterrows():
         from_yymm = row["prev_dominant"]
@@ -802,6 +817,9 @@ def detect_dominant_chain(
     rollover_events, whipsaw_skipped = _filter_whipsaw_events(
         rollover_events, first_dominant, whipsaw_min_gap_days,
     )
+
+    if not first_dominant and rollover_events:
+        first_dominant = str(rollover_events[0]["from_yymm"])
 
     if first_dominant:
         dominant_chain = [first_dominant] + [e["to_yymm"] for e in rollover_events]
@@ -914,6 +932,9 @@ def write_dominant_windows(
     *,
     source: str = "oi_daily",
 ) -> str:
+    if not dominant_chain and not rollover_map.empty:
+        dominant_chain = build_dominant_chain(rollover_map)
+        print(f"  主力链为空，已从 rollover_map 重建: {len(dominant_chain)} 合约")
     bounds = _bounds_from_df_dict(df_dict)
     payload = build_dominant_windows(
         rollover_map, dominant_chain, bounds, source=source,
@@ -969,31 +990,28 @@ def compare_rollover_maps(
     return True
 
 
-def generate_continuous_klines(
+def generate_rollover_cost_detail(
     rollover_map: pd.DataFrame,
     dominant_chain: list[str],
-    simulate_slippage: bool = True,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    prefix = CONFIG["prefix"]
+) -> pd.DataFrame:
+    """按换月事件计算移仓滑点/手续费明细（不写复权连续合约）。"""
     volume_multiple = CONFIG["volume_multiple"]
     tick_value = CONFIG["tick_value"]
     commission_per_lot = CONFIG["commission_per_lot"]
     slippage_ticks = CONFIG["slippage_ticks"]
 
     if len(rollover_map) == 0 or not dominant_chain:
-        print("\n无换月数据或主力链为空，无法生成连续序列")
-        return pd.DataFrame(), pd.DataFrame()
+        print("\n无换月数据或主力链为空，无法生成成本明细")
+        return pd.DataFrame()
 
     print(f"\n{'='*60}")
-    print(f"生成连续合约 K 线序列（基于主力链，共 {len(dominant_chain)} 个主力合约）")
-    if simulate_slippage:
-        print("  移仓滑点模拟: 开启")
-        print(f"  移仓天数: {ROLLOVER_DAYS} 天")
-        print(f"  滑点: {slippage_ticks} tick ({slippage_ticks * tick_value} 元/吨, 双边)")
-        print(f"  手续费: {commission_per_lot} 元/手 (双边, 约 {commission_per_lot * 2 / volume_multiple:.3f} 元/吨)")
-        print(f"  移仓分布: {ROLLOVER_CURVE}")
-    else:
-        print("  移仓滑点模拟: 关闭（仅价格差调整）")
+    print(f"生成移仓成本明细（主力链 {len(dominant_chain)} 合约）")
+    print(f"  移仓天数: {ROLLOVER_DAYS} 天 | 分布: {ROLLOVER_CURVE}")
+    print(f"  滑点: {slippage_ticks} tick ({slippage_ticks * tick_value} 元/吨, 双边)")
+    print(
+        f"  手续费: {commission_per_lot} 元/手 "
+        f"(双边, 约 {commission_per_lot * 2 / volume_multiple:.3f} 元/吨)"
+    )
     print(f"{'='*60}")
 
     df_dict = {}
@@ -1005,296 +1023,88 @@ def generate_continuous_klines(
             print(f"  警告: 主力合约 {yymm} 数据加载失败，跳过")
 
     chain_yymm = [y for y in dominant_chain if y in df_dict]
-
     if len(chain_yymm) < 1:
         print("\n错误: 主力链中无有效合约")
-        return pd.DataFrame(), pd.DataFrame()
+        return pd.DataFrame()
 
-    print(f"\n使用主力链合约: {chain_yymm}")
-
-    rollover_events = _ordered_rollover_events(rollover_map)
+    rollover_events = [
+        e for e in _ordered_rollover_events(rollover_map)
+        if e["from_yymm"] in df_dict and e["to_yymm"] in df_dict
+    ]
+    if len(rollover_events) != len(chain_yymm) - 1:
+        # 末段合约仅有 OI、尚无 1m 时，截断到有数据的连续前缀
+        truncated: list[str] = [chain_yymm[0]]
+        for ev in rollover_events:
+            if ev["from_yymm"] != truncated[-1]:
+                break
+            if ev["to_yymm"] not in df_dict:
+                break
+            truncated.append(ev["to_yymm"])
+        chain_yymm = truncated
+        rollover_events = rollover_events[: max(0, len(chain_yymm) - 1)]
+        print(
+            f"  提示: 缺 1m 的主力合约已跳过，成本明细覆盖 "
+            f"{len(chain_yymm)}/{len(dominant_chain)} 个链上合约"
+        )
     if len(rollover_events) != len(chain_yymm) - 1:
         raise RuntimeError(
             f"换月事件数 ({len(rollover_events)}) 与主力链长度 ({len(chain_yymm)}) 不匹配"
         )
 
-    all_klines = []
     rollover_details = []
     cumulative_spread = 0.0
     cumulative_cost = 0.0
 
-    for idx, yymm in enumerate(chain_yymm):
-        df = slice_dominant_segment(df_dict[yymm], idx, chain_yymm, rollover_events)
-        if len(df) == 0:
-            print(f"  警告: {yymm} 切 bar 后为空，跳过")
+    for idx in range(1, len(chain_yymm)):
+        prev_yymm = chain_yymm[idx - 1]
+        yymm = chain_yymm[idx]
+        rollover_row = rollover_events[idx - 1]
+        if rollover_row["from_yymm"] != prev_yymm or rollover_row["to_yymm"] != yymm:
             continue
 
-        if idx > 0:
-            prev_yymm = chain_yymm[idx - 1]
-            rollover_row = rollover_events[idx - 1]
-            if rollover_row["from_yymm"] == prev_yymm and rollover_row["to_yymm"] == yymm:
-                rollover_date = rollover_row["rollover_date"]
-                spread = float(rollover_row["price_diff"])
-                cumulative_spread += spread
+        rollover_date = rollover_row["rollover_date"]
+        spread = float(rollover_row["price_diff"])
+        cumulative_spread += spread
 
-                if isinstance(rollover_date, pd.Timestamp):
-                    rollover_date = rollover_date.date()
-                elif isinstance(rollover_date, datetime):
-                    rollover_date = rollover_date.date()
+        if isinstance(rollover_date, pd.Timestamp):
+            rollover_date = rollover_date.date()
+        elif isinstance(rollover_date, datetime):
+            rollover_date = rollover_date.date()
 
-                if simulate_slippage:
-                    sim_result = simulate_rollover_cost(
-                        df_dict[prev_yymm],
-                        df_dict[yymm],
-                        rollover_date,
-                    )
-                    cost_adj = float(sim_result["price_adjustment"])
-                    cumulative_cost += cost_adj
+        sim_result = simulate_rollover_cost(
+            df_dict[prev_yymm],
+            df_dict[yymm],
+            rollover_date,
+        )
+        cost_adj = float(sim_result["price_adjustment"])
+        cumulative_cost += cost_adj
 
-                    detail = {
-                        "rollover_id": rollover_row.get("rollover_id", idx),
-                        "rollover_date": rollover_date,
-                        "from_yymm": prev_yymm,
-                        "to_yymm": yymm,
-                        "price_diff_only": spread,
-                        "slippage_cost": sim_result["total_slippage"],
-                        "commission_cost": sim_result["total_commission"],
-                        "total_adjustment": cost_adj,
-                        "rollover_start_date": sim_result["start_date"],
-                        "rollover_end_date": sim_result["end_date"],
-                        "cumulative_spread": cumulative_spread,
-                        "cumulative_cost": cumulative_cost,
-                    }
-                    rollover_details.append(detail)
+        rollover_details.append({
+            "rollover_id": rollover_row.get("rollover_id", idx),
+            "rollover_date": rollover_date,
+            "from_yymm": prev_yymm,
+            "to_yymm": yymm,
+            "price_diff_only": spread,
+            "slippage_cost": sim_result["total_slippage"],
+            "commission_cost": sim_result["total_commission"],
+            "total_adjustment": cost_adj,
+            "rollover_start_date": sim_result["start_date"],
+            "rollover_end_date": sim_result["end_date"],
+            "cumulative_spread": cumulative_spread,
+            "cumulative_cost": cumulative_cost,
+        })
+        print(
+            f"  {prev_yymm} -> {yymm}: "
+            f"价差={spread:+.2f}, "
+            f"滑点={sim_result['total_slippage']:+.2f}, "
+            f"手续费={sim_result['total_commission']:+.3f}, "
+            f"成本调整={cost_adj:+.2f} "
+            f"(价差累计={cumulative_spread:+.2f}, 成本累计={cumulative_cost:+.2f})"
+        )
 
-                    print(
-                        f"  {prev_yymm} -> {yymm}: "
-                        f"价差={spread:+.2f}, "
-                        f"滑点={sim_result['total_slippage']:+.2f}, "
-                        f"手续费={sim_result['total_commission']:+.3f}, "
-                        f"成本调整={cost_adj:+.2f} "
-                        f"(价差累计={cumulative_spread:+.2f}, 成本累计={cumulative_cost:+.2f})"
-                    )
-                else:
-                    cumulative_cost = cumulative_spread
-                    print(
-                        f"  {prev_yymm} -> {yymm}: 价差={spread:+.2f} "
-                        f"(累计={cumulative_spread:+.2f})"
-                    )
-
-        df = df.copy()
-        # 后复权（价差）：消除换月跳空，与 RQ 888 可比（不含滑点/手续费）
-        df["close_adjusted"] = df["close"] - cumulative_spread
-        df["open_adjusted"] = df["open"] - cumulative_spread
-        df["high_adjusted"] = df["high"] - cumulative_spread
-        df["low_adjusted"] = df["low"] - cumulative_spread
-        df["cumulative_spread"] = cumulative_spread
-        # 含移仓成本的后复权（实盘移仓模拟）
-        df["close_adjusted_cost"] = df["close"] - cumulative_cost
-        df["open_adjusted_cost"] = df["open"] - cumulative_cost
-        df["high_adjusted_cost"] = df["high"] - cumulative_cost
-        df["low_adjusted_cost"] = df["low"] - cumulative_cost
-        df["cumulative_cost"] = cumulative_cost
-
-        all_klines.append(df[[
-            "datetime", "dt",
-            "open", "high", "low", "close",
-            "open_adjusted", "high_adjusted", "low_adjusted", "close_adjusted",
-            "open_adjusted_cost", "high_adjusted_cost", "low_adjusted_cost", "close_adjusted_cost",
-            "volume", "open_oi", "close_oi",
-            "yymm", "cumulative_spread", "cumulative_cost",
-        ]])
-
-    if not all_klines:
-        print("\n无有效数据")
-        return pd.DataFrame(), pd.DataFrame()
-
-    continuous = pd.concat(all_klines, ignore_index=True)
-    continuous = continuous.sort_values("datetime").reset_index(drop=True)
-
-    if continuous["datetime"].duplicated().any():
-        dup_count = int(continuous["datetime"].duplicated().sum())
-        raise RuntimeError(f"连续合约存在 {dup_count} 个重复 datetime，切 bar 逻辑异常")
-
-    rollover_detail_df = pd.DataFrame(rollover_details)
-
-    print(f"\n连续合约序列: {len(continuous)} rows")
-    print(f"  起始: {continuous['dt'].min()}")
-    print(f"  结束: {continuous['dt'].max()}")
-    print(f"  移仓次数: {len(rollover_detail_df)}")
-
-    return continuous, rollover_detail_df
-
-
-def verify_continuous_vs_monthly(
-    continuous: pd.DataFrame,
-    chain_yymm: list[str],
-    rollover_map: pd.DataFrame,
-    min_match_rate: float = VERIFY_MIN_MATCH_RATE,
-) -> bool:
-    """逐 yymm 校验 continuous raw OHLCV 与分月切片一致。"""
-    print(f"\n{'='*60}")
-    print("构建后校验: 分月 vs continuous (raw OHLCV)")
-    print(f"{'='*60}")
-
-    total_overlap = 0
-    total_mismatch = 0
-    failed_yymm: list[str] = []
-
-    rollover_events = _ordered_rollover_events(rollover_map)
-
-    for idx, yymm in enumerate(chain_yymm):
-        monthly = load_contract_data(yymm)
-        if monthly is None:
-            continue
-        monthly_slice = slice_dominant_segment(monthly, idx, chain_yymm, rollover_events)
-        if len(monthly_slice) == 0:
-            print(f"  {yymm}[{idx}]: 跳过 (monthly slice 为空)")
-            continue
-
-        min_dt = monthly_slice["datetime"].min()
-        max_dt = monthly_slice["datetime"].max()
-        cont_slice = continuous[
-            (continuous["datetime"] >= min_dt) & (continuous["datetime"] <= max_dt)
-        ]
-        if len(cont_slice) == 0:
-            print(f"  {yymm}[{idx}]: 跳过 (continuous={len(cont_slice)})")
-            continue
-
-        overlap, mismatch, sample = compare_ohlcv(monthly_slice, cont_slice)
-        total_overlap += overlap
-        total_mismatch += mismatch
-        rate = 1.0 - (mismatch / overlap) if overlap else 1.0
-        status = "OK" if rate >= min_match_rate else "FAIL"
-        print(f"  {yymm}: overlap={overlap}, mismatch={mismatch}, match={rate*100:.2f}% [{status}]")
-        if status == "FAIL":
-            failed_yymm.append(yymm)
-            if len(sample) > 0:
-                print(f"    样本:\n{sample.head(3).to_string(index=False)}")
-
-    overall_rate = 1.0 - (total_mismatch / total_overlap) if total_overlap else 0.0
-    print(f"\n总计: overlap={total_overlap}, mismatch={total_mismatch}, match={overall_rate*100:.3f}%")
-    if failed_yymm:
-        print(f"失败合约: {failed_yymm}")
-        return False
-    if overall_rate < min_match_rate:
-        print(f"整体一致率 {overall_rate*100:.3f}% < {min_match_rate*100:.1f}%")
-        return False
-    print("校验通过")
-    return True
-
-
-def _tq_cst_key(datetime_ns: pd.Series) -> pd.Series:
-    return (
-        pd.to_datetime(datetime_ns, unit="ns", utc=True)
-        .dt.tz_convert("Asia/Shanghai")
-        .dt.floor("min")
-    )
-
-
-def _rq_file_path(prefix: str) -> str | None:
-    rq_dir = os.path.join(ROOT, "data", "rq")
-    candidates = [
-        f"{prefix.upper()}888_1m.parquet",
-        f"{prefix}888_1m.parquet",
-    ]
-    for name in candidates:
-        path = os.path.join(rq_dir, name)
-        if os.path.exists(path):
-            return path
-    return None
-
-
-def verify_spread_adjustment_continuity(
-    continuous: pd.DataFrame,
-    max_rollover_gap: float = 80.0,
-) -> bool:
-    """后复权(close_adjusted)在换月边界应近似连续（仅价差，不含成本）。"""
-    print(f"\n{'='*60}")
-    print("校验: 后复权价差连续性 (close_adjusted @ yymm 切换)")
-    print(f"{'='*60}")
-
-    tq = continuous.sort_values("datetime").reset_index(drop=True)
-    change_idx = tq.index[tq["yymm"] != tq["yymm"].shift()]
-    bad = []
-    for i in change_idx:
-        if i == 0:
-            continue
-        gap = float(tq.loc[i, "close_adjusted"] - tq.loc[i - 1, "close_adjusted"])
-        if abs(gap) > max_rollover_gap:
-            bad.append((tq.loc[i - 1, "yymm"], tq.loc[i, "yymm"], gap))
-
-    if bad:
-        print(f"  失败: {len(bad)} 处换月后复权跳空 > {max_rollover_gap}")
-        for a, b, g in bad[:5]:
-            print(f"    {a} -> {b}: adj_gap={g:+.1f}")
-        return False
-
-    print(f"  通过: {len(change_idx) - 1} 处换月边界, 最大允许跳空 {max_rollover_gap}")
-    return True
-
-
-def verify_continuous_vs_rq(
-    continuous: pd.DataFrame,
-    prefix: str,
-    min_return_corr: float = 0.95,
-) -> bool:
-    """与米筐 888 主连对比：CST 对齐后比较 close_adjusted 日收益。"""
-    rq_path = _rq_file_path(prefix)
-    if rq_path is None:
-        print(f"\n跳过 RQ 对比: 未找到 data/rq/{prefix.upper()}888_1m.parquet")
-        return True
-
-    print(f"\n{'='*60}")
-    print(f"校验: TQ continuous vs RQ 888 ({os.path.basename(rq_path)})")
-    print(f"{'='*60}")
-
-    rq = pd.read_parquet(rq_path).reset_index()
-    rq["key"] = pd.to_datetime(rq["datetime"]).dt.tz_localize("Asia/Shanghai").dt.floor("min")
-    tq = continuous.copy()
-    tq["key"] = _tq_cst_key(tq["datetime"])
-
-    overlap_start = max(tq["key"].min(), rq["key"].min())
-    overlap_end = min(tq["key"].max(), rq["key"].max())
-    rq = rq[(rq["key"] >= overlap_start) & (rq["key"] <= overlap_end)]
-    tq = tq[(tq["key"] >= overlap_start) & (tq["key"] <= overlap_end)]
-
-    merged = tq[["key", "close", "close_adjusted", "yymm"]].merge(
-        rq[["key", "close", "dominant_id"]].rename(columns={"close": "close_rq"}),
-        on="key",
-        how="inner",
-    )
-    if len(merged) < 1000:
-        print(f"  失败: 共同分钟过少 ({len(merged)})")
-        return False
-
-    common_pct = len(merged) / max(len(tq), len(rq)) * 100
-    merged = merged.sort_values("key")
-    daily = merged.groupby(merged["key"].dt.date).agg(
-        close_tq_adj=("close_adjusted", "last"),
-        close_rq=("close_rq", "last"),
-        close_tq_raw=("close", "last"),
-    )
-    ret_adj = daily["close_tq_adj"].pct_change().dropna()
-    ret_rq = daily["close_rq"].pct_change().dropna()
-    ret_raw = daily["close_tq_raw"].pct_change().dropna()
-    corr_adj = ret_adj.corr(ret_rq)
-    corr_raw = ret_raw.corr(ret_rq)
-    level_diff = (daily["close_tq_adj"] - daily["close_rq"]).median()
-
-    print(f"  重叠区间: {overlap_start.date()} ~ {overlap_end.date()}")
-    print(f"  共同分钟: {len(merged):,} ({common_pct:.1f}% of TQ)")
-    print(f"  日收益相关: close_adjusted vs RQ = {corr_adj:.4f}")
-    print(f"  日收益相关: close_raw vs RQ      = {corr_raw:.4f}")
-    print(f"  后复权水平差 median(TQ_adj-RQ)  = {level_diff:+.1f} (前/后复权基准不同，水平不可比)")
-    print(f"  后复权 >3% 分钟跳数: {(merged['close_adjusted'].pct_change().abs() > 0.03).sum()}")
-    print(f"  RQ       >3% 分钟跳数: {(merged['close_rq'].pct_change().abs() > 0.03).sum()}")
-
-    if corr_adj < min_return_corr:
-        print(f"  失败: 日收益相关 {corr_adj:.4f} < {min_return_corr}")
-        return False
-    print("  RQ 对齐校验通过")
-    return True
+    detail_df = pd.DataFrame(rollover_details)
+    print(f"\n移仓次数: {len(detail_df)}")
+    return detail_df
 
 
 def _load_manifest() -> dict:
@@ -1330,7 +1140,6 @@ def _latest_monthly_download_time(manifest: dict, prefix: str) -> str | None:
 
 def update_manifest_derived(
     prefix: str,
-    continuous: pd.DataFrame,
     rollover_map: pd.DataFrame,
     dominant_chain: list[str],
     rollover_detail: pd.DataFrame,
@@ -1345,28 +1154,28 @@ def update_manifest_derived(
 
     built_at = datetime.now().isoformat()
     derived = {
-        f"{prefix}_continuous.parquet": {
-            "built_at": built_at,
-            "rows": int(len(continuous)),
-            "rollover_method": ROLLOVER_METHOD,
-            "rollover_params": DOMINANT_OI_PARAMS,
-            "dominant_chain": dominant_chain,
-            "has_adjusted_columns": True,
-            "adjustment_note": "close_adjusted=后复权(价差); close_adjusted_cost=含滑点手续费",
-            "slippage_simulated": True,
-            "source_monthly_max_download_time": _latest_monthly_download_time(manifest, prefix),
-        },
         "rollover_map.parquet": {
             "built_at": built_at,
             "rows": int(len(rollover_map)),
             "rollover_method": ROLLOVER_METHOD,
+            "rollover_params": DOMINANT_OI_PARAMS,
+            "dominant_chain": dominant_chain,
+            "source_monthly_max_download_time": _latest_monthly_download_time(manifest, prefix),
         },
     }
     if len(rollover_detail) > 0:
         derived["rollover_cost_detail.parquet"] = {
             "built_at": built_at,
             "rows": int(len(rollover_detail)),
+            "slippage_simulated": True,
+            "note": "移仓滑点/手续费（元/吨），非行情复权",
         }
+
+    # 清除历史 continuous 衍生记录
+    old = manifest.get("derived") or {}
+    cont_key = f"{prefix}_continuous.parquet"
+    if cont_key in old:
+        print(f"manifest derived 已移除过时项: {cont_key}")
 
     manifest["derived"] = derived
     _save_manifest(manifest)
@@ -1374,32 +1183,22 @@ def update_manifest_derived(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="换月映射表 + 连续合约构建")
+    parser = argparse.ArgumentParser(description="换月映射表 + 移仓成本明细")
     parser.add_argument("-s", "--symbol", required=True, help="品种代码，如 rb, m, MA")
     parser.add_argument(
         "--verify",
         action="store_true",
-        help="构建后校验分月 vs continuous OHLCV（默认开启）",
+        help="保留兼容；当前全量构建不再校验 continuous",
     )
     parser.add_argument(
         "--no-verify",
         action="store_true",
-        help="跳过构建后校验",
-    )
-    parser.add_argument(
-        "--compare-rq",
-        action="store_true",
-        help="构建后与 data/rq/*888* 做日收益对比（默认 rb 等有 RQ 文件时开启）",
-    )
-    parser.add_argument(
-        "--no-compare-rq",
-        action="store_true",
-        help="跳过 RQ 对比",
+        help="保留兼容；当前全量构建不再校验 continuous",
     )
     parser.add_argument(
         "--map-only",
         action="store_true",
-        help="仅生成 rollover_map.parquet + dominant_windows.json，不构建 continuous",
+        help="仅生成 rollover_map.parquet + dominant_windows.json，不生成成本明细",
     )
     parser.add_argument(
         "--from-oi-daily",
@@ -1416,10 +1215,6 @@ def main() -> None:
 
     _configure(args.symbol)
     prefix = CONFIG["prefix"]
-    do_verify = not args.no_verify
-    do_compare_rq = args.compare_rq or (
-        not args.no_compare_rq and _rq_file_path(prefix) is not None
-    )
 
     from_oi = args.from_oi_daily
     rollover_map, dominant_chain = build_rollover_map(from_oi_daily=from_oi)
@@ -1458,45 +1253,28 @@ def main() -> None:
     print(rollover_map[display_cols].to_string(index=False))
 
     if args.map_only:
-        print(f"\n--map-only: 跳过 continuous 构建（切点 {CONFIG.get('rollover_switch_time')} CST）")
+        print(f"\n--map-only: 跳过成本明细（切点 {CONFIG.get('rollover_switch_time')} CST）")
         print(f"\n{'='*60}")
         print(f"{CONFIG['name']} rollover_map 完成")
         print(f"{'='*60}")
         return
 
-    continuous, rollover_detail = generate_continuous_klines(
-        rollover_map, dominant_chain, simulate_slippage=True,
-    )
-
-    if len(continuous) == 0:
-        print("\n连续合约生成失败")
+    rollover_detail = generate_rollover_cost_detail(rollover_map, dominant_chain)
+    if len(rollover_detail) == 0:
+        print("\n移仓成本明细为空（无有效换月事件）")
         sys.exit(1)
 
-    chain_yymm = [y for y in dominant_chain if y in continuous["yymm"].unique()]
+    detail_parquet = os.path.join(DATA_DIR, "rollover_cost_detail.parquet")
+    rollover_detail.to_parquet(detail_parquet, index=False, engine="pyarrow")
+    print(f"移仓成本明细已保存: {detail_parquet}")
 
-    verify_ok = True
-    if do_verify:
-        verify_ok = verify_continuous_vs_monthly(continuous, chain_yymm, rollover_map)
-        if verify_ok:
-            verify_ok = verify_spread_adjustment_continuity(continuous)
-    if do_compare_rq and verify_ok:
-        verify_ok = verify_continuous_vs_rq(continuous, prefix)
-
-    if not verify_ok:
-        print("\n校验失败，不写入 continuous 文件")
-        sys.exit(2)
-
+    # 清理历史复权 continuous 文件（回测主路径不使用）
     cont_file = os.path.join(DATA_DIR, f"{prefix}_continuous.parquet")
-    continuous.to_parquet(cont_file, index=False, engine="pyarrow")
-    size_mb = os.path.getsize(cont_file) / 1024 / 1024
-    print(f"\n连续合约数据已保存: {cont_file} ({size_mb:.1f} MB)")
+    if os.path.exists(cont_file):
+        os.remove(cont_file)
+        print(f"已删除过时 continuous: {cont_file}")
 
-    if len(rollover_detail) > 0:
-        detail_parquet = os.path.join(DATA_DIR, "rollover_cost_detail.parquet")
-        rollover_detail.to_parquet(detail_parquet, index=False, engine="pyarrow")
-        print(f"移仓成本明细已保存: {detail_parquet}")
-
-    update_manifest_derived(prefix, continuous, rollover_map, dominant_chain, rollover_detail)
+    update_manifest_derived(prefix, rollover_map, dominant_chain, rollover_detail)
 
     print(f"\n{'='*60}")
     print(f"{CONFIG['name']} 完成！")

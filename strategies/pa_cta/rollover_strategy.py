@@ -15,8 +15,8 @@ class BrooksPaCtaRolloverStrategy(BrooksPaCtaStrategy):
         shift = event.price_shift
         if abs(shift) < 1e-9:
             return
-        if self.signal_stop_loss > 0:
-            self.signal_stop_loss += shift
+        if self.stop_price > 0:
+            self.stop_price += shift
         if self.mm_target_price > 0:
             self.mm_target_price += shift
         if self.signal_bar_invalid_line > 0:
@@ -48,5 +48,7 @@ class BrooksPaCtaRolloverStrategy(BrooksPaCtaStrategy):
                 f"换月平旧 {closing_setup} @ {trade.price:.1f} pnl={pnl:+.0f} "
                 f"({trade.datetime.strftime('%Y-%m-%d %H:%M')})"
             )
+            self.pending_exit_order = None
+            self.remaining_position = int(self.pos)
             return
         super().on_trade(trade)

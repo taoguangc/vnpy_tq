@@ -9,6 +9,7 @@ from .strategy import BrooksPaCtaStrategy
 from .symbol_config import (
     SYMBOL_PROFILES,
     TQ_CBC_BASELINE_RB,
+    TQ_EXEC_BASELINE_RB,
     TQ_LEAN_DEFAULT_MODE,
     build_strategy_setting,
     resolve_symbol_profile,
@@ -23,6 +24,7 @@ __all__ = [
     "run_tq_cbc_backtest",
     "SYMBOL_PROFILES",
     "TQ_CBC_BASELINE_RB",
+    "TQ_EXEC_BASELINE_RB",
     "TQ_LEAN_DEFAULT_MODE",
     "build_strategy_setting",
     "resolve_symbol_profile",

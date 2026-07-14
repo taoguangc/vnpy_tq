@@ -64,7 +64,7 @@ def _print_scalp_diagnostics(result: dict, *, pricetick: float) -> None:
 
         print("\n----- 每月净盈亏 -----")
         for month in sorted(monthly):
-            print(f"  {month}: {monthly[month:+,.0f}")
+            print(f"  {month}: {monthly[month]:+,.0f}")
         print("\n----- 每小时净盈亏（按 exit 小时 CST）-----")
         for hour in sorted(hourly):
             print(f"  {hour:02d}:00  {hourly[hour]:+,.0f}")

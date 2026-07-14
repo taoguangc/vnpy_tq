@@ -20,8 +20,12 @@
   7. 串行 for 循环（TQSDK 推荐），同品种进程锁防并发，重试机制带 2 秒冷却。
   8. Parquet 默认 zstd 压缩；主循环用 is_changing 过滤无效 update。
   9. 年份跨度警告：CZCE 品种跨 >9 年时警告合约代码撞键风险。
+ 10. 郑商所十年撞键：合并落盘时自动裁切上十年脏 K 线
+     （保留交割年-1 同月 1 日起；见 trim_czce_decade_collision）。
 
   v2.9: 两阶段 OI→1m（默认）；--phase full 恢复传统全量 1m。
+  v2.10: 落盘前完整性门禁（不完整标 quality_status=incomplete）；--repair 扫描磁盘全部分月
+         （含非主力窗半截文件，如 rb_2301 类盲区）。
 
 用法:
     .venv/Scripts/python.exe tools/download_rb_monthly.py --symbol SHFE.rb --years 2023 2026
@@ -86,6 +90,7 @@ from tools.tq_parquet_io import (
     SESSION_NOTE,
     is_monthly_contract_file,
     normalize_monthly_klines,
+    trim_czce_decade_collision,
 )
 
 logging.basicConfig(
@@ -358,15 +363,10 @@ def download_lock(output_dir: str, symbol: str, shard: str | None = None):
 
 
 def _rollover_symbol_key(prefix: str) -> str:
-    """映射落盘 prefix → rollover_rules 品种键（rb / MA / RM）。"""
-    from tools.rollover_rules import SYMBOL_ALLOWED_DELIVERY_MONTHS
+    """映射落盘 prefix → rollover_rules 规范键（rb / MA / RM，大小写不敏感）。"""
+    from tools.rollover_rules import resolve_rollover_symbol_key
 
-    if prefix in SYMBOL_ALLOWED_DELIVERY_MONTHS:
-        return prefix
-    low = prefix.lower()
-    if low in SYMBOL_ALLOWED_DELIVERY_MONTHS:
-        return low
-    return prefix
+    return resolve_rollover_symbol_key(prefix) or prefix
 
 
 def _exchange_month_list(exchange: str, product: str) -> list[int]:
@@ -409,37 +409,60 @@ def prune_non_delivery_monthlies(
     *,
     dry_run: bool = False,
 ) -> dict:
-    """删除非交割月白名单的分月 parquet 及 orphan 分片。"""
+    """删除非交割月白名单的分月 1m / orphan 分片 / oi_daily。"""
     key = _rollover_symbol_key(prefix)
     allowed = allowed_months_for_symbol(key)
     if allowed is None:
         logger.info(f"[prune] {prefix} 无交割月白名单，跳过")
-        return {"removed": [], "skipped": True, "allowed": None}
+        return {"removed": [], "removed_oi": [], "skipped": True, "allowed": None}
 
     yymm_len = _yymm_len_for_prefix(prefix)
     allowed_set = set(allowed)
     removed: list[str] = []
+    removed_oi: list[str] = []
 
-    for f in sorted(os.listdir(output_dir)):
-        yymm = _parse_monthly_yymm(f, prefix, yymm_len)
+    def _maybe_remove(rel_name: str, abs_path: str, bucket: list[str]) -> None:
+        yymm = _parse_monthly_yymm(os.path.basename(rel_name), prefix, yymm_len)
         if not yymm:
-            continue
+            # oi_daily 文件名同样是 {prefix}_{yymm}.parquet
+            base = os.path.basename(abs_path)
+            if base.startswith(f"{prefix}_") and base.endswith(".parquet"):
+                stem = base[len(prefix) + 1 : -8]
+                if stem.isdigit():
+                    yymm = stem
+        if not yymm:
+            return
         try:
             delivery_m = delivery_month_from_yymm(yymm, yymm_len)
         except ValueError:
-            logger.warning(f"[prune] 无法解析 yymm={yymm!r} from {f}，跳过")
-            continue
+            logger.warning(f"[prune] 无法解析 yymm={yymm!r} from {rel_name}，跳过")
+            return
         if delivery_m in allowed_set:
-            continue
-        fp = os.path.join(output_dir, f)
+            return
         if dry_run:
             logger.info(
-                f"[prune dry-run] {f} (交割月 {delivery_m} ∉ {sorted(allowed_set)})"
+                f"[prune dry-run] {rel_name} (交割月 {delivery_m} ∉ {sorted(allowed_set)})"
             )
         else:
-            os.remove(fp)
-            logger.info(f"[prune] 已删除 {f} (交割月 {delivery_m} ∉ {sorted(allowed_set)})")
-        removed.append(f)
+            os.remove(abs_path)
+            logger.info(
+                f"[prune] 已删除 {rel_name} (交割月 {delivery_m} ∉ {sorted(allowed_set)})"
+            )
+        bucket.append(rel_name)
+
+    for f in sorted(os.listdir(output_dir)):
+        fp = os.path.join(output_dir, f)
+        if not os.path.isfile(fp):
+            continue
+        _maybe_remove(f, fp, removed)
+
+    oi_dir = oi_daily_dir(output_dir)
+    if os.path.isdir(oi_dir):
+        for f in sorted(os.listdir(oi_dir)):
+            fp = os.path.join(oi_dir, f)
+            if not os.path.isfile(fp) or not f.endswith(".parquet"):
+                continue
+            _maybe_remove(os.path.join("oi_daily", f), fp, removed_oi)
 
     if not dry_run and removed:
         manifest = _load_manifest(output_dir)
@@ -451,9 +474,14 @@ def prune_non_delivery_monthlies(
 
     logger.info(
         f"[prune] {prefix} 白名单 {sorted(allowed_set)} | "
-        f"{'将删除' if dry_run else '已删除'} {len(removed)} 个文件"
+        f"{'将删除' if dry_run else '已删除'} 1m={len(removed)} oi_daily={len(removed_oi)}"
     )
-    return {"removed": removed, "skipped": False, "allowed": sorted(allowed_set)}
+    return {
+        "removed": removed,
+        "removed_oi": removed_oi,
+        "skipped": False,
+        "allowed": sorted(allowed_set),
+    }
 
 
 def _build_contract_dates(
@@ -672,6 +700,9 @@ def _try_manifest_quality_check(
     """基于 manifest 的快速质检；返回 None 表示 manifest 信息不足，需读 parquet。"""
     if manifest_entry.get("skip_reason") == "no_data":
         return False, "no_data", None
+    if manifest_entry.get("quality_status") == "incomplete":
+        qreason = manifest_entry.get("quality_reason", "incomplete")
+        return False, f"incomplete({qreason})", None
 
     rows = manifest_entry.get("rows")
     if rows is None:
@@ -832,6 +863,19 @@ def _save_manifest(output_dir: str, manifest: dict):
     os.replace(tmp_path, manifest_path)
 
 
+def _apply_czce_collision_trim(df: pd.DataFrame, prefix: str, yymm: str) -> pd.DataFrame:
+    """郑商所品种合并后裁切十年撞键脏数据。"""
+    if prefix not in CZCE_YYMM_LEN3:
+        return df
+    trimmed, n_drop = trim_czce_decade_collision(df, yymm)
+    if n_drop:
+        logger.warning(
+            f"[{prefix}_{yymm}] CZCE 十年撞键裁切: 丢弃 {n_drop} 行"
+            f"（早于交割年-1 同月 1 日）"
+        )
+    return trimmed
+
+
 def _merge_orphan_parts_only(
     output_dir: str,
     prefix: str,
@@ -849,6 +893,7 @@ def _merge_orphan_parts_only(
 
     dfs = [pd.read_parquet(os.path.join(output_dir, pf)) for pf in part_files]
     full_df = normalize_monthly_klines(pd.concat(dfs, ignore_index=True))
+    full_df = _apply_czce_collision_trim(full_df, prefix, yymm)
     if len(full_df) == 0:
         return {"status": "empty", "file": output_file}
 
@@ -1066,6 +1111,8 @@ def download_oi_daily_contract(
 
     try:
         df = normalize_oi_daily(pd.concat(accumulated, ignore_index=True))
+        if prefix in CZCE_YYMM_LEN3:
+            df = _apply_czce_collision_trim(df, prefix, yymm)
         if len(df) < min_rows // 2:
             return {
                 "symbol": symbol,
@@ -1309,6 +1356,7 @@ def download_single_contract(
             dfs.append(pd.read_parquet(os.path.join(output_dir, pf)))
 
         full_df = normalize_monthly_klines(pd.concat(dfs, ignore_index=True))
+        full_df = _apply_czce_collision_trim(full_df, prefix, yymm)
 
         full_df.to_parquet(tmp_path, **PARQUET_WRITE_KWARGS)
         os.replace(tmp_path, output_path)
@@ -1427,15 +1475,31 @@ def download_single_contract(
                 "elapsed": elapsed,
             }
 
-        manifest = _load_manifest(output_dir)
-        manifest.setdefault("_meta", {})["session_note"] = SESSION_NOTE
-        manifest[output_file] = {
+        qc_entry = {
             "rows": rows,
             "start_date": dt_min.date().isoformat(),
             "end_date": dt_max.date().isoformat(),
-            "download_time": datetime.now().isoformat(),
             "gaps": gap_count,
             "volume_nonzero_ratio": round(vol_ratio, 4),
+        }
+        is_good, qreason, _ = _check_contract_quality(
+            symbol, meta_info, output_dir, prefix, manifest_entry=qc_entry, deep=True,
+        )
+        # 上市日晚于规划月初在 TQ 很常见；半截问题是尾部截断，不因 gap_start 判 incomplete
+        if not is_good and str(qreason).startswith("gap_start"):
+            end_plan = datetime.strptime(meta_info["end_date"], "%Y-%m-%d") + timedelta(
+                hours=23, minutes=59, seconds=59,
+            )
+            gap_end_days = (end_plan - dt_max.to_pydatetime()).total_seconds() / 86400.0
+            expected_min = _expected_min_rows(symbol, meta_info)
+            if rows >= expected_min and gap_end_days <= 30 and gap_count <= 10:
+                logger.info(f"[{symbol}] 豁免 {qreason}（行数/尾部达标）")
+                is_good = True
+        manifest = _load_manifest(output_dir)
+        manifest.setdefault("_meta", {})["session_note"] = SESSION_NOTE
+        base_entry = {
+            **qc_entry,
+            "download_time": datetime.now().isoformat(),
             "size_mb": round(os.path.getsize(output_path) / (1024 * 1024), 2),
             "part_count": part_count,
             "has_night_session": has_night,
@@ -1443,6 +1507,29 @@ def download_single_contract(
             "incremental": backtest_start > start_dt,
             "schema_version": 1,
         }
+        if not is_good:
+            manifest[output_file] = {
+                **base_entry,
+                "quality_status": "incomplete",
+                "quality_reason": qreason,
+            }
+            _save_manifest(output_dir, manifest)
+            elapsed = time.time() - t0
+            logger.warning(
+                f"[不完整] {symbol} -> {output_file}: {qreason} "
+                f"({rows} 行, {dt_min.date()} ~ {dt_max.date()}，待 --repair 重下)"
+            )
+            return {
+                "symbol": symbol,
+                "file": output_file,
+                "rows": rows,
+                "status": "incomplete",
+                "error": qreason,
+                "elapsed": elapsed,
+                "date_range": f"{dt_min.date()} ~ {dt_max.date()}",
+            }
+
+        manifest[output_file] = base_entry
         _save_manifest(output_dir, manifest)
 
         elapsed = time.time() - t0
@@ -1478,7 +1565,7 @@ def main():
         "-u", "--update", action="store_true",
         help="尾部更新模式：质检通过的合约若距 end_dt 超过 7 天仍续传补尾（不删旧文件）",
     )
-    parser.add_argument("-r", "--repair", action="store_true", help="增量质量修复模式：仅检测并下载缺陷或残片合约")
+    parser.add_argument("-r", "--repair", action="store_true", help="质量修复：扫描磁盘全部分月（含非主力窗）并仅重下缺陷合约")
     parser.add_argument(
         "--deep-check",
         action="store_true",
@@ -1502,7 +1589,7 @@ def main():
     parser.add_argument(
         "--rebuild-continuous",
         action="store_true",
-        help="pipeline 结束后运行 build_rollover_map.py -s {prefix}",
+        help="pipeline 结束后运行 build_rollover_map.py（换月表 + 移仓成本明细）",
     )
     parser.add_argument(
         "--all-months",
@@ -1573,7 +1660,7 @@ def main():
     phase_label = (
         "two-phase" if args.phase == "two" or args.two_phase else args.phase
     )
-    logger.info(f"分月合约下载（v2.9 two-phase）")
+    logger.info(f"分月合约下载（v2.10 two-phase）")
     logger.info(f"执行品种   : {symbol}")
     logger.info(f"模式       : {phase_label}")
     logger.info(f"年份范围   : {start_year} ~ {end_year}")
@@ -1715,7 +1802,7 @@ def _run_build_rollover_from_oi(prefix: str, compare_ref: str | None = None) -> 
     script = os.path.join(ROOT, "tools", "build_rollover_map.py")
     cmd = [
         sys.executable, script, "-s", prefix,
-        "--from-oi-daily", "--map-only", "--no-verify", "--no-compare-rq",
+        "--from-oi-daily", "--map-only", "--no-verify",
     ]
     if compare_ref:
         cmd.extend(["--compare-rollover", compare_ref])
@@ -1728,17 +1815,69 @@ def _run_rebuild_continuous(prefix: str) -> int:
     script = os.path.join(ROOT, "tools", "build_rollover_map.py")
     cmd = [
         sys.executable, script, "-s", prefix,
-        "--from-oi-daily", "--no-verify", "--no-compare-rq",
+        "--from-oi-daily", "--no-verify",
     ]
-    logger.info(f"触发连续合约/移仓成本重建: {' '.join(cmd[2:])}")
+    logger.info(f"触发换月表/移仓成本重建: {' '.join(cmd[2:])}")
     rc = subprocess.run(cmd, cwd=ROOT, check=False)
     if rc.returncode != 0:
         logger.error(f"build_rollover_map 重建失败 (exit {rc.returncode})")
-    return rc.returncode
-    if rc.returncode != 0:
-        logger.error(f"build_rollover_map 退出码 {rc.returncode}")
     else:
-        logger.info("连续合约重建完成")
+        logger.info("换月表/移仓成本重建完成")
+    return rc.returncode
+
+
+def _full_meta_by_yymm(contract_dates: dict) -> dict[str, dict]:
+    return {meta["yymm"]: meta for meta in contract_dates.values()}
+
+
+def _discover_on_disk_yymms(output_dir: str, prefix: str, yymm_len: int) -> list[str]:
+    if not os.path.isdir(output_dir):
+        return []
+    yymms: list[str] = []
+    for fname in os.listdir(output_dir):
+        if is_monthly_contract_file(fname, prefix, yymm_len):
+            yymms.append(fname.replace(f"{prefix}_", "").replace(".parquet", ""))
+    return sorted(yymms)
+
+
+def _build_repair_scan_map(
+    output_dir: str,
+    prefix: str,
+    full_contract_dates: dict,
+    dominant_windows: dict | None,
+    yymm_len: int,
+) -> dict[str, dict]:
+    """repair 质检元数据：磁盘上全部分月 + 主力窗内缺失项。
+
+    非主力窗文件用整合约 meta（防 rb_2301 类盲区）；主力窗内用 dominant_1m meta。
+    """
+    full_by_yymm = _full_meta_by_yymm(full_contract_dates)
+    sym_by_yymm = {meta["yymm"]: sym for sym, meta in full_contract_dates.items()}
+    win_keys: set[str] = set()
+    if dominant_windows:
+        win_keys = set(dominant_windows.get("windows", {}).keys())
+
+    scan: dict[str, dict] = {}
+    for yymm in _discover_on_disk_yymms(output_dir, prefix, yymm_len):
+        full = full_by_yymm.get(yymm)
+        sym = sym_by_yymm.get(yymm)
+        if full is None or sym is None:
+            continue
+        if yymm in win_keys and dominant_windows:
+            scan[sym] = apply_windows_to_meta(full, dominant_windows, yymm)
+        else:
+            scan[sym] = full
+
+    for sym, meta in full_contract_dates.items():
+        if sym in scan:
+            continue
+        if dominant_windows and meta["yymm"] not in win_keys:
+            continue
+        if dominant_windows:
+            scan[sym] = apply_windows_to_meta(meta, dominant_windows, meta["yymm"])
+        else:
+            scan[sym] = meta
+    return scan
 
 
 def _run_download_pipeline(
@@ -1753,6 +1892,19 @@ def _run_download_pipeline(
     *,
     dominant_windows: dict | None = None,
 ) -> None:
+    full_contract_dates = contract_dates
+    yymm_len = _yymm_len_for_prefix(prefix)
+
+    # repair 质检须区分「主力窗切片」与「半截全合约」；即使 --phase full 也读磁盘窗口
+    dw_for_repair = dominant_windows
+    if args.repair and dw_for_repair is None:
+        dw_for_repair = load_dominant_windows(output_dir)
+        if dw_for_repair and dw_for_repair.get("windows"):
+            logger.info(
+                f"repair: 已加载磁盘 dominant_windows "
+                f"({len(dw_for_repair['windows'])} 窗)，避免误判主力窗切片"
+            )
+
     if dominant_windows:
         win_keys = set(dominant_windows.get("windows", {}).keys())
         contract_dates = {
@@ -1763,15 +1915,22 @@ def _run_download_pipeline(
         logger.info(f"Phase-2 主力 1m: {len(contract_dates)} 个窗口合约")
     logger.info(f"规划流水线内共有 {len(contract_dates)} 个目标合约")
 
+    meta_for_download = contract_dates
     if args.repair:
-        reconcile_manifest(
-            output_dir, prefix, contract_dates, yymm_len=_yymm_len_for_prefix(prefix),
+        repair_scan = _build_repair_scan_map(
+            output_dir, prefix, full_contract_dates, dw_for_repair, yymm_len,
         )
-        logger.info("触发动态质量扫描引擎...")
+        on_disk_n = len(_discover_on_disk_yymms(output_dir, prefix, yymm_len))
+        reconcile_manifest(
+            output_dir, prefix, full_contract_dates, yymm_len=yymm_len,
+        )
+        logger.info(
+            f"触发动态质量扫描引擎（磁盘分月 {on_disk_n} 个，扫描队列 {len(repair_scan)} 个）..."
+        )
         manifest = _load_manifest(output_dir)
         good, bad = [], []
         manifest_hits = parquet_hits = 0
-        for sym, meta_info in contract_dates.items():
+        for sym, meta_info in repair_scan.items():
             output_file = f"{prefix}_{meta_info['yymm']}.parquet"
             m_entry = manifest.get(output_file)
             is_good, reason, _ = _check_contract_quality(
@@ -1793,24 +1952,34 @@ def _run_download_pipeline(
                 bad.append((sym, reason))
 
         # orphan 分片无 canonical 文件
-        for _sym, meta_info in contract_dates.items():
+        bad_syms = {s for s, _ in bad}
+        for _sym, meta_info in repair_scan.items():
             yymm = meta_info["yymm"]
             canonical = f"{prefix}_{yymm}.parquet"
             if os.path.exists(os.path.join(output_dir, canonical)):
                 continue
             parts = _list_part_files(output_dir, prefix, yymm)
-            if parts and _sym not in [s for s, _ in bad]:
+            if parts and _sym not in bad_syms:
                 bad.append((_sym, f"orphan_parts({len(parts)})"))
+                bad_syms.add(_sym)
 
+        hidden_bad = [
+            (sym, reason) for sym, reason in bad
+            if sym in repair_scan
+            and repair_scan[sym].get("download_mode") != "dominant_1m"
+            and os.path.exists(os.path.join(output_dir, f"{prefix}_{repair_scan[sym]['yymm']}.parquet"))
+        ]
         logger.info(
             f"扫描结果 -> 达标: {len(good)} 个 (manifest {manifest_hits}, parquet {parquet_hits})"
             f" | 缺陷/缺失: {len(bad)} 个"
+            f"（非主力窗半截: {len(hidden_bad)}）"
         )
         if bad:
             logger.info("待修复合约优先级队列 (前10个):")
             for sym, reason in bad[:10]:
                 logger.info(f"  -> {sym}: 状态码={reason}")
             symbols_to_download = [sym for sym, _ in bad]
+            meta_for_download = repair_scan
         else:
             logger.info("本地全量合约质量极佳，无需任何修复。")
             symbols_to_download = []
@@ -1848,7 +2017,7 @@ def _run_download_pipeline(
     for idx, sym in enumerate(symbols_to_download):
         t_contract = time.time()
         result = download_single_contract(
-            sym, contract_dates[sym], auth, output_dir, prefix, args.force, update=args.update
+            sym, meta_for_download[sym], auth, output_dir, prefix, args.force, update=args.update
         )
 
         if result["status"] == "ok":
@@ -1867,6 +2036,12 @@ def _run_download_pipeline(
             total_empty += 1
             empty_symbols.append(sym)
             logger.warning(f"  [{idx+1}/{total_count}] {sym}: 暂无任何历史数据")
+        elif result["status"] == "incomplete":
+            total_error += 1
+            error_symbols.append(sym)
+            logger.warning(
+                f"  [{idx+1}/{total_count}] {sym}: 落盘不完整 -> {result.get('error', '')}"
+            )
         else:
             total_error += 1
             error_symbols.append(sym)
@@ -1892,7 +2067,7 @@ def _run_download_pipeline(
             time.sleep(2)
             for sym, _orig in retry_items:
                 result = download_single_contract(
-                    sym, contract_dates[sym], auth, output_dir, prefix,
+                    sym, meta_for_download[sym], auth, output_dir, prefix,
                     force=True, update=args.update,
                 )
                 if result["status"] in ["ok", "skipped"]:
@@ -1916,7 +2091,7 @@ def _run_download_pipeline(
         still_empty = []
         for sym in empty_symbols:
             result = download_single_contract(
-                sym, contract_dates[sym], auth, output_dir, prefix,
+                sym, meta_for_download[sym], auth, output_dir, prefix,
                 force=False, update=args.update,
             )
             if result["status"] in ["ok", "skipped"]:
@@ -1925,7 +2100,7 @@ def _run_download_pipeline(
                 logger.info(f"  [空序列恢复] {sym} -> {result['status']}")
             else:
                 still_empty.append(sym)
-                _record_no_data_contract(output_dir, prefix, contract_dates[sym], sym)
+                _record_no_data_contract(output_dir, prefix, meta_for_download[sym], sym)
                 logger.warning(f"  [确认无数据] {sym}，已记入 manifest (skip_reason=no_data)")
         empty_symbols = still_empty
 

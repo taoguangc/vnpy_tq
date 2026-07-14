@@ -16,7 +16,20 @@ def tq_data_root() -> Path:
 
 def symbol_dir(prefix: str) -> Path:
     """品种 1m / rollover_map / oi_daily 等：data/tq/{prefix}/。"""
-    return tq_data_root() / prefix
+    return resolve_symbol(prefix)[0]
+
+
+def resolve_symbol(prefix: str) -> tuple[Path, str]:
+    """解析品种目录（大小写不敏感），返回 (data_dir, 文件前缀名)。"""
+    root = tq_data_root()
+    direct = root / prefix
+    if direct.is_dir():
+        return direct, direct.name
+    key = prefix.lower()
+    for child in sorted(root.iterdir()):
+        if child.is_dir() and child.name.lower() == key:
+            return child, child.name
+    return direct, prefix
 
 
 def tick_dir(prefix: str) -> Path:

@@ -5,6 +5,7 @@
 # 环境与密钥
 .venv/
 .env
+.claude/settings.local.json
 
 # 离线数据（本地 download_rb_monthly / download_tick_monthly 生成，体积大）
 data/
@@ -20,6 +21,8 @@ __pycache__/
 # 回测产物 / 日志
 backtests/
 *.log
+research/output/
+experiments/output/
 
 # OS
 .DS_Store

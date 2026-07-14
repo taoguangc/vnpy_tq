@@ -6,7 +6,7 @@ BrooksPaCtaStrategy — Al Brooks 价格行为（PA）深度精简版。
 净盈利最高的 Top 8 OPP，删除全部 Mixin、诊断/审计代码与低盈利 OPP。
 VWAP Dual Core 门禁 + Brooks 恒定风险金定仓 + MM/Chandelier/Breakeven 出场均保留。
 
-保留 OPP（按净盈利排序）：
+保留 OPP（实现见 strategies/pa_cta/opp/）：
   OPP16 两棒反转 / OPP02 EMA 回调 / OPP13 日边界反转 / OPP12 超调衰竭 /
   OPP08 强突破 / OPP19 开幕式 / OPP15 楔形 / OPP17 高潮反转
 """
@@ -38,6 +38,12 @@ try:
     from .aff_router import classify_aff_archetype, setup_allowed_for_archetype
     from .symbol_adaptive import parse_prefix_list, runtime_liquidity_risk_mult, static_liquidity_risk_mult
     from .regime_gate import compute_chop_index, compute_trend_r2
+    from .context_layers import (
+        ContextLayerSnapshot,
+        compute_context_layers,
+        empty_snapshot,
+        layer_gate_blocks,
+    )
     from .bar_patterns import (
         BarMetrics,
         PatternThresholds,
@@ -47,12 +53,20 @@ try:
         is_boundary_bull_reversal,
         is_bull_reversal as bp_is_bull_reversal,
         is_outside_outside,
-        is_quality_day_high_short,
         is_strong_bar as bp_is_strong_bar,
     )
     from .opp_tf import is_opposite_direction, should_upgrade_arm
     from .vsa import VsaFilterMixin
-    from .wedge import WedgeBar, scan_latest_bearish_wedge, scan_latest_bullish_wedge
+    from .opp import OppMixins
+    from .shadow_ledger import (
+        ShadowLedger,
+        build_candidate_from_strategy,
+        evaluate_opp15_direct_gates,
+        evaluate_production_gates,
+    )
+    from .shadow_dry_scan import collect_production_matches
+    from .exit_families import ExitFamilyConfig, family_for_setup
+    from .setup_shrinkage import lookup_shrinkage_mult, parse_shrinkage_overrides
 except (ModuleNotFoundError, ImportError):
     from strategies.pa_cta.aff_gate import compute_aff_snapshot
     from strategies.pa_cta.aff_router import classify_aff_archetype, setup_allowed_for_archetype
@@ -60,6 +74,12 @@ except (ModuleNotFoundError, ImportError):
         parse_prefix_list, runtime_liquidity_risk_mult, static_liquidity_risk_mult,
     )
     from strategies.pa_cta.regime_gate import compute_chop_index, compute_trend_r2
+    from strategies.pa_cta.context_layers import (
+        ContextLayerSnapshot,
+        compute_context_layers,
+        empty_snapshot,
+        layer_gate_blocks,
+    )
     from strategies.pa_cta.bar_patterns import (
         BarMetrics,
         PatternThresholds,
@@ -69,16 +89,20 @@ except (ModuleNotFoundError, ImportError):
         is_boundary_bull_reversal,
         is_bull_reversal as bp_is_bull_reversal,
         is_outside_outside,
-        is_quality_day_high_short,
         is_strong_bar as bp_is_strong_bar,
     )
     from strategies.pa_cta.opp_tf import is_opposite_direction, should_upgrade_arm
     from strategies.pa_cta.vsa import VsaFilterMixin
-    from strategies.pa_cta.wedge import (
-        WedgeBar,
-        scan_latest_bearish_wedge,
-        scan_latest_bullish_wedge,
+    from strategies.pa_cta.opp import OppMixins
+    from strategies.pa_cta.shadow_ledger import (
+        ShadowLedger,
+        build_candidate_from_strategy,
+        evaluate_opp15_direct_gates,
+        evaluate_production_gates,
     )
+    from strategies.pa_cta.shadow_dry_scan import collect_production_matches
+    from strategies.pa_cta.exit_families import ExitFamilyConfig, family_for_setup
+    from strategies.pa_cta.setup_shrinkage import lookup_shrinkage_mult, parse_shrinkage_overrides
 
 
 # ── 入场 Lane 字典（双芯矩阵用）──
@@ -113,7 +137,7 @@ _SETUP_RISK_MULT: dict[str, float] = {
 }
 
 
-class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
+class BrooksPaCtaStrategy(OppMixins, VsaFilterMixin, CtaTemplate):
     """Al Brooks PA 极简版：5m 信号 + 15m Context + VWAP 双芯门禁 + VSA arm 滤网。"""
 
     author = "Tao"
@@ -275,19 +299,54 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     mm_atr_mult = 2.0
     mm_half_close_enabled = True
     mm_runner_enabled = True
+    # Fast Lane 持仓期追踪（关则走慢车道 PP/Chandelier；入场 arm 不变）
+    fast_lane_trail_enabled = True
+    # Phase-3：两族出场（默认关；开则按 exit_families 路由，不改入场集合）
+    exit_family_v3_enabled = False
+    # Phase-4：setup 软收缩定仓（默认关；替代小样本 disabled_setups 硬禁）
+    setup_shrinkage_enabled = False
+    setup_shrinkage_overrides = ""
+    setup_shrinkage_hard_disable = False
+    # Phase-2：production OPP 影子账本（回测研究用，不影响下单）
+    shadow_ledger_enabled = False
     # 趋势寿命
     trend_late_counter_threshold = 3
     trend_late_atr_shrink_ratio = 0.7
-    # VWAP Dual Core
+    # VWAP Dual Core（soft：不拒单，用偏离度降仓/缩目标；hard：旧硬门禁）
     dual_core_enabled = True
+    dual_core_soft_enabled = False  # 默认 hard；rb 对照 NEW 更差，见 EXP-GATE-SOFT-BT
     vwap_regime_lookback = 30
     vwap_chop_min_crosses = 4
     vwap_slope_thresh_ticks = 2
     vwap_trend_deadband_ticks = 4
     vwap_fade_max_atr = 1.2
+    dual_core_exhaustion_atr = 1.0       # OPP16 充分偏离（ATR 倍数）
+    dual_core_exhaustion_min_atr = 0.4  # OPP16 最低偏离门槛
+    dual_core_soft_min_size_mult = 0.25
+    dual_core_soft_min_target_mult = 0.40
+    dual_core_opp16_soft_enabled = True   # soft 模式下 OPP16 是否参与（False=仅 OPP08）
+    dual_core_opp16_wrong_side_size_mult = 0.40
+    dual_core_opp16_wrong_side_target_mult = 0.60
+    dual_core_opp16_shallow_size_mult = 0.55
+    dual_core_opp16_shallow_target_mult = 0.75
+    dual_core_opp16_favor_size_floor = 0.85   # 有利侧衰竭区 size 下限
+    dual_core_opp16_favor_target_floor = 0.90
+    dual_core_opp16_favor_skip_extra = True   # 有利侧跳过 CHOP/强趋势附加罚
+    dual_core_opp16_soft_min_size_mult = 0.70
+    dual_core_opp16_soft_min_target_mult = 0.55
+    # 15m 快/慢连续背景层（默认只计算；gate 默认关，不改变历史入场集合）
+    context_layers_enabled = True
+    context_layer_fast_bars = 10
+    context_layer_slow_bars = 30  # 建议 20～40
+    context_layer_gate_enabled = False
+    context_layer_opp08_min_fit = 0.45
+    context_layer_opp16_min_fit = 0.40
     # VSA 开仓熔断（与 pa 旗舰同源 VsaFilterMixin）
     vsa_enabled = True
     vsa_volume_window = 40
+    vsa_session_relative_enabled = False  # 默认混窗；同时段版见 EXP-GATE-SOFT-BT
+    vsa_session_lookback_days = 15
+    vsa_session_min_samples = 8
     vsa_low_volume_pct = 35.0
     vsa_high_volume_pct = 70.0
     vsa_spread_atr_mult = 0.25
@@ -327,9 +386,14 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     day_high_test_state = "IDLE"
     day_high_test_bar_count = 0
     first_test_high = 0.0
-    signal_stop_loss = 0.0
+    stop_price = 0.0
+    stop_source = ""
+    pending_exit_order: dict | None = None
+    remaining_position = 0
     entry_price = 0.0
     profit_protect_active = False
+    profit_protect_enabled = True
+    eod_flat_enabled = True
     breakeven_locked = False
     highest_high_since_entry = 0.0
     lowest_low_since_entry = 0.0
@@ -344,7 +408,7 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     last_leg1_amplitude = 0.0
     mm_swing_low = 0.0
     mm_swing_high = 0.0
-    _pending_exit_reason = ""
+    last_exit_reason = ""
     trend_direction = 0
     trend_age_bars = 0
     trend_pullback_count = 0
@@ -355,6 +419,8 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     pending_dir = 0
     trigger_level = 0.0
     entry_lane = ""
+    active_entry_lane = ""
+    active_exit_family = ""
     pd_open = 0.0
     pd_close = 0.0
     mtf_wedge_exhaustion_zone = False
@@ -435,12 +501,39 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         "wedge_session_start_hour", "wedge_session_start_minute",
         "wedge_require_mtf", "wedge_b_prime_alpha", "wedge_arm_trigger_max_bars",
         "trailing_active_multiplier", "chandelier_multiplier",
+        "profit_protect_enabled",
+        "eod_flat_enabled",
         "follow_through_bars", "max_daily_trades", "mm_atr_mult",
         "mm_half_close_enabled", "mm_runner_enabled",
+        "fast_lane_trail_enabled",
+        "exit_family_v3_enabled",
+        "setup_shrinkage_enabled",
+        "setup_shrinkage_overrides",
+        "setup_shrinkage_hard_disable",
+        "shadow_ledger_enabled",
         "trend_late_counter_threshold", "trend_late_atr_shrink_ratio",
-        "dual_core_enabled", "vwap_regime_lookback", "vwap_chop_min_crosses",
+        "dual_core_enabled", "dual_core_soft_enabled",
+        "vwap_regime_lookback", "vwap_chop_min_crosses",
         "vwap_slope_thresh_ticks", "vwap_trend_deadband_ticks", "vwap_fade_max_atr",
-        "vsa_enabled", "vsa_volume_window", "vsa_low_volume_pct",
+        "dual_core_exhaustion_atr", "dual_core_exhaustion_min_atr",
+        "dual_core_soft_min_size_mult", "dual_core_soft_min_target_mult",
+        "dual_core_opp16_soft_enabled",
+        "dual_core_opp16_wrong_side_size_mult",
+        "dual_core_opp16_wrong_side_target_mult",
+        "dual_core_opp16_shallow_size_mult",
+        "dual_core_opp16_shallow_target_mult",
+        "dual_core_opp16_favor_size_floor",
+        "dual_core_opp16_favor_target_floor",
+        "dual_core_opp16_favor_skip_extra",
+        "dual_core_opp16_soft_min_size_mult",
+        "dual_core_opp16_soft_min_target_mult",
+        "context_layers_enabled", "context_layer_fast_bars", "context_layer_slow_bars",
+        "context_layer_gate_enabled", "context_layer_opp08_min_fit",
+        "context_layer_opp16_min_fit",
+        "vsa_enabled", "vsa_volume_window",
+        "vsa_session_relative_enabled", "vsa_session_lookback_days",
+        "vsa_session_min_samples",
+        "vsa_low_volume_pct",
         "vsa_high_volume_pct", "vsa_spread_atr_mult", "vsa_weak_close_ratio",
         "vsa_stopping_close_ratio", "vsa_persistence_enabled",
         "vsa_persistence_bars", "vsa_persistence_displacement_ticks",
@@ -451,6 +544,7 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         "market_context", "always_in", "active_setup_name", "daily_trade_count",
         "day_high", "day_low", "vwap", "vwap_regime", "machine_state", "pos",
         "vsa_block_count", "vsa_persistence_exempt_count",
+        "ctx_trend_quality", "ctx_opp08_fit", "ctx_opp16_fit",
     ]
 
     # ──────────────────────────────────────────────────────────────────────
@@ -478,6 +572,10 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self._last_1m_close = 0.0
         self._wedge_direction = 0
         self._dual_core_block_count = 0
+        self._dual_core_soft_reduce_count = 0
+        self._dual_core_size_mult = 1.0
+        self._dual_core_target_mult = 1.0
+        self._vsa_slot_hist = None
         self._late_phase_block_count = 0
         self._aff_block_count = 0
         self._aff_alpha_strength = 0.0
@@ -520,6 +618,13 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self._od_bar1_mid = 0.0
         self._od_bar1_range = 0.0
         self._clear_tf_counter_exit()
+        self._reset_exit_state()
+        self._shadow_ledger = None
+        self._current_5min_bar: BarData | None = None
+        self._shadow_bar_first_attempt = ""
+        if self.shadow_ledger_enabled:
+            sym = self.vt_symbol.split(".")[0] if self.vt_symbol else "unknown"
+            self._shadow_ledger = ShadowLedger(sym)
 
     def on_init(self) -> None:
         self.write_log("Brooks PA CTA 策略初始化，预热历史数据...")
@@ -534,6 +639,14 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self._reset_vwap()
         self.market_context = "TRADING_RANGE"
         self.always_in = "NONE"
+        self._context_layers: ContextLayerSnapshot = empty_snapshot(
+            fast_n=int(self.context_layer_fast_bars),
+            slow_n=int(self.context_layer_slow_bars),
+        )
+        self.ctx_trend_quality = 0.0
+        self.ctx_opp08_fit = 0.5
+        self.ctx_opp16_fit = 0.5
+        self._context_layer_block_count = 0
         self.h_counter = 0
         self.l_counter = 0
         self.h1_signal_low = 0.0
@@ -555,6 +668,8 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self.trend_entry_atr = 0.0
         self.prev_bar_shape = ""
         self.last_context = ""
+        self.active_entry_lane = ""
+        self._reset_exit_state()
         self.pd_open = 0.0
         self.pd_close = 0.0
         self._last_5min_date = None
@@ -574,6 +689,10 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self.vsa_persistence_exempt_count = 0
         self._opp13_vol_block_count = 0
         self._dual_core_block_count = 0
+        self._dual_core_soft_reduce_count = 0
+        self._dual_core_size_mult = 1.0
+        self._dual_core_target_mult = 1.0
+        self._vsa_slot_hist = None
         self._late_phase_block_count = 0
         self._aff_block_count = 0
         self._aff_alpha_strength = 0.0
@@ -585,6 +704,9 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self._trend_r2 = 0.0
         self._trend_chop = 100.0
         self._clear_tf_counter_exit()
+        if self.shadow_ledger_enabled:
+            sym = self.vt_symbol.split(".")[0] if self.vt_symbol else "unknown"
+            self._shadow_ledger = ShadowLedger(sym)
 
     def on_order(self, order: OrderData) -> None:
         pass
@@ -598,8 +720,10 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             self.lowest_low_since_entry = trade.price
             self.bars_since_entry = 0
             self.daily_trade_count += 1
-            self._pending_exit_reason = "STOP_LOSS"
+            self._set_stop(float(self.stop_price or 0.0), "INITIAL", force_source=True)
             setup = self.active_setup_name or "UNKNOWN"
+            stop_px = float(self.stop_price or 0.0)
+            init_r = abs(trade.price - stop_px) * self.contract_size if stop_px > 0 else 0.0
             self._entry_snapshot = {
                 "setup": setup,
                 "entry_time": trade.datetime,
@@ -607,6 +731,8 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                 "market_context": self.market_context,
                 "always_in": self.always_in,
                 "direction": "多" if trade.direction == Direction.LONG else "空",
+                "initial_stop_loss": stop_px,
+                "initial_r_yuan": round(init_r, 2),
             }
             if self.pending_dir != 0 and self.am_5min.inited:
                 atr_5 = float(self.am_5min.atr(self.atr_window))
@@ -621,7 +747,28 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             self.mm_entry_volume = int(trade.volume)
             self.mm_target_scaled = False
             self.mm_runner_active = False
+            if not self.active_entry_lane:
+                setup = self.active_setup_name or ""
+                self.active_entry_lane = self._setup_entry_lane(setup)
+            if getattr(self, "exit_family_v3_enabled", False):
+                fam, _ = family_for_setup(self.active_setup_name or setup)
+                self.active_exit_family = fam.value
+            self._entry_snapshot["exit_family"] = self.active_exit_family or ""
+            signed = int(trade.volume) if trade.direction == Direction.LONG else -int(trade.volume)
+            self.remaining_position = signed
+            self.pending_exit_order = None
+            self.last_exit_reason = ""
+            if self.shadow_ledger_enabled and self._shadow_ledger is not None:
+                self._shadow_ledger.mark_traded(
+                    self.active_setup_name or setup, trade.datetime)
         elif trade.offset in (Offset.CLOSE, Offset.CLOSETODAY):
+            fill_reason = ""
+            if self.pending_exit_order:
+                fill_reason = str(self.pending_exit_order.get("reason") or "")
+            self.pending_exit_order = None
+            self.remaining_position = int(self.pos)
+            if fill_reason:
+                self.last_exit_reason = fill_reason
             snap = self._entry_snapshot or {}
             closing_setup = snap.get("setup") or self.active_setup_name
             if not closing_setup:
@@ -655,7 +802,8 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                             **snap,
                             "exit_time": trade.datetime,
                             "exit_price": trade.price,
-                            "exit_reason": self._pending_exit_reason or "UNKNOWN",
+                            "exit_reason": self.last_exit_reason or "UNKNOWN",
+                            "stop_source": self.stop_source or "",
                             "volume": trade.volume,
                             "holding_minutes": round(
                                 (trade.datetime - snap["entry_time"]).total_seconds() / 60.0,
@@ -668,10 +816,21 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                     )
                     self._entry_snapshot = None
                 self.active_setup_name = ""
+                self.active_entry_lane = ""
+                self._reset_exit_state()
                 self._reset_machine()
 
     def on_stop(self) -> None:
+        if self.shadow_ledger_enabled and self._shadow_ledger is not None:
+            self._shadow_export_path = getattr(self, "_shadow_export_path", None)
         self._print_vsa_funnel()
+        if self.dual_core_enabled:
+            soft = getattr(self, "dual_core_soft_enabled", False)
+            mode = "soft(降仓/缩目标)" if soft else "hard(拒单)"
+            self.write_log(
+                f"Dual Core[{mode}] hard_block={self._dual_core_block_count} "
+                f"soft_reduce={getattr(self, '_dual_core_soft_reduce_count', 0)}"
+            )
         items = sorted(
             self._setup_pnl.items(), key=lambda x: x[1], reverse=True
         )
@@ -696,7 +855,15 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     def on_bar(self, bar: BarData) -> None:
         """1 分钟 Bar：时间过滤、日切重置、尾盘清仓、1m 止损/止盈。"""
         current_time = bar.datetime.time()
-        if self._is_noise_window(current_time):
+        in_noise = self._is_noise_window(current_time)
+
+        if in_noise:
+            if self.pos != 0:
+                if self._process_tf_counter_exit(bar):
+                    return
+                if self._manage_stop_loss(bar):
+                    return
+                self._manage_mm_targets(bar)
             return
 
         if self._process_tf_counter_exit(bar):
@@ -731,15 +898,18 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         else:
             self.entry_window_open = True
 
-        if time(14, 55) <= current_time <= time(15, 0):
-            self.cancel_all()
+        if self.eod_flat_enabled and time(14, 55) <= current_time <= time(15, 0):
             self._reset_machine()
-            if self.pos > 0:
-                self._close_long_position(bar.close_price, exit_reason="EOD_FLAT")
-                self.write_log("【日内清仓】收盘价平多")
-            elif self.pos < 0:
-                self._close_short_position(bar.close_price, exit_reason="EOD_FLAT")
-                self.write_log("【日内清仓】收盘价平空")
+            if self.pos != 0:
+                side_msg = "【日内清仓】收盘价平多" if self.pos > 0 else "【日内清仓】收盘价平空"
+                if self._submit_exit(
+                        bar.close_price,
+                        abs(int(self.pos)),
+                        reason="EOD_FLAT",
+                        kind="EOD",
+                        allow_replace=True,
+                ):
+                    self.write_log(side_msg)
             return
 
         if current_time == time(9, 6) or self.day_high <= 0:
@@ -750,7 +920,8 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             self.day_low = min(self.day_low, bar.low_price)
 
         if self.pos != 0:
-            self._manage_stop_loss(bar)
+            if self._manage_stop_loss(bar):
+                return
             self._manage_mm_targets(bar)
 
         self._update_vwap(bar)
@@ -762,9 +933,12 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     # ──────────────────────────────────────────────────────────────────────
     def on_5min_bar(self, bar: BarData) -> None:
         """5 分钟核心信号引擎：ATR regime gate + Top 8 OPP 入场。"""
+        self._current_5min_bar = bar
+        self._shadow_bar_first_attempt = ""
         self.bg_15.update_bar(bar)
         self.am_5min.update_bar(bar)
         if not self.am_5min.inited:
+            self._record_vsa_slot_volume(bar)
             self._prev_5min_bar = bar
             return
 
@@ -835,106 +1009,117 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                 return
 
         effective_context = self.market_context
-
-        # ── 全局硬过滤 ──
-        if not self.entry_window_open:
-            self._reset_machine()
-            return
-        if atr_5 < self._min_atr_for_context(effective_context):
-            self._reset_machine()
-            return
-        if self.pos != 0:
-            return
-        if not allow_new_entry:
-            self._reset_machine()
-            return
-        if self.daily_trade_count >= self.max_daily_trades:
-            return
-
-        # ── OPP15 Wedge trigger + arm ──
-        if self._process_wedge_trigger_phase(bar, atr_5, tick, is_strong_bar=is_strong_bar):
-            return
-        if (not self.wedge_setup_active and self.machine_state == "IDLE" and not is_oo):
-            self._try_arm_wedge_setup(bar, atr_5, tick)
-
         boundary_tol = self.day_boundary_tolerance * tick
         day_high_touch_tol = self.day_high_second_test_ticks * tick
         lh_max_drop = self.day_high_lh_max_ticks * tick
         is_long_climax = (bar.close_price - ema_20) > (self.long_climax_atr_mult * atr_5)
         is_short_climax = (ema_20 - bar.close_price) > (self.long_climax_atr_mult * atr_5)
 
-        # ── Context 路由 ──
-        if effective_context == "STRONG_BULL":
-            if (bar.close_price > ema_20 and is_strong_bar
-                    and bar.close_price > bar.open_price
-                    and bar.close_price > prev_high and not is_long_climax):
-                self._arm_fast_track(
-                    direction=1, opportunity="OPP08_5M_STRONG_BREAKOUT_LONG",
-                    trigger=bar.high_price + tick,
-                    stop=self._cap_long_stop(bar.low_price - stop_buffer, bar.close_price, atr_5),
-                )
+        dry_kwargs = dict(
+            effective_context=effective_context,
+            atr_5=atr_5,
+            tick=tick,
+            stop_buffer=stop_buffer,
+            ema_20=ema_20,
+            bar_range=bar_range,
+            body=body,
+            prev_high=prev_high,
+            recent_5bar_low=recent_5bar_low,
+            is_strong_bar=is_strong_bar,
+            is_bull_reversal=is_bull_reversal,
+            is_bear_reversal=is_bear_reversal,
+            is_boundary_bull=is_boundary_bull,
+            is_boundary_bear=is_boundary_bear,
+            is_oo=is_oo,
+            is_long_climax=is_long_climax,
+            is_short_climax=is_short_climax,
+            boundary_tol=boundary_tol,
+            day_high_touch_tol=day_high_touch_tol,
+            lh_max_drop=lh_max_drop,
+            upper_shadow=upper_shadow,
+            lower_shadow=lower_shadow,
+        )
+
+        # ── 全局硬过滤 ──
+        global_skip = ""
+        if not self.entry_window_open:
+            self._reset_machine()
+            global_skip = "ENTRY_WINDOW_CLOSED"
+        elif atr_5 < self._min_atr_for_context(effective_context):
+            self._reset_machine()
+            global_skip = "ATR_TOO_LOW"
+        elif self.pos != 0:
+            global_skip = "HAS_POSITION"
+        elif not allow_new_entry:
+            self._reset_machine()
+            global_skip = "REGIME_DISALLOW"
+        elif self.daily_trade_count >= self.max_daily_trades:
+            global_skip = "MAX_DAILY_TRADES"
+
+        if global_skip:
+            return
+
+        self._shadow_bar_first_attempt = ""
+        try:
+            # ── OPP15 Wedge trigger + arm ──
+            if self._process_wedge_trigger_phase(bar, atr_5, tick, is_strong_bar=is_strong_bar):
                 return
-        elif effective_context == "STRONG_BEAR":
-            if (bar.close_price < ema_20 and is_strong_bar
-                    and bar.close_price < bar.open_price):
-                self._arm_fast_track(
-                    direction=-1, opportunity="OPP08_5M_STRONG_BREAKOUT_SHORT",
-                    trigger=bar.low_price - tick,
-                    stop=self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5),
-                )
-                return
-        elif effective_context == "BULL_CHANNEL":
-            self._try_overshoot_fail(bar, atr_5, tick, stop_buffer, bar_range, ema_20,
-                                     is_bull_reversal, is_bear_reversal, is_oo)
-            if self.machine_state != "IDLE":
-                return
-        elif effective_context == "BEAR_CHANNEL":
-            if (self.machine_state == "IDLE" and not is_oo and is_strong_bar
-                    and bar_range > atr_5 * 1.5 and not is_short_climax
-                    and bar.close_price < bar.open_price
-                    and bar.low_price < recent_5bar_low
-                    and bar.close_price < ema_20):
-                self._arm_fast_track(
-                    direction=-1, opportunity="OPP08_5M_STRONG_BREAKOUT_SHORT",
-                    trigger=bar.low_price - tick,
-                    stop=self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5),
-                )
-                return
-            self._try_overshoot_fail(bar, atr_5, tick, stop_buffer, bar_range, ema_20,
-                                     is_bull_reversal, is_bear_reversal, is_oo)
-            if self.machine_state != "IDLE":
-                return
-        elif effective_context == "WIDE_RANGE":
-            if self._try_day_boundary_reversal(
-                    bar, atr_5, tick, bar_range, upper_shadow, lower_shadow,
-                    is_boundary_bull, is_boundary_bear, boundary_tol, is_oo):
-                return
-            if self._try_day_high_double_top(
-                    bar, atr_5, tick, bar_range, upper_shadow, is_boundary_bear,
-                    effective_context, day_high_touch_tol, lh_max_drop):
+            if (not self.wedge_setup_active and self.machine_state == "IDLE" and not is_oo):
+                self._try_arm_wedge_setup(bar, atr_5, tick)
+
+            # ── OPP08 强突破（STRONG_BULL/BEAR + BEAR_CHANNEL）──
+            if self._process_strong_breakout(
+                    bar, effective_context, atr_5, tick, stop_buffer, bar_range,
+                    ema_20, prev_high, recent_5bar_low, is_strong_bar, is_oo,
+                    is_long_climax, is_short_climax):
                 return
 
-        # ── OPP16 Two-Bar Reversal ──
-        if (self.two_bar_rev_enabled and self.machine_state == "IDLE" and self.pos == 0
-                and self._process_two_bar_reversal(
-                    bar, effective_context, atr_5, tick, stop_buffer, bar_range, body)):
-            return
-        # ── OPP02 EMA Pullback ──
-        if (self.ema_pullback_enabled and self.machine_state == "IDLE" and self.pos == 0
-                and self._process_ema_pullback(
-                    bar, effective_context, atr_5, tick, stop_buffer, bar_range, body, ema_20, is_oo)):
-            return
-        # ── OPP17 Climax Reversal ──
-        if (self.climax_rev_enabled and self.machine_state == "IDLE" and self.pos == 0
-                and self._process_climax_reversal(
-                    bar, effective_context, atr_5, tick, stop_buffer, bar_range, is_oo)):
-            return
-        # ── OPP19 Opening Drive ──
-        if (self.opening_drive_enabled and self.machine_state == "IDLE" and self.pos == 0
-                and self._process_opening_drive(
-                    bar, effective_context, atr_5, tick, stop_buffer, bar_range,
-                    body, is_strong_bar, is_oo)):
-            return
+            # ── Context 路由：通道超调 / 宽幅日边界 ──
+            if effective_context in ("BULL_CHANNEL", "BEAR_CHANNEL"):
+                self._try_overshoot_fail(bar, atr_5, tick, stop_buffer, bar_range, ema_20,
+                                         is_bull_reversal, is_bear_reversal, is_oo)
+                if self.machine_state != "IDLE":
+                    return
+            elif effective_context == "WIDE_RANGE":
+                if self._try_day_boundary_reversal(
+                        bar, atr_5, tick, bar_range, upper_shadow, lower_shadow,
+                        is_boundary_bull, is_boundary_bear, boundary_tol, is_oo):
+                    return
+                if self._try_day_high_double_top(
+                        bar, atr_5, tick, bar_range, upper_shadow, is_boundary_bear,
+                        effective_context, day_high_touch_tol, lh_max_drop):
+                    return
+
+            # ── OPP16 Two-Bar Reversal ──
+            if (self.two_bar_rev_enabled and self.machine_state == "IDLE" and self.pos == 0
+                    and self._process_two_bar_reversal(
+                        bar, effective_context, atr_5, tick, stop_buffer, bar_range, body)):
+                return
+            # ── OPP02 EMA Pullback ──
+            if (self.ema_pullback_enabled and self.machine_state == "IDLE" and self.pos == 0
+                    and self._process_ema_pullback(
+                        bar, effective_context, atr_5, tick, stop_buffer, bar_range, body, ema_20, is_oo)):
+                return
+            # ── OPP17 Climax Reversal ──
+            if (self.climax_rev_enabled and self.machine_state == "IDLE" and self.pos == 0
+                    and self._process_climax_reversal(
+                        bar, effective_context, atr_5, tick, stop_buffer, bar_range, is_oo)):
+                return
+            # ── OPP19 Opening Drive ──
+            if (self.opening_drive_enabled and self.machine_state == "IDLE" and self.pos == 0
+                    and self._process_opening_drive(
+                        bar, effective_context, atr_5, tick, stop_buffer, bar_range,
+                        body, is_strong_bar, is_oo)):
+                return
+        finally:
+            self._record_vsa_slot_volume(bar)
+            if self.shadow_ledger_enabled:
+                # 若仅 FIRST_TEST 占位 return 且无 arm 记录，用占位标签抢占
+                if (not getattr(self, "_shadow_bar_first_attempt", "")
+                        and self.day_high_test_state == "FIRST_TEST"
+                        and not self._shadow_ledger.bar_winner(bar.datetime)):
+                    self._shadow_bar_first_attempt = "OPP13_DAY_HIGH_FIRST_TEST"
+                self._shadow_dry_scan_bar(bar, **dry_kwargs)
 
     def on_15min_bar(self, bar: BarData) -> None:
         """15m Context Engine：market_context + always_in + MTF wedge 确认。"""
@@ -951,10 +1136,66 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             return
         self.market_context = self._classify_market_context(
             highs, lows, closes, opens, ema_15, atr_15)
+        self._update_context_layers(highs, lows, closes, ema_15, atr_15)
         self._update_mtf_wedge_exhaustion_zone(atr_15)
         self._update_always_in_state(closes, ema_15, bar, self.get_pricetick(), atr_15)
         self._update_aff_state()
         self._update_trend_regime_state()
+
+    def _update_context_layers(
+        self,
+        highs,
+        lows,
+        closes,
+        ema_15,
+        atr_15: float,
+    ) -> None:
+        """刷新 15m 快/慢连续因子；离散 market_context 仍由 _classify_market_context 负责。"""
+        if not self.context_layers_enabled:
+            self._context_layers = empty_snapshot(
+                fast_n=int(self.context_layer_fast_bars),
+                slow_n=int(self.context_layer_slow_bars),
+            )
+            self.ctx_trend_quality = 0.0
+            self.ctx_opp08_fit = 0.5
+            self.ctx_opp16_fit = 0.5
+            return
+        snap = compute_context_layers(
+            highs,
+            lows,
+            closes,
+            ema_15,
+            float(atr_15),
+            fast_n=int(self.context_layer_fast_bars),
+            slow_n=int(self.context_layer_slow_bars),
+        )
+        self._context_layers = snap
+        self.ctx_trend_quality = float(snap.trend_quality)
+        self.ctx_opp08_fit = float(snap.opp08_fit)
+        self.ctx_opp16_fit = float(snap.opp16_fit)
+
+    def context_layer_snapshot(self) -> ContextLayerSnapshot:
+        return getattr(self, "_context_layers", None) or empty_snapshot(
+            fast_n=int(self.context_layer_fast_bars),
+            slow_n=int(self.context_layer_slow_bars),
+        )
+
+    def _context_layer_blocks_entry(self, direction: int, opportunity: str) -> bool:
+        if not self.context_layer_gate_enabled or not self.context_layers_enabled:
+            return False
+        reason = layer_gate_blocks(
+            self.context_layer_snapshot(),
+            setup=opportunity,
+            direction=direction,
+            min_opp08_fit=float(self.context_layer_opp08_min_fit),
+            min_opp16_fit=float(self.context_layer_opp16_min_fit),
+        )
+        if reason:
+            self._context_layer_block_count = int(
+                getattr(self, "_context_layer_block_count", 0)
+            ) + 1
+            return True
+        return False
 
     def _update_trend_regime_state(self) -> None:
         """15m 收盘后刷新 R² / CHOP（Setup 趋势延续门禁用）。"""
@@ -1222,6 +1463,9 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
     def _dual_core_allows_entry(self, direction: int, lane: str) -> bool:
         if not self.dual_core_enabled or self.vwap_regime == "UNINIT":
             return True
+        # 软模式：不拒单，由 _dual_core_soft_adjust 降仓/缩目标
+        if getattr(self, "dual_core_soft_enabled", False):
+            return True
         ctx = self.market_context
         close = self._last_1m_close
         tick = self.get_pricetick()
@@ -1253,6 +1497,143 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             self._dual_core_block_count += 1
             return False
         return True
+
+    def _dual_core_soft_adjust(
+        self, direction: int, opportunity: str = ""
+    ) -> tuple[float, float]:
+        """软 Dual Core：返回 (size_mult, target_mult)，不拒单。
+
+        OPP08：突破后须在 VWAP 同侧；与日内 VWAP 反向/震荡时降仓缩目标。
+        OPP16：看相对 VWAP 的衰竭偏离，而非仅 VWAP 三态硬切。
+        """
+        size_m, tgt_m = 1.0, 1.0
+        if (
+            not self.dual_core_enabled
+            or not getattr(self, "dual_core_soft_enabled", False)
+            or self.vwap_regime == "UNINIT"
+            or direction == 0
+        ):
+            return 1.0, 1.0
+
+        opp = opportunity or getattr(self, "active_setup_name", "") or ""
+        lane = self._setup_entry_lane(opp) if opp else "TREND"
+        ctx = self.market_context
+        close = float(self._last_1m_close or 0.0)
+        dist = float(self.vwap_distance_atr or 0.0)
+        regime = self.vwap_regime
+        tr_ctx = {"TRADING_RANGE", "TIGHT_RANGE"}
+        tick = self.get_pricetick()
+        deadband = self.vwap_trend_deadband_ticks * tick
+        exh_full = float(getattr(self, "dual_core_exhaustion_atr", 1.0))
+        exh_min = float(getattr(self, "dual_core_exhaustion_min_atr", 0.4))
+        min_size = float(getattr(self, "dual_core_soft_min_size_mult", 0.25))
+        min_tgt = float(getattr(self, "dual_core_soft_min_target_mult", 0.40))
+
+        is_opp08 = opp.startswith("OPP08_") or lane == "TREND"
+
+        if is_opp08 and not opp.startswith("OPP16_"):
+            # 突破后是否仍在 VWAP 同侧
+            if self.vwap > 0 and close > 0:
+                same_side = (
+                    (direction > 0 and close >= self.vwap)
+                    or (direction < 0 and close <= self.vwap)
+                )
+                if not same_side:
+                    size_m *= 0.50
+                    tgt_m *= 0.65
+                if direction > 0 and close < self.vwap - deadband:
+                    size_m *= 0.55
+                    tgt_m *= 0.75
+                if direction < 0 and close > self.vwap + deadband:
+                    size_m *= 0.55
+                    tgt_m *= 0.75
+            # Brooks 趋势 vs 日内 VWAP 冲突 → 降仓而非拒单
+            if regime == "CHOP" and ctx in tr_ctx:
+                size_m *= 0.55
+                tgt_m *= 0.75
+            if direction > 0 and regime == "TREND_DOWN":
+                size_m *= 0.40
+                tgt_m *= 0.60
+            if direction < 0 and regime == "TREND_UP":
+                size_m *= 0.40
+                tgt_m *= 0.60
+
+        opp16_soft = (
+            opp.startswith("OPP16_")
+            and getattr(self, "dual_core_opp16_soft_enabled", True)
+        )
+        if opp16_soft or opp.startswith(("OPP13_", "OPP17_")):
+            wrong_size = float(
+                getattr(self, "dual_core_opp16_wrong_side_size_mult", 0.40)
+            )
+            wrong_tgt = float(
+                getattr(self, "dual_core_opp16_wrong_side_target_mult", 0.60)
+            )
+            shallow_size = float(
+                getattr(self, "dual_core_opp16_shallow_size_mult", 0.55)
+            )
+            shallow_tgt = float(
+                getattr(self, "dual_core_opp16_shallow_target_mult", 0.75)
+            )
+            favor_size_floor = float(
+                getattr(self, "dual_core_opp16_favor_size_floor", 0.85)
+            )
+            favor_tgt_floor = float(
+                getattr(self, "dual_core_opp16_favor_target_floor", 0.90)
+            )
+            skip_extra = bool(
+                getattr(self, "dual_core_opp16_favor_skip_extra", True)
+            )
+            # 反转有利侧：多在下、空在上
+            favorable = (direction > 0 and dist < 0) or (direction < 0 and dist > 0)
+            wrong_side = (direction > 0 and dist >= 0) or (direction < 0 and dist <= 0)
+            if wrong_side:
+                size_m *= wrong_size
+                tgt_m *= wrong_tgt
+            elif abs(dist) < exh_min:
+                size_m *= shallow_size
+                tgt_m *= shallow_tgt
+            elif abs(dist) < exh_full:
+                frac = (abs(dist) - exh_min) / max(exh_full - exh_min, 1e-6)
+                if favorable:
+                    size_m *= favor_size_floor + (1.0 - favor_size_floor) * frac
+                    tgt_m *= favor_tgt_floor + (1.0 - favor_tgt_floor) * frac
+                else:
+                    size_m *= shallow_size + (1.0 - shallow_size) * frac
+                    tgt_m *= shallow_tgt + (1.0 - shallow_tgt) * frac
+            extra_ok = not (skip_extra and favorable and opp.startswith("OPP16_"))
+            if extra_ok:
+                if regime in ("TREND_UP", "TREND_DOWN") and abs(dist) > self.vwap_fade_max_atr:
+                    size_m *= 0.50
+                    tgt_m *= 0.55
+                if regime == "CHOP" and ctx in ("STRONG_BULL", "STRONG_BEAR"):
+                    size_m *= 0.60
+                    tgt_m *= 0.80
+
+        if opp.startswith("OPP16_"):
+            min_size = float(
+                getattr(self, "dual_core_opp16_soft_min_size_mult", min_size)
+            )
+            min_tgt = float(
+                getattr(self, "dual_core_opp16_soft_min_target_mult", min_tgt)
+            )
+
+        size_m = max(min_size, min(1.0, size_m))
+        tgt_m = max(min_tgt, min(1.0, tgt_m))
+        if size_m < 0.999 or tgt_m < 0.999:
+            self._dual_core_soft_reduce_count = (
+                getattr(self, "_dual_core_soft_reduce_count", 0) + 1
+            )
+        return size_m, tgt_m
+
+    def _refresh_dual_core_soft_mults(
+        self, direction: int | None = None, opportunity: str | None = None
+    ) -> None:
+        d = int(direction if direction is not None else (self.pending_dir or 0))
+        opp = opportunity if opportunity is not None else (self.active_setup_name or "")
+        size_m, tgt_m = self._dual_core_soft_adjust(d, opp)
+        self._dual_core_size_mult = size_m
+        self._dual_core_target_mult = tgt_m
 
     def _clear_tf_counter_exit(self) -> None:
         self._tf_counter_exit_setup = ""
@@ -1300,9 +1681,11 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             return False
         reason = self._tf_counter_exit_reason or "TF_COUNTER"
         if self.pos > 0:
-            self._close_long_position(bar.close_price, exit_reason=reason)
+            self._close_long_position(
+                bar.close_price, exit_reason=reason, kind="TF_COUNTER", allow_replace=True)
         else:
-            self._close_short_position(bar.close_price, exit_reason=reason)
+            self._close_short_position(
+                bar.close_price, exit_reason=reason, kind="TF_COUNTER", allow_replace=True)
         self._clear_tf_counter_exit()
         return True
 
@@ -1320,82 +1703,437 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         opp = opportunity or ""
         if not opp:
             return False
+        if getattr(self, "setup_shrinkage_enabled", False) and getattr(self, "setup_shrinkage_hard_disable", False):
+            mult = self._get_setup_shrinkage_mult(opp)
+            if mult <= 0:
+                return True
         for prefix in self._parse_disabled_setups(self.disabled_setups):
             if opp.startswith(prefix):
                 return True
         return False
 
-    def _arm_fast_track(self, *, direction, opportunity, trigger, stop, invalid_line=0.0) -> None:
-        if self._setup_disabled(opportunity):
-            return
-        if self._aff_archetype_blocks_entry(opportunity):
-            self._aff_archetype_block_count += 1
-            return
-        if self._late_phase_blocks_entry(
-                direction, self.market_context, opportunity):
-            self._late_phase_block_count += 1
-            return
-        if self._aff_blocks_entry():
-            self._aff_block_count += 1
-            return
-        lane = self._setup_entry_lane(opportunity)
-        if not self._dual_core_allows_entry(direction, lane):
-            return
-        if self._vsa_blocks_entry(direction):
-            return
-        if not self._opp_tf_arm_gate(direction, opportunity):
-            return
-        self.machine_state = "FAST_TRACK_ARMED"
-        self.pending_dir = direction
-        self.active_setup_name = opportunity
-        self.trigger_level = trigger
-        self.signal_stop_loss = stop
-        self.signal_bar_invalid_line = invalid_line or stop
-        self.entry_lane = "FAST_TRACK"
+    def _get_setup_shrinkage_mult(self, setup: str | None = None) -> float:
+        if not getattr(self, "setup_shrinkage_enabled", False):
+            return 1.0
+        name = setup or self.active_setup_name or ""
+        overrides = parse_shrinkage_overrides(getattr(self, "setup_shrinkage_overrides", "") or "")
+        default = 0.5
+        return lookup_shrinkage_mult(name, overrides, default)
 
-    def _arm_pending_confirm(self, *, direction, opportunity, trigger, stop, invalid_line=0.0) -> None:
-        if self._setup_disabled(opportunity):
-            return
-        if self._aff_archetype_blocks_entry(opportunity):
+    def _shadow_increment_gate_block(self, gate: str) -> None:
+        if gate == "aff_archetype":
             self._aff_archetype_block_count += 1
-            return
-        if self._late_phase_blocks_entry(
-                direction, self.market_context, opportunity):
+        elif gate == "late_phase":
             self._late_phase_block_count += 1
-            return
-        if self._aff_blocks_entry():
+        elif gate == "aff_filter":
             self._aff_block_count += 1
-            return
-        lane = self._setup_entry_lane(opportunity)
-        if not self._dual_core_allows_entry(direction, lane):
-            return
-        if self._vsa_blocks_entry(direction):
-            return
-        if not self._opp_tf_arm_gate(direction, opportunity):
-            return
-        self.machine_state = "PENDING_CONFIRM"
-        self.pending_dir = direction
-        self.active_setup_name = opportunity
-        self.trigger_level = trigger
-        self.signal_stop_loss = stop
-        self.signal_bar_invalid_line = invalid_line or trigger
-        self.entry_lane = "PENDING_CONFIRM"
-
-    def _arm_opp13_pending(
-        self, bar, *, direction, opportunity, trigger, stop, invalid_line=0.0,
-    ) -> None:
-        """OPP13 专用 arm：叠加量能筛选后再走 PENDING_CONFIRM。"""
-        if not self._opp13_volume_allows_entry(bar, direction):
+        elif gate == "opp13_volume":
             self._opp13_vol_block_count += 1
+
+    def _shadow_entry_price(self, bar: BarData, direction: int, tick: float) -> float:
+        if direction > 0:
+            return bar.close_price + tick
+        return bar.close_price - tick
+
+    def _shadow_log_candidate(
+        self,
+        *,
+        bar: BarData,
+        direction: int,
+        opportunity: str,
+        entry_price: float,
+        trigger: float,
+        stop: float,
+        arm_mode: str,
+        gates: dict,
+        first_block: str | None,
+        allow_preempt: bool = True,
+        global_skip_reason: str = "",
+        source: str = "ARM",
+        force_disposition: str = "",
+        preempted_by: str = "",
+    ) -> str:
+        ledger = self._shadow_ledger
+        if not getattr(self, "_shadow_bar_first_attempt", ""):
+            self._shadow_bar_first_attempt = opportunity
+        if force_disposition:
+            disposition = force_disposition
+        elif first_block:
+            disposition = "GATE_BLOCKED"
+            # 计数已在 _production_gates_pass 完成；此处不重复 increment
+        elif self.pos != 0:
+            disposition = "POS_SKIP"
+        elif global_skip_reason:
+            disposition = "GLOBAL_SKIP"
+        elif allow_preempt and ledger.bar_winner(bar.datetime):
+            preempted_by = preempted_by or ledger.bar_winner(bar.datetime)
+            disposition = "PREEMPTED"
+        else:
+            disposition = "ARMED"
+        if disposition == "PREEMPTED" and not preempted_by:
+            preempted_by = (
+                ledger.bar_winner(bar.datetime)
+                or getattr(self, "_shadow_bar_first_attempt", "")
+                or ""
+            )
+        rec = build_candidate_from_strategy(
+            ledger,
+            self,
+            bar=bar,
+            opportunity=opportunity,
+            direction=direction,
+            entry_price=entry_price,
+            stop=stop,
+            trigger=trigger,
+            arm_mode=arm_mode,
+            gates=gates,
+            first_block=first_block,
+            disposition=disposition,
+            preempted_by=preempted_by,
+            global_skip_reason=global_skip_reason,
+            source=source,
+        )
+        ledger.add(rec)
+        return disposition
+
+    def _shadow_mark_bar_winner(self, bar: BarData, setup: str) -> None:
+        if self.shadow_ledger_enabled and self._shadow_ledger is not None:
+            self._shadow_ledger.set_bar_winner(bar.datetime, setup)
+
+    def _shadow_gate_counters_snapshot(self) -> dict:
+        return {
+            "_aff_archetype_block_count": self._aff_archetype_block_count,
+            "_late_phase_block_count": self._late_phase_block_count,
+            "_aff_block_count": self._aff_block_count,
+            "_dual_core_block_count": self._dual_core_block_count,
+            "_opp13_vol_block_count": self._opp13_vol_block_count,
+            "vsa_block_count": int(getattr(self, "vsa_block_count", 0)),
+            "_vsa_block_count": int(getattr(self, "_vsa_block_count", 0)),
+        }
+
+    def _shadow_gate_counters_restore(self, snap: dict) -> None:
+        for k, v in snap.items():
+            setattr(self, k, v)
+
+    def _shadow_dry_scan_bar(
+        self,
+        bar: BarData,
+        *,
+        effective_context: str,
+        atr_5: float,
+        tick: float,
+        stop_buffer: float,
+        ema_20: float,
+        bar_range: float,
+        body: float,
+        prev_high: float,
+        recent_5bar_low: float,
+        is_strong_bar: bool,
+        is_bull_reversal: bool,
+        is_bear_reversal: bool,
+        is_boundary_bull: bool,
+        is_boundary_bear: bool,
+        is_oo: bool,
+        is_long_climax: bool,
+        is_short_climax: bool,
+        boundary_tol: float,
+        day_high_touch_tol: float,
+        lh_max_drop: float,
+        upper_shadow: float,
+        lower_shadow: float,
+        global_skip_reason: str = "",
+    ) -> None:
+        """Phase-2.1：补记未到达 arm 的 pattern 命中（PREEMPTED / GLOBAL_SKIP）。"""
+        if not self.shadow_ledger_enabled or self._shadow_ledger is None:
             return
-        self._arm_pending_confirm(
+        matches = collect_production_matches(
+            self,
+            bar,
+            effective_context=effective_context,
+            atr_5=atr_5,
+            tick=tick,
+            stop_buffer=stop_buffer,
+            ema_20=ema_20,
+            bar_range=bar_range,
+            body=body,
+            prev_high=prev_high,
+            recent_5bar_low=recent_5bar_low,
+            is_strong_bar=is_strong_bar,
+            is_bull_reversal=is_bull_reversal,
+            is_bear_reversal=is_bear_reversal,
+            is_boundary_bull=is_boundary_bull,
+            is_boundary_bear=is_boundary_bear,
+            is_oo=is_oo,
+            is_long_climax=is_long_climax,
+            is_short_climax=is_short_climax,
+            boundary_tol=boundary_tol,
+            day_high_touch_tol=day_high_touch_tol,
+            lh_max_drop=lh_max_drop,
+            upper_shadow=upper_shadow,
+            lower_shadow=lower_shadow,
+        )
+        if not matches:
+            return
+        winner = self._shadow_ledger.bar_winner(bar.datetime)
+        first_attempt = getattr(self, "_shadow_bar_first_attempt", "") or ""
+        preempt_label = winner or first_attempt
+        for m in matches:
+            if self._shadow_ledger.has_setup_at(bar.datetime, m.setup):
+                continue
+            # 无抢占/无全局跳过 → production 应已走到该 OPP；缺记录则视为未命中，不补记
+            if not preempt_label and not global_skip_reason:
+                continue
+            entry_price = (
+                float(m.trigger) if m.is_direct
+                else self._shadow_entry_price(bar, m.direction, tick)
+            )
+            snap = self._shadow_gate_counters_snapshot()
+            try:
+                if m.is_direct:
+                    gates, first_block = evaluate_opp15_direct_gates(
+                        self, m.setup, m.direction)
+                else:
+                    gates, first_block = evaluate_production_gates(
+                        self,
+                        m.setup,
+                        m.direction,
+                        bar=bar,
+                        include_opp13_volume=m.include_opp13_volume,
+                    )
+            finally:
+                self._shadow_gate_counters_restore(snap)
+            if global_skip_reason:
+                force = "GLOBAL_SKIP"
+                preempted_by = ""
+            else:
+                force = "PREEMPTED"
+                preempted_by = preempt_label
+            self._shadow_log_candidate(
+                bar=bar,
+                direction=m.direction,
+                opportunity=m.setup,
+                entry_price=entry_price,
+                trigger=m.trigger,
+                stop=m.stop,
+                arm_mode=m.arm_mode,
+                gates=gates,
+                first_block=first_block,
+                allow_preempt=False,
+                global_skip_reason=global_skip_reason,
+                source="DRY_SCAN",
+                force_disposition=force,
+                preempted_by=preempted_by,
+            )
+
+    def _production_gates_pass(
+        self,
+        *,
+        direction: int,
+        opportunity: str,
+        bar: BarData | None,
+        include_opp13_volume: bool = False,
+    ) -> bool:
+        if include_opp13_volume and bar is not None:
+            if not self._opp13_volume_allows_entry(bar, direction):
+                self._opp13_vol_block_count += 1
+                return False
+        if self._setup_disabled(opportunity):
+            return False
+        if self._aff_archetype_blocks_entry(opportunity):
+            self._aff_archetype_block_count += 1
+            return False
+        if self._late_phase_blocks_entry(
+                direction, self.market_context, opportunity):
+            self._late_phase_block_count += 1
+            return False
+        if self._context_layer_blocks_entry(direction, opportunity):
+            return False
+        if self._aff_blocks_entry():
+            self._aff_block_count += 1
+            return False
+        lane = self._setup_entry_lane(opportunity)
+        if not self._dual_core_allows_entry(direction, lane):
+            return False
+        if self._vsa_blocks_entry(direction, bar=bar):
+            return False
+        if not self._opp_tf_arm_gate(direction, opportunity):
+            return False
+        return True
+
+    def _commit_production_arm(
+        self,
+        *,
+        arm_mode: str,
+        direction: int,
+        opportunity: str,
+        trigger: float,
+        stop: float,
+        invalid_line: float = 0.0,
+    ) -> None:
+        if arm_mode == "FAST_TRACK":
+            self.machine_state = "FAST_TRACK_ARMED"
+            self.entry_lane = "FAST_TRACK"
+            self.active_entry_lane = "FAST_TRACK"
+            self.signal_bar_invalid_line = invalid_line or stop
+        else:
+            self.machine_state = "PENDING_CONFIRM"
+            self.entry_lane = "PENDING_CONFIRM"
+            self.active_entry_lane = "PENDING_CONFIRM"
+            self.signal_bar_invalid_line = invalid_line or trigger
+        self.pending_dir = direction
+        self.active_setup_name = opportunity
+        self.trigger_level = trigger
+        self._set_stop(stop, "INITIAL", force_source=True)
+        self._refresh_dual_core_soft_mults(direction, opportunity)
+
+    def _try_production_arm(
+        self,
+        *,
+        direction: int,
+        opportunity: str,
+        trigger: float,
+        stop: float,
+        invalid_line: float = 0.0,
+        arm_mode: str = "FAST_TRACK",
+        include_opp13_volume: bool = False,
+    ) -> bool:
+        bar = self._current_5min_bar
+        if bar is None:
+            return False
+        tick = self.get_pricetick()
+        entry_price = self._shadow_entry_price(bar, direction, tick)
+        passed = self._production_gates_pass(
+            direction=direction,
+            opportunity=opportunity,
+            bar=bar,
+            include_opp13_volume=include_opp13_volume,
+        )
+        if self.shadow_ledger_enabled and self._shadow_ledger is not None:
+            snap = self._shadow_gate_counters_snapshot()
+            try:
+                gates, first_block = evaluate_production_gates(
+                    self,
+                    opportunity,
+                    direction,
+                    bar=bar,
+                    include_opp13_volume=include_opp13_volume,
+                )
+            finally:
+                self._shadow_gate_counters_restore(snap)
+            if not passed:
+                first_block = first_block or "production_gates"
+            disposition = self._shadow_log_candidate(
+                bar=bar,
+                direction=direction,
+                opportunity=opportunity,
+                entry_price=entry_price,
+                trigger=trigger,
+                stop=stop,
+                arm_mode=arm_mode,
+                gates=gates,
+                first_block=first_block if not passed else None,
+                allow_preempt=passed,
+            )
+            if not passed:
+                return False
+        elif not passed:
+            return False
+        self._commit_production_arm(
+            arm_mode=arm_mode,
             direction=direction,
             opportunity=opportunity,
             trigger=trigger,
             stop=stop,
             invalid_line=invalid_line,
         )
+        if self.shadow_ledger_enabled and bar is not None:
+            self._shadow_mark_bar_winner(bar, opportunity)
+        return True
 
+    def _try_opp15_direct_entry(
+        self,
+        *,
+        bar: BarData,
+        direction: int,
+        opportunity: str,
+        entry_price: float,
+        stop: float,
+        invalid_line: float,
+        atr_5: float,
+    ) -> bool:
+        """OPP15 B' 直进：shadow 记录 + 与 production 相同的 gate 子集。"""
+        passed = True
+        if self._setup_disabled(opportunity):
+            passed = False
+        elif not self._dual_core_allows_entry(
+                direction, self._setup_entry_lane(opportunity)):
+            passed = False
+        elif self._aff_blocks_entry():
+            self._aff_block_count += 1
+            passed = False
+        self._refresh_dual_core_soft_mults(direction, opportunity)
+        volume = self._calc_brooks_volume(
+            entry_price if direction > 0 else stop,
+            stop if direction > 0 else entry_price,
+            atr_5=atr_5,
+        )
+        if volume <= 0:
+            passed = False
+        if self.shadow_ledger_enabled and self._shadow_ledger is not None:
+            snap = self._shadow_gate_counters_snapshot()
+            try:
+                gates, first_block = evaluate_opp15_direct_gates(
+                    self, opportunity, direction)
+            finally:
+                self._shadow_gate_counters_restore(snap)
+            if not passed:
+                first_block = first_block or "production_gates"
+            self._shadow_log_candidate(
+                bar=bar,
+                direction=direction,
+                opportunity=opportunity,
+                entry_price=entry_price,
+                trigger=entry_price,
+                stop=stop,
+                arm_mode="DIRECT",
+                gates=gates,
+                first_block=first_block if not passed else None,
+                allow_preempt=passed,
+            )
+            if not passed:
+                return False
+        elif not passed:
+            return False
+        self.active_setup_name = opportunity
+        self._set_stop(stop, "INITIAL", force_source=True)
+        self.signal_bar_invalid_line = invalid_line
+        self.profit_protect_active = False
+        if direction > 0:
+            self.buy(entry_price, volume)
+        else:
+            self.short(entry_price, volume)
+        self._shadow_mark_bar_winner(bar, opportunity)
+        return True
+
+    def _arm_fast_track(self, *, direction, opportunity, trigger, stop, invalid_line=0.0) -> None:
+        self._try_production_arm(
+            direction=direction,
+            opportunity=opportunity,
+            trigger=trigger,
+            stop=stop,
+            invalid_line=invalid_line,
+            arm_mode="FAST_TRACK",
+        )
+
+    def _arm_pending_confirm(self, *, direction, opportunity, trigger, stop, invalid_line=0.0) -> None:
+        self._try_production_arm(
+            direction=direction,
+            opportunity=opportunity,
+            trigger=trigger,
+            stop=stop,
+            invalid_line=invalid_line,
+            arm_mode="PENDING_CONFIRM",
+        )
     def _execute_state_machine(self, bar, atr_5, tick, is_strong_bar) -> bool:
         """执行 PENDING_CONFIRM / FAST_TRACK_ARMED 状态机，返回是否已处理。"""
         if self.machine_state == "PENDING_CONFIRM":
@@ -1414,7 +2152,7 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             if confirmed:
                 if self.pending_dir == 1:
                     volume = self._calc_brooks_volume(
-                        self.entry_price, self.signal_stop_loss, atr_5=atr_5,
+                        self.entry_price, self.stop_price, atr_5=atr_5,
                         max_position_cap=self.max_position)
                     if volume > 0:
                         self.profit_protect_active = False
@@ -1422,7 +2160,7 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                         filled = True
                 else:
                     volume = self._calc_brooks_volume(
-                        self.signal_stop_loss, self.entry_price, atr_5=atr_5,
+                        self.stop_price, self.entry_price, atr_5=atr_5,
                         max_position_cap=self.max_position)
                     if volume > 0:
                         self.profit_protect_active = False
@@ -1433,13 +2171,13 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         if self.machine_state == "FAST_TRACK_ARMED":
             if self.pending_dir == 1:
                 volume = self._calc_brooks_volume(
-                    self.trigger_level, self.signal_stop_loss, atr_5=atr_5)
+                    self.trigger_level, self.stop_price, atr_5=atr_5)
                 if volume > 0:
                     self.profit_protect_active = False
                     self.buy(self.trigger_level, volume, stop=True)
             else:
                 volume = self._calc_brooks_volume(
-                    self.signal_stop_loss, self.trigger_level, atr_5=atr_5)
+                    self.stop_price, self.trigger_level, atr_5=atr_5)
                 if volume > 0:
                     self.profit_protect_active = False
                     self.short(self.trigger_level, volume, stop=True)
@@ -1476,13 +2214,47 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         return float(np.searchsorted(np.sort(valid), atr_5) / len(valid) * 100.0)
 
     def _is_fast_lane_setup(self) -> bool:
-        return self.entry_lane == "FAST_TRACK"
+        if not getattr(self, "fast_lane_trail_enabled", True):
+            return False
+        if getattr(self, "exit_family_v3_enabled", False):
+            cfg = self._active_exit_family_config()
+            if cfg is not None:
+                return cfg.enable_fast_lane_trail
+        return self.active_entry_lane == "FAST_TRACK"
+
+    def _active_exit_family_config(self) -> ExitFamilyConfig | None:
+        if not getattr(self, "exit_family_v3_enabled", False):
+            return None
+        setup = self.active_setup_name or ""
+        if not setup:
+            return None
+        _, cfg = family_for_setup(setup)
+        return cfg
 
     def _get_breakeven_trigger_atr_mult(self) -> float:
+        cfg = self._active_exit_family_config()
+        if cfg is not None:
+            return cfg.breakeven_atr_mult
         setup = self.active_setup_name or ""
         if setup.startswith(_BREAKEVEN_FAST_SETUPS):
             return self.breakeven_trigger_atr_mult_fast
         return self.breakeven_trigger_atr_mult_slow
+
+    def _mm_runner_allowed(self) -> bool:
+        if not getattr(self, "mm_runner_enabled", True):
+            return False
+        cfg = self._active_exit_family_config()
+        if cfg is not None:
+            return cfg.enable_mm_runner
+        return True
+
+    def _profit_protect_allowed(self) -> bool:
+        if not getattr(self, "profit_protect_enabled", True):
+            return False
+        cfg = self._active_exit_family_config()
+        if cfg is not None:
+            return cfg.enable_profit_protect
+        return True
 
     def _get_setup_risk_mult(self) -> float:
         """按 active_setup_name 查表缩放单笔 risk_money（仅定仓，不改信号）。"""
@@ -1491,7 +2263,10 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         setup = self.active_setup_name or ""
         if not setup:
             return self.setup_risk_mult_default
-        return _SETUP_RISK_MULT.get(setup, self.setup_risk_mult_default)
+        base = _SETUP_RISK_MULT.get(setup, self.setup_risk_mult_default)
+        if getattr(self, "setup_shrinkage_enabled", False):
+            return base * self._get_setup_shrinkage_mult(setup)
+        return base
 
     def _late_phase_blocks_entry(
         self, direction: int, effective_context: str, opportunity: str = "",
@@ -1624,733 +2399,215 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         self.trigger_level = 0.0
         self.entry_lane = ""
 
-    def _reset_day_high_test(self) -> None:
-        self.day_high_test_state = "IDLE"
-        self.day_high_test_bar_count = 0
-        self.first_test_high = 0.0
-
-    def _reset_wedge_setup(self) -> None:
-        self.wedge_setup_active = False
-        self.wedge_confirmed_p3_high = 0.0
-        self.wedge_trigger_line = 0.0
-        self.wedge_arm_time = None
-        self.wedge_current_alpha = 0.0
-        self.wedge_p3_body_floor = 0.0
-        self._wedge_direction = 0
-
-    def _reset_opening_drive(self) -> None:
-        self._od_state = "IDLE"
-        self._od_high = 0.0
-        self._od_low = 0.0
-        self._od_bars_collected = 0
-        self._od_session_date = None
-        self._od_bar1_shape = ""
-        self._od_bar1_mid = 0.0
-        self._od_bar1_range = 0.0
-
     # ──────────────────────────────────────────────────────────────────────
-    # OPP12 超调衰竭（BULL/BEAR_CHANNEL 共用）
+    # 出场管理（Phase-1 硬不变量）
+    # 1) 持仓时任何时段都必须检查止损
+    # 2) 同 bar 止损与目标同时触发，只允许止损单
+    # 3) 半仓必须真实按指定 volume 平仓
+    # 4) 平仓单未成交前，不清空止损保护、不重复下全平单
+    # 状态拆分：stop_price / stop_source / pending_exit_order / remaining_position
     # ──────────────────────────────────────────────────────────────────────
-    def _try_overshoot_fail(self, bar, atr_5, tick, stop_buffer, bar_range, ema_20,
-                            is_bull_reversal, is_bear_reversal, is_oo) -> None:
-        if is_oo:
+    _EXIT_REPLACE_KINDS = frozenset({"STOP", "EOD", "TF_COUNTER"})
+
+    def _reset_exit_state(self) -> None:
+        self.stop_price = 0.0
+        self.stop_source = ""
+        self.pending_exit_order = None
+        self.remaining_position = 0
+        self.last_exit_reason = ""
+
+    def _set_stop(self, price: float, source: str, *, force_source: bool = False) -> None:
+        if price <= 0:
             return
-        overshoot_depth = ema_20 - bar.close_price
-        if (atr_5 * self.overshoot_atr_mult <= overshoot_depth <= atr_5 * self.overshoot_max_atr_mult
-                and is_bull_reversal and bar.close_price > bar.open_price
-                and not self._pd_blocks_long_target(bar.close_price, atr_5)):
-            self._arm_pending_confirm(
-                direction=1, opportunity="OPP12_5M_OVERSHOOT_FAIL_LONG",
-                trigger=bar.high_price,
-                stop=self._cap_long_stop(bar.low_price - tick, bar.close_price, atr_5),
-                invalid_line=bar.low_price)
+        prev = float(self.stop_price or 0.0)
+        if price != prev or force_source:
+            self.stop_source = source
+        self.stop_price = float(price)
+
+    def _tighten_stop_long(self, new_stop: float, source: str) -> None:
+        if new_stop <= 0:
             return
-        if (bar.close_price > ema_20 + atr_5 * self.overshoot_atr_mult
-                and is_bear_reversal
-                and not self._pd_blocks_short_target(bar.close_price, atr_5)):
-            self._arm_pending_confirm(
-                direction=-1, opportunity="OPP12_5M_OVERSHOOT_FAIL_SHORT",
-                trigger=bar.low_price,
-                stop=self._cap_short_stop(bar.high_price + tick, bar.close_price, atr_5),
-                invalid_line=bar.high_price)
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP13 日边界反转（WIDE_RANGE: 日高/日低单触 + 日高双顶）
-    # ──────────────────────────────────────────────────────────────────────
-    def _try_day_boundary_reversal(
-        self, bar, atr_5, tick, bar_range, upper_shadow, lower_shadow,
-        is_boundary_bull, is_boundary_bear, boundary_tol, is_oo,
-    ) -> bool:
-        if is_oo:
-            return False
-        # Path A: 日高单触空
-        if abs(bar.high_price - self.day_high) <= boundary_tol and is_boundary_bear:
-            if (bar.close_price < bar.open_price and upper_shadow >= bar_range * 0.4
-                    and not self._pd_blocks_short_target(bar.close_price, atr_5)):
-                if (self.always_in == "LONG"
-                        and self.market_context not in ("WIDE_RANGE",)):
-                    return True
-                if self._late_phase_blocks_entry(
-                        -1, self.market_context, "OPP13_5M_RANGE_FAIL_HIGH"):
-                    self._late_phase_block_count += 1
-                    return True
-                bulldozer_pulse = False
-                if self.am_5min.count >= 4:
-                    p1r = float(self.am_5min.high[-2]) - float(self.am_5min.low[-2])
-                    p2r = float(self.am_5min.high[-3]) - float(self.am_5min.low[-3])
-                    p1s = (float(self.am_5min.close[-2]) - float(self.am_5min.open[-2])) > p1r * 0.5
-                    p2s = (float(self.am_5min.close[-3]) - float(self.am_5min.open[-3])) > p2r * 0.5
-                    bulldozer_pulse = p1s and p2s
-                if not bulldozer_pulse:
-                    self._arm_opp13_pending(
-                        bar,
-                        direction=-1, opportunity="OPP13_5M_RANGE_FAIL_HIGH",
-                        trigger=bar.low_price, stop=bar.high_price + tick,
-                        invalid_line=bar.high_price)
-                return True
-        # Path A: 日低单触多
-        if abs(bar.low_price - self.day_low) <= boundary_tol and is_boundary_bull:
-            if (bar.close_price > bar.open_price and lower_shadow >= bar_range * 0.4
-                    and not self._pd_blocks_long_target(bar.close_price, atr_5)
-                    and self.always_in != "SHORT"):
-                if self._late_phase_blocks_entry(
-                        1, self.market_context, "OPP13_5M_RANGE_FAIL_LOW"):
-                    self._late_phase_block_count += 1
-                    return True
-                bearish_pulse = False
-                if self.am_5min.count >= 4:
-                    p1r = float(self.am_5min.high[-2]) - float(self.am_5min.low[-2])
-                    p2r = float(self.am_5min.high[-3]) - float(self.am_5min.low[-3])
-                    p1b = (float(self.am_5min.open[-2]) - float(self.am_5min.close[-2])) > p1r * 0.5
-                    p2b = (float(self.am_5min.open[-3]) - float(self.am_5min.close[-3])) > p2r * 0.5
-                    bearish_pulse = p1b and p2b
-                if not bearish_pulse:
-                    self._arm_opp13_pending(
-                        bar,
-                        direction=1, opportunity="OPP13_5M_RANGE_FAIL_LOW",
-                        trigger=bar.high_price, stop=bar.low_price - tick,
-                        invalid_line=bar.low_price)
-                return True
-        return False
-
-    def _try_day_high_double_top(
-        self, bar, atr_5, tick, bar_range, upper_shadow, is_boundary_bear,
-        effective_context, day_high_touch_tol, lh_max_drop,
-    ) -> bool:
-        if self.day_high_test_state == "FIRST_TEST":
-            self.day_high_test_bar_count += 1
-            if self.day_high_test_bar_count > self.day_high_second_test_max_bars:
-                self._reset_day_high_test()
-        # 首次触达日高 → FIRST_TEST
-        if (self.day_high_test_state == "IDLE" and self.machine_state == "IDLE"
-                and abs(bar.high_price - self.day_high) <= day_high_touch_tol
-                and is_quality_day_high_short(
-                    BarMetrics.from_bar(bar), bar_range, is_boundary_bear)):
-            self.day_high_test_state = "FIRST_TEST"
-            self.first_test_high = bar.high_price
-            self.day_high_test_bar_count = 0
-            return True
-        # 二次测试（LH）+ 质量空棒 → 入场
-        if self.day_high_test_state == "FIRST_TEST":
-            lh_ok = (self.day_high_test_bar_count <= self.day_high_second_test_max_bars
-                     and self.first_test_high > 0
-                     and bar.high_price <= self.first_test_high
-                     and bar.high_price >= self.first_test_high - lh_max_drop)
-            if lh_ok and is_quality_day_high_short(
-                    BarMetrics.from_bar(bar), bar_range, is_boundary_bear):
-                if effective_context in ("STRONG_BEAR", "BEAR_CHANNEL", "WIDE_RANGE"):
-                    if not (self.always_in == "LONG" and effective_context != "WIDE_RANGE"):
-                        if not (self.trend_phase == "LATE" and self.trend_direction == -1
-                                and effective_context != "WIDE_RANGE"):
-                            if not self._pd_blocks_short_target(bar.close_price, atr_5):
-                                self._arm_opp13_pending(
-                                    bar,
-                                    direction=-1, opportunity="OPP13_5M_RANGE_FAIL_HIGH",
-                                    trigger=bar.low_price, stop=bar.high_price + tick,
-                                    invalid_line=bar.high_price)
-                self._reset_day_high_test()
-                return True
-        return False
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP16 Two-Bar Reversal
-    # ──────────────────────────────────────────────────────────────────────
-    def _process_two_bar_reversal(
-        self, bar, effective_context, atr_5, tick, stop_buffer, bar_range, body,
-    ) -> bool:
-        if bar_range <= tick or self.am_5min.count < 2:
-            return False
-        allowed_ctx = {s.strip() for s in self.two_bar_rev_context.split(",") if s.strip()}
-        if effective_context not in allowed_ctx:
-            return False
-        prev_close = float(self.am_5min.close[-2])
-        prev_open = float(self.am_5min.open[-2])
-        prev_high = float(self.am_5min.high[-2])
-        prev_low = float(self.am_5min.low[-2])
-        prev_range = prev_high - prev_low
-        if prev_range <= 0:
-            return False
-        prev_body_ratio = abs(prev_close - prev_open) / prev_range
-        prev_mid = (prev_high + prev_low) / 2.0
-        prev_shape = self.prev_bar_shape or ""
-        is_strong_trend_bar = (
-            prev_body_ratio >= self.two_bar_rev_body_ratio
-            and prev_shape in ("UP_TREND", "DOWN_TREND", "OUTSIDE_UP", "OUTSIDE_DOWN"))
-        if not is_strong_trend_bar and prev_body_ratio < self.two_bar_rev_body_ratio:
-            return False
-        # A: 空头趋势棒 → 后棒越过中点向上 → 做多
-        if prev_close < prev_open and bar.close_price > prev_mid:
-            stop = self._cap_long_stop(bar.low_price - stop_buffer, bar.close_price, atr_5)
-            self._arm_pending_confirm(
-                direction=1, opportunity="OPP16_5M_TWO_BAR_REV_LONG",
-                trigger=bar.high_price + tick, stop=stop, invalid_line=bar.low_price)
-            return True
-        # B: 多头趋势棒 → 后棒越过中点向下 → 做空
-        if prev_close > prev_open and bar.close_price < prev_mid:
-            stop = self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5)
-            self._arm_pending_confirm(
-                direction=-1, opportunity="OPP16_5M_TWO_BAR_REV_SHORT",
-                trigger=bar.low_price - tick, stop=stop, invalid_line=bar.high_price)
-            return True
-        return False
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP02 EMA Pullback
-    # ──────────────────────────────────────────────────────────────────────
-    def _process_ema_pullback(
-        self, bar, effective_context, atr_5, tick, stop_buffer, bar_range, body, ema_20, is_oo,
-    ) -> bool:
-        if is_oo or bar_range <= tick or ema_20 <= 0 or atr_5 <= 0:
-            return False
-        # EXP-007：15m R² 趋势门禁（替代 Setup AFF 时启用）
-        if self.opp02_r2_gate_enabled and self._trend_regime_blocks_continuation(self.opp02_r2_min):
-            return False
-        if self.opp02_aff_gate_enabled and self._aff_alpha_strength < self.opp02_aff_alpha_min:
-            return False
-        touch_band = atr_5 * self.ema_pullback_touch_atr
-        body_ratio = body / bar_range if bar_range > 0 else 0.0
-        if self.always_in == "LONG":
-            touched_ema = bar.low_price <= ema_20 + touch_band
-            sig_long = (bar.close_price > bar.open_price
-                        and body_ratio >= self.ema_pullback_min_body_ratio
-                        and bar.high_price - max(bar.open_price, bar.close_price) < bar_range * 0.45)
-            if touched_ema and sig_long and not self._pd_blocks_long_target(bar.close_price, atr_5):
-                stop = self._cap_long_stop(bar.low_price - stop_buffer, bar.close_price, atr_5)
-                self._arm_pending_confirm(
-                    direction=1, opportunity="OPP02_5M_EMA_PULLBACK_LONG",
-                    trigger=bar.high_price + tick, stop=stop, invalid_line=bar.low_price)
-                return True
-        if self.always_in == "SHORT":
-            touched_ema = bar.high_price >= ema_20 - touch_band
-            sig_short = (bar.close_price < bar.open_price
-                         and body_ratio >= self.ema_pullback_min_body_ratio
-                         and min(bar.open_price, bar.close_price) - bar.low_price < bar_range * 0.45)
-            if touched_ema and sig_short and not self._pd_blocks_short_target(bar.close_price, atr_5):
-                stop = self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5)
-                self._arm_pending_confirm(
-                    direction=-1, opportunity="OPP02_5M_EMA_PULLBACK_SHORT",
-                    trigger=bar.low_price - tick, stop=stop, invalid_line=bar.high_price)
-                return True
-        return False
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP17 Climax Reversal
-    # ──────────────────────────────────────────────────────────────────────
-    def _process_climax_reversal(
-        self, bar, effective_context, atr_5, tick, stop_buffer, bar_range, is_oo,
-    ) -> bool:
-        if is_oo or bar_range <= tick or atr_5 <= 0:
-            return False
-        allowed_ctx = {s.strip() for s in self.climax_rev_context.split(",") if s.strip()}
-        if effective_context not in allowed_ctx:
-            return False
-        prev_high = float(self.am_5min.high[-2])
-        prev_low = float(self.am_5min.low[-2])
-        prev_close = float(self.am_5min.close[-2])
-        prev_open = float(self.am_5min.open[-2])
-        prev_range = prev_high - prev_low
-        if prev_range <= 0 or prev_range <= self.climax_rev_range_atr * atr_5:
-            return False
-        prev_mid = (prev_high + prev_low) / 2.0
-        if prev_close < prev_open and bar.close_price > prev_mid:
-            stop = self._cap_long_stop(bar.low_price - stop_buffer, bar.close_price, atr_5)
-            self._arm_pending_confirm(
-                direction=1, opportunity="OPP17_5M_CLIMAX_REV_LONG",
-                trigger=bar.high_price + tick, stop=stop, invalid_line=bar.low_price)
-            return True
-        if prev_close > prev_open and bar.close_price < prev_mid:
-            stop = self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5)
-            self._arm_pending_confirm(
-                direction=-1, opportunity="OPP17_5M_CLIMAX_REV_SHORT",
-                trigger=bar.low_price - tick, stop=stop, invalid_line=bar.high_price)
-            return True
-        return False
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP19 Opening Drive
-    # ──────────────────────────────────────────────────────────────────────
-    def _opening_drive_breakout_context_ok(
-        self, direction: int, effective_context: str
-    ) -> bool:
-        """OPP19 BREAKOUT context 软禁：逆强势背景不做开盘区间突破。"""
-        if direction > 0 and effective_context == "STRONG_BEAR":
-            return False
-        if direction < 0 and effective_context == "STRONG_BULL":
-            return False
-        return True
-
-    def _opening_rev_allows_entry(
-        self, direction: int, effective_context: str, atr_5: float,
-    ) -> bool:
-        """OPP19 OD_REV：过滤逆势 always_in、强趋势反向 fade、首棒振幅异常。"""
-        if not self.opp19_rev_gate_enabled:
-            return True
-        if direction > 0:
-            if self.opp19_rev_always_in_gate and self.always_in == "SHORT":
-                return False
-            if (self.opp19_rev_block_strong_counter
-                    and effective_context == "STRONG_BEAR"):
-                return False
-        elif direction < 0:
-            if self.opp19_rev_always_in_gate and self.always_in == "LONG":
-                return False
-            if (self.opp19_rev_block_strong_counter
-                    and effective_context == "STRONG_BULL"):
-                return False
-        if self._od_bar1_range > 0 and atr_5 > 0:
-            bar1_atr = self._od_bar1_range / atr_5
-            if bar1_atr < self.opp19_rev_min_bar1_range_atr:
-                return False
-            if bar1_atr > self.opp19_rev_max_bar1_range_atr:
-                return False
-        allowed = {
-            s.strip()
-            for s in str(self.opp19_rev_contexts or "").split(",")
-            if s.strip()
-        }
-        if allowed and effective_context not in allowed:
-            return False
-        return True
-
-    def _opening_rev_in_time_window(
-        self, bar_time: time, *, is_morning: bool, is_night: bool,
-    ) -> bool:
-        """开盘反转仅在 session 前 N 分钟内 arm（防 FAST_TRACK 止损单迟填）。"""
-        if is_morning:
-            return bar_time <= time(9, int(self.opp19_rev_morning_cutoff_minute))
-        if is_night:
-            return bar_time <= time(21, int(self.opp19_rev_night_cutoff_minute))
-        return False
-
-    def _arm_opening_rev(
-        self, bar, *, direction: int, opportunity: str, atr_5: float,
-        tick: float, stop_buffer: float, effective_context: str,
-    ) -> bool:
-        """OD_REV：PENDING_CONFIRM + 门禁 + 时间窗（替代 FAST_TRACK 迟填）。"""
-        bar_time = bar.datetime.time()
-        is_morning = time(9, 0) <= bar_time <= time(11, 30)
-        is_night = time(21, 0) <= bar_time <= time(23, 0)
-        if str(self.opp19_rev_arm_mode).upper() != "FAST_TRACK":
-            if not self._opening_rev_in_time_window(
-                    bar_time, is_morning=is_morning, is_night=is_night):
-                return False
-        if not self._opening_rev_allows_entry(direction, effective_context, atr_5):
-            return False
-        if str(self.opp19_rev_arm_mode).upper() == "FAST_TRACK":
-            if direction > 0:
-                stop = self._cap_long_stop(
-                    bar.low_price - stop_buffer, bar.close_price, atr_5)
-                self._arm_fast_track(
-                    direction=1, opportunity=opportunity,
-                    trigger=bar.high_price + tick, stop=stop,
-                    invalid_line=bar.low_price)
-            else:
-                stop = self._cap_short_stop(
-                    bar.high_price + stop_buffer, bar.close_price, atr_5)
-                self._arm_fast_track(
-                    direction=-1, opportunity=opportunity,
-                    trigger=bar.low_price - tick, stop=stop,
-                    invalid_line=bar.high_price)
+        prev = float(self.stop_price or 0.0)
+        tightened = max(prev, new_stop) if prev > 0 else new_stop
+        if tightened != prev:
+            self._set_stop(tightened, source)
         else:
-            if direction > 0:
-                stop = self._cap_long_stop(
-                    bar.low_price - stop_buffer, bar.close_price, atr_5)
-                self._arm_pending_confirm(
-                    direction=1, opportunity=opportunity,
-                    trigger=bar.high_price + tick, stop=stop,
-                    invalid_line=bar.low_price)
-            else:
-                stop = self._cap_short_stop(
-                    bar.high_price + stop_buffer, bar.close_price, atr_5)
-                self._arm_pending_confirm(
-                    direction=-1, opportunity=opportunity,
-                    trigger=bar.low_price - tick, stop=stop,
-                    invalid_line=bar.high_price)
-        self._reset_opening_drive()
+            self.stop_price = tightened
+
+    def _tighten_stop_short(self, new_stop: float, source: str) -> None:
+        if new_stop <= 0:
+            return
+        prev = float(self.stop_price or 0.0)
+        tightened = min(prev, new_stop) if prev > 0 else new_stop
+        if tightened != prev:
+            self._set_stop(tightened, source)
+        else:
+            self.stop_price = tightened
+
+    def _submit_exit(
+        self,
+        price: float,
+        volume: int,
+        *,
+        reason: str,
+        kind: str,
+        allow_replace: bool = False,
+    ) -> bool:
+        """提交平仓；未成交前保留 stop_price，禁止无授权的重复全平。"""
+        pos = int(self.pos)
+        if pos == 0:
+            return False
+        close_vol = min(int(volume), abs(pos))
+        if close_vol <= 0:
+            return False
+        is_full = close_vol >= abs(pos)
+        pend = self.pending_exit_order
+
+        if pend is not None:
+            same_full = bool(pend.get("is_full")) and is_full
+            same_order = (
+                int(pend.get("volume", 0)) == close_vol
+                and str(pend.get("reason", "")) == reason
+                and str(pend.get("kind", "")) == kind
+            )
+            if same_order:
+                return False
+            if same_full and not allow_replace and kind not in self._EXIT_REPLACE_KINDS:
+                return False
+            if not allow_replace and kind not in self._EXIT_REPLACE_KINDS:
+                return False
+            # 允许升级（STOP/EOD/TF）：撤挂单后重挂；止损价仍保留至成交
+            self.cancel_all()
+
+        if pos > 0:
+            self.sell(price, close_vol)
+            self.remaining_position = pos - close_vol
+        else:
+            self.cover(price, close_vol)
+            self.remaining_position = pos + close_vol
+
+        self.pending_exit_order = {
+            "kind": kind,
+            "reason": reason,
+            "volume": close_vol,
+            "price": float(price),
+            "is_full": is_full,
+            "side": "LONG" if pos > 0 else "SHORT",
+        }
+        self.last_exit_reason = reason
+        # 硬不变量 4：未成交前不清空 stop_price / stop_source
         return True
 
-    def _process_opening_drive(
-        self, bar, effective_context, atr_5, tick, stop_buffer, bar_range, body,
-        is_strong_bar, is_oo,
+    def _close_long_position(
+        self, price, *, volume: int | None = None, exit_reason: str = "",
+        kind: str = "MANUAL", allow_replace: bool = False,
     ) -> bool:
-        if is_oo or bar_range <= tick or atr_5 <= 0:
-            return False
-        bar_time = bar.datetime.time()
-        bar_date = bar.datetime.date()
-        is_morning = time(9, 0) <= bar_time <= time(11, 30)
-        is_night = time(21, 0) <= bar_time <= time(23, 0)
-        if not (is_morning or is_night):
-            if self._od_state != "IDLE":
-                self._reset_opening_drive()
-            return False
-        session_changed = bar_date != self._od_session_date
-        new_morning = is_morning and bar_time < time(9, 20) and self._od_state == "IDLE"
-        new_night = is_night and bar_time < time(21, 20) and self._od_state == "IDLE"
-        if session_changed or new_morning or new_night:
-            self._reset_opening_drive()
-            self._od_state = "COLLECTING"
-            self._od_session_date = bar_date
-            self._od_high = bar.high_price
-            self._od_low = bar.low_price
-            self._od_bars_collected = 1
-            if self.opening_rev_enabled and bar_range > 0:
-                if body / bar_range >= self.opening_rev_body_ratio:
-                    if bar.close_price > bar.open_price:
-                        self._od_bar1_shape = "UP"
-                    elif bar.close_price < bar.open_price:
-                        self._od_bar1_shape = "DOWN"
-                    if self._od_bar1_shape:
-                        self._od_bar1_mid = (bar.high_price + bar.low_price) / 2.0
-                        self._od_bar1_range = bar_range
-            return False
-        if self._od_state == "IDLE":
-            return False
-        # COLLECTING
-        if self._od_state == "COLLECTING":
-            # Path B: Opening Reversal
-            if (self.opening_rev_enabled and self.machine_state == "IDLE"
-                    and self._od_bars_collected <= 2 and self._od_bar1_shape):
-                body_ratio = body / bar_range if bar_range > 0 else 0.0
-                if (self._od_bar1_shape == "DOWN" and bar.close_price > bar.open_price
-                        and body_ratio >= self.opening_rev_body_ratio
-                        and bar.close_price > self._od_bar1_mid):
-                    if self._arm_opening_rev(
-                            bar, direction=1,
-                            opportunity="OPP19_5M_OD_REV_LONG",
-                            atr_5=atr_5, tick=tick, stop_buffer=stop_buffer,
-                            effective_context=effective_context):
-                        return True
-                if (self._od_bar1_shape == "UP" and bar.close_price < bar.open_price
-                        and body_ratio >= self.opening_rev_body_ratio
-                        and bar.close_price < self._od_bar1_mid):
-                    if self._arm_opening_rev(
-                            bar, direction=-1,
-                            opportunity="OPP19_5M_OD_REV_SHORT",
-                            atr_5=atr_5, tick=tick, stop_buffer=stop_buffer,
-                            effective_context=effective_context):
-                        return True
-            # Path A: Range collection
-            self._od_high = max(self._od_high, bar.high_price)
-            self._od_low = min(self._od_low, bar.low_price)
-            self._od_bars_collected += 1
-            if self._od_bars_collected >= self.opening_drive_bars:
-                if self._od_high - self._od_low >= atr_5 * self.opening_drive_range_atr_min:
-                    self._od_state = "RANGE_SET"
-                else:
-                    self._reset_opening_drive()
-            return False
-        # RANGE_SET
-        if self._od_state == "RANGE_SET":
-            self._od_bars_collected += 1
-            if self._od_bars_collected > 24:
-                self._reset_opening_drive()
-                return False
-            body_ratio = body / bar_range if bar_range > 0 else 0.0
-            # EXP-007：OPP19 突破 R² 门禁（替代 Setup AFF 时启用）
-            if (self.opp19_breakout_r2_gate_enabled
-                    and self._trend_regime_blocks_continuation(self.opp19_breakout_r2_min)):
-                return False
-            if (self.opp19_breakout_aff_gate_enabled
-                    and self._aff_alpha_strength < self.opp19_breakout_aff_alpha_min):
-                return False
-            if (bar.close_price > self._od_high and bar.close_price > bar.open_price
-                    and body_ratio >= self.opening_drive_min_body and is_strong_bar):
-                if self._opening_drive_breakout_context_ok(1, effective_context):
-                    self._arm_fast_track(
-                        direction=1, opportunity="OPP19_5M_OD_BREAKOUT_LONG",
-                        trigger=bar.high_price + tick,
-                        stop=self._cap_long_stop(bar.low_price - stop_buffer, bar.close_price, atr_5))
-                    self._reset_opening_drive()
-                    return True
-            if (bar.close_price < self._od_low and bar.close_price < bar.open_price
-                    and body_ratio >= self.opening_drive_min_body and is_strong_bar):
-                if self._opening_drive_breakout_context_ok(-1, effective_context):
-                    self._arm_fast_track(
-                        direction=-1, opportunity="OPP19_5M_OD_BREAKOUT_SHORT",
-                        trigger=bar.low_price - tick,
-                        stop=self._cap_short_stop(bar.high_price + stop_buffer, bar.close_price, atr_5))
-                    self._reset_opening_drive()
-                    return True
-        return False
-
-    # ──────────────────────────────────────────────────────────────────────
-    # OPP15 Wedge
-    # ──────────────────────────────────────────────────────────────────────
-    @staticmethod
-    def _array_manager_to_wedge_bars(am: ArrayManager) -> list[WedgeBar]:
-        n = min(am.count, am.size)
-        return [WedgeBar(
-            open_price=float(am.open[-(n - i)]), high_price=float(am.high[-(n - i)]),
-            low_price=float(am.low[-(n - i)]), close_price=float(am.close[-(n - i)]), index=i,
-        ) for i in range(n)]
-
-    def _update_mtf_wedge_exhaustion_zone(self, atr_15: float) -> None:
-        if atr_15 <= 0 or self.am_15min.count < 7:
-            self.mtf_wedge_exhaustion_zone = False
-            self.mtf_bull_wedge_exhaustion_zone = False
-            return
-        tick = self.get_pricetick()
-        bars = self._array_manager_to_wedge_bars(self.am_15min)
-        verdict_bear = scan_latest_bearish_wedge(
-            bars, atr_15, tick_size=tick, n_min=self.wedge_n_min_15m,
-            alpha_threshold=self.wedge_mtf_alpha_threshold)
-        self.mtf_wedge_exhaustion_zone = verdict_bear.get("status") == "wedge_valid:hh3"
-        verdict_bull = scan_latest_bullish_wedge(
-            bars, atr_15, tick_size=tick, n_min=self.wedge_n_min_15m,
-            alpha_threshold=self.wedge_mtf_alpha_threshold)
-        self.mtf_bull_wedge_exhaustion_zone = verdict_bull.get("status") == "wedge_valid:ll3"
-
-    def _p3_body_from_idx(self, p3_idx: int, *, side: int = 0) -> float:
-        n = min(self.am_5min.count, self.am_5min.size)
-        neg = n - p3_idx
-        if neg < 1 or neg > n:
-            return self.wedge_confirmed_p3_high
-        o = float(self.am_5min.open[-neg])
-        c = float(self.am_5min.close[-neg])
-        if o <= 0 or c <= 0:
-            return self.wedge_confirmed_p3_high
-        if side > 0:
-            return max(o, c)
-        if side < 0:
-            return min(o, c)
-        return min(o, c)
-
-    def _process_wedge_trigger_phase(self, bar, atr_5, tick, *, is_strong_bar) -> bool:
-        if not self.wedge_setup_active or self._wedge_direction == 0:
-            return False
-        d = self._wedge_direction
-        # HH3 (bearish short)
-        if d == -1:
-            p3_price = self.wedge_confirmed_p3_high
-            if bar.high_price > p3_price + tick:
-                self._reset_wedge_setup()
-                return False
-            bars_since = (int((bar.datetime - self.wedge_arm_time).total_seconds() / 300)
-                          if self.wedge_arm_time else 0)
-            if bars_since > self.wedge_arm_trigger_max_bars:
-                self._reset_wedge_setup()
-                return False
-            if self.am_5min.count >= 2:
-                self.wedge_trigger_line = min(
-                    float(self.am_5min.low[-1]), float(self.am_5min.low[-2]))
-            p3_stop = p3_price + tick
-            trigger = bar.low_price - tick
-            # Path A: 强趋势棒反向突破
-            if (is_strong_bar and bar.close_price < bar.open_price
-                    and self.wedge_trigger_line > 0
-                    and bar.close_price < self.wedge_trigger_line
-                    and not self._pd_blocks_short_target(bar.close_price, atr_5)):
-                self._arm_fast_track(
-                    direction=-1, opportunity="OPP15_5M_WEDGE_REVERSAL",
-                    trigger=trigger,
-                    stop=self._cap_short_stop(p3_stop, bar.close_price, atr_5),
-                    invalid_line=p3_price)
-                self._reset_wedge_setup()
-                return True
-            # Path B': alpha 衰减 + 跌破 p3 body floor
-            if (self.wedge_current_alpha < self.wedge_b_prime_alpha
-                    and bar.close_price < bar.open_price
-                    and self.wedge_p3_body_floor > 0
-                    and bar.close_price < self.wedge_p3_body_floor
-                    and bars_since <= self.wedge_arm_trigger_max_bars
-                    and not self._pd_blocks_short_target(bar.close_price, atr_5)):
-                if self._dual_core_allows_entry(-1, self._setup_entry_lane("OPP15_5M_WEDGE_B_PRIME")):
-                    if self._aff_blocks_entry():
-                        self._aff_block_count += 1
-                        return False
-                    entry_price = bar.close_price - tick
-                    volume = self._calc_brooks_volume(p3_stop, entry_price, atr_5=atr_5)
-                    if volume > 0:
-                        self.active_setup_name = "OPP15_5M_WEDGE_B_PRIME"
-                        self.signal_stop_loss = p3_stop
-                        self.signal_bar_invalid_line = p3_price
-                        self.profit_protect_active = False
-                        self.short(entry_price, volume)
-                        self._reset_wedge_setup()
-                        return True
-            return False
-        # LL3 (bullish long)
-        p3_price = self.wedge_confirmed_p3_high
-        if bar.low_price < p3_price - tick:
-            self._reset_wedge_setup()
-            return False
-        bars_since = (int((bar.datetime - self.wedge_arm_time).total_seconds() / 300)
-                      if self.wedge_arm_time else 0)
-        if bars_since > self.wedge_arm_trigger_max_bars:
-            self._reset_wedge_setup()
-            return False
-        if self.am_5min.count >= 2:
-            self.wedge_trigger_line = max(
-                float(self.am_5min.high[-1]), float(self.am_5min.high[-2]))
-        p3_stop = p3_price - tick
-        trigger = bar.high_price + tick
-        # Path B' (long)
-        if (self.wedge_current_alpha < self.wedge_b_prime_alpha
-                and bar.close_price > bar.open_price
-                and self.wedge_p3_body_floor > 0
-                and bar.close_price > self.wedge_p3_body_floor
-                and bars_since <= self.wedge_arm_trigger_max_bars
-                and not self._pd_blocks_long_target(bar.close_price, atr_5)):
-            if self._dual_core_allows_entry(1, self._setup_entry_lane("OPP15_5M_WEDGE_B_PRIME_LONG")):
-                if self._aff_blocks_entry():
-                    self._aff_block_count += 1
-                    return False
-                entry_price = bar.close_price + tick
-                volume = self._calc_brooks_volume(entry_price, p3_stop, atr_5=atr_5)
-                if volume > 0:
-                    self.active_setup_name = "OPP15_5M_WEDGE_B_PRIME_LONG"
-                    self.signal_stop_loss = p3_stop
-                    self.signal_bar_invalid_line = p3_price
-                    self.profit_protect_active = False
-                    self.buy(entry_price, volume)
-                    self._reset_wedge_setup()
-                    return True
-        return False
-
-    def _try_arm_wedge_setup(self, bar, atr_5, tick) -> None:
-        if self.wedge_setup_active or self.machine_state != "IDLE":
-            return
-        if self.late_phase_gate_enabled and self.trend_phase == "LATE":
-            return
-        if bar.datetime.time() < time(self.wedge_session_start_hour, self.wedge_session_start_minute):
-            return
-        if atr_5 < self.ttr_rb_min_atr:
-            return
-        bars = self._array_manager_to_wedge_bars(self.am_5min)
-        # HH3 (bearish wedge → short)
-        if self.market_context in ("WIDE_RANGE", "TIGHT_RANGE"):
-            if not self.wedge_require_mtf or self.mtf_wedge_exhaustion_zone:
-                verdict = scan_latest_bearish_wedge(
-                    bars, atr_5, tick_size=tick, n_min=self.wedge_n_min_5m,
-                    alpha_threshold=self.wedge_alpha_threshold)
-                if verdict.get("status") == "wedge_valid:hh3":
-                    p3_idx = int(verdict["p3_idx"])
-                    if len(bars) - 1 >= p3_idx + 2:
-                        p3_high = float(verdict.get("p3_high", 0.0))
-                        if p3_high > 0:
-                            self.wedge_setup_active = True
-                            self._wedge_direction = -1
-                            self.wedge_confirmed_p3_high = p3_high
-                            self.wedge_arm_time = bar.datetime
-                            self.wedge_current_alpha = float(verdict.get("alpha", 0.0))
-                            self.wedge_p3_body_floor = self._p3_body_from_idx(p3_idx)
-                            if self.am_5min.count >= 2:
-                                self.wedge_trigger_line = min(
-                                    float(self.am_5min.low[-1]), float(self.am_5min.low[-2]))
-                            return
-        # LL3 (bullish wedge → long)
-        if self.market_context in ("BULL_CHANNEL", "WIDE_RANGE"):
-            if not (self.market_context == "WIDE_RANGE" and not self.mtf_bull_wedge_exhaustion_zone):
-                if self.always_in in ("LONG", "NONE"):
-                    verdict = scan_latest_bullish_wedge(
-                        bars, atr_5, tick_size=tick, n_min=self.wedge_n_min_5m,
-                        alpha_threshold=self.wedge_alpha_threshold)
-                    if verdict.get("status") == "wedge_valid:ll3":
-                        p3_idx = int(verdict["p3_idx"])
-                        if len(bars) - 1 >= p3_idx + 2:
-                            p3_low = float(verdict.get("p3_low", 0.0))
-                            if p3_low > 0:
-                                self.wedge_setup_active = True
-                                self._wedge_direction = 1
-                                self.wedge_confirmed_p3_high = p3_low
-                                self.wedge_arm_time = bar.datetime
-                                self.wedge_current_alpha = float(verdict.get("alpha", 0.0))
-                                self.wedge_p3_body_floor = self._p3_body_from_idx(p3_idx, side=1)
-                                if self.am_5min.count >= 2:
-                                    self.wedge_trigger_line = max(
-                                        float(self.am_5min.high[-1]), float(self.am_5min.high[-2]))
-                                return
-
-    # ──────────────────────────────────────────────────────────────────────
-    # 出场管理
-    # ──────────────────────────────────────────────────────────────────────
-    def _close_long_position(self, price, *, exit_reason="") -> None:
         if self.pos <= 0:
-            return
-        self._pending_exit_reason = exit_reason or "CLOSE_LONG"
-        self.sell(price, abs(self.pos))
-        self.signal_stop_loss = 0.0
+            return False
+        close_vol = abs(int(self.pos)) if volume is None else int(volume)
+        return self._submit_exit(
+            price, close_vol,
+            reason=exit_reason or "CLOSE_LONG",
+            kind=kind,
+            allow_replace=allow_replace,
+        )
 
-    def _close_short_position(self, price, *, exit_reason="") -> None:
+    def _close_short_position(
+        self, price, *, volume: int | None = None, exit_reason: str = "",
+        kind: str = "MANUAL", allow_replace: bool = False,
+    ) -> bool:
         if self.pos >= 0:
-            return
-        self._pending_exit_reason = exit_reason or "CLOSE_SHORT"
-        self.cover(price, abs(self.pos))
-        self.signal_stop_loss = 0.0
+            return False
+        close_vol = abs(int(self.pos)) if volume is None else int(volume)
+        return self._submit_exit(
+            price, close_vol,
+            reason=exit_reason or "CLOSE_SHORT",
+            kind=kind,
+            allow_replace=allow_replace,
+        )
 
-    def _manage_stop_loss(self, bar: BarData) -> None:
-        """1m 级逻辑止损：跳空用 min(open, stop) / max(open, target)（§2.1）。"""
-        if self.signal_stop_loss <= 0 or self.pos == 0:
-            return
-        reason = self._pending_exit_reason or "STOP_LOSS"
-        if self.pos > 0 and bar.low_price <= self.signal_stop_loss:
-            exec_price = min(bar.open_price, self.signal_stop_loss)
-            self._close_long_position(exec_price, exit_reason=reason)
-            self.write_log(f"【逻辑止损】多头防线触发 @ {exec_price} ({reason})")
-        elif self.pos < 0 and bar.high_price >= self.signal_stop_loss:
-            exec_price = max(bar.open_price, self.signal_stop_loss)
-            self._close_short_position(exec_price, exit_reason=reason)
-            self.write_log(f"【逻辑止损】空头防线触发 @ {exec_price} ({reason})")
+    def _manage_stop_loss(self, bar: BarData) -> bool:
+        """1m 级逻辑止损：跳空用 min(open, stop) / max(open, stop)（§2.1）。"""
+        if self.stop_price <= 0 or self.pos == 0:
+            return False
+        pend = self.pending_exit_order
+        if pend and pend.get("is_full") and pend.get("kind") == "STOP":
+            return True  # 止损全平已在途：挡掉同 bar 目标单
+        reason = self.stop_source or "STOP_LOSS"
+        if self.pos > 0 and bar.low_price <= self.stop_price:
+            exec_price = min(bar.open_price, self.stop_price)
+            if self._submit_exit(
+                    exec_price, abs(int(self.pos)),
+                    reason=reason, kind="STOP", allow_replace=True):
+                self.write_log(f"【逻辑止损】多头防线触发 @ {exec_price} ({reason})")
+                return True
+        elif self.pos < 0 and bar.high_price >= self.stop_price:
+            exec_price = max(bar.open_price, self.stop_price)
+            if self._submit_exit(
+                    exec_price, abs(int(self.pos)),
+                    reason=reason, kind="STOP", allow_replace=True):
+                self.write_log(f"【逻辑止损】空头防线触发 @ {exec_price} ({reason})")
+                return True
+        return False
 
     def _manage_mm_targets(self, bar: BarData) -> None:
-        """1m 级 Measured Move 止盈：0.5 目标位平半仓 + 完全目标位 runner 减仓。"""
+        """1m 级 Measured Move 止盈：0.5 目标位按 volume 平半仓 + 完全目标位 runner 减仓。"""
         if self.pos == 0 or self.entry_price <= 0 or not self.mm_half_close_enabled:
+            return
+        # 有未成交平仓单时不做目标单（硬不变量 2/4：止损优先、不叠单）
+        if self.pending_exit_order is not None:
             return
         if self.pos > 0:
             if self.mm_target_price <= self.entry_price:
                 return
             half_target = (self.entry_price + self.mm_target_price) / 2.0
             if (not self.mm_half_closed and bar.high_price >= half_target
-                    and self.volume_capable_half_close() and abs(self.pos) // 2 > 0):
-                self._close_long_position(max(half_target, bar.open_price), exit_reason="MM_HALF")
-                self.mm_half_closed = True
+                    and self.volume_capable_half_close()):
+                half_vol = abs(int(self.pos)) // 2
+                if half_vol > 0 and self._submit_exit(
+                        max(half_target, bar.open_price), half_vol,
+                        reason="MM_HALF", kind="MM"):
+                    self.mm_half_closed = True
+                    return
             if not self.mm_target_scaled and self.pos > 0 and bar.high_price >= self.mm_target_price:
                 close_vol, runner_vol = self._calc_mm_runner_exit_volumes()
                 exec_price = max(bar.open_price, self.mm_target_price)
-                if runner_vol > 0 and close_vol > 0:
-                    self._close_long_position(exec_price, exit_reason="MM_RUNNER_START")
-                    self.mm_target_scaled = True
-                    self.mm_runner_active = True
+                if runner_vol > 0 and close_vol > 0 and self._mm_runner_allowed():
+                    if self._submit_exit(
+                            exec_price, close_vol,
+                            reason="MM_RUNNER_START", kind="MM"):
+                        self.mm_target_scaled = True
+                        self.mm_runner_active = True
                 else:
-                    self._close_long_position(exec_price, exit_reason="MM_TARGET_FULL")
+                    self._submit_exit(
+                        exec_price, abs(int(self.pos)),
+                        reason="MM_TARGET_FULL", kind="MM")
             return
         # pos < 0
         if not (0 < self.mm_target_price < self.entry_price):
             return
         half_target = (self.entry_price + self.mm_target_price) / 2.0
         if (not self.mm_half_closed and bar.low_price <= half_target
-                and self.volume_capable_half_close() and abs(self.pos) // 2 > 0):
-            self._close_short_position(min(half_target, bar.open_price), exit_reason="MM_HALF")
-            self.mm_half_closed = True
+                and self.volume_capable_half_close()):
+            half_vol = abs(int(self.pos)) // 2
+            if half_vol > 0 and self._submit_exit(
+                    min(half_target, bar.open_price), half_vol,
+                    reason="MM_HALF", kind="MM"):
+                self.mm_half_closed = True
+                return
         if not self.mm_target_scaled and self.pos < 0 and bar.low_price <= self.mm_target_price:
             close_vol, runner_vol = self._calc_mm_runner_exit_volumes()
             exec_price = min(bar.open_price, self.mm_target_price)
-            if runner_vol > 0 and close_vol > 0:
-                self._close_short_position(exec_price, exit_reason="MM_RUNNER_START")
-                self.mm_target_scaled = True
-                self.mm_runner_active = True
+            if runner_vol > 0 and close_vol > 0 and self._mm_runner_allowed():
+                if self._submit_exit(
+                        exec_price, close_vol,
+                        reason="MM_RUNNER_START", kind="MM"):
+                    self.mm_target_scaled = True
+                    self.mm_runner_active = True
             else:
-                self._close_short_position(exec_price, exit_reason="MM_TARGET_FULL")
+                self._submit_exit(
+                    exec_price, abs(int(self.pos)),
+                    reason="MM_TARGET_FULL", kind="MM")
 
     def volume_capable_half_close(self) -> bool:
         return abs(int(self.pos)) >= 2
@@ -2367,18 +2624,19 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             return current, 0
         return current - runner_vol, runner_vol
 
-    def _apply_chandelier_stop_long(self, atr_5) -> None:
+    def _apply_chandelier_stop_long(self, atr_5, *, reason: str = "CHANDELIER_STOP") -> None:
         self.profit_protect_active = True
-        self.signal_stop_loss = max(
-            self.signal_stop_loss, self.highest_high_since_entry - self.chandelier_multiplier * atr_5)
+        self._tighten_stop_long(
+            self.highest_high_since_entry - self.chandelier_multiplier * atr_5,
+            reason,
+        )
 
-    def _apply_chandelier_stop_short(self, atr_5) -> None:
+    def _apply_chandelier_stop_short(self, atr_5, *, reason: str = "CHANDELIER_STOP") -> None:
         self.profit_protect_active = True
-        chandelier_stop = self.lowest_low_since_entry + self.chandelier_multiplier * atr_5
-        if self.signal_stop_loss <= 0:
-            self.signal_stop_loss = chandelier_stop
-        else:
-            self.signal_stop_loss = min(self.signal_stop_loss, chandelier_stop)
+        self._tighten_stop_short(
+            self.lowest_low_since_entry + self.chandelier_multiplier * atr_5,
+            reason,
+        )
 
     def _update_position_risk(self, bar, atr_5, stop_buffer) -> None:
         """快车道闪电防线 / 慢车道变频风控（5m on_5min_bar 调用）。"""
@@ -2399,64 +2657,55 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
         # Breakeven
         if not self.breakeven_locked and floating_profit > self._get_breakeven_trigger_atr_mult() * atr_5:
             if is_long:
-                self.signal_stop_loss = max(self.signal_stop_loss, self.entry_price)
+                self._tighten_stop_long(self.entry_price, "BREAKEVEN")
             else:
-                self.signal_stop_loss = (min(self.signal_stop_loss, self.entry_price)
-                                          if self.signal_stop_loss > 0 else self.entry_price)
-            self._pending_exit_reason = "BREAKEVEN"
+                self._tighten_stop_short(self.entry_price, "BREAKEVEN")
             self.breakeven_locked = True
         if self.mm_runner_active:
             if is_long:
-                self._apply_chandelier_stop_long(atr_5)
+                self._apply_chandelier_stop_long(atr_5, reason="CHANDELIER_RUNNER")
             else:
-                self._apply_chandelier_stop_short(atr_5)
-            self._pending_exit_reason = "CHANDELIER_RUNNER"
+                self._apply_chandelier_stop_short(atr_5, reason="CHANDELIER_RUNNER")
         elif self._is_fast_lane_setup():
             invalid_breach = (self.bars_since_entry <= 2 and self.signal_bar_invalid_line > 0
                                and (bar.close_price < self.signal_bar_invalid_line if is_long
                                     else bar.close_price > self.signal_bar_invalid_line))
             if invalid_breach:
                 if is_long:
-                    self.signal_stop_loss = max(self.signal_stop_loss, self.signal_bar_invalid_line)
+                    self._tighten_stop_long(self.signal_bar_invalid_line, "SIGNAL_BAR_INVALID")
                 else:
-                    self.signal_stop_loss = (min(self.signal_stop_loss, self.signal_bar_invalid_line)
-                                              if self.signal_stop_loss > 0 else self.signal_bar_invalid_line)
-                self._pending_exit_reason = "SIGNAL_BAR_INVALID"
+                    self._tighten_stop_short(self.signal_bar_invalid_line, "SIGNAL_BAR_INVALID")
             else:
                 trail = bar.low_price - stop_buffer if is_long else bar.high_price + stop_buffer
                 if is_long:
-                    self.signal_stop_loss = max(self.signal_stop_loss, trail)
+                    self._tighten_stop_long(trail, "FAST_LANE_TRAIL")
                 else:
-                    self.signal_stop_loss = (min(self.signal_stop_loss, trail)
-                                              if self.signal_stop_loss > 0 else trail)
-                self._pending_exit_reason = "FAST_LANE_TRAIL"
+                    self._tighten_stop_short(trail, "FAST_LANE_TRAIL")
         else:
             # 慢车道
-            if current_time >= time(14, 40):
+            if self._profit_protect_allowed() and current_time >= time(14, 40):
                 self.profit_protect_active = True
                 ref = prev_low if is_long else prev_high
                 if is_long:
-                    self.signal_stop_loss = max(self.signal_stop_loss, ref)
+                    self._tighten_stop_long(ref, "PROFIT_PROTECT_1440")
                 else:
-                    self.signal_stop_loss = (min(self.signal_stop_loss, ref)
-                                              if self.signal_stop_loss > 0 else ref)
-                self._pending_exit_reason = "PROFIT_PROTECT_1440"
+                    self._tighten_stop_short(ref, "PROFIT_PROTECT_1440")
             elif (self.bars_since_entry <= self.follow_through_bars
                     and self.signal_bar_invalid_line > 0
                     and (bar.close_price < self.signal_bar_invalid_line if is_long
                          else bar.close_price > self.signal_bar_invalid_line)):
                 if is_long:
-                    self.signal_stop_loss = max(self.signal_stop_loss, self.signal_bar_invalid_line)
+                    self._tighten_stop_long(self.signal_bar_invalid_line, "SIGNAL_BAR_INVALID")
                 else:
-                    self.signal_stop_loss = (min(self.signal_stop_loss, self.signal_bar_invalid_line)
-                                              if self.signal_stop_loss > 0 else self.signal_bar_invalid_line)
-                self._pending_exit_reason = "SIGNAL_BAR_INVALID"
+                    self._tighten_stop_short(self.signal_bar_invalid_line, "SIGNAL_BAR_INVALID")
             elif floating_profit > self.trailing_active_multiplier * atr_5:
-                if is_long:
-                    self._apply_chandelier_stop_long(atr_5)
-                else:
-                    self._apply_chandelier_stop_short(atr_5)
-                self._pending_exit_reason = "CHANDELIER_STOP"
+                cfg = self._active_exit_family_config()
+                chandelier_ok = cfg.enable_chandelier_trail if cfg is not None else True
+                if chandelier_ok:
+                    if is_long:
+                        self._apply_chandelier_stop_long(atr_5)
+                    else:
+                        self._apply_chandelier_stop_short(atr_5)
 
     # ──────────────────────────────────────────────────────────────────────
     # Brooks 定仓 + MM 目标
@@ -2476,7 +2725,12 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
                     base_move = max(base_move, sb_range * 2.0)
         if base_move < tick * 2:
             base_move = tick * 2
-        return entry_price + base_move if direction > 0 else entry_price - base_move
+        tgt = entry_price + base_move if direction > 0 else entry_price - base_move
+        mult = float(getattr(self, "_dual_core_target_mult", 1.0) or 1.0)
+        if mult < 0.999 and abs(tgt - entry_price) > 0:
+            move = abs(tgt - entry_price) * mult
+            tgt = entry_price + move if direction > 0 else entry_price - move
+        return tgt
 
     def _calc_brooks_volume(self, high_price, low_price, *, atr_5=None, max_position_cap=None) -> int:
         """Brooks 恒定风险金定仓；超额风险熔断时拒单。F2: Regime-weighted sizing。"""
@@ -2496,6 +2750,9 @@ class BrooksPaCtaStrategy(VsaFilterMixin, CtaTemplate):
             return 0
         risk_money *= aff_mult
         risk_money *= self._get_symbol_liquidity_risk_mult()
+        dc_mult = float(getattr(self, "_dual_core_size_mult", 1.0) or 1.0)
+        if getattr(self, "dual_core_soft_enabled", False):
+            risk_money *= max(dc_mult, 0.0)
         atr_5_rt = float(self.am_5min.atr(self.atr_window)) if self.am_5min.inited else 0.0
         atr_15_rt = float(self.am_15min.atr(self.atr_window)) if self.am_15min.inited else 0.0
         atr_ratio = round(atr_5_rt / atr_15_rt, 3) if atr_15_rt > 0 and atr_5_rt > 0 else 0.0

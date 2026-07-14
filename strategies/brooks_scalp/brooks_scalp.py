@@ -90,8 +90,6 @@ class BrooksScalpV01(CtaTemplate):
         )
 
     def on_bar(self, bar: BarData) -> None:
-        self.cancel_all()
-
         self.am.update_bar(bar)
         if not self.am.inited:
             return
@@ -101,6 +99,7 @@ class BrooksScalpV01(CtaTemplate):
         if self.pos == 0:
             self.detect_setup(bar)
         else:
+            self.cancel_all()
             self.manage_position(bar)
 
         self.put_event()
@@ -113,6 +112,8 @@ class BrooksScalpV01(CtaTemplate):
         self._detect_trend()
 
         if self.trend == 0:
+            if self.state != State.IDLE.value:
+                self.cancel_all()
             self.state = State.IDLE.value
             return
 
@@ -186,7 +187,8 @@ class BrooksScalpV01(CtaTemplate):
         return close < open_ and close < self.am.low[-2] and body_ratio > 0.4
 
     def _send_long_stop_entry(self, bar: BarData) -> None:
-        tick = self.pricetick or 1.0
+        self.cancel_all()
+        tick = self.get_pricetick()
         self.entry_price = bar.high_price + tick
         self.stop_price = self.pullback_low - tick
         risk = self.entry_price - self.stop_price
@@ -196,7 +198,8 @@ class BrooksScalpV01(CtaTemplate):
         self.buy(self.entry_price, self.fixed_size, stop=True)
 
     def _send_short_stop_entry(self, bar: BarData) -> None:
-        tick = self.pricetick or 1.0
+        self.cancel_all()
+        tick = self.get_pricetick()
         self.entry_price = bar.low_price - tick
         self.stop_price = self.pullback_high + tick
         risk = self.stop_price - self.entry_price
@@ -273,7 +276,7 @@ class BrooksScalpV01(CtaTemplate):
         self._record_exit(bar, reason)
 
     def _record_exit(self, bar: BarData, reason: str) -> None:
-        tick = self.pricetick or 1.0
+        tick = self.get_pricetick()
         holding_min = 0.0
         if self._entry_dt is not None:
             holding_min = (bar.datetime - self._entry_dt).total_seconds() / 60.0
@@ -299,7 +302,8 @@ class BrooksScalpV01(CtaTemplate):
         if trade.offset == Offset.OPEN:
             self.hold_bars = 0
             self._entry_side = 1 if trade.direction == Direction.LONG else -1
-            self._entry_dt = trade.datetime
+            if self._entry_dt is None:
+                self._entry_dt = trade.datetime
             self._entry_fill = trade.price
             self._trip_mfe = 0.0
             self._trip_mae = 0.0

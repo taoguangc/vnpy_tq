@@ -24,7 +24,7 @@ version: '1.1.0'
 | Round-trip 配对与胜率/盈亏比 | `scripts/backtest_trade_analysis.py` |
 | Parquet 加载 | `scripts/parquet_data_loader.py` |
 | 回测 SOP / 引擎参数 | `.agents/skills/vnpy-cta-backtest/SKILL.md` |
-| 数据下载 | `.agents/skills/vnpy-rqdata-data-pipeline/SKILL.md` |
+| 数据下载 | `.agents/skills/vnpy-quant-python/SKILL.md` §TQ 数据 |
 | 流程与风控底线 | `AGENTS.md` + `AGENTS_DETAIL.md` |
 | 外来代码检查表 | `AGENTS_DETAIL.md` §7 |
 
@@ -47,7 +47,7 @@ version: '1.1.0'
 
 ### 1.1 数据源与路径
 
-- [ ] 数据来自 `data/raw/rq/{SYMBOL}_1m.parquet`（RQData 下载链路），非来源不明 CSV/H5。
+- [ ] 数据来自 `data/tq/{prefix}/` TQ 分月 Parquet + CbC 拼接链路。
 - [ ] `load_bar_data_from_parquet` 的 `symbol` **小写**（如 `rb888`），与 `vt_symbol`（如 `rb888.SHFE`）一致。
 - [ ] 回测 `start`/`end` 落在 parquet 实际日期范围内；加载后 `len(engine.history_data)` 与区间匹配（非 0、非异常少）。
 - [ ] 未在 Parquet 流程中误用 `engine.load_data()`（SQLite）。
@@ -59,7 +59,7 @@ version: '1.1.0'
 
 ### 1.3 连续合约
 
-- [ ] 使用 `*888` 连续数据时，策略逻辑是否假设「物理主力」；换月跳空是否触发假突破/假止损。
+- [ ] 使用 CbC 分月拼接时，策略逻辑是否假设「物理主力」；换月跳空是否触发假突破/假止损。
 - [ ] 样本区间是否覆盖至少 2 个主力周期（`AGENTS_DETAIL.md` §3）。
 
 ---
@@ -167,7 +167,7 @@ summary = summarize_round_trips(round_trips)
 | 输出审计报告与 1 条下一步建议 | 自动 `optimize` / 网格 / 改参连跑 |
 | 建议用户跑 `--zero-cost` 做 **一次** 对照（须用户确认） | 为通过审计而降低 `slippage` 或扩大样本「刷指标」 |
 
-回测执行细节与命令见 **vnpy-cta-backtest** skill；数据问题先查 **vnpy-rqdata-data-pipeline**。
+回测执行细节与命令见 **vnpy-cta-backtest** skill；数据问题先查 **vnpy-quant-python** §TQ 数据。
 
 ---
 

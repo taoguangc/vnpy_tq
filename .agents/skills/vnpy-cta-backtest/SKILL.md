@@ -20,7 +20,7 @@ version: '1.3.0'
 | 品种 size/slippage | `scripts/symbol_profiles.md` |
 | 回测模板 | `strategies/pac_pullback_strategy.py` |
 | 参数扫描（须授权） | `scripts/diagnose_strategy.py` |
-| 数据 | `data/raw/rq/{SYMBOL}_1m.parquet` |
+| 数据 | `data/tq/{prefix}/` 分月 Parquet + CbC 拼接 |
 
 ## 默认常量
 
@@ -71,4 +71,4 @@ version: '1.3.0'
 | 指标 NaN | 未 `update_bar` / 未 `inited` |
 | 过滤无效 | `add_strategy` 未传过滤参数 |
 
-数据下载：`vnpy-rqdata-data-pipeline`。`scripts/` 约定：`vnpy-quant-python`。
+数据下载：`tools/download_rb_monthly.py`、`scripts/download_new_symbols_1m.py`（见 `vnpy-quant-python`）。`scripts/` 约定：`vnpy-quant-python`。

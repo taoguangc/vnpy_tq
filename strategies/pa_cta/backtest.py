@@ -256,6 +256,9 @@ def _run_engine_backtest(
         },
         "funnel_diag": {
             "dual_core_block_count": int(getattr(strategy, "_dual_core_block_count", 0)),
+            "dual_core_soft_reduce_count": int(
+                getattr(strategy, "_dual_core_soft_reduce_count", 0)
+            ),
             "vsa_block_count": int(getattr(strategy, "vsa_block_count", 0)),
             "vsa_persistence_exempt_count": int(
                 getattr(strategy, "vsa_persistence_exempt_count", 0)
@@ -273,6 +276,37 @@ def _run_engine_backtest(
     }
 
 
+def export_shadow_ledger(
+    strategy,
+    bars_1m: list,
+    *,
+    contract_size: float,
+    pricetick: float,
+    rate: float,
+    slippage_ticks: float,
+    export_path: Path | None = None,
+) -> Path | None:
+    """回测结束后附加 forwards 并导出 production OPP 影子账本 CSV。"""
+    if not getattr(strategy, "shadow_ledger_enabled", False):
+        return None
+    ledger = getattr(strategy, "_shadow_ledger", None)
+    if ledger is None or not ledger.records:
+        return None
+    path = export_path or getattr(strategy, "_shadow_export_path", None)
+    if path is None:
+        sym = getattr(ledger, "symbol", "unknown")
+        path = _ROOT / "research" / "output" / f"shadow_ledger_{sym}.csv"
+    path = Path(path)
+    ledger.attach_forwards(
+        bars_1m,
+        contract_size=contract_size,
+        pricetick=pricetick,
+        rate=rate,
+        slippage_ticks=slippage_ticks,
+    )
+    return ledger.export_csv(path)
+
+
 def _augment_round_trips_with_trade_log(
     round_trips: list,
     trade_log: list[dict],
@@ -287,6 +321,8 @@ def _augment_round_trips_with_trade_log(
         best_delta = None
         for i, log in enumerate(remaining):
             if log.get("direction") != rt.direction:
+                continue
+            if log.get("entry_time") is None:
                 continue
             delta = abs((log["entry_time"] - rt.entry_time).total_seconds())
             if best_delta is None or delta < best_delta:
@@ -323,6 +359,7 @@ def run_tq_cbc_backtest(
     strategy_label: str = "Brooks PA CTA",
     base_strategy_class: type | None = None,
     rollover_strategy_class: type | None = None,
+    bars_loader=None,
 ) -> dict:
     """TQ 分月 raw + 21:00 换月（CbC）。"""
     root = Path(__file__).parent.parent.parent.resolve()
@@ -368,13 +405,24 @@ def run_tq_cbc_backtest(
     prefix = file_stem
     events = build_rollover_events(prefix, start=start, end=end)
     load_start = perf_counter()
-    bars = load_stitched_raw_bars(
-        prefix,
-        exchange,
-        symbol=symbol,
-        start=start,
-        end=end,
-    )
+    if bars_loader is not None:
+        bars = bars_loader(
+            prefix,
+            exchange,
+            symbol=symbol,
+            start=start,
+            end=end,
+        )
+        data_label = "tick→1m 重采样"
+    else:
+        bars = load_stitched_raw_bars(
+            prefix,
+            exchange,
+            symbol=symbol,
+            start=start,
+            end=end,
+        )
+        data_label = "分月 raw 1m"
     load_seconds = perf_counter() - load_start
 
     engine = RolloverBacktestingEngine()
@@ -395,8 +443,17 @@ def run_tq_cbc_backtest(
     if strategy_class is base_cls:
         strategy_class = rollover_cls
     strategy_setting = build_strategy_setting_fn(profile, capital=backtest_capital)
+    shadow_export_path = None
+    candidate_export_path = None
     if strategy_overrides:
-        strategy_setting.update(strategy_overrides)
+        overrides = dict(strategy_overrides)
+        shadow_export_path = overrides.pop("shadow_export_path", None) or overrides.pop(
+            "_shadow_export_path", None
+        )
+        candidate_export_path = overrides.pop("candidate_export_path", None) or overrides.pop(
+            "_candidate_export_path", None
+        )
+        strategy_setting.update(overrides)
     allowed_params = set(getattr(strategy_class, "parameters", []))
     filtered_setting = {k: v for k, v in strategy_setting.items() if k in allowed_params}
     engine.add_strategy(strategy_class, filtered_setting)
@@ -416,6 +473,17 @@ def run_tq_cbc_backtest(
     )
     backtest_seconds = perf_counter() - t0
     stats = result["stats"]
+    strategy = engine.strategy
+    shadow_path = export_shadow_ledger(
+        strategy,
+        bars,
+        contract_size=float(engine.size),
+        pricetick=float(engine.pricetick),
+        rate=float(rate),
+        slippage_ticks=float(slippage),
+        export_path=Path(shadow_export_path) if shadow_export_path else None,
+    )
+    shadow_count = len(getattr(getattr(strategy, "_shadow_ledger", None), "records", []) or [])
 
     if verbose:
         title_extra = " | TQ CbC raw"
@@ -424,7 +492,7 @@ def run_tq_cbc_backtest(
         print(f"\n===== Parquet 回测统计 ({strategy_label} {symbol}{title_extra}) =====")
         print(f"品种: {symbol}.{exchange.value}")
         print(f"区间: {start.date()} -> {end.date()}")
-        print(f"数据: 分月 raw 拼接 | 换月 {len(events)} 次 | 切点 21:00 CST")
+        print(f"数据: {data_label} 拼接 | 换月 {len(events)} 次 | 切点 21:00 CST")
         print(f"数据量(1m): {len(bars):,}")
         print(f"加载: {load_seconds:.2f}s  回测: {backtest_seconds:.2f}s")
         print("-" * 40)
@@ -493,6 +561,33 @@ def run_tq_cbc_backtest(
             setup_pnl=result.get("setup_pnl"),
             setup_trades=result.get("setup_trades"),
         )
+        if shadow_path is not None:
+            print(f"\n===== Production OPP 影子账本 =====")
+            print(f"  导出: {shadow_path}")
+            print(f"  候选数: {shadow_count:,}")
+            print("=" * 40)
+
+    candidate_funnel = None
+    candidate_records = None
+    if hasattr(strategy, "get_candidate_ledger"):
+        ledger = strategy.get_candidate_ledger()
+        if ledger is not None:
+            if hasattr(ledger, "attach_forwards") and ledger.records:
+                ledger.attach_forwards(
+                    bars,
+                    contract_size=float(engine.size),
+                    pricetick=float(engine.pricetick),
+                    rate=float(rate),
+                    slippage_ticks=float(slippage),
+                )
+            candidate_funnel = ledger.funnel()
+            candidate_records = ledger.to_rows()
+            if candidate_export_path and hasattr(ledger, "export_csv"):
+                ledger.export_csv(Path(candidate_export_path))
+
+    dryscan_compare = None
+    if hasattr(strategy, "get_dryscan_compare"):
+        dryscan_compare = strategy.get_dryscan_compare()
 
     return {
         "name": f"{strategy_label} {symbol} TQ CbC",
@@ -500,11 +595,19 @@ def run_tq_cbc_backtest(
         "round_trips": result["round_trips"],
         "rt_summary": result["rt_summary"],
         "open_position": result["open_position"],
+        "trade_log": result.get("trade_log", []),
+        "setup_pnl": result.get("setup_pnl", {}),
+        "setup_trades": result.get("setup_trades", {}),
         "funnel_diag": result.get("funnel_diag", {}),
+        "candidate_funnel": candidate_funnel,
+        "candidate_records": candidate_records,
+        "dryscan_compare": dryscan_compare,
         "load_seconds": load_seconds,
         "backtest_seconds": backtest_seconds,
         "rollover_stats": engine.rollover_stats,
         "data_count": len(bars),
+        "shadow_ledger_path": str(shadow_path) if shadow_path else None,
+        "shadow_ledger_count": shadow_count,
     }
 
 
@@ -519,9 +622,17 @@ def run_parquet_backtest(
     end: datetime | None = None,
     slippage_override: float | None = None,
     strategy_class: type | None = None,
+    profile_mode: str = "production",
 ) -> dict:
     if history_data is not None:
         raise ValueError("TQ CbC 回测不支持预加载 history_data")
+    profile_resolver = None
+    if profile_mode == "generic_base":
+        from strategies.pa_cta.symbol_config import resolve_generic_base_profile
+
+        profile_resolver = resolve_generic_base_profile
+    elif profile_mode != "production":
+        raise ValueError(f"未知 profile_mode: {profile_mode}")
     return run_tq_cbc_backtest(
         symbol=symbol,
         zero_cost=zero_cost,
@@ -531,6 +642,7 @@ def run_parquet_backtest(
         end=end,
         slippage_override=slippage_override,
         strategy_class=strategy_class,
+        profile_resolver=profile_resolver,
     )
 
 

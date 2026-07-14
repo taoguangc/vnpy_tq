@@ -67,19 +67,6 @@ def diag_prefix(prefix: str, symbol: str) -> dict:
             "commission": ev.commission_cost,
         })
 
-    # 连续合约 vs 拼接 close 抽样
-    cont_path = data_dir / f"{file_stem}_continuous.parquet"
-    cont_note = "missing"
-    if cont_path.exists():
-        cont = pd.read_parquet(cont_path)
-        if "datetime" in cont.columns:
-            cont["dt_cst"] = pd.to_datetime(cont["datetime"], utc=True).dt.tz_convert("Asia/Shanghai")
-        elif "dt" in cont.columns:
-            cont["dt_cst"] = pd.to_datetime(cont["dt"], utc=True).dt.tz_convert("Asia/Shanghai")
-        cont = cont[(cont["dt_cst"] >= pd.Timestamp(START, tz="Asia/Shanghai")) &
-                    (cont["dt_cst"] <= pd.Timestamp(END, tz="Asia/Shanghai"))]
-        cont_note = f"rows={len(cont)} close_range={cont['close'].min():.0f}~{cont['close'].max():.0f}"
-
     return {
         "prefix": prefix,
         "bars": len(bars),
@@ -99,7 +86,6 @@ def diag_prefix(prefix: str, symbol: str) -> dict:
         "cost_slippage_sum": float(cost_df["slippage_cost"].sum()) if cost_df is not None else None,
         "events": ev_rows,
         "big_gaps_sample": big_gaps.head(5).to_string(index=False) if len(big_gaps) else "",
-        "cont": cont_note,
     }
 
 
@@ -114,7 +100,6 @@ def main() -> None:
         print(f"  相邻缺口>15min: {d['gaps_gt15m']}  单bar涨跌>5%: {d['jump_5pct']}")
         print(f"  rollover_map: {d['rollover_map_rows']}  回测窗 events: {d['rollover_events']}")
         print(f"  cost_detail: {d['has_cost_detail']}  slippage_sum={d['cost_slippage_sum']}")
-        print(f"  continuous: {d['cont']}")
         print("  换月切点:")
         for ev in d["events"]:
             print(
