@@ -45,10 +45,23 @@ H1: volume_ratio 与 RV_N 存在可检出关联
 | period | `2024-01-01` … `2025-12-31` |
 | W（baseline） | `100` |
 | N（outcome） | `60` |
+| sampling interval | `60`（非重叠 Outcome） |
 | Primary Metric | Spearman ρ |
 | Roll | 标注 + **双报** `full` / `ex_roll`；默认 W_roll=`60` |
 
 主结论样本：主=`ex_roll`，次=`full`；必须双报。
+
+### 2.1 Evidence 结论规则（跑数前冻结）
+
+`association_detected` 当且仅当：
+
+1. `ex_roll` 的 `|ρ| >= 0.10`；
+2. `ex_roll` 的 95% CI 不跨 0；
+3. `full` 与 `ex_roll` 的 ρ 同号；
+4. `|ρ_full - ρ_ex_roll| <= 0.05`。
+
+否则结论为 `inconclusive`，治理决策保持 `HOLD`。  
+本 EXP001 不使用显著性单独晋级，也不声明 `no_association`（单品种无法证明普遍无关联）。
 
 ---
 
@@ -75,3 +88,4 @@ H1: volume_ratio 与 RV_N 存在可检出关联
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 与 Parent 同步首稿 |
 | 2026-07-19 | 1.0.0 | Accepted：VQ1–VQ5 按建议冻结；跑数仍须另授权 |
+| 2026-07-19 | 1.0.1 | 跑数前冻结 Evidence 门槛与非重叠采样 |
