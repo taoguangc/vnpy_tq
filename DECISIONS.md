@@ -191,7 +191,12 @@ FeatureResult   DetectionResult
   3. ATR Compression 仅可作为 **EXPERIMENT Feature Sensor** 候选，不得 Production、不得生成 Opportunity；
   4. Registry **分册**：`DetectorRegistry` 与 `SensorRegistry`（禁止 `UniversalComponentRegistry`）；
   5. 实现顺序：Evidence Engine Core → Storage/Evaluation → ATR Experiment Sensor → Promotion Review；
-  6. v0.3 Removal Window：删除 Registry `_adapt_legacy` / 实例注册；删除 Domain `Signal`；隔离 Direction 仅 Opportunity 路径。
+  6. Feature Sensor 生命周期采用 `EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED`；
+     生命周期表示治理状态而非收益；正常晋级单向，活动状态可转 DEPRECATED；
+     算法变化须新 `sensor_version` 并从 EXPERIMENT 开始；
+  7. PRODUCTION 必须同时具备 **Operational Intent + Evidence + Explicit Enablement**，
+     Evidence 不得触发自动上线；
+  8. v0.3 Removal Window：删除 Registry `_adapt_legacy` / 实例注册；删除 Domain `Signal`；隔离 Direction 仅 Opportunity 路径。
 - **对 Decision 008 的关系**：本提案 **不静默废止 008**；仅在本 Decision Accepted 后，允许按 Feature Spec 受控引入 Feature Sensor（仍禁止 Market→Feature→Context 交易捷径）。
 - **正面后果**：Feature 不污染交易逻辑；Opportunity 保留方向语义；Evidence 可独立验证 Alpha。
 - **负面后果**：类型数量、pipeline 复杂度与生命周期管理增加。

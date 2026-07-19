@@ -235,35 +235,54 @@ Evidence 正确形态是假设—观测—结果—结论，**禁止** `compress
 
 生命周期状态挂在 **Sensor Descriptor**（按 `(sensor_id, sensor_version)`），不挂在单次 FeatureResult。
 
-与证据可见状态对齐（命名可复用 `DetectorStatus`，语义为 Sensor）：
+**Lifecycle 表示治理状态，不表示交易表现或收益。晋级不自动发生。**
 
 ```text
 EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED
 ```
 
-（`CANDIDATE` 是否正式加入枚举由 Q4 关闭；Draft 先保留为晋升讨论位。）
-
-| 状态 | 允许 |
-|------|------|
-| EXPERIMENT | 研究臂、Evidence 采集；**默认** |
-| VALIDATED | 有合格 evidence_refs；仍非 Decision 默认输入 |
-| CANDIDATE | （Q4）通过既定 Gate、待用户确认是否进 Production profile |
-| PRODUCTION | E4 + 用户确认 + 显式启用；可作为 Decision 输入 |
-| DEPRECATED | 保留指纹与历史；默认不进入生产 profile |
+| 状态 | 定义与 Gate | 禁止 / 限制 |
+|------|-------------|-------------|
+| **EXPERIMENT** | 新提出、尚未完成 Evidence 验证；可计算 FeatureResult、进入 Experiment、生成 Evidence 数据；**默认状态** | 生产决策依赖、自动交易启用 |
+| **VALIDATED** | Hypothesis、Outcome、预注册 Metric、可复现 Evidence 与非空结论齐全 | 仅表示研究过程通过审计，**不等于有效 Alpha**，不得默认进入 Decision |
+| **CANDIDATE** | 具备生产评估资格：多时间段；多品种（适用时）**或**多年份；OOS 完成；稳健性有记录 | 不得自动晋级 Production |
+| **PRODUCTION** | 前置状态为 CANDIDATE；`evidence_refs` 齐全；Operational Intent + 人类/治理批准 + Explicit Enablement | Evidence 单独存在不足以晋级 |
+| **DEPRECATED** | 被新版本替代、假设失效、数据环境变化或停止维护 | 禁止物理删除；历史结果必须可追溯 |
 
 **ATR Compression** 在本 Spec Accepted 后的首个实现，生命周期起点必须是 **EXPERIMENT Feature Sensor**，不得标 PRODUCTION，不得生成 Opportunity。
 
-晋级：
+正常晋级：
 
 ```text
 Experiment Sensor
     → Evidence Dataset
     → Statistical Validation
-    → Production Feature
+    → Candidate Review
+    → Production Feature（Intent + Evidence + Enablement）
     → Decision Engine Input
 ```
 
-客观 Gate（样本 / OOS / 多品种 / 稳健性 / 回退）见 **Q4**；细则以 Evidence Spec 为准，本 Spec 只约束默认状态与禁止交易语义。
+允许任一非 Deprecated 状态转入 `DEPRECATED`；禁止降级：
+
+```text
+VALIDATED / CANDIDATE / PRODUCTION → DEPRECATED
+
+PRODUCTION → CANDIDATE     # 禁止
+PRODUCTION → EXPERIMENT    # 禁止
+```
+
+算法行为变化必须创建新 `sensor_version`，从 EXPERIMENT 重新开始：
+
+```text
+atr_compression v1.0 → DEPRECATED
+atr_compression v2.0 → EXPERIMENT
+```
+
+不得原地改写旧版本。显式 Parameter Set 变化仍属于 Experiment 配置，
+不自动升级 `sensor_version`（见 §2.6）。
+
+样本量、OOS、多品种/多年份及稳健性数值阈值归 Evidence Spec；
+本 Spec 冻结状态机、治理边界与禁止交易语义。
 
 ---
 
@@ -374,43 +393,31 @@ Pipeline 运行态进 `PipelineRunContext`，不回写 FeatureResult。详见 §
 
 ---
 
+### Q4 — Sensor Lifecycle / Promotion Criteria — **CLOSED**
+
+**决议**：`EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED`；
+生命周期是治理状态，不是收益评价；正常路径单向，任一活动状态可转
+DEPRECATED；Production 必须 `Intent + Evidence + Enablement`。详见 §4。
+
+负面或拒绝结论只要研究过程可复现，也可标记 VALIDATED，随后转
+DEPRECATED；只有满足正向证据与稳健性 Gate 才可进入 CANDIDATE。
+
+---
+
 ### 待关闭（Review 顺序）
 
 | ID | 主题 | 提案（待你确认） |
 |----|------|------------------|
-| **Q4** | Promotion Criteria | 见下方 Q4 草案；Feature Spec 声明状态机，客观 Gate 数值归 Evidence Spec |
 | **Q5** | Experiment Data Storage | 落盘路径与表结构归 Evidence Spec（倾向 `research/output/evidence/<experiment_id>/`）；Feature Spec 不规定存储 |
 
-**附带（建议 Q4 旁关闭）**
+**附带（待 Q5 或 Freeze Review 关闭）**
 
 | 项 | 提案 |
 |----|------|
 | Emit 策略 | ATR Compression 默认 **Always emit** |
 | Capability | 独立 `SensorCapability`（requires / produces / timeframe）；不含 directions |
 
-#### Q4 草案 — Sensor Lifecycle / Promotion Criteria
-
-状态机（Descriptor 级）：
-
-```text
-EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED
-```
-
-| 跃迁 | 客观 Gate（原则；阈值进 Evidence Spec） | 谁批准 |
-|------|------------------------------------------|--------|
-| → VALIDATED | 单假设已登记；有可审计观测+outcome；预登记度量完成；decision ≠ 空 | Evidence + 研究结论 KEEP/HOLD 可 VALIDATED；REVERT 不得晋级 |
-| → CANDIDATE | 满足 E2+ 级证据意图：多品种或多年份之一；OOS 窗口预登记且通过；稳健性（参数扰动不翻转结论）有记录 | 用户确认进入候选名单 |
-| → PRODUCTION | E4 意图 + 用户显式确认 + profile 启用；evidence_refs 齐全 | **仅用户** |
-| → DEPRECATED | 被替代版本、证据失效、或主动下线 | 用户或维护者 |
-
-附加规则：
-
-1. Feature Spec **不**把 KEEP 自动写成 PRODUCTION。  
-2. 允许 **回退**：PRODUCTION → DEPRECATED（保留指纹）；新行为用新 `sensor_version`，禁止原地改历史。  
-3. 参数扫描产生的 KEEP **不**升级 `sensor_version`，只绑定新 Experiment。  
-4. ATR Compression 首版最高停在 EXPERIMENT，直到 Evidence Gate 关闭。
-
-确认方式：对 Q4–Q5 回复 `Q4 OK` / 修改意见即可逐条 CLOSED。
+确认方式：对 Q5 回复 `Q5 OK` / 修改意见即可关闭。
 
 ---
 
@@ -434,3 +441,4 @@ EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED
 | 2026-07-19 | 0.1.1-draft | Review：Q1 CLOSED（DetectorRegistry / SensorRegistry 分册） |
 | 2026-07-19 | 0.1.2-draft | Review：Q2 CLOSED（schema/sensor 双版本；参数集独立；历史结果不可覆盖） |
 | 2026-07-19 | 0.1.3-draft | Review：Q3 CLOSED（四层所有权；symbol/timeframe Identity；diagnostics） |
+| 2026-07-19 | 0.1.4-draft | Review：Q4 CLOSED（单向治理状态机；Production = Intent + Evidence + Enablement） |
