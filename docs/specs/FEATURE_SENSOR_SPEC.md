@@ -73,7 +73,7 @@
 | 读只读窗口 / Context | `buy` / `sell` / 持仓 |
 | 返回 `FeatureResult \| None`（或每 bar 恒输出，见 §3） | 返回 `DetectionResult` / `Opportunity` / `Signal` |
 | 数值 `values` 为 `Mapping[str, float]` | `BUY` / `SELL` / `LONG` / `SHORT` 进入 values 或 metadata 业务键 |
-| 显式 `sensor_id` / `version` / lifecycle | 修改 Context；隐藏全局状态 |
+| 显式 `sensor_id` / `sensor_version` / lifecycle | 修改 Context；隐藏全局状态 |
 | 可序列化、可审计 | 声称 Production Alpha；跳过 Evidence |
 
 ---
@@ -86,7 +86,7 @@
 @dataclass(frozen=True)
 class FeatureResult:
     sensor_id: str
-    version: str
+    sensor_version: str
     timestamp: datetime                 # timezone-aware，默认 UTC
     values: Mapping[str, float]         # 发布后只读
     metadata: Mapping[str, str]         # 仅字符串诊断键；发布后只读
@@ -122,7 +122,40 @@ weight, position_size, breakout_weight
 - JSON 友好；Enum → value；datetime → ISO 8601
 - 未知 `schema_version` 明确失败
 
-### 2.5 与 DetectionResult 的隔离
+### 2.5 FeatureResult Versioning（Q2 Resolved）
+
+FeatureResult 采用双版本模型：
+
+| 字段 | 含义 | 升级条件 |
+|------|------|----------|
+| `schema_version` | FeatureResult 外层数据结构与序列化契约版本 | 字段、字段类型或编码格式发生不兼容变化 |
+| `sensor_version` | Sensor 计算行为及输出契约版本 | 算法、特征定义、输出键集合或算法默认常量变化 |
+
+规则：
+
+1. FeatureResult 必须 `frozen=True`；`values` 与 `metadata` 在构造时防御性复制并以只读 Mapping 发布（例如 `MappingProxyType`）。
+2. Result 写入 Evidence Store 或 Backtest Artifact 后即为 **published**，不得覆盖或修改。
+3. Sensor 行为变化必须生成新 `sensor_version`；历史结果继续引用原版本。
+4. 显式实验参数不属于 `sensor_version`，须作为独立 Parameter Set 保存。
+5. 历史证据必须保留原始 `schema_version`、`sensor_version` 及完整参数配置或其不可变指纹。
+
+```yaml
+sensor:
+  id: atr_compression
+  version: "1.0"
+
+parameters:
+  atr_window: 14
+  baseline_window: 100
+```
+
+同一算法使用不同实验参数，不自动升级 `sensor_version`；算法实现、特征语义或默认常量改变才升级。
+
+**边界说明**：在 `values: Mapping[str, float]` 外层类型不变时，增加
+`compression_score` 属于 Sensor 输出契约变化，升级 `sensor_version`；
+只有 FeatureResult 外层字段、字段类型或序列化编码改变才升级 `schema_version`。
+
+### 2.6 与 DetectionResult 的隔离
 
 | | FeatureResult | DetectionResult |
 |--|---------------|-----------------|
@@ -199,7 +232,7 @@ Registry
 
 **禁止** `UniversalComponentRegistry` / `registry.register(anything)`。
 
-- 注册键：`(sensor_id, version)`（与 Detector 的 `(id, version)` 对称但分表）
+- 注册键：`(sensor_id, sensor_version)`（与 Detector 的 `(id, version)` 对称但分表）
 - v0.2 `DetectorRegistry` API 形状可参考，**类型与能力契约不得混装**
 
 ### 5.2 Pipeline
@@ -266,11 +299,17 @@ OpportunityPipeline:  (现有 DetectorPipeline) → Opportunity[]
 
 ---
 
+### Q2 — FeatureResult Versioning — **CLOSED**
+
+**决议**：采用 `schema_version` + `sensor_version` 双版本；Published Result
+不可覆盖；实验 Parameter Set 独立存档。详见 §2.5。
+
+---
+
 ### 待关闭（Review 顺序）
 
 | ID | 主题 | 提案（待你确认） |
 |----|------|------------------|
-| **Q2** | FeatureResult Versioning | `schema_version`（契约）与 `version`（sensor 实现）分列；结果不可变；行为变更 → 新 `version`，不得原地改已发布结果 |
 | **Q3** | Sensor Metadata Ownership | `metadata` 仅 Sensor 自有诊断键（`Mapping[str, str]`）；Pipeline / Evidence 附加信息进各自对象，不回写 FeatureResult |
 | **Q4** | Promotion Criteria | Feature 侧不定义 KEEP/Production 规则；晋级门禁归 Evidence Spec；本 Spec 只要求 EXPERIMENT 默认与禁止 Direction |
 | **Q5** | Experiment Data Storage | 落盘路径与表结构归 Evidence Spec（倾向 `research/output/evidence/<experiment_id>/`）；Feature Spec 不规定存储 |
@@ -284,7 +323,7 @@ OpportunityPipeline:  (现有 DetectorPipeline) → Opportunity[]
 
 ---
 
-确认方式：对 Q2–Q5 回复 `Q2 OK` / 修改意见即可逐条 CLOSED。
+确认方式：对 Q3–Q5 回复 `Q3 OK` / 修改意见即可逐条 CLOSED。
 
 ---
 
@@ -306,3 +345,4 @@ OpportunityPipeline:  (现有 DetectorPipeline) → Opportunity[]
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Draft：Feature/Opportunity 双路径；FeatureResult；ATR 定位为 EXPERIMENT Sensor |
 | 2026-07-19 | 0.1.1-draft | Review：Q1 CLOSED（DetectorRegistry / SensorRegistry 分册） |
+| 2026-07-19 | 0.1.2-draft | Review：Q2 CLOSED（schema/sensor 双版本；参数集独立；历史结果不可覆盖） |
