@@ -17,6 +17,7 @@
 - 两实验独立假设；强制换月双报；串行：先 A 后 B；未授权实现 / 跑数
 - `VolumeRatioSensor@1.0`：EXPERIMENT；只产出 `volume_ratio`，不含交易语义
 - Volume EXP001 closed：`ρ_ex_roll=0.064631`；`inconclusive` / `HOLD`；无晋级
+- `OIChangeSensor@1.0`：Volume 闭环后实现；只产出 `oi_rel_change`
 
 ### Docs / Research（Roll Annotation Policy Accepted）
 

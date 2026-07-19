@@ -163,6 +163,24 @@ def _experiment_root(config: ScalarExperimentConfig) -> Path:
     return ROOT / "research" / "output" / "evidence" / config.experiment_id
 
 
+def _frame_values(frame: pd.DataFrame, column: str) -> np.ndarray:
+    if column != "open_interest":
+        if column not in frame:
+            raise KeyError(f"数据缺字段: {column}")
+        return frame[column].to_numpy(dtype=float)
+
+    if "open_oi" not in frame:
+        raise KeyError("数据缺字段: open_oi")
+    if "close_oi" in frame:
+        values = frame["close_oi"].where(
+            frame["close_oi"].notna(),
+            frame["open_oi"],
+        )
+    else:
+        values = frame["open_oi"]
+    return values.fillna(0.0).to_numpy(dtype=float)
+
+
 def run_artifact(
     config: ScalarExperimentConfig,
     sensor: BaseFeatureSensor,
@@ -183,8 +201,6 @@ def run_artifact(
     ].reset_index(drop=True)
     if frame.empty:
         raise RuntimeError("加载后无可用 bar")
-    if config.frame_column not in frame:
-        raise KeyError(f"数据缺字段: {config.frame_column}")
 
     period_mask = (
         (frame["dt_cst"] >= pd.Timestamp(PERIOD_START))
@@ -195,7 +211,7 @@ def run_artifact(
         yymms,
         window=DEFAULT_ROLL_WINDOW,
     )
-    values = frame[config.frame_column].to_numpy(dtype=float)
+    values = _frame_values(frame, config.frame_column)
 
     data_dir = symbol_dir("rb")
     rollover_map = pd.read_parquet(data_dir / "rollover_map.parquet")

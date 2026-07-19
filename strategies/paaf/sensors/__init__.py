@@ -22,6 +22,13 @@ from strategies.paaf.sensors.models import (
     SensorDescriptor,
     SensorStatus,
 )
+from strategies.paaf.sensors.oi_change import (
+    OI_CHANGE_DESCRIPTOR,
+    OI_OUTPUT_KEY,
+    OI_SENSOR_ID,
+    OI_SENSOR_VERSION,
+    OIChangeSensor,
+)
 from strategies.paaf.sensors.registry import (
     SensorRegistry,
     build_sensor_registry,
@@ -48,6 +55,11 @@ __all__ = [
     "BaseFeatureSensor",
     "DemoConstantSensor",
     "FeatureResult",
+    "OI_CHANGE_DESCRIPTOR",
+    "OI_OUTPUT_KEY",
+    "OI_SENSOR_ID",
+    "OI_SENSOR_VERSION",
+    "OIChangeSensor",
     "SensorCapability",
     "SensorDescriptor",
     "SensorRegistry",

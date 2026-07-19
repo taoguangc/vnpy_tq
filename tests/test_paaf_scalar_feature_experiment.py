@@ -4,10 +4,25 @@ from __future__ import annotations
 
 import unittest
 
-from scripts.paaf_scalar_feature_experiment import classify_association
+import pandas as pd
+
+from scripts.paaf_scalar_feature_experiment import (
+    _frame_values,
+    classify_association,
+)
 
 
 class TestScalarFeatureEvidenceGate(unittest.TestCase):
+    def test_open_interest_prefers_close_and_falls_back_to_open(self) -> None:
+        frame = pd.DataFrame({
+            "open_oi": [100.0, 101.0, 102.0],
+            "close_oi": [110.0, None, 112.0],
+        })
+
+        values = _frame_values(frame, "open_interest")
+
+        self.assertEqual(values.tolist(), [110.0, 101.0, 112.0])
+
     def test_detects_only_material_stable_association(self) -> None:
         self.assertEqual(
             classify_association(
