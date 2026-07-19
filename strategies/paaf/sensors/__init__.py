@@ -26,6 +26,14 @@ from strategies.paaf.sensors.registry import (
     SensorRegistry,
     build_sensor_registry,
 )
+from strategies.paaf.sensors.volume_ratio import (
+    DEFAULT_VOLUME_BASELINE_WINDOW,
+    VOLUME_OUTPUT_KEY,
+    VOLUME_RATIO_DESCRIPTOR,
+    VOLUME_SENSOR_ID,
+    VOLUME_SENSOR_VERSION,
+    VolumeRatioSensor,
+)
 
 __all__ = [
     "ATR_COMPRESSION_DESCRIPTOR",
@@ -44,6 +52,12 @@ __all__ = [
     "SensorDescriptor",
     "SensorRegistry",
     "SensorStatus",
+    "DEFAULT_VOLUME_BASELINE_WINDOW",
+    "VOLUME_OUTPUT_KEY",
+    "VOLUME_RATIO_DESCRIPTOR",
+    "VOLUME_SENSOR_ID",
+    "VOLUME_SENSOR_VERSION",
+    "VolumeRatioSensor",
     "build_sensor_registry",
     "write_feature_artifact",
 ]
