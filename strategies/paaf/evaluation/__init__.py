@@ -7,6 +7,11 @@ from strategies.paaf.evaluation.models import (
     OutcomeDefinition,
     OutcomeRecord,
 )
+from strategies.paaf.evaluation.provenance import (
+    fingerprint_evaluation_body,
+    fingerprint_metric_definition,
+    fingerprint_outcome_definition,
+)
 
 __all__ = [
     "EvaluationResult",
@@ -14,4 +19,7 @@ __all__ = [
     "MetricRecord",
     "OutcomeDefinition",
     "OutcomeRecord",
+    "fingerprint_evaluation_body",
+    "fingerprint_metric_definition",
+    "fingerprint_outcome_definition",
 ]
