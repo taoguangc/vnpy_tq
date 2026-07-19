@@ -81,16 +81,17 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-下一阶段：**v0.3 Evidence Engine Core 实现**（Manifest / ArtifactReference / EvidenceRecord / Provenance）。
-Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，不得跳过 Evidence。
+下一阶段：**v0.3 Phase 1 Experiment Workflow**（Context → Persist → Replay）。
+Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，不得跳过 Workflow / Evaluation。
 
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Engine Implementation RFC（Accepted）
-    → Evidence Engine Skeleton（models ← 当前 → provenance → repository）
-    → Evidence Storage / Evaluation
-    → ATR Compression Experiment Sensor
+Evidence Engine Phase 0（Accepted / Implemented）
+    → Experiment Workflow Impl RFC（Draft ← 当前）
+    → Experiment Workflow Context / Persist / Replay
+    → Evidence Evaluation（另 RFC）
+    → ATR Compression Experiment Sensor（另 RFC）
     → Promotion Review
 ```
 
@@ -98,7 +99,8 @@ Evidence Engine Implementation RFC（Accepted）
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
-| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | IQ1–IQ5 关闭；Phase 0 models 已授权 |
+| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation 完成 |
+| `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Draft** | Phase 1：谁创建 Manifest / Evidence |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---

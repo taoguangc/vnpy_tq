@@ -12,11 +12,11 @@
 
 ### Docs（Spec Accepted — 未授权 ATR 实现）
 
-- `FEATURE_SENSOR_SPEC.md` v1.0.0：**Accepted** — Q1–Q5 关闭；Observation Key + Storage Envelope
-- `EVIDENCE_ENGINE_SPEC.md` v1.0.0：**Accepted** — Evidence Object + Validation Protocol + Provenance
-- Decision 015：**Accepted** — 双路径；Production = Intent + Evidence + Enablement
-- `EVIDENCE_ENGINE_IMPL_RFC.md` v1.0.0：**Accepted** — IQ1–IQ5 关闭；ID Responsibility；Phase 0 切片
-- 当前实现切片：Evidence Engine core models（禁止直接 ATR）
+- `FEATURE_SENSOR_SPEC.md` / `EVIDENCE_ENGINE_SPEC.md` / Decision 015：**Accepted**
+- `EVIDENCE_ENGINE_IMPL_RFC.md`：**Accepted**；Phase 0 models + provenance + repository **已实现**
+- `EXPERIMENT_WORKFLOW_IMPL_RFC.md`：**Draft** — Phase 1 Experiment Workflow（Context / Persist / Replay）
+- 下一切片：本 Workflow RFC Review → Accepted → `feat(paaf): add experiment workflow context`
+- 仍禁止：ATR Sensor、FeaturePipeline、Evaluation、Promotion Automation
 
 ---
 
