@@ -10,14 +10,14 @@
 
 ## [Unreleased]
 
-### Docs（EXP001 Accepted — 跑数未授权）
+### Docs / Research（EXP001 Completed — no promotion）
 
-- Phase 0–3.1：**Evidence + Workflow + Evaluation + Feature Sensor + ATR Sensor 已实现**
-- `37baf45`：`feat(paaf): add atr compression feature sensor`
-- `docs/experiments/ATR_COMPRESSION_EXP001.md` v1.0.0：**Accepted** — RQ1–RQ4 关闭
-- 冻结区间：`2024-01-01`–`2025-12-31`；Dataset Fingerprint = file_manifest + hashes + construction_metadata
-- 授权边界：Accepted 仅准备 Feature Run；须「跑 EXP001」才生成 Artifact；Evaluation / Evidence 另授权
-- 仍禁止：自作主张跑数、Trading signal、Production 晋级、参数搜索、compression_score、显著性 pass/fail 晋级
+- EXP001 闭环：Feature Artifact → Evaluation → Evidence
+- Evidence：`EV-ATR-COMPRESSION-EXP001-001`；`hypothesis_conclusion=inconclusive`；governance `HOLD`
+- Sensor：`atr_compression@1.0` 仍为 **EXPERIMENT**；禁止原地改参续跑
+- 新增 runners：`scripts/run_atr_compression_exp001{,_evaluation,_evidence}.py`
+- 新增索引：`docs/experiments/ATR_COMPRESSION_EXP001_INDEX.md`（大产物仍 gitignore 于 `research/output/`）
+- 仍禁止：Production 晋级、Trading signal、EXP001 参数/区间事后修改
 
 ---
 

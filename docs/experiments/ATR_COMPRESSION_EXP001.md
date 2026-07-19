@@ -1,12 +1,13 @@
 # ATR Compression EXP001 — Experiment Run Specification
 
-> **Status**: Accepted（Frozen for ATR_COMPRESSION_EXP001 Feature Run）
+> **Status**: Accepted / **Lifecycle Completed**（Evidence closed 2026-07-19；no promotion）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `ATR_COMPRESSION_EXP001`
 > **Parent**: `docs/specs/ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md`（Accepted）
 > **Sensor**: `atr_compression@1.0`（EXPERIMENT；commit `37baf45`）
+> **Artifact Index**: `docs/experiments/ATR_COMPRESSION_EXP001_INDEX.md`
 > **规则优先级**: `AGENTS.md` > Parent RFC > 本 Run Spec > 运行脚本
-> **运行门禁**: 本文件 **已 Accepted**；仍须用户明确授权「跑 EXP001」才可生成 Feature Artifact。Accepted ≠ 自动跑数；**不**授权 Evaluation / Evidence。
+> **运行门禁**: 本实验线已闭环；禁止改写产物。继续研究须新 `experiment_id`。
 
 本文件冻结 **第一次真实运行** 的实验身份、数据、参数、产物与评估计划。
 它不是新的 Sensor RFC，也不授权交易。
@@ -336,12 +337,15 @@ Feature Run 成功 = 可审计 Feature Artifact 完成，**不是** Spearman 显
 ```text
 ATR Sensor RFC            ✅ Accepted
 ATR Sensor Implementation ✅ 37baf45
-ATR EXP001 Run Spec       ✅ Accepted ← 本文件
-    → (explicit) 跑 EXP001
-    → Feature Artifact only
-    → (separate auth) Evaluation
-    → (separate auth) Evidence
+ATR EXP001 Run Spec       ✅ Accepted
+Feature Artifact          ✅
+Evaluation                ✅
+Evidence                  ✅ inconclusive / HOLD
+Promotion                 ❌ none
+Artifact Index            docs/experiments/ATR_COMPRESSION_EXP001_INDEX.md
 ```
+
+继续研究 → 新 Experiment（EXP002+），禁止 mutate EXP001。
 
 ---
 
@@ -351,3 +355,4 @@ ATR EXP001 Run Spec       ✅ Accepted ← 本文件
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 EXP001 Run Spec；开列 RQ1–RQ4 |
 | 2026-07-19 | 1.0.0 | **Accepted**：冻结 2024-01-01–2025-12-31；Dataset Fingerprint 完整定义；Feature-only 授权；无显著性门槛 |
+| 2026-07-19 | 1.1.0 | Lifecycle Completed：Evidence inconclusive/HOLD；见 Artifact Index |
