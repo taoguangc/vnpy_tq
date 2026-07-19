@@ -81,21 +81,19 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
-当前：`FEATURE_ROLL_ANNOTATION_POLICY_RFC` **Accepted**（新 Feature 须标注 + 双报；Decision 001 不变）。
-共享 `roll_neighborhood` 已实现。下两条 Feature 已 **Accepted**（分实验、禁合并结论）：
-1. `VOLUME_RATIO`（成交量相对活跃度）→ **Closed**：inconclusive / HOLD
-2. `OI_CHANGE`（持仓相对变化）→ **Closed**：inconclusive / HOLD
+ATR / Volume / OI Feature EXP001 均 **Closed（inconclusive）**。
+Decision 016：暂停 rb 上「标量 Feature ↔ RV_60」同构实验。
+当前执行：`DATA_CONTINUOUS_CONTRACT_EXP002`（hc/i/m/au 换月审计）。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `ATR_COMPRESSION_EXP001` | **Closed** | inconclusive / HOLD |
 | `DATA_CONTINUOUS_CONTRACT_EXP001` | **Closed** | RUN002；material_annotate / HOLD；基线不变 |
-| `DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md` | **Completed** | Artifact index |
+| `DATA_CONTINUOUS_CONTRACT_EXP002` | **Accepted / Running** | 多品种 Method A；hc/i/m/au |
 | `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md` | **Accepted** | RQ1–RQ5 关闭；约束新 Feature |
-| `data_audit/roll_annotation.py` | **Implemented** | W=60；合成 K 任一 1m 标注；不负责过滤 |
 | `VOLUME_RATIO_EXP001` | **Closed** | ρ_ex=0.0646；inconclusive / HOLD；无晋级 |
 | `OI_CHANGE_EXP001` | **Closed** | ρ_ex=-0.0198；inconclusive / HOLD；无晋级 |
+| Decision 016 | **Accepted** | 暂停 rb Feature↔RV_60 同构搜索 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |

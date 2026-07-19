@@ -205,3 +205,17 @@ FeatureResult   DetectionResult
 - **正面后果**：Feature 不污染交易逻辑；Evidence 可独立验证 Alpha；研究→证据→晋级闭环可审计。
 - **负面后果**：类型数量、pipeline 复杂度与生命周期管理增加。
 - **实现门禁**：首切片为 Evidence Engine Skeleton；禁止直接实现 ATR / FeaturePipeline / Decision Engine。
+
+---
+
+## Decision 016 — 暂停 rb 上「标量 Feature ↔ RV_60」同构实验
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：在冻结协议下，ATR_COMPRESSION_EXP001、VOLUME_RATIO_EXP001、OI_CHANGE_EXP001 均于 b/1m 对未来 RV_60 给出 `inconclusive / HOLD`，效应未达预注册门槛。继续更换同类输入（另一标量 ↔ 同一 Outcome）属于低价值同构搜索。
+- **决策**：暂停在 `rb` 上新开「单标量 Feature Sensor → Spearman(RV_60)」同构实验，直至满足以下**任一**立项条件：
+  1. 多品种 / OOS 设计的新 Feature 实验；
+  2. 新 Outcome 家族（非 RV_60）；
+  3. 价格行为结构特征（如 bar 内位置 / 形态相关）并单独写 Spec。
+- **原因**：遵守复杂度预算与不追逐利润；避免用连跑换输入凑显著性。
+- **后果**：下一优先线为数据侧多品种换月审计（DATA EXP002）或满足上述立项条件的新 Feature Spec；不得静默恢复同构搜索。

@@ -10,6 +10,12 @@
 
 ## [Unreleased]
 
+### Docs / Research（DATA EXP002 + Feature Pause）
+
+- Decision 016：暂停 `rb` 上标量 Feature ↔ RV_60 同构实验
+- `DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC` + `DATA_CONTINUOUS_CONTRACT_EXP002`：**Accepted**
+- 冻结品种：`hc/i/m/au`；门槛 `vol_ratio≥1.5` 或 `p95_ratio≥1.2`；多数≥50% → material_annotate_multi
+
 ### Docs / Research（Volume / OI Feature Specs Accepted）
 
 - `VOLUME_RATIO_SENSOR_EXPERIMENT_RFC` + `VOLUME_RATIO_EXP001`：**Accepted**（VQ1–VQ5 关闭）
