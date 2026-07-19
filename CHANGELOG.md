@@ -13,8 +13,8 @@
 ### Docs（Spec Accepted — 未授权 ATR 实现）
 
 - Phase 0–2.1：**Evidence + Workflow + Evaluation Models + Persistence 已实现**
-- `FEATURE_SENSOR_IMPLEMENTATION_RFC.md`：**Draft** — Phase 3.0 Feature Sensor Contract（Registry / FeatureResult / DEMO）
-- 下一切片：本 RFC Review → Accepted → sensor models / registry
+- `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` v1.0.0：**Accepted** — SQ1–SQ6 关闭
+- 当前切片：`feat(paaf): add feature sensor models`
 - 仍禁止：ATRCompression、Feature ranking、Trading signal、Promotion Automation
 
 ---

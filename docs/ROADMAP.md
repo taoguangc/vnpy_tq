@@ -97,7 +97,7 @@ Evidence + Workflow + Evaluation Persistence（Implemented）
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 架构契约；Q1–Q5 关闭 |
-| `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` | **Draft** | Phase 3.0 实现切片 |
+| `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` | **Accepted** | SQ1–SQ6 关闭；Sensor framework 已授权 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
