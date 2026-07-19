@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import date, datetime, timezone
 from enum import Enum
+import re
 from types import MappingProxyType
 from typing import Any, Mapping, Optional
 
@@ -61,6 +62,15 @@ class DetectorStatus(str, Enum):
     VALIDATED = "VALIDATED"
     PRODUCTION = "PRODUCTION"
     DEPRECATED = "DEPRECATED"
+
+
+class OpportunityDirection(str, Enum):
+    """Opportunity 描述方向；与交易层 Direction 分离。"""
+
+    LONG = "LONG"
+    SHORT = "SHORT"
+    BOTH = "BOTH"
+    UNKNOWN = "UNKNOWN"
 
 
 @dataclass(frozen=True)
@@ -270,6 +280,125 @@ class DetectionResult:
             evidence_refs=tuple(data.get("evidence_refs", ())),
             schema_version=schema_version,
             created_at=datetime.fromisoformat(str(data["created_at"])),
+        )
+
+
+@dataclass(frozen=True)
+class Opportunity:
+    """可审计、不可变的交易机会描述（schema 1.0）。
+
+    Opportunity 引用 DetectionResult，但不是订单或立即交易指令。
+    """
+
+    id: str
+    version: str
+    status: DetectorStatus
+    direction: OpportunityDirection
+    market_state: Optional[MarketState]
+    detector_result: DetectionResult
+    evidence_refs: tuple[str, ...] = ()
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+    lineage: tuple[str, ...] = ()
+    created_at: datetime = field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+    schema_version: str = "1.0"
+
+    def __post_init__(self) -> None:
+        if not re.fullmatch(r"(?:OPP\d{2}|DEMO_[A-Z0-9_]+)", self.id):
+            raise ValueError("Opportunity.id 必须是 OPPXX 或 DEMO_<SLUG>")
+        if not self.version.strip():
+            raise ValueError("Opportunity.version 不能为空")
+        if self.detector_result.opportunity_id != self.id:
+            raise ValueError(
+                "detector_result.opportunity_id 必须等于 Opportunity.id"
+            )
+
+        if self.direction is OpportunityDirection.LONG:
+            if self.detector_result.direction is not Direction.LONG:
+                raise ValueError("LONG Opportunity 与 DetectionResult.direction 不一致")
+        elif self.direction is OpportunityDirection.SHORT:
+            if self.detector_result.direction is not Direction.SHORT:
+                raise ValueError("SHORT Opportunity 与 DetectionResult.direction 不一致")
+
+        evidence_refs = tuple(self.evidence_refs)
+        lineage = tuple(self.lineage)
+        detector_lineage = (
+            f"DET:{self.detector_result.detector_id}"
+            f"@{self.detector_result.detector_version}"
+        )
+        if detector_lineage not in lineage:
+            raise ValueError(f"lineage 缺少直接来源 {detector_lineage}")
+        missing_evidence = [
+            ref for ref in evidence_refs if f"EXP:{ref}" not in lineage
+        ]
+        if missing_evidence:
+            raise ValueError(
+                f"lineage 缺少 evidence 来源: {', '.join(missing_evidence)}"
+            )
+        if not set(self.detector_result.evidence_refs).issubset(evidence_refs):
+            raise ValueError(
+                "Opportunity.evidence_refs 必须覆盖 DetectionResult.evidence_refs"
+            )
+        if self.status is DetectorStatus.PRODUCTION and not evidence_refs:
+            raise ValueError("PRODUCTION Opportunity 必须包含 evidence_refs")
+
+        if self.schema_version != "1.0":
+            raise ValueError(f"不支持 Opportunity schema: {self.schema_version}")
+        if self.created_at.tzinfo is None:
+            raise ValueError("Opportunity.created_at 必须包含时区")
+
+        object.__setattr__(self, "evidence_refs", evidence_refs)
+        object.__setattr__(self, "metadata", _freeze_json_mapping(self.metadata))
+        object.__setattr__(self, "lineage", lineage)
+
+    def to_dict(self) -> dict[str, Any]:
+        """转换为 JSON 友好的 schema 1.0 字典。"""
+
+        return {
+            "id": self.id,
+            "version": self.version,
+            "status": self.status.value,
+            "direction": self.direction.value,
+            "market_state": (
+                self.market_state.value if self.market_state else None
+            ),
+            "detector_result": self.detector_result.to_dict(),
+            "evidence_refs": list(self.evidence_refs),
+            "metadata": _thaw_json_value(self.metadata),
+            "lineage": list(self.lineage),
+            "created_at": self.created_at.isoformat(),
+            "schema_version": self.schema_version,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "Opportunity":
+        """从 schema 1.0 字典恢复；未知版本明确失败。"""
+
+        schema_version = str(data.get("schema_version", ""))
+        if schema_version != "1.0":
+            raise ValueError(f"不支持 Opportunity schema: {schema_version}")
+
+        raw_market_state = data.get("market_state")
+        raw_detection = data.get("detector_result")
+        if not isinstance(raw_detection, Mapping):
+            raise TypeError("detector_result 必须是 Mapping")
+        return cls(
+            id=str(data["id"]),
+            version=str(data["version"]),
+            status=DetectorStatus(str(data["status"])),
+            direction=OpportunityDirection(str(data["direction"])),
+            market_state=(
+                MarketState(str(raw_market_state))
+                if raw_market_state is not None
+                else None
+            ),
+            detector_result=DetectionResult.from_dict(raw_detection),
+            evidence_refs=tuple(data.get("evidence_refs", ())),
+            metadata=data.get("metadata", {}),
+            lineage=tuple(data.get("lineage", ())),
+            created_at=datetime.fromisoformat(str(data["created_at"])),
+            schema_version=schema_version,
         )
 
 

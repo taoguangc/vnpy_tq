@@ -193,13 +193,25 @@ custom:<slug>
 
 ---
 
-## 5. Opportunity Model
+## 5. Opportunity Model（v0.2.2）
 
 ### 5.1 定义
 
-**Opportunity 是目录中的可审计交易机会定义**（研究资产），不是单笔下单，也不是 UUID 瞬时事件。
+**Opportunity 是一个已被 Detector 识别、可被后续 Decision / Risk 消费的交易机会描述对象。**
 
-单 bar 检出 → `DetectionResult`；目录条目 → `Opportunity`（稳定业务 ID）。
+它引用 `DetectionResult`，代表市场出现了一个带证据血缘的机会；它不是订单，也不表示立即买卖。
+
+```text
+Detector
+    ↓
+DetectionResult
+    ↓
+Opportunity
+    ↓
+Decision / Risk
+    ↓
+Execution
+```
 
 ### 5.2 `Opportunity.id`（已决议：固定业务 ID）
 
@@ -226,23 +238,40 @@ DEMO_<SLUG>    # 如 DEMO_CONTEXT_PASSTHROUGH
 ```python
 @dataclass(frozen=True)
 class Opportunity:
-    id: str                              # OPPXX 或 DEMO_*
-    symbol_scope: str                    # 如 "rb" / "multi" / "*"
-    direction: Direction | None          # None = 多空均可能
-    setup: str                           # 人类可读短名
-    detector_id: str
-    detector_version: str
-    status: DetectorStatus               # 见 §7
-    tags: tuple[DetectorTag | str, ...] = ()
-    evidence_refs: tuple[str, ...] = ()  # 见 §6；一对多实验引用
-    context_requirements: tuple[str, ...] = ()  # 如 ("TREND",)
+    id: str                                  # OPPXX 或 DEMO_*
+    version: str                             # Opportunity schema/business version
+    status: DetectorStatus
+    direction: OpportunityDirection          # LONG | SHORT | BOTH | UNKNOWN
+    market_state: MarketState | None
+    detector_result: DetectionResult         # 直接引用，不复制检测字段
+    evidence_refs: tuple[str, ...] = ()
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+    lineage: tuple[str, ...] = ()             # DET:* / EXP:*
+    created_at: datetime = field(default_factory=utc_now)
+    schema_version: str = "1.0"
 ```
 
 ### 5.4 原则
 
 - Opportunity **不是**订单
+- Opportunity 直接保存 `DetectionResult` 引用；禁止复制 `detector_id` / confidence / tags 等检测字段
+- Opportunity 发布后完全不可变；状态变化产生**新 Opportunity**
+- `metadata` 深度只读；必须 JSON 兼容
 - `status=PRODUCTION` 时 `evidence_refs` **不得为空**
-- Library 检索/UI 可后置；本 Spec 先冻字段
+- `detector_result.opportunity_id` 必须等于 `Opportunity.id`
+- `lineage` 至少包含 `DET:<detector_id>@<detector_version>`；每个 evidence reference 对应 `EXP:<id>`
+- `to_dict()` / `from_dict()` 使用 schema `"1.0"`，并保证 JSON 往返等价
+- Library / Registry 检索可后置；本切片只实现 Domain Object
+
+### 5.5 OpportunityDirection
+
+```text
+LONG | SHORT | BOTH | UNKNOWN
+```
+
+- `LONG` / `SHORT` 时必须与 DetectionResult.direction 一致
+- `BOTH` / `UNKNOWN` 用于组合或尚未收敛方向的 Opportunity 描述
+- 不修改交易层 `Direction` 的冻结语义
 
 ---
 
@@ -398,8 +427,8 @@ v0.2.4：
 |------|------|
 | **v0.2.0** | 本 Spec Accepted（本文件） |
 | **v0.2.1** | Domain：`DetectionResult` + `PatternState` + `DetectorTag` + 必要 `DetectorStatus`；序列化与版本契约；`Signal` Deprecated |
-| **v0.2.2** | Registry：`(id, version)` + `discover` / `priority` / `capability` |
-| **v0.2.3** | Domain：`Opportunity` + `evidence_refs` 目录关联 |
+| **v0.2.2** | Domain：`Opportunity` + lineage + DetectionResult 引用 |
+| **v0.2.3** | Registry：`(id, version)` + `discover` / `priority` / `capability` |
 | **v0.2.4** | Demo Detector + Contract Tests |
 
 分支：`feature/detector-framework`；验证后 Merge `main`。  
@@ -415,6 +444,10 @@ v0.2.4：
 - confidence 接受 `[0.0, 1.0]`，越界失败
 - tags 只验证分类格式，不作为业务分支输入
 - 返回 `None` vs Result；禁止 bool 路径单测
+- Opportunity frozen；构造时保持 `detector_result is result` 引用
+- Opportunity `to_dict → from_dict` 等价；metadata 深度只读
+- Opportunity id 只接受 `OPPXX` / `DEMO_*`；禁止 UUID / hash
+- Opportunity lineage 覆盖直接 Detector 与全部 evidence refs
 - Registry 同 id 不同 version 可并存；同 `(id, version)` 重复注册失败
 - Capability 门禁：缺 `requires` 时不进入 discover 结果
 - PRODUCTION 且 `evidence_refs` 为空 → 校验失败
@@ -439,3 +472,4 @@ v0.2.4：
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 RFC |
 | 2026-07-19 | 1.0.0 | Review 合入；五问关闭；Capability/Status/Evidence；Status → Accepted |
+| 2026-07-19 | 1.1.0 | Opportunity-first DDD 顺序；冻结 DetectionResult 引用、lineage 与序列化契约 |

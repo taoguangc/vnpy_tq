@@ -8,6 +8,23 @@
 
 ---
 
+## [0.2.2] — 2026-07-19
+
+### Added（Commit 007 — Opportunity Domain）
+
+- `Opportunity`：引用 `DetectionResult` 的不可变机会描述对象
+- `OpportunityDirection`：`LONG / SHORT / BOTH / UNKNOWN`
+- `lineage`：`DET:<id>@<version>` 与 `EXP:<experiment_id>` 血缘
+- schema `1.0`、UTC `created_at`、深度只读 `metadata`
+- `to_dict()` / `from_dict()` JSON 友好往返
+
+### Notes
+
+- Opportunity 不是订单；状态变化产生新对象
+- Registry / Demo Detector 不在本版本实现
+
+---
+
 ## [0.2.1] — 2026-07-19
 
 ### Added（Commit 005 — DetectionResult Domain）

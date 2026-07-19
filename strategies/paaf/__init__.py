@@ -1,4 +1,4 @@
-"""PAAF Framework v0.2.1
+"""PAAF Framework v0.2.2
 
 开发顺序：Domain → Interface → Engine → Strategy → Detector
 Spec-Driven：先改 docs/specs，再改实现。
@@ -18,6 +18,8 @@ from strategies.paaf.domain import (
     DetectorTag,
     Direction,
     MarketState,
+    Opportunity,
+    OpportunityDirection,
     PatternState,
     Session,
     Signal,
@@ -53,6 +55,8 @@ __all__ = [
     "Direction",
     "ExecutionEngine",
     "MarketState",
+    "Opportunity",
+    "OpportunityDirection",
     "PAAFConfig",
     "PaafStrategy",
     "PatternState",
@@ -66,4 +70,4 @@ __all__ = [
     "make_experiment_id",
 ]
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"

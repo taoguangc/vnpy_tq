@@ -46,8 +46,8 @@ Market State
 |------|------|------|
 | v0.2.0 | `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` | **Accepted**（Decision 013） |
 | v0.2.1 | `DetectionResult` / `PatternState` / 必要类型（`Signal` Deprecated） | **完成**（Commit 005/006） |
-| v0.2.2 | Registry `(id, version)` + discover / priority / capability | 待做 |
-| v0.2.3 | `Opportunity` 目录模型 + `evidence_refs` 关联 | 待做 |
+| v0.2.2 | `Opportunity` + DetectionResult 引用 + lineage | 实现中（Commit 007/008） |
+| v0.2.3 | Registry `(id, version)` + discover / priority / capability | 待做 |
 | v0.2.4 | Demo Detector（非 OPP）+ Contract Tests | 待做 |
 
 原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。
@@ -63,7 +63,7 @@ Market State
 | v0.1.0 | Framework Skeleton |
 | v0.1.1 | Context Engine Foundation（**Tagged**） |
 | v0.2.0 | Detector Framework Spec |
-| v0.2.1–0.2.4 | DetectionResult → Registry → Opportunity → Demo |
+| v0.2.1–0.2.4 | DetectionResult → Opportunity → Registry → Demo |
 | v0.1.2 | Logger（可与 v0.2 并行排期） |
 | v0.3.x | Core OPP Detectors（证据驱动） |
 
