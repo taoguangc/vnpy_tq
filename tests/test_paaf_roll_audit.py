@@ -22,13 +22,14 @@ class TestRollAudit(unittest.TestCase):
         timestamps = [
             datetime(2024, 3, 1, i, tzinfo=timezone.utc) for i in range(4)
         ]
-        gaps = compute_roll_gaps(closes, yymms, timestamps)
+        opens = [100.0, 101.0, 108.0, 111.0]
+        gaps = compute_roll_gaps(closes, opens, yymms, timestamps)
         self.assertEqual(len(gaps), 1)
         self.assertEqual(gaps[0].roll_index, 2)
         self.assertEqual(gaps[0].from_yymm, "2401")
         self.assertEqual(gaps[0].to_yymm, "2405")
-        self.assertAlmostEqual(gaps[0].gap_abs, 9.0)
-        self.assertAlmostEqual(gaps[0].gap_rel, 9.0 / 101.0)
+        self.assertAlmostEqual(gaps[0].gap_abs, 7.0)
+        self.assertAlmostEqual(gaps[0].gap_rel, 7.0 / 101.0)
 
     def test_neighborhood_mask_window(self) -> None:
         mask = neighborhood_mask(10, roll_indices=(5,), window=2)
@@ -50,7 +51,8 @@ class TestRollAudit(unittest.TestCase):
             datetime(2024, 1, 1, 0, i % 60, tzinfo=timezone.utc)
             for i in range(len(closes))
         ]
-        gaps = compute_roll_gaps(closes, yymms, timestamps)
+        opens = list(closes)
+        gaps = compute_roll_gaps(closes, opens, yymms, timestamps)
         summary = summarize_roll_audit(
             closes=closes,
             gaps=gaps,

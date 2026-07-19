@@ -47,13 +47,14 @@ class RollAuditSummary:
 
 def compute_roll_gaps(
     closes: Sequence[float],
+    opens: Sequence[float],
     yymms: Sequence[str],
     timestamps: Sequence[datetime],
 ) -> tuple[RollGapRecord, ...]:
-    """Detect rolls where yymm changes; gap uses prev close vs next open(=close)."""
+    """Detect rolls where yymm changes; gap uses old close vs new open."""
 
-    if not (len(closes) == len(yymms) == len(timestamps)):
-        raise ValueError("closes、yymms、timestamps 长度必须一致")
+    if not (len(closes) == len(opens) == len(yymms) == len(timestamps)):
+        raise ValueError("closes、opens、yymms、timestamps 长度必须一致")
     if len(closes) < 2:
         return ()
 
@@ -62,7 +63,7 @@ def compute_roll_gaps(
         if yymms[index] == yymms[index - 1]:
             continue
         prev_close = float(closes[index - 1])
-        next_open = float(closes[index])
+        next_open = float(opens[index])
         if prev_close == 0.0 or not math.isfinite(prev_close):
             raise ValueError("换月前收盘价非法")
         gap_abs = next_open - prev_close

@@ -10,13 +10,14 @@
 
 ## [Unreleased]
 
-### Docs / Research（Route C Accepted — run not authorized）
+### Docs / Research（DATA EXP001 Closed）
 
-- `DATA_CONTINUOUS_CONTRACT_*` Spec：**Accepted**（Method A；W=60）
-- 实现：`strategies/paaf/data_audit/roll_audit.py` + `scripts/run_data_continuous_contract_exp001.py`
-- Evidence `SUBJECT_KINDS` 增加 `dataset`
-- 仍未授权：跑 DATA EXP001 / Evaluation / Evidence
-- 仍禁止：改 Decision 001、默认 loader、交易回测
+- RUN001：INVALID（close 误作 open）；保留不覆盖
+- RUN002：Artifact → Evaluation → Evidence
+- Evidence：`EV-...-RUN002`；`roll_effect_material_annotate`；governance `HOLD`
+- **Decision 001 / 默认 loader 不变**；要求 Feature 研究预注册换月标注或过滤
+- runners：`scripts/run_data_continuous_contract_exp001{,_evaluation,_evidence}.py`
+- index：`docs/experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md`
 
 ---
 

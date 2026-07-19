@@ -1,11 +1,12 @@
 # DATA_CONTINUOUS_CONTRACT_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted（Frozen；跑数须另授权）
+> **Status**: Accepted / **Lifecycle Completed**（Evidence closed 2026-07-19；Decision 001 unchanged）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `DATA_CONTINUOUS_CONTRACT_EXP001`
 > **Parent RFC**: `docs/specs/DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md`（Accepted）
+> **Artifact Index**: `docs/experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md`
 > **规则优先级**: `AGENTS.md` > Parent RFC > 本 Run Spec > 脚本
-> **运行门禁**: Accepted ≠ 自动跑数；须明确「跑 DATA EXP001」。不改默认 loader，不做交易。
+> **运行门禁**: 本实验线已闭环。有效结果以 **RUN002** 为准；RUN001 为 INVALID。禁止改写产物；禁止改 Decision 001。
 
 ---
 
@@ -14,7 +15,7 @@
 | 字段 | 冻结值 |
 |------|--------|
 | `experiment_id` | `DATA_CONTINUOUS_CONTRACT_EXP001` |
-| `run_id`（建议） | `DATA_CONTINUOUS_CONTRACT_EXP001_RUN001` |
+| `run_id`（有效） | `DATA_CONTINUOUS_CONTRACT_EXP001_RUN002`（RUN001 INVALID） |
 | `subject_kind` | `dataset` |
 | `subject_id` | `rb_cbc_unadjusted` |
 | `subject_version` | `1.0` |
@@ -87,17 +88,16 @@ research/output/evidence/DATA_CONTINUOUS_CONTRACT_EXP001/
 └── evidence/...
 ```
 
-Evaluation / Evidence 仍须**分开授权**（对齐 ATR EXP001 纪律）。
-
 ## 7. Execution Gate
 
-| Step | 需要 |
+| Step | 状态 |
 |------|------|
 | RFC + Run Spec Accepted | ✅ |
-| 实现审计脚本 | 可先做代码，不跑全量 |
-| 「跑 DATA EXP001」 | Feature/审计 Artifact only |
-| 「跑 DATA EXP001 Evaluation」 | 另授权 |
-| 「写 DATA EXP001 Evidence」 | 另授权 |
+| RUN001 Artifact | ❌ INVALID（gap 口径错误；保留） |
+| RUN002 Artifact | ✅ |
+| Evaluation（RUN002） | ✅ HOLD |
+| Evidence（RUN002） | ✅ `roll_effect_material_annotate` / HOLD |
+| Decision 001 / loader | ✅ unchanged |
 
 ---
 
@@ -106,3 +106,4 @@ Evaluation / Evidence 仍须**分开授权**（对齐 ATR EXP001 纪律）。
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 1.0.0 | Accepted：与 Parent RFC DQ 决议对齐；W=60；仅 Method A |
+| 2026-07-19 | 1.1.0 | Lifecycle Completed：RUN002 Evidence；见 Artifact Index |

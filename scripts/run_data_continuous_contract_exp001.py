@@ -24,6 +24,7 @@ from strategies.paaf.data_audit.roll_audit import (  # noqa: E402
 )
 from strategies.paaf.evidence.hashing import (  # noqa: E402
     canonical_json_dumps,
+    hash_bytes,
     hash_canonical_json,
     hash_file,
 )
@@ -41,8 +42,8 @@ from strategies.paaf.sensors.atr_compression import (  # noqa: E402
 from tools.tq_paths import symbol_dir  # noqa: E402
 
 EXPERIMENT_ID = "DATA_CONTINUOUS_CONTRACT_EXP001"
-RUN_ID = "DATA_CONTINUOUS_CONTRACT_EXP001_RUN001"
-ARTIFACT_ID = "DATA_CONTINUOUS_CONTRACT_EXP001_ROLL_AUDIT"
+RUN_ID = "DATA_CONTINUOUS_CONTRACT_EXP001_RUN002"
+ARTIFACT_ID = "DATA_CONTINUOUS_CONTRACT_EXP001_RUN002_ROLL_AUDIT"
 SUBJECT_ID = "rb_cbc_unadjusted"
 SUBJECT_VERSION = "1.0"
 CST = ZoneInfo("Asia/Shanghai")
@@ -63,11 +64,25 @@ HYPOTHESIS = (
 
 
 def _git_revision() -> str:
-    return subprocess.check_output(
+    revision = subprocess.check_output(
         ["git", "rev-parse", "HEAD"],
         cwd=ROOT,
         text=True,
     ).strip()
+    diff = subprocess.check_output(
+        [
+            "git",
+            "diff",
+            "--binary",
+            "--",
+            "scripts/run_data_continuous_contract_exp001.py",
+            "strategies/paaf/data_audit/roll_audit.py",
+        ],
+        cwd=ROOT,
+    )
+    if diff:
+        return f"{revision}+dirty:{hash_bytes(diff)}"
+    return revision
 
 
 def _file_entry(path: Path, *, relative_to: Path) -> dict[str, object]:
@@ -169,8 +184,18 @@ def main() -> int:
     artifact_path = (
         experiment_root / "artifacts" / ARTIFACT_ID / "roll_audit.json"
     )
-    if artifact_path.exists() or (experiment_root / "manifest.json").exists():
-        raise FileExistsError(f"{EXPERIMENT_ID} 已存在产物；append-only")
+    run_root = experiment_root / "runs" / RUN_ID
+    run_manifest_path = run_root / "manifest.json"
+    run_metadata_path = run_root / "run_metadata.json"
+    if (
+        artifact_path.exists()
+        or run_manifest_path.exists()
+        or run_metadata_path.exists()
+    ):
+        raise FileExistsError(f"{RUN_ID} 已存在产物；append-only")
+    invalid_marker = experiment_root / "RUN001_INVALID.json"
+    if not invalid_marker.is_file():
+        raise FileNotFoundError("RUN002 必须保留并引用 RUN001_INVALID.json")
 
     print("[DATA EXP001] loading CbC unadjusted frame ...")
     frame = build_stitched_raw_frame("rb")
@@ -187,11 +212,12 @@ def main() -> int:
         raise RuntimeError("区间内无 bar")
 
     closes = period["close"].astype(float).tolist()
+    opens = period["open"].astype(float).tolist()
     yymms = period["yymm"].astype(str).tolist()
     timestamps = [
         ts.to_pydatetime() for ts in period["dt_cst"].tolist()
     ]
-    gaps = compute_roll_gaps(closes, yymms, timestamps)
+    gaps = compute_roll_gaps(closes, opens, yymms, timestamps)
     # Keep rolls whose timestamp falls in period (already true by construction).
     print(f"[DATA EXP001] rolls_in_period={len(gaps)}")
 
@@ -283,13 +309,22 @@ def main() -> int:
     )
     workflow = ExperimentWorkflow(repository)
     manifest = workflow.build_manifest(context, artifact_refs=(artifact_ref,))
-    workflow.persist_manifest(manifest)
+    run_manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with run_manifest_path.open(
+        "x",
+        encoding="utf-8",
+        newline="\n",
+    ) as handle:
+        handle.write(f"{canonical_json_dumps(manifest.to_dict())}\n")
 
     run_metadata = {
         "experiment_id": EXPERIMENT_ID,
         "run_id": RUN_ID,
         "created_at": datetime.now(tz=timezone.utc).isoformat(),
         "authorization": "Roll audit Artifact only",
+        "run_manifest": run_manifest_path.relative_to(experiment_root).as_posix(),
+        "supersedes_invalid_run": "DATA_CONTINUOUS_CONTRACT_EXP001_RUN001",
+        "invalid_marker": "RUN001_INVALID.json",
         "evaluation_authorized": False,
         "evidence_authorized": False,
         "code_revision": code_revision,
@@ -300,7 +335,7 @@ def main() -> int:
         "dataset_fingerprint_payload": dataset_payload,
         "summary": artifact_payload["summary"],
     }
-    with (experiment_root / "run_metadata.json").open(
+    with run_metadata_path.open(
         "x",
         encoding="utf-8",
         newline="\n",

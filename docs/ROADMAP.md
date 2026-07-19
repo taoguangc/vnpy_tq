@@ -81,15 +81,15 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-Phase 3.1 ATR Compression EXP001 **已关闭**。
-下一阶段：**路线 C — DATA_CONTINUOUS_CONTRACT_EXP001**（RFC + Run Spec **Accepted**；主线无复权换月审计；W=60；跑数未授权）。
-正式基线仍为 Decision 001；禁止复权替换默认 loader。
+Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**：
+`roll_effect_material_annotate` / `HOLD`；**Decision 001 无复权基线不变**；Feature 研究须换月标注/过滤。
+下一阶段方向待选（新实验线，不得改写 DATA/ATR EXP001）。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `ATR_COMPRESSION_EXP001` | **Closed** | inconclusive / HOLD |
-| `DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md` | **Accepted** | DQ1–DQ8 关闭；仅 Method A |
-| `DATA_CONTINUOUS_CONTRACT_EXP001.md` | **Accepted** | W=60；rb；2024–2025；跑数须另授权 |
+| `DATA_CONTINUOUS_CONTRACT_EXP001` | **Closed** | RUN002；material_annotate / HOLD；基线不变 |
+| `DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md` | **Completed** | Artifact index |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |

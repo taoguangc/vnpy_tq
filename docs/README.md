@@ -23,7 +23,8 @@
 | [experiments/ATR_COMPRESSION_EXP001.md](experiments/ATR_COMPRESSION_EXP001.md) | ATR Compression EXP001 Run Spec（**Accepted**；已完成 Evidence） |
 | [experiments/ATR_COMPRESSION_EXP001_INDEX.md](experiments/ATR_COMPRESSION_EXP001_INDEX.md) | EXP001 Artifact Index（inconclusive / HOLD；无晋级） |
 | [specs/DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md](specs/DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md) | 连续合约 / 换月审计实验（**Accepted**；主线 Method A） |
-| [experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md) | DATA EXP001 Run Spec（**Accepted**；跑数须另授权） |
+| [experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md) | DATA EXP001 Run Spec（**Closed**；RUN002 Evidence） |
+| [experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md) | DATA EXP001 Artifact Index（material_annotate / HOLD；基线不变） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 
