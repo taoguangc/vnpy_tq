@@ -27,11 +27,16 @@
 - **无** Market State 算法：发布后 `market_state` 恒为 `UNKNOWN`（Context Framework only）
 - `framework_version` → `0.1.1`
 
+### Added（Commit 004 — Contract / Lifecycle tests）
+
+- `tests/test_paaf_context.py`：Domain 纯度、生命周期、只读契约、Detector 不可写 Context
+- ROADMAP：v0.1.1 里程碑（API / Lifecycle / Contract Frozen；Market State Not Implemented）
+
 ### Notes
 
 - **Stable API, Replaceable Implementation**；Context 是 Semantic Layer，不是 Feature Layer
-- v0.1.1 基线 `MarketState` 仍为 `UNKNOWN` / `TREND` / `RANGE`；Market State **Not Implemented**
-- 后续 Commit：Contract Test / Lifecycle Test
+- v0.1.1 基线 `MarketState` 仍为 `UNKNOWN` / `TREND` / `RANGE`；**Market State Not Implemented**
+- 下一阶段：v0.2 Detector Framework（建立在已冻结 Context 契约之上）
 
 ---
 

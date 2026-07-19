@@ -18,10 +18,27 @@
 | `paaf_strategy.py` + Engine 接口 | 完成（Commit 001 骨架） |
 | Engine 可导入骨架 | 完成（Commit 001） |
 | Foundation 补强：`adapters/vnpy_adapter.py` + `experiments/schema.yaml` | 完成（Commit 001.x，仍属 0.1.0） |
-| Context Engine | 待做（正式 v0.1.1） |
+| Context Engine Spec（`docs/specs/CONTEXT_ENGINE_SPEC.md`） | **Accepted**（Decision 009） |
+| Spec-Driven Development | **Accepted**（Decision 010） |
+| Context Engine：Domain / Lifecycle / Contract Tests | **完成**（Commit 002 / 003 / 004）→ Tag `v0.1.1` |
 | CSV Logger | 待做 |
 | `PAAFStrategy` + vn.py 可加载 | 待做 |
 | OPP16 Detector | 待做 |
+
+#### PAAF v0.1.1 里程碑（Context Framework）
+
+```text
+PAAF v0.1.1
+
+✓ Context API Frozen
+✓ Context Lifecycle Frozen
+✓ Context Contract Frozen
+
+Market State
+  Not Implemented
+```
+
+Detector 可基于冻结 Context 契约开发；Market State 另立项、证据驱动，不与 Framework 混写。
 
 验收：
 
