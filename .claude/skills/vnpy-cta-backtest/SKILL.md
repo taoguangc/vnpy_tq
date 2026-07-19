@@ -8,7 +8,7 @@ version: '1.3.0'
 
 **路径**：Parquet → `load_bar_data_from_parquet` → `engine.history_data` → `run_backtesting()`。**禁止** Parquet 流程中 `engine.load_data()`（SQLite）。
 
-**流程**：`AGENTS.md` §5（探索 3 次 / 排障 3 次）。**审计**（结果可疑时）：`quant-backtest-validation-tool`。**编码/风控**：`AGENTS.md` §2、`AGENTS_DETAIL.md` §4。
+**流程**：`AGENTS.md` 回测配额 + `docs/04_BACKTEST_SPEC.md`（探索 3 次 / 排障 3 次）。**数据**：`docs/07_DATA_SPEC.md`。**审计**（结果可疑时）：`quant-backtest-validation-tool`。**编码/风控**：`docs/05_CODING_STYLE.md`。
 
 ## 关键路径
 
@@ -26,7 +26,7 @@ version: '1.3.0'
 
 | 项 | 值 |
 |----|-----|
-| 区间 | `2023-05-17` → `2026-05-16` |
+| 区间 | `2021-07-01` → `2026-06-30` |
 | capital | `200_000` |
 | rate | `0.00003` |
 | interval | `Interval.MINUTE` |

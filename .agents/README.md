@@ -22,4 +22,4 @@
 | `vnpy-cta-backtest` | vn.py CTA Parquet 回测 | 回测、策略开发 |
 | `quant-backtest-validation-tool` | 回测审计清单 | 结果可疑、零成交、外来教程、未来函数排查 |
 
-**选用顺序**：数据问题 → `vnpy-quant-python`（TQ 下载/Parquet）；跑/改回测 → `vnpy-cta-backtest`；结果审计 → `quant-backtest-validation-tool`；改 `scripts/` 工具 → `vnpy-quant-python`。核心流程见 **`AGENTS.md`**；回测标准/工程细则见 **`AGENTS_DETAIL.md`**（按需）。
+**选用顺序**：数据问题 → `vnpy-quant-python`（TQ 下载/Parquet）；跑/改回测 → `vnpy-cta-backtest`；结果审计 → `quant-backtest-validation-tool`；改 `scripts/` 工具 → `vnpy-quant-python`。核心流程见 **`AGENTS.md`**；细则见 **`docs/04_BACKTEST_SPEC.md`**、**`docs/05_CODING_STYLE.md`**、**`docs/07_DATA_SPEC.md`**。

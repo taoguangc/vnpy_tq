@@ -6,7 +6,7 @@ version: '2.0.0'
 
 # vnpy_quant Python 补充规范
 
-本 skill **不重复** 通用工程原则（最小 diff、避免过度抽象、先根因再改代码等）——以 **Cursor 用户规则** 与 **`AGENTS.md`** / **`AGENTS_DETAIL.md`** 为准。冲突时：**AGENTS.md > AGENTS_DETAIL.md > 本 skill**。
+本 skill **不重复** 通用工程原则（最小 diff、避免过度抽象、先根因再改代码等）——以 **Cursor 用户规则** 与 **`AGENTS.md`** / **`docs/`** 为准。冲突时：**宪章 / AGENTS.md > docs/* > 本 skill**。
 
 ## 何时读本 skill
 

@@ -1,7 +1,9 @@
 # program_trading — 量化自治研究 Playbook
 
 > 灵感来源：[karpathy/autoresearch](https://github.com/karpathy/autoresearch) 的「改代码 → 固定协议实验 → 单指标决策 → 保留/回滚」循环。  
-> **权威规则仍以 `AGENTS.md` / `CLAUDE.md` 为准**；本文件只定义实验编排，不覆盖配额与编码底线。
+> **权威规则仍以 `AGENTS.md` / `CLAUDE.md` / `docs/01_CONSTITUTION.md` 为准**；  
+> 研究门禁见 `docs/06_RESEARCH_WORKFLOW.md`，回测见 `docs/04_BACKTEST_SPEC.md`。  
+> 本文件只定义实验编排，不覆盖配额、宪章与编码底线。
 
 ---
 
@@ -25,7 +27,7 @@
 |------|--------------|---------|
 | 固定层 | `prepare.py` | 回测引擎、`scripts/rollover_backtest_engine.py`、`scripts/tq_rollover_data.py`、`data/tq/`、`symbol_config` 引擎字段 |
 | 可变层 | `train.py` | 策略逻辑与参数（见 §3 白名单） |
-| 编排层 | `program.md` | **本文件** + `AGENTS.md` §5 |
+| 编排层 | `program.md` | **本文件** + `AGENTS.md` 回测配额 + `docs/06_RESEARCH_WORKFLOW.md` |
 | 实验日志 | （终端 / commit） | `research/experiments.md` |
 
 ---
@@ -99,6 +101,32 @@ Set-Location C:\projects\vnpy_tq; $env:PYTHONIOENCODING='utf-8'
 - ❌ 同轮同时改 OPP02 filter + OPP15 止损逻辑  
 - ✅ 先改 OPP13，跑 1 次；下一轮再动 OPP15  
 
+### 5.2.1 pa_minimal CTA 冻结基线（OPP16_LONG_LAE）
+
+对照与 ΔPnL 默认相对下列集合（代码：`MINIMAL_BASE_PROFILE` / `CTA_BASELINE_*`）：
+
+| 项 | 值 |
+|----|-----|
+| 交易集 | **仅** `OPP16_5M_TWO_BAR_REV_LONG`（SHORT/PIN/1H 禁） |
+| 出场 | `signal_invalid_defer_exit_enabled=True`；`signal_invalid_buffer_atr_mult=0.1` |
+| 入场闸 | LAE-2a：`opp16_lae_r2_er_gate_enabled=True`（`fast_r2<0.5` 且 `slow_er<0.20`） |
+| 量软仓 | `opp16_session_vol_soft_enabled=True`（sess%&lt;60 → risk×0.5；硬拒 floor 关） |
+| 入场位 | EQ-A2：`opp16_ema_above_gate_enabled=True`（浅贴 EMA 有利侧 0～1ATR 拒；顺势可跳过） |
+| 顺宽逆严 | `opp16_trend_asym_entry_enabled=True`（逆势须失败突破+收在 EMA 有利侧） |
+| 空侧 DYN | `opp16_short_dyn_sizing_enabled=False`（代码保留；对照用 override） |
+| 版本串 | `0.5.1_OPP16_LONG_LAE` |
+
+**禁止**：未经用户确认，把多 OPP / OPP01·08·13 白名单或默认开空写入 `MINIMAL_BASE_PROFILE`。扩 OPP / 2WAY / DYN 只作 CLI override 对照，Δ 仍对上表基线。
+
+### 5.2.2 亏损归因层级（单杠杆）
+
+拆解亏损用于**找下一个可证伪假设**，不是逐项修到赚钱：
+
+1. 交易集合（该不该交易该 setup）→ 2. 入场质量拒单 → 3. 风险手数 → 4. 出场/缓冲/滑点  
+
+每轮流程：归因产出 **1** 个假设 → OFF/ON 或影子对照 → IS 选规则 / OOS 验证 → `KEEP` / `REVERT` / `HOLD`。  
+禁止同轮并联修多个「根因」；症状标签（如 EARLY_FAIL）≠ 可修杠杆（见 LAE-1 REVERT）。
+
 ### 5.3 回测配额（摘自 AGENTS.md §5.1）
 
 | 类型 | 上限 | 本 playbook |
@@ -169,15 +197,15 @@ autoresearch 用单一 `val_bpb`；交易用**主指标 + 硬门禁**。
 ## 8. Agent 启动话术（复制即用）
 
 ```
-请阅读 program_trading.md 与 AGENTS.md §5。
-策略包：strategies/pa_cta/
-品种：rb
+请阅读 program_trading.md §5.2.1–5.2.2、research/RESEARCH_OPTIMIZATION_PROTOCOL.md 与 AGENTS.md §5。
+策略包：strategies/pa_minimal/（对照基线 OPP16_LONG_LAE）
+品种：rb,i,ma,ta（或用户指定）
 任务：探索类，最多 3 轮回测。
 
-1. 若 research/experiments.md 无 rb BASE，先跑基线并记录。
-2. 提出 1 个最小假设（单变量）。
+1. 对照基线 = MINIMAL_BASE（OPP16 多 + LAE 开闸）；勿把扩 OPP 当默认。
+2. 归因后提出 1 个最小假设（单变量）。
 3. 改码 → 等我确认或直接跑回测（按任务类型）。
-4. 按 §6 门禁判定 KEEP/REVERT/HOLD，追加 experiments.md。
+4. OFF/ON 或影子 → IS/OOS（若适用）→ KEEP/REVERT/HOLD，追加 experiments.md。
 5. 输出 AGENTS.md 完整四段，然后停止。
 ```
 
@@ -191,6 +219,8 @@ autoresearch 用单一 `val_bpb`；交易用**主指标 + 硬门禁**。
 - 修改 `data/tq/` 或 Parquet 源数据  
 - 在根目录新建一次性回测脚本（用既有 `backtest.py` / `run_backtest.py`）  
 - 配额用尽后继续回测  
+- 将扩 OPP / 多 OPP 白名单未经确认写入 `MINIMAL_BASE_PROFILE`（对照只用 override）  
+- 同轮用多条「亏损根因」并联改码（须遵守 §5.2.2：一轮一个杠杆）  
 
 ---
 

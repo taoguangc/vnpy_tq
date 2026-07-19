@@ -7,7 +7,7 @@ version: '1.1.0'
 
 # 量化回测校验（vnpy_quant）
 
-对 **策略代码 + 回测配置 + 统计结果** 做审计，输出问题清单与根因假设。**不自动改策略、不自动发起第二轮及以后回测**（流程约束见仓库根目录 `AGENTS.md` §5）。
+对 **策略代码 + 回测配置 + 统计结果** 做审计，输出问题清单与根因假设。**不自动改策略、不自动发起第二轮及以后回测**（流程约束见仓库根目录 `AGENTS.md` 回测配额）。
 
 ## 何时必须使用本 skill
 
@@ -25,14 +25,15 @@ version: '1.1.0'
 | Parquet 加载 | `scripts/parquet_data_loader.py` |
 | 回测 SOP / 引擎参数 | `.agents/skills/vnpy-cta-backtest/SKILL.md` |
 | 数据下载 | `.agents/skills/vnpy-quant-python/SKILL.md` §TQ 数据 |
-| 流程与风控底线 | `AGENTS.md` + `AGENTS_DETAIL.md` |
-| 外来代码检查表 | `AGENTS_DETAIL.md` §7 |
+| 流程与风控底线 | `AGENTS.md` + `docs/04_BACKTEST_SPEC.md` + `docs/05_CODING_STYLE.md` |
+| 冻结数据口径 | `docs/07_DATA_SPEC.md` |
+| 外来代码检查表 | `docs/05_CODING_STYLE.md` §6 |
 
 ---
 
 ## 审计输出格式（必须）
 
-用中文输出，结构固定为四块（与 `AGENTS.md` §5.2 **完整四段**同类结构，此处侧重**审计**而非改参）：
+用中文输出，结构固定为四块（与 `AGENTS.md` **完整四段**同类结构，此处侧重**审计**而非改参）：
 
 1. **审计结论**：通过 / 有条件通过 / 不通过（一句话）。
 2. **发现项**：按严重程度列 `P0`（致命）/`P1`（重要）/`P2`（建议），每项写清「现象 → 可能根因 → 验证方式」。
@@ -60,7 +61,7 @@ version: '1.1.0'
 ### 1.3 连续合约
 
 - [ ] 使用 CbC 分月拼接时，策略逻辑是否假设「物理主力」；换月跳空是否触发假突破/假止损。
-- [ ] 样本区间是否覆盖至少 2 个主力周期（`AGENTS_DETAIL.md` §3）。
+- [ ] 样本区间是否覆盖至少 2 个主力周期（`docs/04_BACKTEST_SPEC.md`）。
 
 ---
 
@@ -78,7 +79,7 @@ version: '1.1.0'
 - [ ] 停止单：触发价与 `slippage`（tick 数）是否与 `pricetick` 一致。
 - [ ] 过滤条件（日盘 `day_session_only`、ATR 过滤等）是否在代码与 `add_strategy(setting)` 中 **同时生效**（避免参数写了但未传入）。
 
-### 2.3 外来教程（扩展 `AGENTS_DETAIL.md` §7）
+### 2.3 外来教程（扩展 `docs/05_CODING_STYLE.md` §6）
 
 - [ ] `from vnpy_ctastrategy import ...`，非 `vnpy.app.cta_strategy`。
 - [ ] 动态手数：`手数 ≈ risk_money / (ATR × contract_size)`，且 `contract_size == engine.size`。

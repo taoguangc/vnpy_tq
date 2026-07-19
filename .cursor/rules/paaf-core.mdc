@@ -1,0 +1,17 @@
+---
+description: PAAF 项目冻结规范入口，所有会话必须遵守
+alwaysApply: true
+---
+
+# PAAF 核心规则
+
+1. 开始工作前读取根目录 `AGENTS.md`；架构或研究决策再读 `PAAF_PROJECT_SPEC.md`。
+2. PAAF 研究统计显著的价格行为 Alpha，不复刻 Brooks，不收集「策略点子」。
+3. 正式数据冻结为 TQSDK 离线、1m、CbC 自动换月、无复权、真实手续费和滑点。
+4. 禁止以提高回测收益为优化目标；只优化研究质量、解释性、复现性、统计有效性和生产真实性。
+5. Detector 不下单、不访问持仓、不修改 Strategy；只返回 Signal/None 与显式 PatternState。
+6. Context v0.1 只计算 Unknown、Trend、Range，不产生交易；Compression 是待验证假设。
+7. Strategy 只编排 Context → Registry → Risk → Execution → Logger，不定义形态。
+8. 每次实验只验证一个假设；无 CSV/等价审计输出，不得称为已证实或晋级。
+9. 生命周期与证据等级按 `docs/03_DETECTOR_SPEC.md`；Production 必须 E4 且用户确认。
+10. 未经用户明确要求，不运行回测、不 Commit、不 Push。

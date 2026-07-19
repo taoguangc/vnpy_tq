@@ -1,18 +1,19 @@
 # 稳定 Alpha 研究协议（ALPHA_PROTOCOL_V1）
 
-> 本文件为计划落地文档；**不要**把开发窗结果标为「稳定 alpha」或 `CONFIRMED_ALPHA`。
+> 本文件为计划落地文档；**不要**把开发窗结果标为「稳定 alpha」或 `CONFIRMED_ALPHA`。  
+> 服从 `docs/01_CONSTITUTION.md` 零假设与 `docs/06_RESEARCH_WORKFLOW.md` 晋级门禁。
 
 ## 1. 不可变冻结项
 
 | 项 | 值 |
 |----|-----|
 | 版本 | `ALPHA_PROTOCOL_V1` |
-| 开发窗 | 2023-05-17 → 2026-05-16 |
+| 开发窗 | 2021-07-01 → 2026-06-30 |
 | 品种池 | `i, jm, p, y, ag, rb, hc, ta` |
 | OPP 候选库 | OPP02 / 08 / 12 / 13 / 15 / 16 / 17 / 19（阈值冻结） |
 | 成本 | 品种 profile 滑点 tick + `rate=0.00003`；经济边际按 **1 手** |
 | 主退出视野 | 40 根 1m；辅 10/20/80；折间 embargo=80 分钟 |
-| Forward holdout | **2026-05-17 起**（未见数据） |
+| Forward holdout | **2026-07-01 起**（未见数据） |
 
 指纹写入：`research/output/alpha_discovery/alpha_protocol_manifest.json`  
 （`opp_code_fingerprint` / `param_fingerprint` / 各 detector 文件 hash）。
