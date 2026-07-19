@@ -15,7 +15,7 @@
 | [specs/FEATURE_SENSOR_SPEC.md](specs/FEATURE_SENSOR_SPEC.md) | Feature Sensor Architecture（v0.3；**Accepted**） |
 | [specs/EVIDENCE_ENGINE_SPEC.md](specs/EVIDENCE_ENGINE_SPEC.md) | Evidence Engine（v0.3；**Accepted**） |
 | [specs/EVIDENCE_ENGINE_IMPL_RFC.md](specs/EVIDENCE_ENGINE_IMPL_RFC.md) | Evidence Engine Phase 0 实现切片（**Accepted**） |
-| [specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md](specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md) | Experiment Workflow Phase 1 实现切片（**Draft**） |
+| [specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md](specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md) | Experiment Workflow Phase 1 实现切片（**Accepted**） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 

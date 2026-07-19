@@ -1,13 +1,13 @@
 # Experiment Workflow Implementation RFC（Phase 1）
 
-> **Status**: Draft（Implementation RFC — Ready for Review）  
-> **Accepted date**: —  
+> **Status**: Accepted（Frozen for Phase 1 implementation）  
+> **Accepted date**: 2026-07-19  
 > **Target version**: PAAF v0.3.x Phase 1  
 > **Path**: `docs/specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md`  
 > **Parent Specs**: `EVIDENCE_ENGINE_SPEC.md`、`EVIDENCE_ENGINE_IMPL_RFC.md`（Accepted）  
 > **Related**: `FEATURE_SENSOR_SPEC.md`、Decision 015（Accepted）  
 > **规则优先级**: `AGENTS.md` > Parent Specs > 本 Implementation RFC > 代码  
-> **实现门禁**: 本 RFC **Accepted** 之前，禁止提交 Experiment Workflow 代码；仍禁止 ATR / FeaturePipeline / Evaluation / Promotion。
+> **实现门禁**: 仅授权 ExperimentContext / RunContext / Manifest+Evidence build/persist/replay；仍禁止 ATR / FeaturePipeline / Evaluation / Promotion。
 
 本文件限定 **Phase 1 实现切片**：在 Phase 0 Evidence Foundation 之上，补齐「谁创建 Manifest / Evidence」的 workflow owner。
 
@@ -146,14 +146,18 @@ class ExperimentContext:
 ```python
 @dataclass(frozen=True)
 class RunContext:
+    experiment_id: str
     created_at: datetime          # 调用方注入；timezone-aware
+    run_id: str | None = None     # 可选；若存在必须由调用方提供
     labels: Mapping[str, str] = ...
 ```
 
 规则：
 
 - `created_at` 不得进入 `parameter_fingerprint` / `fingerprint_manifest` 的配置身份  
-- Phase 1 **不**强制 `run_id` 字段；若调用方需要，放进 `labels["run_id"]` 或后续 RFC  
+- Phase 1 **不**强制 `run_id`；多个执行实例需要 run_id 时，必须由调用方提供
+- Workflow / Repository 禁止生成 run_id
+- `RunContext.experiment_id` 必须与 `ExperimentContext.experiment_id` 一致
 
 ### 4.3 ArtifactRegistration
 
@@ -187,11 +191,11 @@ class ExperimentWorkflow:
         self,
         context: ExperimentContext,
         *,
+        run_context: RunContext,
         evidence_id: str,
         decision: str,
         feature_artifact_uri: str,
         artifact_hash: str,
-        created_at: datetime,
         observation: Mapping[str, float | str] = ...,
         outcome: Mapping[str, float | str] = ...,
         window: Mapping[str, int | str] = ...,
@@ -292,34 +296,31 @@ Workflow 不绕过 Repository；不直接写文件。
 | Commit | Message | 内容 |
 |--------|---------|------|
 | A | `docs(paaf): add experiment workflow implementation rfc` | 本文件 + 索引 |
-| B | `feat(paaf): add experiment workflow context` | `ExperimentContext` / `RunContext` + 组装 helpers + tests |
-| C | `feat(paaf): add experiment workflow persist and replay` | `ExperimentWorkflow` 编排 + replay tests |
+| B | `feat(paaf): add experiment workflow context` | Context + Manifest/Evidence build/persist/replay + contract tests |
 
-可合并 B+C 为单 commit，若 Review 要求「更小切片」则拆开。默认倾向：**B 再 C**。
+Review 已明确本轮以 Workflow 生命周期为单一概念，B 包含最小 persist/replay 编排。
 
 ---
 
-## 10. Open Questions（Implementation）
+## 10. Open Questions（Implementation）— CLOSED
 
-| ID | 问题 | 默认倾向 |
-|----|------|----------|
-| WQ1 | `RunContext` 是否强制 `run_id`？ | 否；可选 `labels` |
-| WQ2 | `build_evidence` 是否要求 Manifest 已 persist？ | 是（与 Repository 一致） |
-| WQ3 | fixture Artifact 是否允许 `content_hash="sha256:fixture"`？ | 测试允许；正式实验须真实 hash |
-| WQ4 | Workflow 是否写入 `EvidenceRecord.metadata` 运行标签？ | 仅透传调用方 `metadata`；不自动注入 |
-| WQ5 | 包路径 `evidence/workflow.py` 还是 `evidence/experiment.py`？ | `workflow.py` |
-
-关闭 WQ1–WQ5 后可将本 RFC 标为 **Accepted**。
+| ID | Accepted 决议 |
+|----|---------------|
+| WQ1 | `run_id` 可选；若存在由调用方提供；Workflow/Repository 不生成 |
+| WQ2 | `build_evidence` 要求 Manifest 已 persist；缺失明确失败，不自动保存 |
+| WQ3 | 测试允许 fixture hash；正式实验必须真实 content hash |
+| WQ4 | Workflow 不自动注入 metadata；只透传调用方显式字段 |
+| WQ5 | 包文件使用 `evidence/workflow.py` |
 
 ---
 
 ## 11. Freeze Criteria
 
-- [ ] WQ1–WQ5 关闭或显式推迟  
-- [ ] 与 Evidence Phase 0 / Feature Spec 无矛盾  
-- [ ] Out of Scope 明确排除 ATR / Evaluation / Promotion  
-- [ ] Commit 边界获同意  
-- [ ] `docs/README.md` 已索引  
+- [x] WQ1–WQ5 关闭或显式推迟  
+- [x] 与 Evidence Phase 0 / Feature Spec 无矛盾  
+- [x] Out of Scope 明确排除 ATR / Evaluation / Promotion  
+- [x] Commit 边界获同意  
+- [x] `docs/README.md` 已索引  
 
 ---
 
@@ -341,3 +342,4 @@ Phase 3  Experiment Sensor（ATR）      （另 RFC；须 Evidence Gate）
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Phase 1 Workflow RFC：Context / Persist / Replay；排除 Sensor 与 Evaluation |
+| 2026-07-19 | 1.0.0 | **Accepted**：WQ1–WQ5 关闭；授权受控 Manifest/Evidence 生命周期 |

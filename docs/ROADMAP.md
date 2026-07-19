@@ -88,8 +88,8 @@ Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，
 
 ```text
 Evidence Engine Phase 0（Accepted / Implemented）
-    → Experiment Workflow Impl RFC（Draft ← 当前）
-    → Experiment Workflow Context / Persist / Replay
+    → Experiment Workflow Impl RFC（Accepted）
+    → Experiment Workflow Context / Persist / Replay（← 当前）
     → Evidence Evaluation（另 RFC）
     → ATR Compression Experiment Sensor（另 RFC）
     → Promotion Review
@@ -100,7 +100,7 @@ Evidence Engine Phase 0（Accepted / Implemented）
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation 完成 |
-| `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Draft** | Phase 1：谁创建 Manifest / Evidence |
+| `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | WQ1–WQ5 关闭；Workflow 实现已授权 |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---

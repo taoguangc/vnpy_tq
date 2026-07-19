@@ -14,8 +14,8 @@
 
 - `FEATURE_SENSOR_SPEC.md` / `EVIDENCE_ENGINE_SPEC.md` / Decision 015：**Accepted**
 - `EVIDENCE_ENGINE_IMPL_RFC.md`：**Accepted**；Phase 0 models + provenance + repository **已实现**
-- `EXPERIMENT_WORKFLOW_IMPL_RFC.md`：**Draft** — Phase 1 Experiment Workflow（Context / Persist / Replay）
-- 下一切片：本 Workflow RFC Review → Accepted → `feat(paaf): add experiment workflow context`
+- `EXPERIMENT_WORKFLOW_IMPL_RFC.md` v1.0.0：**Accepted** — WQ1–WQ5 关闭
+- 当前切片：`feat(paaf): add experiment workflow context`
 - 仍禁止：ATR Sensor、FeaturePipeline、Evaluation、Promotion Automation
 
 ---
