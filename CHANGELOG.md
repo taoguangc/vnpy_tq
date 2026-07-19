@@ -18,6 +18,10 @@
 - 唯一键 `(detector_id, detector_version)`；多版本可共存
 - Deprecated 默认可见；Capability 子集查询
 
+### Added（Commit 010 — Registry Tests）
+
+- `tests/test_paaf_registry.py`：复合键、多版本、查询、不可变、Deprecated 与 factory Contract
+
 ### Notes
 
 - Registry 只存 Descriptor，不存 Detector 实例

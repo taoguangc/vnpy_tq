@@ -47,12 +47,25 @@ Market State
 | v0.2.0 | `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` | **Accepted**（Decision 013） |
 | v0.2.1 | `DetectionResult` / `PatternState` / 必要类型（`Signal` Deprecated） | **完成**（Commit 005/006） |
 | v0.2.2 | `Opportunity` + DetectionResult 引用 + lineage | **完成**（Commit 007/008） |
-| v0.2.3 | Descriptor Catalog Registry + Capability Query | 实现中（Commit 009/010） |
+| v0.2.3 | Descriptor Catalog Registry + Capability Query | **完成**（Commit 009/010） |
 | v0.2.4 | Demo Detector（非 OPP）+ Contract Tests | 待做 |
 
 原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。
 
 真实 OPP（如 OPP16）在 v0.2.4 管线验证之后，进入 v0.3.x 证据驱动实现。
+
+#### PAAF v0.2.3 里程碑
+
+```text
+✓ Context
+✓ DetectionResult
+✓ Opportunity
+✓ Registry
+
+Detector Framework Ready
+```
+
+Registry 以后只增加 Descriptor；不得为新 Detector 重写基础架构。Demo Pipeline 验证仍属于 v0.2.4。
 
 ---
 
