@@ -1,11 +1,12 @@
 # Evidence Engine Specification（RFC）
 
-> **Status**: Draft（RFC — Ready for Architecture Review）  
+> **Status**: Accepted（Frozen for v0.3 Evidence Engine interface）  
+> **Accepted date**: 2026-07-19  
 > **Target version**: PAAF v0.3.x  
 > **Path**: `docs/specs/EVIDENCE_ENGINE_SPEC.md`  
-> **规则优先级**: `AGENTS.md` > `PAAF_PROJECT_SPEC.md` / 宪章 > Accepted Specs > 本 Draft  
+> **规则优先级**: `AGENTS.md` > `PAAF_PROJECT_SPEC.md` / 宪章 > 本 Spec > 实现代码  
 > **变更规则**: 先改本 Spec，再改代码；破坏性变更须 ADR。  
-> **实现门禁**: 本 Spec **Accepted** 之前，禁止实现 Evidence Engine、禁止把 Feature/OPP 标为已证实 Alpha。
+> **实现门禁**: Accepted **不等于**授权 ATR Sensor。首个实现切片为 Evidence Engine Core（Manifest / ArtifactReference / EvidenceRecord / Provenance）。
 
 本文件定义 **Evidence Engine（证据引擎）**：采集、挂接、验证与晋级研究证据。  
 v0.3 的核心不是交易，而是：
@@ -26,7 +27,9 @@ Evidence Collection + Research Validation
 | Decision 011 | Production 必须有证据链 |
 | Decision 013 | Opportunity / DetectionResult 已冻结；证据挂接不得破坏其 immutability |
 | Decision 014 | Framework First；本 Spec 是 Alpha 之前的证据层 |
+| Decision 015 | 双路径、Storage/Provenance、Production = Intent+Evidence+Enablement |
 | `experiments/schema.yaml` | 实验登记最低字段继续有效 |
+| `FEATURE_SENSOR_SPEC.md` | FeatureResult / Observation Key / 四层分存交叉冻结 |
 
 ---
 
@@ -87,6 +90,8 @@ class EvidenceRecord:
     metrics: Mapping[str, float]
     data_protocol_version: str
     decision: str                         # KEEP | REVERT | HOLD
+    feature_artifact_uri: str = ""        # 引用，不复制 Feature 表
+    artifact_hash: str = ""
     schema_version: str = "1.0"
     created_at: datetime = ...
     metadata: Mapping[str, str] = ...
@@ -145,6 +150,65 @@ breakout_weight += 0.5
 
 ---
 
+## 3.4 Storage and Provenance（与 Feature Spec Q5 对齐）
+
+Evidence Engine 是 **Evidence Object + Validation Protocol**，不只是存储。
+
+四层存储：
+
+```text
+Registry | Feature Artifact | Experiment Manifest | Evidence Store
+```
+
+Observation Key（定位 Feature 观测；`parameter_fingerprint` 在 Envelope，不进 FeatureResult）：
+
+```text
+sensor_id + sensor_version + parameter_fingerprint
++ symbol + timeframe + timestamp
+```
+
+Artifact Provenance：
+
+```text
+experiment_id + run_id + code_revision
++ data_fingerprint + environment_fingerprint
+```
+
+Experiment Manifest（示例）：
+
+```json
+{
+  "experiment_id": "exp_20260719_001",
+  "sensor_id": "atr_compression",
+  "sensor_version": "1.0",
+  "parameters": {"atr_window": 14, "baseline_window": 100},
+  "parameter_fingerprint": "...",
+  "code_revision": "...",
+  "data_fingerprint": "...",
+  "environment_fingerprint": "...",
+  "artifact_refs": [
+    {"uri": "runs/run_001/feature_results.parquet", "hash": "..."}
+  ]
+}
+```
+
+目录：
+
+```text
+research/output/evidence/<experiment_id>/
+├── manifest.json
+├── runs/<run_id>/feature_results.parquet
+├── outcomes.parquet
+├── metrics.json
+└── evidence.json
+```
+
+规则：进入 Evidence 的 FeatureResult 必须先持久化；临时 Pipeline 可 memory-only；
+Artifact append-only；Evidence 用 URI/hash 引用，禁止复制整表；Evidence 不回写 FeatureResult；
+Replay 必须恢复五元组（sensor_version、parameter_fingerprint、code、data、environment）。
+
+---
+
 ## 4. Validation & Promotion
 
 ```text
@@ -158,10 +222,11 @@ E0 Idea
 | 动作 | 含义 |
 |------|------|
 | KEEP | 证据支持保留假设；**不**自动 Production |
-| REVERT | 证据反对；关闭实验臂或回滚版本 |
+| REVERT | 证据反对；关闭实验臂；可 VALIDATED（过程可审计）后转 DEPRECATED |
 | HOLD | 样本不足或冲突 |
 
-Sensor / Detector / Opportunity 的 `DetectorStatus` 晋级必须引用合格 `evidence_refs`。
+Sensor 治理状态机见 Feature Spec §4：`EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED`。  
+PRODUCTION 必须 **Intent + Evidence + Explicit Enablement**。
 
 ---
 
@@ -218,25 +283,25 @@ Evidence 层落地同期或紧前，执行 Detector Framework 已声明的删除
 
 ---
 
-## 9. Open Questions
+## 9. Open Questions — **CLOSED**
 
-| ID | 问题 | 默认倾向 |
-|----|------|----------|
-| Q1 | `evidence_id` 与 `experiment_id` 是否 1:1？ | 初版 1:1；后期允许一对多报告 |
-| Q2 | Feature 连续序列证据 vs Opportunity 事件证据是否分表？ | 统一 EvidenceRecord + `subject_kind` |
-| Q3 | 前向度量库是否内置 RV/MAE/MFE？ | 初版最小：RV + sample_n；其余扩展 |
-| Q4 | Evidence Engine 是否同步提供查询 API？ | 延后；先落盘 + schema |
-| Q5 | 与 `research/output/` 目录约定？ | `research/output/evidence/<experiment_id>/` |
+| ID | 决议 |
+|----|------|
+| Q1 | 初版 `evidence_id`:`experiment_id` = 1:1；后期可一对多报告 |
+| Q2 | 统一 `EvidenceRecord` + `subject_kind` |
+| Q3 | 初版最小度量：RV + `sample_n`；其余扩展 |
+| Q4 | 查询 API 延后；先落盘 + schema |
+| Q5 | 目录见 §3.4；与 Feature Spec Storage 交叉冻结 |
 
 ---
 
 ## 10. Freeze Criteria
 
-- [ ] Open Questions 关闭或推迟  
-- [ ] 与 Decision 001/011/013/014 一致  
-- [ ] 明确：Compression 证据 ≠ Breakout 交易规则  
-- [ ] Feature Spec Draft 交叉引用无矛盾  
-- [ ] `docs/README.md` 已索引  
+- [x] Open Questions 关闭或推迟  
+- [x] 与 Decision 001/011/013/014/015 一致  
+- [x] 明确：Compression 证据 ≠ Breakout 交易规则  
+- [x] Feature Spec Accepted 交叉引用无矛盾  
+- [x] `docs/README.md` 已索引  
 
 ---
 
@@ -245,3 +310,4 @@ Evidence 层落地同期或紧前，执行 Detector Framework 已声明的删除
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Draft：EvidenceRecord、采集/晋级、与 Feature/Opportunity 边界 |
+| 2026-07-19 | 1.0.0 | **Accepted**：Storage/Provenance；Validation Protocol；Open Questions 关闭 |
