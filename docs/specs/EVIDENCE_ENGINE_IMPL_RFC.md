@@ -244,36 +244,39 @@ EvidenceRepository(
 ```text
 research/output/evidence/<experiment_id>/
 ├── manifest.json
-├── evidence.json
+├── evidence/
+│   └── <evidence_id>.json
 └── artifacts/
-    └── <artifact_id>/
-        └── <filename>          # e.g. feature_results.parquet / .jsonl
+    └── <artifact_id>/          # Phase 0 只保存引用，不管理二进制内容
 ```
 
-说明：Accepted Spec 曾示例 `runs/<run_id>/...`。Phase 0 采用 `artifacts/<artifact_id>/` + Manifest 内 `run_id`（若需要）字段或 `artifact_id` 编码 run，避免两套布局。若 Review 要求严格 `runs/`，Accepted 前改本 RFC 一处即可。
+一个 Experiment 可产生多个 EvidenceRecord。Phase 0 不引入 Run Lifecycle。
 
 ### 6.3 EvidenceRepository 契约
 
 ```text
 save_manifest(manifest) -> None      # 若已存在 → 失败
 load_manifest(experiment_id) -> ExperimentManifest
+manifest_exists(experiment_id) -> bool
 
 save_evidence(record) -> None        # 若已存在 → 失败
-load_evidence(evidence_id | experiment_id) -> EvidenceRecord
-
-register_artifact(experiment_id, path, artifact_type) -> ArtifactReference
-  # 计算 content_hash；拒绝覆盖同 URI
+load_evidence(experiment_id, evidence_id) -> EvidenceRecord
+evidence_exists(experiment_id, evidence_id) -> bool
 ```
 
 规则：
 
 - append-only / create-once  
-- 禁止 overwrite `manifest.json` / `evidence.json` / 已登记 artifact 文件  
-- 相同配置重跑 → 新 `experiment_id` 或新 `artifact_id`/`run`，不得改历史  
+- 禁止 overwrite `manifest.json` / 已存在 `<evidence_id>.json`
+- load 未知 ID → `FileNotFoundError`，不返回 `None`
+- `(experiment_id, evidence_id)` 定位，禁止全仓扫描 evidence_id
+- ID 作为路径片段时必须拒绝 `.`, `..`, `/`, `\`，防止越界
+- 相同配置重跑 → 新 `experiment_id`，不得改历史
 
 ### 6.4 临时 vs 持久
 
-进入 Evidence 的观测必须先有 Artifact；Phase 0 可不实现 Feature 写出，仅支持**外部已生成文件**的 `register_artifact`。
+进入 Evidence 的观测必须先有 ArtifactReference。Phase 0 Repository 只保存
+Manifest / Evidence 元数据与引用，**不复制、不加载、不管理 Artifact 二进制**。
 
 ---
 
@@ -313,8 +316,10 @@ Repository **只存取，不生成领域 ID**。Phase 0 不使用 UUID 自动生
 
 - save → load 等价  
 - 二次 save 同 id → 失败（不可覆盖）  
-- register_artifact 后 Reference.hash 与文件内容一致  
-- 不依赖 Parquet 全行情回测；可用小 fixture 文件  
+- load 未知 id → `FileNotFoundError`
+- 不同 experiment 目录隔离
+- 路径穿越 ID 明确失败
+- 不依赖 Parquet 全行情回测
 
 禁止：以「收益好看」为断言；禁止联真实 TQ 大数据。
 
@@ -377,3 +382,4 @@ Repository **只存取，不生成领域 ID**。Phase 0 不使用 UUID 自动生
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Phase 0 Implementation RFC：范围、包边界、Repository、测试与 Commit 切片 |
 | 2026-07-19 | 1.0.0 | **Accepted**：IQ1–IQ5 关闭；ID Responsibility；授权 core models |
+| 2026-07-19 | 1.0.1 | Repository 切片：多 Evidence 目录；metadata/reference only；双 ID load |

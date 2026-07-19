@@ -18,10 +18,16 @@ from strategies.paaf.evidence.provenance import (
     fingerprint_parameters,
     verify_parameter_fingerprint,
 )
+from strategies.paaf.evidence.repository import (
+    DEFAULT_EVIDENCE_ROOT,
+    EvidenceRepository,
+)
 
 __all__ = [
     "ArtifactReference",
+    "DEFAULT_EVIDENCE_ROOT",
     "EvidenceRecord",
+    "EvidenceRepository",
     "ExperimentManifest",
     "build_observation_key",
     "canonical_json_dumps",
