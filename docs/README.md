@@ -30,7 +30,8 @@
 | [experiments/VOLUME_RATIO_EXP001.md](experiments/VOLUME_RATIO_EXP001.md) | VOLUME_RATIO EXP001（**Closed**；inconclusive / HOLD） |
 | [experiments/VOLUME_RATIO_EXP001_INDEX.md](experiments/VOLUME_RATIO_EXP001_INDEX.md) | VOLUME_RATIO EXP001 Artifact Index |
 | [specs/OI_CHANGE_SENSOR_EXPERIMENT_RFC.md](specs/OI_CHANGE_SENSOR_EXPERIMENT_RFC.md) | 持仓相对变化 Sensor（**Accepted**；实验 B；与 A 独立） |
-| [experiments/OI_CHANGE_EXP001.md](experiments/OI_CHANGE_EXP001.md) | OI_CHANGE EXP001 Run Spec（**Accepted**；等待 A 闭环） |
+| [experiments/OI_CHANGE_EXP001.md](experiments/OI_CHANGE_EXP001.md) | OI_CHANGE EXP001（**Closed**；inconclusive / HOLD） |
+| [experiments/OI_CHANGE_EXP001_INDEX.md](experiments/OI_CHANGE_EXP001_INDEX.md) | OI_CHANGE EXP001 Artifact Index |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 

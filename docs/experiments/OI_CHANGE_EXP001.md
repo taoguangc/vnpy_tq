@@ -1,11 +1,12 @@
 # OI_CHANGE_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted（Frozen；按 OQ5 等待 `VOLUME_RATIO_EXP001` 闭环）
+> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；no promotion）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `OI_CHANGE_EXP001`
 > **Parent RFC**: `docs/specs/OI_CHANGE_SENSOR_EXPERIMENT_RFC.md`
+> **Artifact Index**: `docs/experiments/OI_CHANGE_EXP001_INDEX.md`
 > **规则优先级**: `AGENTS.md` > Parent RFC > 本 Run Spec > 脚本
-> **运行门禁**: Accepted ≠ 自动实现 / 跑数。须 `VOLUME_RATIO_EXP001` 先闭环，再明确授权后续工作。
+> **运行门禁**: 本实验已关闭；禁止覆盖产物。继续研究须新 `experiment_id`。
 
 **一句话**：登记持仓相对变化的第一次可审计 Run；与成交量实验完全独立。
 
@@ -87,3 +88,4 @@ H1: oi_rel_change 与 RV_N 存在可检出关联
 | 2026-07-19 | 0.1.0-draft | 与 Parent 同步首稿 |
 | 2026-07-19 | 1.0.0 | Accepted：OQ1–OQ5 按建议冻结；等待 Volume 闭环 |
 | 2026-07-19 | 1.0.1 | 跑数前冻结与 Volume 相同的 Evidence 门槛 |
+| 2026-07-19 | 1.1.0 | Lifecycle Completed：inconclusive / HOLD；无晋级 |

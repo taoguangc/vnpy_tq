@@ -18,6 +18,7 @@
 - `VolumeRatioSensor@1.0`：EXPERIMENT；只产出 `volume_ratio`，不含交易语义
 - Volume EXP001 closed：`ρ_ex_roll=0.064631`；`inconclusive` / `HOLD`；无晋级
 - `OIChangeSensor@1.0`：Volume 闭环后实现；只产出 `oi_rel_change`
+- OI EXP001 closed：`ρ_ex_roll=-0.019848`；`inconclusive` / `HOLD`；无晋级
 
 ### Docs / Research（Roll Annotation Policy Accepted）
 
