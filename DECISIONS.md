@@ -155,3 +155,44 @@
 - **决策**：先完成并验证 Framework，再引入 Alpha。v0.2.4 只验证 Context→Detector→DetectionResult→Opportunity→Logger 管线；`DEMO_MINIMAL` 不构成 Alpha。
 - **原因**：使后续 Detector 只增加实现，不再反复修改基础架构。
 - **后果**：真实 OPP / Market State 必须在 Framework 验收后独立立项，并继续服从 Evidence Gate。
+
+---
+
+## Decision 015 — Dual-Path Feature Sensor Architecture（Proposed）
+
+- **日期**：2026-07-19
+- **状态**：Proposed（待 Architecture Review；未授权实现 Feature / ATR）
+- **背景**：Framework（v0.2）已完成。系统内存在两类计算：Opportunity Detector（→ DetectionResult → Opportunity）与未来 Feature Sensor（→ FeatureResult → Evidence）。Decision 008 曾延后 Feature Layer；Decision 014 / ROADMAP 将 v0.3 定为 Evidence。直接实现 Feature+ATR 会跳过证据层并可能泄漏 Direction。
+- **决策（提案）**：采用 **双路径模型**：
+
+```text
+Market Data
+    |
+    +----------------+
+    |                |
+    v                v
+Feature Sensor   Opportunity Detector
+    |                |
+    v                v
+FeatureResult   DetectionResult
+    |                |
+    +-------+--------+
+            |
+            v
+      Evidence Layer
+            |
+            v
+      Decision Engine
+```
+
+  具体约束：
+  1. v0.3 **先 Accepted** `FEATURE_SENSOR_SPEC.md` 与 `EVIDENCE_ENGINE_SPEC.md`，再实现；
+  2. `FeatureResult` **禁止** Direction / Opportunity；Direction 仅在 Opportunity 路径；
+  3. ATR Compression 仅可作为 **EXPERIMENT Feature Sensor** 候选，不得 Production、不得生成 Opportunity；
+  4. Registry **分册**：`DetectorRegistry` 与 `SensorRegistry`（禁止 `UniversalComponentRegistry`）；
+  5. 实现顺序：Evidence Engine Core → Storage/Evaluation → ATR Experiment Sensor → Promotion Review；
+  6. v0.3 Removal Window：删除 Registry `_adapt_legacy` / 实例注册；删除 Domain `Signal`；隔离 Direction 仅 Opportunity 路径。
+- **对 Decision 008 的关系**：本提案 **不静默废止 008**；仅在本 Decision Accepted 后，允许按 Feature Spec 受控引入 Feature Sensor（仍禁止 Market→Feature→Context 交易捷径）。
+- **正面后果**：Feature 不污染交易逻辑；Opportunity 保留方向语义；Evidence 可独立验证 Alpha。
+- **负面后果**：类型数量、pipeline 复杂度与生命周期管理增加。
+- **未 Accepted 前**：禁止合并 Feature / ATR 实现。

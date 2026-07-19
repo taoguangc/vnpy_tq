@@ -8,6 +8,16 @@
 
 ---
 
+## [Unreleased]
+
+### Docs（RFC Draft — 未授权实现）
+
+- `docs/specs/FEATURE_SENSOR_SPEC.md`：**Draft** — Feature / Opportunity 双路径；FeatureResult；ATR 定位为 EXPERIMENT Sensor
+- `docs/specs/EVIDENCE_ENGINE_SPEC.md`：**Draft** — EvidenceRecord + Validation Protocol；Compression 证据 ≠ Buy Breakout
+- Decision 015：**Proposed** — 双路径模型；分册 Registry；v0.3 Removal Window（legacy adapter / Signal / Direction 隔离）
+
+---
+
 ## [0.2.4] — 2026-07-19
 
 ### Added（Commit 011 — Detector Pipeline Verification）
