@@ -17,6 +17,10 @@
 - `OpportunityLogger`：最小 JSONL Opportunity 消费与审计
 - Decision 014：**Framework First, Alpha Later**
 
+### Added（Commit 012 — Pipeline Tests）
+
+- `tests/test_paaf_detector_pipeline.py`：七步 Pipeline、空结果、Capability Gate 与契约失败测试
+
 ### Notes
 
 - 不含 Risk / Execution / Market State / OPP

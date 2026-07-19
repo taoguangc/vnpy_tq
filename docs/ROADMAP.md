@@ -48,7 +48,7 @@ Market State
 | v0.2.1 | `DetectionResult` / `PatternState` / 必要类型（`Signal` Deprecated） | **完成**（Commit 005/006） |
 | v0.2.2 | `Opportunity` + DetectionResult 引用 + lineage | **完成**（Commit 007/008） |
 | v0.2.3 | Descriptor Catalog Registry + Capability Query | **完成**（Commit 009/010） |
-| v0.2.4 | Detector Pipeline Verification + `DEMO_MINIMAL` | 实现中（Commit 011/012） |
+| v0.2.4 | Detector Pipeline Verification + `DEMO_MINIMAL` | **完成**（Commit 011/012；待分支 Review） |
 
 原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。
 
@@ -66,6 +66,23 @@ Detector Framework Ready
 ```
 
 Registry 以后只增加 Descriptor；不得为新 Detector 重写基础架构。Demo Pipeline 验证仍属于 v0.2.4。
+
+#### PAAF v0.2 Detector Framework 里程碑
+
+```text
+✓ Context
+✓ DetectionResult
+✓ Opportunity
+✓ Registry
+✓ Detector Pipeline Verification
+✓ Minimal Opportunity Logger
+
+Detector Framework Complete
+Alpha Not Implemented
+```
+
+下一阶段：**v0.3 Evidence Layer**（Experiment → Validation → Evidence → Production）。
+Market State 顺延到 v0.4；在 Evidence Engine 完成前不得把主观状态分类带入 Production。
 
 ---
 
