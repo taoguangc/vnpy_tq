@@ -10,7 +10,12 @@ from typing import Any, Mapping
 
 SCHEMA_VERSION = "1.0"
 EVIDENCE_DECISIONS = frozenset({"KEEP", "REVERT", "HOLD"})
-SUBJECT_KINDS = frozenset({"feature_sensor", "opportunity", "detector"})
+SUBJECT_KINDS = frozenset({
+    "feature_sensor",
+    "opportunity",
+    "detector",
+    "dataset",
+})
 
 ParameterValue = str | int | float | bool
 ObservationValue = float | str
@@ -217,7 +222,7 @@ class EvidenceRecord:
             _require_text(getattr(self, field_name), field_name)
         if self.subject_kind not in SUBJECT_KINDS:
             raise ValueError(
-                "subject_kind 必须是 feature_sensor、opportunity 或 detector"
+                "subject_kind 必须是 feature_sensor、opportunity、detector 或 dataset"
             )
         if self.decision not in EVIDENCE_DECISIONS:
             raise ValueError("decision 必须是 KEEP、REVERT 或 HOLD")

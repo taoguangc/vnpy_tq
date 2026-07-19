@@ -74,7 +74,7 @@ class ExperimentContext:
             _require_text(getattr(self, field_name), field_name)
         if self.subject_kind not in SUBJECT_KINDS:
             raise ValueError(
-                "subject_kind 必须是 feature_sensor、opportunity 或 detector"
+                "subject_kind 必须是 feature_sensor、opportunity、detector 或 dataset"
             )
         object.__setattr__(
             self,

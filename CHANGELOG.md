@@ -12,11 +12,11 @@
 
 ### Docs / Research（Route C Accepted — run not authorized）
 
-- `DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md` v1.0.0：**Accepted**
-- `DATA_CONTINUOUS_CONTRACT_EXP001.md`：**Accepted**
-- 冻结：Method A only；W=60；rb；2024-01-01–2025-12-31；B/C defer
-- Evidence subject：`dataset` / `rb_cbc_unadjusted@1.0`
-- 仍禁止：改 Decision 001、默认 loader、未授权跑数、交易回测
+- `DATA_CONTINUOUS_CONTRACT_*` Spec：**Accepted**（Method A；W=60）
+- 实现：`strategies/paaf/data_audit/roll_audit.py` + `scripts/run_data_continuous_contract_exp001.py`
+- Evidence `SUBJECT_KINDS` 增加 `dataset`
+- 仍未授权：跑 DATA EXP001 / Evaluation / Evidence
+- 仍禁止：改 Decision 001、默认 loader、交易回测
 
 ---
 
