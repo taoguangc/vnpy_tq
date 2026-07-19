@@ -1,16 +1,21 @@
-"""PAAF Framework v0.1.0
+"""PAAF Framework v0.1.1
 
 开发顺序：Domain → Interface → Engine → Strategy → Detector
+Spec-Driven：先改 docs/specs，再改实现。
 """
 
 from strategies.paaf.base_detector import BaseDetector
 from strategies.paaf.config import DEFAULT_CONFIG, PAAFConfig
 from strategies.paaf.domain import (
+    EXTRAS_COMPRESSION_SCORE,
+    EXTRAS_STATE_CONFIDENCE,
+    EXTRAS_TREND_BIAS,
     TRADE_RECORD_FIELDS,
     Context,
     DetectorInfo,
     Direction,
     MarketState,
+    Session,
     Signal,
     TradeRecord,
     make_experiment_id,
@@ -28,6 +33,9 @@ from strategies.paaf.registry import DetectorRegistry, build_registry
 
 __all__ = [
     "DEFAULT_CONFIG",
+    "EXTRAS_COMPRESSION_SCORE",
+    "EXTRAS_STATE_CONFIDENCE",
+    "EXTRAS_TREND_BIAS",
     "TRADE_RECORD_FIELDS",
     "BaseDetector",
     "Context",
@@ -41,6 +49,7 @@ __all__ = [
     "PAAFConfig",
     "PaafStrategy",
     "RiskEngine",
+    "Session",
     "Signal",
     "SignalEngine",
     "TradeLogger",
@@ -49,4 +58,4 @@ __all__ = [
     "make_experiment_id",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"

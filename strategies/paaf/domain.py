@@ -1,14 +1,21 @@
 """PAAF 领域模型（Domain）。
 
-只放通用语言对象。禁止放入指标定义、仓位、订单或 vn.py 依赖。
+只放通用语言对象。禁止放入指标定义、仓位、订单或 vn.py / numpy / pandas / talib 依赖。
+允许：dataclass、Enum、typing、标准库类型。
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
+from types import MappingProxyType
 from typing import Any, Mapping, Optional
+
+# Documented extras keys (values are research/diagnostic; not MarketState).
+EXTRAS_TREND_BIAS = "trend_bias"
+EXTRAS_STATE_CONFIDENCE = "state_confidence"
+EXTRAS_COMPRESSION_SCORE = "compression_score"
 
 
 class Direction(str, Enum):
@@ -20,19 +27,38 @@ class Direction(str, Enum):
 
 
 class MarketState(str, Enum):
-    """v0.1 市场状态。Compression 属于研究假设，不进入框架基线。"""
+    """一级市场状态（v0.1.1 基线）。不编码方向、强度或实验性信息。"""
 
     UNKNOWN = "UNKNOWN"
     TREND = "TREND"
     RANGE = "RANGE"
 
 
+class Session(str, Enum):
+    """交易时段抽象。稳定领域模型，非实验对象。"""
+
+    DAY = "DAY"
+    NIGHT = "NIGHT"
+    UNKNOWN = "UNKNOWN"
+
+
 @dataclass(frozen=True)
 class Context:
-    """ContextEngine 发布的只读市场上下文。"""
+    """ContextEngine 发布的只读市场上下文（Semantic Layer）。
 
+    符合 ``docs/specs/CONTEXT_ENGINE_SPEC.md`` v1.0.0。
+    ``extras`` 在构造后为只读 MappingProxyType。
+    """
+
+    symbol: str = ""
+    datetime: Optional[datetime] = None
+    session: Session = Session.UNKNOWN
     market_state: MarketState = MarketState.UNKNOWN
     extras: Mapping[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.extras, MappingProxyType):
+            object.__setattr__(self, "extras", MappingProxyType(dict(self.extras)))
 
 
 @dataclass(frozen=True)
@@ -67,6 +93,8 @@ class Signal:
             raise ValueError("无信号请返回 None，不能构造 Direction.NONE Signal")
         if not 0.0 <= float(self.confidence) <= 1.0:
             raise ValueError("Signal.confidence 必须在 [0, 1]")
+        if not isinstance(self.extras, MappingProxyType):
+            object.__setattr__(self, "extras", MappingProxyType(dict(self.extras)))
 
 
 @dataclass(frozen=True)

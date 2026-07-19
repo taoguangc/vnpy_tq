@@ -8,6 +8,26 @@
 
 ---
 
+## [0.1.1] — 2026-07-19
+
+### Added（Commit 002 — Domain + Spec freeze）
+
+- `docs/specs/CONTEXT_ENGINE_SPEC.md` v1.0.0：**Accepted**（接口与契约冻结；算法不冻结）
+- Decision 009：Context Engine Spec Accepted
+- Decision 010：Spec-Driven Development（RFC → Review → Accepted → Implementation → Contract Test → Merge）
+- Domain：`Session`（`DAY` / `NIGHT` / `UNKNOWN`）
+- Domain：扩展 `Context`（`symbol` / `datetime` / `session` / `market_state` / `extras`）
+- Domain：`extras` 发布后为 `MappingProxyType`（只读）
+- Domain：文档化 extras 键 `trend_bias` / `state_confidence` / `compression_score`
+
+### Notes
+
+- **Stable API, Replaceable Implementation**；Context 是 Semantic Layer，不是 Feature Layer
+- v0.1.1 基线 `MarketState` 仍为 `UNKNOWN` / `TREND` / `RANGE`；无 Market State 算法
+- 后续 Commit：ContextEngine 生命周期 → Contract Test
+
+---
+
 ## [0.1.0] — 2026-07-19
 
 ### Added（Sprint 1 / Commit 001）
@@ -32,8 +52,7 @@
 
 ### Notes
 
-- 本版本建立可运行契约；vn.py `CtaTemplate` 接入与 OPP16 实装分别在 Commit 002 / 003
-- **正式 v0.1.1 仍留给 Context Engine**（本补强不发 0.1.1 版本号）
+- 本版本建立可运行契约；vn.py `CtaTemplate` 接入与 OPP16 实装分别在后续 Commit
 - v0.1 Context 只有 UNKNOWN / TREND / RANGE；Compression 作为 E0 假设保留
 - `Signal.confidence` 默认 1.0，预留 Opportunity Score
 - Feature Layer 未实现；见 ROADMAP「后续项」
@@ -87,5 +106,4 @@
 
 ## [1.x] — 2026-07 及更早
 
-历史以 git 提交与 `research/experiments.md` 为准（`AGENTS.md` 曾用 1.7.x 协作规则）。  
-自 2.0.0 起，AI 契约以本 Changelog 与 `docs/` 为准。
+历史以 git 提交与 `research/experiments.md` 为准（`AGENTS.md` 曾用 1.7.x 协作规则）。

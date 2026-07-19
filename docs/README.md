@@ -10,5 +10,8 @@
 | [06_RESEARCH_WORKFLOW.md](06_RESEARCH_WORKFLOW.md) | 单假设实验、证据晋级与 Commit 门禁 |
 | [07_DATA_SPEC.md](07_DATA_SPEC.md) | 冻结数据、换月与成本 |
 | [ROADMAP.md](ROADMAP.md) | 阶段目标（可变） |
+| [specs/CONTEXT_ENGINE_SPEC.md](specs/CONTEXT_ENGINE_SPEC.md) | Context Engine Spec（v0.1.1 接口；**Accepted**） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
+
+模块级 RFC 放在 `docs/specs/`：**先改 Spec，再改对应实现。**

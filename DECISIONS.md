@@ -89,3 +89,25 @@
 - **决策**：v0.1.0 Foundation 补强不实现 `features/`；Feature Layer 记为 E0 后续假设。
 - **原因**：复杂度预算；指标周期已在 `config.py`；Context Engine（v0.1.1）落地前过早拆层无验收价值。
 - **后果**：若将来实现 Feature，只作 Context/Risk 计算依赖，不得改写宪章主链或宣称已改变架构。
+
+---
+
+## Decision 009 — Context Engine Spec Accepted（v0.1.1 接口冻结）
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：v0.1.1 实现前需冻结 Context 对外语言与模块契约，避免算法迭代破坏 Detector。
+- **决策**：采纳 `docs/specs/CONTEXT_ENGINE_SPEC.md` v1.0.0。要点：Semantic Layer 非 Feature Layer；`MarketState` 仅一级语义 `UNKNOWN|TREND|RANGE`；`Session` 为 Enum `DAY|NIGHT|UNKNOWN`；方向用 `extras.trend_bias`；`ctx.bar` 延期；`&lt;100μs` 为 Design Target；强制 Contract Test；原则 **Stable API, Replaceable Implementation**。
+- **原因**：接口稳定、实现可替换；与 Decision 002/007/008 一致。
+- **后果**：Context 接口变更必须先改 Spec；实现阶段严格按 Spec 编码；算法桩可替换且不改 Detector 读法。
+
+---
+
+## Decision 010 — Spec-Driven Development（SDD）自 v0.1.1 起
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：聊天决策无法长期审计；核心模块需要可回溯契约。
+- **决策**：自 v0.1.1 起，核心模块统一流程：`RFC → Architecture Review → Accepted → Implementation → Contract Test → Merge`。模块 Spec 放在 `docs/specs/`。
+- **原因**：几年后仍能回答「代码为何如此」；AI Agent 与人类共享同一边界。
+- **后果**：Detector Engine / Risk / Opportunity Library 等均先 Spec 后实现；无 Accepted Spec 不得宣称接口已冻结。
