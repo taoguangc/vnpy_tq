@@ -78,8 +78,24 @@ class TestFeatureResult(unittest.TestCase):
         restored = FeatureResult.from_dict(payload)
 
         self.assertEqual(restored, original)
+        self.assertEqual(payload["schema_version"], "2.0")
         self.assertEqual(payload["sensor_version"], "1.0")
         self.assertEqual(payload["timestamp"], TIMESTAMP.isoformat())
+
+    def test_schema_v2_allows_null_and_v1_remains_readable(self) -> None:
+        missing = _result(values={"fixture_value": None})
+        restored = FeatureResult.from_dict(
+            json.loads(json.dumps(missing.to_dict()))
+        )
+        legacy = _result(schema_version="1.0")
+
+        self.assertIsNone(restored.values["fixture_value"])
+        self.assertEqual(legacy.schema_version, "1.0")
+        with self.assertRaisesRegex(TypeError, "1.0 不允许 null"):
+            _result(
+                values={"fixture_value": None},
+                schema_version="1.0",
+            )
 
     def test_has_no_direction_status_or_experiment_fields(self) -> None:
         fields = FeatureResult.__dataclass_fields__
@@ -104,8 +120,8 @@ class TestFeatureResult(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "时区"):
             _result(timestamp=datetime(2026, 7, 19, 10, 0))
         with self.assertRaisesRegex(ValueError, "schema"):
-            _result(schema_version="2.0")
-        with self.assertRaisesRegex(TypeError, "int 或 float"):
+            _result(schema_version="3.0")
+        with self.assertRaisesRegex(TypeError, "int、float 或 None"):
             _result(values={"fixture_value": True})
         with self.assertRaisesRegex(ValueError, "有限"):
             _result(values={"fixture_value": float("nan")})

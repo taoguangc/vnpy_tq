@@ -74,7 +74,7 @@
 |------|----------|
 | 读只读窗口 / Context | `buy` / `sell` / 持仓 |
 | 返回 `FeatureResult \| None`（或每 bar 恒输出，见 §3） | 返回 `DetectionResult` / `Opportunity` / `Signal` |
-| 数值 `values` 为 `Mapping[str, float]` | `BUY` / `SELL` / `LONG` / `SHORT` 进入 values 或 diagnostics |
+| 数值 `values` 为 `Mapping[str, float \| None]`（schema 2.0；`None` 只表示缺失） | `BUY` / `SELL` / `LONG` / `SHORT` 进入 values 或 diagnostics |
 | 显式 identity：`sensor_id` / `sensor_version` / `symbol` / `timeframe` / `timestamp` | 修改 Context；隐藏全局状态；携带 experiment / evidence / pipeline 业务语义 |
 | 可序列化、可审计 | 声称 Production Alpha；跳过 Evidence |
 
@@ -89,11 +89,11 @@
 class FeatureResult:
     sensor_id: str
     sensor_version: str
-    schema_version: str                 # 默认 "1.0"
+    schema_version: str                 # 默认 "2.0"；"1.0" 历史结果仍可读取
     symbol: str                         # 观测身份；一等字段，禁止塞入 diagnostics
     timeframe: str                      # 如 "1m"；一等字段
     timestamp: datetime                 # timezone-aware，默认 UTC
-    values: Mapping[str, float]         # 发布后只读
+    values: Mapping[str, float | None]  # 发布后只读；None 只表示缺失
     diagnostics: Mapping[str, str]      # 计算诊断；发布后只读
 ```
 
@@ -189,9 +189,13 @@ parameters:
 
 同一算法使用不同实验参数，不自动升级 `sensor_version`；算法实现、特征语义或默认常量改变才升级。
 
-**边界说明**：在 `values: Mapping[str, float]` 外层类型不变时，增加
+**边界说明**：在 `values: Mapping[str, float | None]` 外层类型不变时，增加
 `compression_score` 属于 Sensor 输出契约变化，升级 `sensor_version`；
 只有 FeatureResult 外层字段、字段类型或序列化编码改变才升级 `schema_version`。
+
+Schema 2.0 将 `values` 从 `Mapping[str, float]` 扩展为
+`Mapping[str, float | None]`，其中 `None` 只表达 warmup / 缺失，禁止用
+`0.0` 代替缺失。Schema 1.0 历史结果保持可读取，且仍禁止 `None`。
 
 ### 2.7 Metadata Ownership（Q3 Resolved）
 
@@ -508,3 +512,4 @@ Open Questions：**全部关闭**。
 | 2026-07-19 | 0.1.3-draft | Review：Q3 CLOSED（四层所有权；symbol/timeframe Identity；diagnostics） |
 | 2026-07-19 | 0.1.4-draft | Review：Q4 CLOSED（单向治理状态机；Production = Intent + Evidence + Enablement） |
 | 2026-07-19 | 1.0.0 | **Accepted**：Q5 Storage/Provenance；Open Questions 全部关闭 |
+| 2026-07-19 | 1.1.0 | FeatureResult schema 2.0：values 支持显式 null；schema 1.0 历史结果保持可读取 |

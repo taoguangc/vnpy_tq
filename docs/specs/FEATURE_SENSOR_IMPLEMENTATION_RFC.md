@@ -127,7 +127,7 @@ class FeatureResult:
     symbol: str
     timeframe: str
     timestamp: datetime
-    values: Mapping[str, float]
+    values: Mapping[str, float | None]  # schema 2.0；None 只表示缺失
     diagnostics: Mapping[str, str]
 ```
 
@@ -135,6 +135,7 @@ class FeatureResult:
 
 - timezone-aware `timestamp`  
 - `values` / `diagnostics` MappingProxyType  
+- schema 2.0 允许 value=`None` 表示 warmup / 缺失；schema 1.0 历史结果可读但不允许 null
 - 禁止交易语义键与 experiment/evidence/pipeline 键（见 Parent Spec §2.4）  
 - 生命周期状态 **不**出现在 FeatureResult  
 
@@ -345,3 +346,4 @@ Phase 4      Decision / Strategy Adaptation
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Phase 3.0：FeatureResult / SensorRegistry / DEMO fixture；排除 ATR |
 | 2026-07-19 | 1.0.0 | **Accepted**：SQ1–SQ6 关闭；授权 Sensor framework 实现 |
+| 2026-07-19 | 1.1.0 | Phase 3.1 兼容修订：FeatureResult schema 2.0 支持显式 null；保留 schema 1.0 读取 |

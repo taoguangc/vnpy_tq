@@ -10,12 +10,15 @@
 
 ## [Unreleased]
 
-### Docs（Spec Accepted — 未授权 ATR 实现）
+### Docs（Phase 3.1 RFC Accepted — 未跑数据）
 
 - Phase 0–2.1：**Evidence + Workflow + Evaluation Models + Persistence 已实现**
-- `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` v1.0.0：**Accepted** — SQ1–SQ6 关闭
-- 当前切片：`feat(paaf): add feature sensor models`
-- 仍禁止：ATRCompression、Feature ranking、Trading signal、Promotion Automation
+- Phase 3.0：**Feature Sensor Framework 已实现**
+- `ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md` v1.0.0：**Accepted** — AQ1–AQ7 关闭
+- 冻结：Universe=`rb`+`1m`；v1 仅 `atr_ratio`；Outcome `N=60` non-overlapping；Spearman primary
+- FeatureResult schema 2.0：values 支持显式 null；schema 1.0 历史结果保持可读取
+- Phase 3.1：`ATRCompressionSensor@1.0` 已实现（EXPERIMENT only；尚未跑数据）
+- 仍禁止：Trading signal、Opportunity Detector、Production 晋级、参数搜索、compression_score
 
 ---
 

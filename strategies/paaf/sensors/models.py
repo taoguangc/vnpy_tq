@@ -15,7 +15,8 @@ if TYPE_CHECKING:
     from strategies.paaf.sensors.base import BaseFeatureSensor
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "2.0"
+SUPPORTED_SCHEMA_VERSIONS = frozenset({"1.0", SCHEMA_VERSION})
 EMIT_MODES = frozenset({"always", "sparse"})
 FORBIDDEN_FEATURE_KEYS = frozenset({
     "action",
@@ -83,7 +84,7 @@ class FeatureResult:
     symbol: str
     timeframe: str
     timestamp: datetime
-    values: Mapping[str, float]
+    values: Mapping[str, float | None]
     diagnostics: Mapping[str, str] = field(default_factory=dict)
     schema_version: str = SCHEMA_VERSION
 
@@ -97,17 +98,22 @@ class FeatureResult:
             _require_text(getattr(self, field_name), field_name)
         if self.timestamp.tzinfo is None:
             raise ValueError("timestamp 必须包含时区")
-        if self.schema_version != SCHEMA_VERSION:
+        if self.schema_version not in SUPPORTED_SCHEMA_VERSIONS:
             raise ValueError(
                 f"不支持 FeatureResult schema: {self.schema_version}"
             )
 
         value_keys = _require_keys(self.values.keys(), "values")
-        frozen_values: dict[str, float] = {}
+        frozen_values: dict[str, float | None] = {}
         for key in value_keys:
             value = self.values[key]
+            if value is None:
+                if self.schema_version == "1.0":
+                    raise TypeError("FeatureResult schema 1.0 不允许 null value")
+                frozen_values[key] = None
+                continue
             if isinstance(value, bool) or not isinstance(value, (int, float)):
-                raise TypeError("values 的值只允许 int 或 float")
+                raise TypeError("values 的值只允许 int、float 或 None")
             normalized = float(value)
             if not math.isfinite(normalized):
                 raise ValueError("values 的数值必须有限")
