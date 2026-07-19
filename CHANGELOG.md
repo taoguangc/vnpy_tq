@@ -12,10 +12,10 @@
 
 ### Docs（Spec Accepted — 未授权 ATR 实现）
 
-- Phase 0–2：**Foundation + Workflow + Evaluation Models 已实现**
-- `EVALUATION_REPOSITORY_INTEGRATION_RFC.md` v1.0.0：**Accepted** — RQ1–RQ5 关闭
-- 当前切片：`feat(paaf): extend evidence repository for evaluation artifacts`
-- 仍禁止：Metric Calculator、ATR Sensor、Promotion Automation
+- Phase 0–2.1：**Evidence + Workflow + Evaluation Models + Persistence 已实现**
+- `FEATURE_SENSOR_IMPLEMENTATION_RFC.md`：**Draft** — Phase 3.0 Feature Sensor Contract（Registry / FeatureResult / DEMO）
+- 下一切片：本 RFC Review → Accepted → sensor models / registry
+- 仍禁止：ATRCompression、Feature ranking、Trading signal、Promotion Automation
 
 ---
 

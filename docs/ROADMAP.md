@@ -81,29 +81,28 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-下一阶段：**v0.3 Phase 2.1 Evaluation Persistence**（Repository 扩展 ← 当前）。
-Market State 顺延到 v0.4；ATR 仍须等 Feature Sensor Framework + Evaluation Gate。
+下一阶段：**v0.3 Phase 3.0 Feature Sensor Contract**（FeatureResult / SensorRegistry / DEMO fixture）。
+Market State 顺延到 v0.4；ATRCompression 仅作为 Phase 3.1 EXPERIMENT Sensor，不得跳过本 RFC。
 
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Foundation Phase 0（Implemented）
-    → Experiment Workflow Phase 1（Implemented）
-    → Evaluation Models Phase 2（Implemented）
-    → Evaluation Persistence RFC（Accepted）
-    → Repository extension（← 当前）
-    → Feature Sensor Framework（另 RFC）
-    → ATR Compression Experiment（另 RFC）
+Evidence + Workflow + Evaluation Persistence（Implemented）
+    → Feature Sensor Implementation RFC（Draft ← 当前）
+    → FeatureResult / SensorRegistry / DEMO sensor
+    → ATRCompression EXPERIMENT Sensor（Phase 3.1 另 RFC）
+    → Decision / Strategy Adaptation
 ```
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
-| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
-| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol |
+| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 架构契约；Q1–Q5 关闭 |
+| `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` | **Draft** | Phase 3.0 实现切片 |
+| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
 | `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Accepted** | Phase 2 Models |
-| `EVALUATION_REPOSITORY_INTEGRATION_RFC.md` | **Accepted** | RQ1–RQ5 关闭；Repository 扩展已授权 |
+| `EVALUATION_REPOSITORY_INTEGRATION_RFC.md` | **Accepted** | Phase 2.1 Persistence |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---
