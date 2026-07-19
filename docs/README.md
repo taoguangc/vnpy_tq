@@ -27,7 +27,8 @@
 | [experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md) | DATA EXP001 Artifact Index（material_annotate / HOLD；基线不变） |
 | [specs/FEATURE_ROLL_ANNOTATION_POLICY_RFC.md](specs/FEATURE_ROLL_ANNOTATION_POLICY_RFC.md) | Feature 换月邻域标注政策（**Accepted**；新实验须双报 full/ex_roll） |
 | [specs/VOLUME_RATIO_SENSOR_EXPERIMENT_RFC.md](specs/VOLUME_RATIO_SENSOR_EXPERIMENT_RFC.md) | 成交量相对活跃度 Sensor（**Accepted**；实验 A） |
-| [experiments/VOLUME_RATIO_EXP001.md](experiments/VOLUME_RATIO_EXP001.md) | VOLUME_RATIO EXP001 Run Spec（**Accepted**；跑数须另授权） |
+| [experiments/VOLUME_RATIO_EXP001.md](experiments/VOLUME_RATIO_EXP001.md) | VOLUME_RATIO EXP001（**Closed**；inconclusive / HOLD） |
+| [experiments/VOLUME_RATIO_EXP001_INDEX.md](experiments/VOLUME_RATIO_EXP001_INDEX.md) | VOLUME_RATIO EXP001 Artifact Index |
 | [specs/OI_CHANGE_SENSOR_EXPERIMENT_RFC.md](specs/OI_CHANGE_SENSOR_EXPERIMENT_RFC.md) | 持仓相对变化 Sensor（**Accepted**；实验 B；与 A 独立） |
 | [experiments/OI_CHANGE_EXP001.md](experiments/OI_CHANGE_EXP001.md) | OI_CHANGE EXP001 Run Spec（**Accepted**；等待 A 闭环） |
 

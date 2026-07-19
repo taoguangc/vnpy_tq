@@ -16,6 +16,7 @@
 - `OI_CHANGE_SENSOR_EXPERIMENT_RFC` + `OI_CHANGE_EXP001`：**Accepted**（OQ1–OQ5 关闭）
 - 两实验独立假设；强制换月双报；串行：先 A 后 B；未授权实现 / 跑数
 - `VolumeRatioSensor@1.0`：EXPERIMENT；只产出 `volume_ratio`，不含交易语义
+- Volume EXP001 closed：`ρ_ex_roll=0.064631`；`inconclusive` / `HOLD`；无晋级
 
 ### Docs / Research（Roll Annotation Policy Accepted）
 
