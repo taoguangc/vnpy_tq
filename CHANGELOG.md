@@ -20,11 +20,18 @@
 - Domain：`extras` 发布后为 `MappingProxyType`（只读）
 - Domain：文档化 extras 键 `trend_bias` / `state_confidence` / `compression_score`
 
+### Added（Commit 003 — ContextEngine lifecycle）
+
+- `ContextEngine`：`update` / `freeze` / `publish` / `get_context` / `reset`
+- 生命周期：`update → freeze → publish → readonly`
+- **无** Market State 算法：发布后 `market_state` 恒为 `UNKNOWN`（Context Framework only）
+- `framework_version` → `0.1.1`
+
 ### Notes
 
 - **Stable API, Replaceable Implementation**；Context 是 Semantic Layer，不是 Feature Layer
-- v0.1.1 基线 `MarketState` 仍为 `UNKNOWN` / `TREND` / `RANGE`；无 Market State 算法
-- 后续 Commit：ContextEngine 生命周期 → Contract Test
+- v0.1.1 基线 `MarketState` 仍为 `UNKNOWN` / `TREND` / `RANGE`；Market State **Not Implemented**
+- 后续 Commit：Contract Test / Lifecycle Test
 
 ---
 

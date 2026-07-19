@@ -35,7 +35,7 @@ class PaafStrategy:
         self.symbol = symbol
         self.config = config or DEFAULT_CONFIG
         self.registry = registry or DetectorRegistry()
-        self.context_engine = ContextEngine(self.config)
+        self.context_engine = ContextEngine(self.config, symbol=symbol)
         self.signal_engine = SignalEngine(self.registry)
         self.risk_engine = RiskEngine(self.config)
         self.execution_engine = ExecutionEngine()
@@ -52,7 +52,7 @@ class PaafStrategy:
     def on_bar_window(self, am: Any) -> list[Signal]:
         """用只读行情窗口跑完一轮检测。"""
 
-        context: Context = self.context_engine.update(am)
+        context: Context = self.context_engine.update(am, symbol=self.symbol)
         signals = self.signal_engine.scan(am, context)
         for signal in signals:
             _ = self.risk_engine.stop(signal)
