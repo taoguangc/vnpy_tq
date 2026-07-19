@@ -55,21 +55,23 @@ Detector Registry → Signal | None
 
 | 包 | 角色 |
 |----|------|
-| `strategies/pa_minimal/` | 最小可交易 / 研究基线（检测器拆分 + 编排） |
-| `strategies/pa_cta/` | 完整 Brooks PA CTA（历史主策略） |
-| `strategies/pa_minimal/pa_minimal.py` | 单文件研究包（由 `scripts/build_pa_minimal_single.py` 生成） |
+| `strategies/paaf/` | **生产 / 研究主框架**（Domain / Registry / Engines / Adapters） |
 | `scripts/tq_data_loader.py` / `rollover_*` | CbC 数据与换月引擎对接 |
 | `research/` | 对照臂、OOS、归因、实验日志 |
+| `experiments/` | 实验登记（`schema.yaml`）；新实验按 schema 登记 |
+
+遗留包（`pa_minimal` / `pa_cta` 等）仅作对照与渐进迁移来源，**不再**作为新功能主战场。禁止以此为由一次性重写；每次只迁移一个接口或模块，并做行为对照。
 
 其它策略包（如 `smc_orderflow_vwap`）服从同一分层原则，但**不默认**套用全部 OPP 编号规则。
 
-### 目标包（渐进迁移）
+### 目标包（`strategies/paaf/`）
 
 ```text
 strategies/paaf/
 ├── domain.py
 ├── config.py
 ├── base_detector.py
+├── adapters/          # vn.py 边界；Domain 禁止直接 import vn.py
 ├── detectors/
 ├── engines/
 │   ├── context_engine.py
@@ -81,9 +83,7 @@ strategies/paaf/
 └── profiles/
 ```
 
-`strategies/paaf/` 是冻结的目标架构，不代表现有 `pa_minimal` / `pa_cta` 已迁移完成。禁止以此为由一次性重写；每次只迁移一个接口或模块，并做行为对照。
-
-`domain.py` 是依赖中心，不依赖 vn.py、Engine 或 Strategy。
+`domain.py` 是依赖中心，不依赖 vn.py、Engine 或 Strategy。vn.py 类型只经 `adapters/` 进入 PAAF。
 
 ---
 
@@ -112,6 +112,6 @@ strategies/paaf/
 
 ## 6. 单文件 vs 包路径
 
-- **生产 / 对照默认**：包路径（`strategies/pa_minimal/` 模块）。
-- **单文件**：仅研究便携；须由构建脚本重生，禁止手改 `pa_minimal.py` 后当作源真相。
-- 包与单文件对照回测应对齐；不一致时以包路径 + 构建脚本缺陷排查为准。
+- **生产 / 对照默认**：`strategies/paaf/` 包路径。
+- 遗留单文件（如历史 `pa_minimal.py`）仅研究便携；须由构建脚本重生，禁止手改后当作源真相。
+- 遗留包与 `paaf` 对照回测应对齐；不一致时以 `paaf` + 迁移缺陷排查为准。

@@ -1,0 +1,143 @@
+# PAAF Experiment Registry Schema
+# Aligns with docs/06_RESEARCH_WORKFLOW.md §3 (experiment registration minimum fields).
+# New experiments MUST be registered against this schema.
+# Do not use disposable names like run_final2.py / run_final_real.py.
+
+version: "1.0.0"
+
+decision_enum:
+  - KEEP
+  - REVERT
+  - HOLD
+
+lifecycle_enum:
+  - Candidate
+  - Testing
+  - Verified
+  - Production
+  - Deprecated
+
+evidence_level_enum:
+  - E0
+  - E1
+  - E2
+  - E3
+  - E4
+
+# Required fields for every registered experiment.
+required:
+  - experiment_id
+  - detector_id
+  - detector_version
+  - lifecycle
+  - evidence_level
+  - hypothesis
+  - baseline_id
+  - symbol
+  - date_range
+  - data_protocol_version
+  - cost_model
+  - execution_model
+  - single_variable
+  - primary_metrics
+  - stop_conditions
+  - csv_path
+  - code_fingerprint
+  - decision
+
+fields:
+  experiment_id:
+    type: string
+    description: "Stable experiment ID; run logs may use YYYYMMDD_symbol_vX.Y.Z via make_experiment_id."
+  detector_id:
+    type: string
+    description: "Detector stable ID, e.g. OPP16."
+  detector_version:
+    type: string
+    description: "Detector version under test, e.g. 0.1.0."
+  lifecycle:
+    type: string
+    enum_ref: lifecycle_enum
+  evidence_level:
+    type: string
+    enum_ref: evidence_level_enum
+  hypothesis:
+    type: string
+    description: "Single falsifiable hypothesis in one sentence."
+  baseline_id:
+    type: string
+    description: "Baseline experiment or profile ID for comparison."
+  symbol:
+    type: string
+    description: "Primary symbol or symbol set label, e.g. rb."
+  date_range:
+    type: object
+    properties:
+      start:
+        type: string
+        format: date
+      end:
+        type: string
+        format: date
+  data_protocol_version:
+    type: string
+    description: "Frozen data protocol tag; default formal baseline is TQ offline 1m CbC unadjusted real cost."
+  cost_model:
+    type: string
+    description: "Commission and slippage model identifier."
+  execution_model:
+    type: string
+    description: "Execution / fill model identifier."
+  single_variable:
+    type: string
+    description: "The only primary variable changed in this experiment."
+  primary_metrics:
+    type: array
+    items:
+      type: string
+    description: "Primary metrics to evaluate, e.g. trade_count, win_rate, PF, expectancy, MAE, MFE."
+  stop_conditions:
+    type: array
+    items:
+      type: string
+    description: "Pre-registered stop / HOLD conditions."
+  csv_path:
+    type: string
+    description: "Path to CSV or equivalent audit artifact."
+  code_fingerprint:
+    type: string
+    description: "Code / config fingerprint for reproducibility."
+  decision:
+    type: string
+    enum_ref: decision_enum
+    description: "KEEP retains evidence without auto-promoting to Production; Production requires E4 + user confirmation."
+
+example:
+  experiment_id: "EXP-2026-001"
+  detector_id: "OPP16"
+  detector_version: "0.1.0"
+  lifecycle: "Candidate"
+  evidence_level: "E0"
+  hypothesis: "Two-bar reversal has positive expectancy on RB under frozen TQ CbC costs."
+  baseline_id: "none"
+  symbol: "rb"
+  date_range:
+    start: "2021-01-01"
+    end: "2026-06-30"
+  data_protocol_version: "tq_offline_1m_cbc_unadj_v1"
+  cost_model: "real_commission_real_slippage"
+  execution_model: "1m_stop_priority"
+  single_variable: "OPP16 detector definition"
+  primary_metrics:
+    - trade_count
+    - win_rate
+    - PF
+    - expectancy
+    - MAE
+    - MFE
+  stop_conditions:
+    - "n_trades < 30 -> HOLD"
+    - "no CSV -> no KEEP claim"
+  csv_path: "research/output/EXP-2026-001.csv"
+  code_fingerprint: "pending"
+  decision: "HOLD"

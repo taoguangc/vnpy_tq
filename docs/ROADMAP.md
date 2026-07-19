@@ -17,7 +17,8 @@
 | `domain.py` / `config.py` / `base_detector.py` / `registry.py` | 完成（Commit 001） |
 | `paaf_strategy.py` + Engine 接口 | 完成（Commit 001 骨架） |
 | Engine 可导入骨架 | 完成（Commit 001） |
-| Context Engine | 待做 |
+| Foundation 补强：`adapters/vnpy_adapter.py` + `experiments/schema.yaml` | 完成（Commit 001.x，仍属 0.1.0） |
+| Context Engine | 待做（正式 v0.1.1） |
 | CSV Logger | 待做 |
 | `PAAFStrategy` + vn.py 可加载 | 待做 |
 | OPP16 Detector | 待做 |
@@ -78,6 +79,14 @@ test: add detector unit tests
 - 无约束参数搜索与自动「优化到年化」
 - 为证明 Brooks 正确而扭曲数据或成本
 - 大爆炸式重写整个 `strategies/` 树
+- 将 Feature Engine 插入冻结信号主链（见下）
+
+## 后续项（未立项实现）
+
+| 项 | 状态 | 说明 |
+|----|------|------|
+| Feature Layer（ATR/EMA/ADX 等） | E0 假设 | 若实现，只作 Context/Risk 的计算依赖；**不得**改主链为 Market→Feature→Context |
+| `research/run_*.py` 三层治理 | 待治理专项 | experiments / validation / reports；不与 Foundation 补强捆绑 |
 
 ---
 

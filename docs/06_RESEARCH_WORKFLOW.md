@@ -41,6 +41,8 @@ Commit（仅用户明确要求）
 
 ## 3. 实验登记最低字段
 
+可机读 schema：`experiments/schema.yaml`（新实验必须按该 schema 登记）。
+
 - 实验 ID；
 - Detector ID 与版本；
 - 当前生命周期 / 证据等级；
@@ -52,7 +54,8 @@ Commit（仅用户明确要求）
 - 唯一改动变量；
 - 主要指标与停止条件；
 - 输出 CSV 路径；
-- 代码 / 配置指纹。
+- 代码 / 配置指纹；
+- 决策（KEEP / REVERT / HOLD）。
 
 ---
 

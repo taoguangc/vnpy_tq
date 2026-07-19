@@ -67,3 +67,25 @@
 - **决策**：严格按 Domain、Interface、Engine、Strategy、Detector 顺序推进 Commit。
 - **原因**：契约稳定后再写实现，减少接口抖动。
 - **后果**：Commit 001 不做 OPP16 实装与收益优化。
+
+---
+
+## Decision 007 — vn.py 仅经 Adapter 进入 PAAF
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：Domain 若直接依赖 `BarData` / `ArrayManager`，换回测引擎或审计边界时会推倒契约。
+- **决策**：vn.py 类型只允许出现在 `strategies/paaf/adapters/`；Domain / Detector / Context 契约保持框架无关。
+- **原因**：固化边界，便于单测与未来替换执行后端。
+- **后果**：新增 vn.py 依赖必须经 Adapter；禁止在 `domain.py` 中 `import vnpy`。
+
+---
+
+## Decision 008 — Feature Layer 延后；不改冻结信号主链
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：架构审计建议拆出 Feature Engine；冻结主链仍是 Market Data → Context → Detector → Risk → Execution → Logger。
+- **决策**：v0.1.0 Foundation 补强不实现 `features/`；Feature Layer 记为 E0 后续假设。
+- **原因**：复杂度预算；指标周期已在 `config.py`；Context Engine（v0.1.1）落地前过早拆层无验收价值。
+- **后果**：若将来实现 Feature，只作 Context/Risk 计算依赖，不得改写宪章主链或宣称已改变架构。

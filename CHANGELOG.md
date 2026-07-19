@@ -22,11 +22,21 @@
 - `DECISIONS.md`：架构决策记录
 - `tests/test_paaf_foundation.py`
 
+### Added（Sprint 1 / Commit 001.x Architecture Foundation 补强）
+
+- `strategies/paaf/adapters/vnpy_adapter.py`：vn.py `BarData` / 行情窗口 → `PaafBar` 边界适配
+- `experiments/schema.yaml`：与 `docs/06_RESEARCH_WORKFLOW.md` 对齐的可机读实验登记 schema
+- `experiments/README.md`：实验登记规则
+- `tests/test_paaf_adapter.py`
+- Decision 007 / 008：Adapter 边界；Feature Layer 延后且不改信号主链
+
 ### Notes
 
 - 本版本建立可运行契约；vn.py `CtaTemplate` 接入与 OPP16 实装分别在 Commit 002 / 003
+- **正式 v0.1.1 仍留给 Context Engine**（本补强不发 0.1.1 版本号）
 - v0.1 Context 只有 UNKNOWN / TREND / RANGE；Compression 作为 E0 假设保留
 - `Signal.confidence` 默认 1.0，预留 Opportunity Score
+- Feature Layer 未实现；见 ROADMAP「后续项」
 
 ---
 

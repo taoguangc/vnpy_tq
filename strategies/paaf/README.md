@@ -14,6 +14,8 @@ paaf/
 ├── base_detector.py
 ├── registry.py
 ├── paaf_strategy.py
+├── adapters/
+│   └── vnpy_adapter.py   # vn.py 边界；Domain 禁止直接 import vn.py
 ├── engines/
 │   ├── context_engine.py
 │   ├── signal_engine.py
