@@ -13,8 +13,10 @@
 ### Docs / Research（DATA EXP002 + Feature Pause）
 
 - Decision 016：暂停 `rb` 上标量 Feature ↔ RV_60 同构实验
-- `DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC` + `DATA_CONTINUOUS_CONTRACT_EXP002`：**Accepted**
+- `DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC` + `DATA_CONTINUOUS_CONTRACT_EXP002`：**Accepted → Closed**
 - 冻结品种：`hc/i/m/au`；门槛 `vol_ratio≥1.5` 或 `p95_ratio≥1.2`；多数≥50% → material_annotate_multi
+- Evidence：`roll_effect_material_annotate_multi` / `HOLD`；material=`i,m,au`（3/4）；`hc` 略低于门槛；Decision 001 不变
+- 下一候选 Draft：`CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC`（结构特征；非 RV_60 同构）
 
 ### Docs / Research（Volume / OI Feature Specs Accepted）
 
