@@ -10,11 +10,12 @@
 
 ## [Unreleased]
 
-### Docs（RFC Draft — 未授权实现）
+### Docs（Spec Accepted — 未授权 ATR 实现）
 
-- `docs/specs/FEATURE_SENSOR_SPEC.md`：**Draft** — Feature / Opportunity 双路径；FeatureResult；ATR 定位为 EXPERIMENT Sensor
-- `docs/specs/EVIDENCE_ENGINE_SPEC.md`：**Draft** — EvidenceRecord + Validation Protocol；Compression 证据 ≠ Buy Breakout
-- Decision 015：**Proposed** — 双路径模型；分册 Registry；v0.3 Removal Window（legacy adapter / Signal / Direction 隔离）
+- `FEATURE_SENSOR_SPEC.md` v1.0.0：**Accepted** — Q1–Q5 关闭；Observation Key + Storage Envelope
+- `EVIDENCE_ENGINE_SPEC.md` v1.0.0：**Accepted** — Evidence Object + Validation Protocol + Provenance
+- Decision 015：**Accepted** — 双路径；Production = Intent + Evidence + Enablement
+- 下一实现切片：Evidence Engine Skeleton（禁止直接 ATR）
 
 ---
 

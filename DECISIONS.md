@@ -158,12 +158,14 @@
 
 ---
 
-## Decision 015 — Dual-Path Feature Sensor Architecture（Proposed）
+## Decision 015 — Dual-Path Feature Sensor Architecture（Accepted）
 
 - **日期**：2026-07-19
-- **状态**：Proposed（待 Architecture Review；未授权实现 Feature / ATR）
-- **背景**：Framework（v0.2）已完成。系统内存在两类计算：Opportunity Detector（→ DetectionResult → Opportunity）与未来 Feature Sensor（→ FeatureResult → Evidence）。Decision 008 曾延后 Feature Layer；Decision 014 / ROADMAP 将 v0.3 定为 Evidence。直接实现 Feature+ATR 会跳过证据层并可能泄漏 Direction。
-- **决策（提案）**：采用 **双路径模型**：
+- **状态**：Accepted
+- **背景**：Framework（v0.2）已完成。系统内存在两类计算：Opportunity Detector（→ DetectionResult → Opportunity）与 Feature Sensor（→ FeatureResult → Evidence）。Decision 008 曾延后 Feature Layer；Decision 014 / ROADMAP 将 v0.3 定为 Evidence。
+- **决策**：采用 **双路径模型**，并 Accepted 以下 Spec：
+  - `docs/specs/FEATURE_SENSOR_SPEC.md` v1.0.0
+  - `docs/specs/EVIDENCE_ENGINE_SPEC.md` v1.0.0
 
 ```text
 Market Data
@@ -186,18 +188,20 @@ FeatureResult   DetectionResult
 ```
 
   具体约束：
-  1. v0.3 **先 Accepted** `FEATURE_SENSOR_SPEC.md` 与 `EVIDENCE_ENGINE_SPEC.md`，再实现；
-  2. `FeatureResult` **禁止** Direction / Opportunity；Direction 仅在 Opportunity 路径；
-  3. ATR Compression 仅可作为 **EXPERIMENT Feature Sensor** 候选，不得 Production、不得生成 Opportunity；
-  4. Registry **分册**：`DetectorRegistry` 与 `SensorRegistry`（禁止 `UniversalComponentRegistry`）；
-  5. 实现顺序：Evidence Engine Core → Storage/Evaluation → ATR Experiment Sensor → Promotion Review；
-  6. Feature Sensor 生命周期采用 `EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED`；
-     生命周期表示治理状态而非收益；正常晋级单向，活动状态可转 DEPRECATED；
-     算法变化须新 `sensor_version` 并从 EXPERIMENT 开始；
-  7. PRODUCTION 必须同时具备 **Operational Intent + Evidence + Explicit Enablement**，
-     Evidence 不得触发自动上线；
-  8. v0.3 Removal Window：删除 Registry `_adapt_legacy` / 实例注册；删除 Domain `Signal`；隔离 Direction 仅 Opportunity 路径。
-- **对 Decision 008 的关系**：本提案 **不静默废止 008**；仅在本 Decision Accepted 后，允许按 Feature Spec 受控引入 Feature Sensor（仍禁止 Market→Feature→Context 交易捷径）。
-- **正面后果**：Feature 不污染交易逻辑；Opportunity 保留方向语义；Evidence 可独立验证 Alpha。
+  1. Feature / Opportunity 双路径；`FeatureResult` **禁止** Direction / Opportunity；
+  2. Registry **分册**：`DetectorRegistry` 与 `SensorRegistry`；
+  3. Sensor 生命周期：`EXPERIMENT → VALIDATED → CANDIDATE → PRODUCTION → DEPRECATED`；
+     治理状态 ≠ 收益；正常晋级单向；算法变化须新 `sensor_version`；
+  4. PRODUCTION = **Operational Intent + Evidence + Explicit Enablement**；
+  5. Storage：Observation Key 含 `parameter_fingerprint`（不进 FeatureResult）；
+     Feature Artifact / Experiment Manifest / Evidence Store 分存；Evidence URI/hash 引用；
+     Provenance 含 `environment_fingerprint`；
+  6. ATR Compression 仅可作为 **EXPERIMENT Feature Sensor**，不得跳过 Evidence 变 Alpha；
+  7. 实现顺序：Evidence Engine Core → Storage/Evaluation → ATR Experiment Sensor → Promotion Review；
+  8. v0.3 Removal Window：删除 Registry `_adapt_legacy` / 实例注册；删除 Domain `Signal`；
+     隔离 Direction 仅 Opportunity 路径。
+- **对 Decision 008 的关系**：不静默废止；在本 Decision Accepted 后按 Feature Spec 受控引入 Feature Sensor
+  （仍禁止 Market→Feature→Context 交易捷径）。
+- **正面后果**：Feature 不污染交易逻辑；Evidence 可独立验证 Alpha；研究→证据→晋级闭环可审计。
 - **负面后果**：类型数量、pipeline 复杂度与生命周期管理增加。
-- **未 Accepted 前**：禁止合并 Feature / ATR 实现。
+- **实现门禁**：首切片为 Evidence Engine Skeleton；禁止直接实现 ATR / FeaturePipeline / Decision Engine。

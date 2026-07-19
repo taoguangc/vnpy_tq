@@ -81,16 +81,23 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-下一阶段：**v0.3 Evidence Layer**（Experiment → Validation → Evidence → Production）。
-Market State 顺延到 v0.4；在 Evidence Engine 完成前不得把主观状态分类带入 Production。
+下一阶段：**v0.3 Evidence Engine Core 实现**（Manifest / ArtifactReference / EvidenceRecord / Provenance）。
+Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，不得跳过 Evidence。
 
-并行 Draft（未授权实现）：
-
-| Spec | 状态 | 说明 |
+| Spec / ADR | 状态 | 说明 |
 |------|------|------|
-| `docs/specs/FEATURE_SENSOR_SPEC.md` | **Draft** | Feature / Opportunity 双路径；ATR 仅 EXPERIMENT Sensor |
-| `docs/specs/EVIDENCE_ENGINE_SPEC.md` | **Draft** | 证据采集与晋级；Compression 证据 ≠ Buy Breakout |
-| Decision 015 | **Proposed** | 双路径；分册 Registry；v0.3 Removal Window |
+| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
+| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
+| Decision 015 | **Accepted** | 双路径；分册 Registry；Intent+Evidence+Enablement |
+
+实现顺序（禁止跳过）：
+
+```text
+Evidence Engine Skeleton
+    → Evidence Storage / Evaluation
+    → ATR Compression Experiment Sensor
+    → Promotion Review
+```
 
 ---
 
