@@ -89,8 +89,8 @@ Market State 顺延到 v0.4；ATR Compression 仍须等 Evaluation Gate，不得
 ```text
 Evidence Engine Phase 0（Implemented）
     → Experiment Workflow Phase 1（Implemented）
-    → Evidence Evaluation Impl RFC（Draft ← 当前）
-    → Evaluation models / repository / workflow link
+    → Evidence Evaluation Impl RFC（Accepted）
+    → Evaluation models（← 当前）→ repository → workflow link
     → Feature Sensor Framework（另 RFC）
     → ATR Compression Experiment（另 RFC）
     → Promotion Review
@@ -102,7 +102,7 @@ Evidence Engine Phase 0（Implemented）
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
-| `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Draft** | Phase 2：通用 Outcome/Metric/Evaluation |
+| `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Accepted** | EQ1–EQ6 关闭；generic models 已授权 |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---
