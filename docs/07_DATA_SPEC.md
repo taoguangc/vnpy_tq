@@ -57,6 +57,14 @@ data/tq/{prefix}/
 - 不得用未来主力合约信息回填过去；
 - 合约切换规则与 map 版本必须可追溯。
 
+### 3.1 Feature 换月邻域标注（指针）
+
+DATA EXP001 Evidence（`roll_effect_material_annotate` / `HOLD`）要求：**新** Feature 实验须预注册换月邻域标注，并双报 `full` + `ex_roll`。
+
+- 政策全文 → `docs/specs/FEATURE_ROLL_ANNOTATION_POLICY_RFC.md`（**Accepted**）
+- 默认邻域 `W=60`（1m）；不改本文件冻结的无复权基线
+- 不回溯已 Closed 实验（如 ATR EXP001）
+
 ---
 
 ## 4. 成本验证分层

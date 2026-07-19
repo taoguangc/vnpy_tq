@@ -8,7 +8,7 @@
 | [04_BACKTEST_SPEC.md](04_BACKTEST_SPEC.md) | 回测验收指标与报告 |
 | [05_CODING_STYLE.md](05_CODING_STYLE.md) | Python / vn.py 编码 |
 | [06_RESEARCH_WORKFLOW.md](06_RESEARCH_WORKFLOW.md) | 单假设实验、证据晋级与 Commit 门禁 |
-| [07_DATA_SPEC.md](07_DATA_SPEC.md) | 冻结数据、换月与成本 |
+| [07_DATA_SPEC.md](07_DATA_SPEC.md) | 冻结数据、换月与成本（含 §3.1 Feature 换月标注指针） |
 | [ROADMAP.md](ROADMAP.md) | 阶段目标（可变） |
 | [specs/CONTEXT_ENGINE_SPEC.md](specs/CONTEXT_ENGINE_SPEC.md) | Context Engine Spec（v0.1.1 接口；**Accepted**） |
 | [specs/DETECTOR_FRAMEWORK_SPEC.md](specs/DETECTOR_FRAMEWORK_SPEC.md) | Detector Framework Spec（v0.2；**Accepted**） |
@@ -25,6 +25,7 @@
 | [specs/DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md](specs/DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md) | 连续合约 / 换月审计实验（**Accepted**；主线 Method A） |
 | [experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001.md) | DATA EXP001 Run Spec（**Closed**；RUN002 Evidence） |
 | [experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md) | DATA EXP001 Artifact Index（material_annotate / HOLD；基线不变） |
+| [specs/FEATURE_ROLL_ANNOTATION_POLICY_RFC.md](specs/FEATURE_ROLL_ANNOTATION_POLICY_RFC.md) | Feature 换月邻域标注政策（**Accepted**；新实验须双报 full/ex_roll） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 

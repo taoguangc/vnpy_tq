@@ -81,15 +81,16 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**：
-`roll_effect_material_annotate` / `HOLD`；**Decision 001 无复权基线不变**；Feature 研究须换月标注/过滤。
-下一阶段方向待选（新实验线，不得改写 DATA/ATR EXP001）。
+Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
+当前：`FEATURE_ROLL_ANNOTATION_POLICY_RFC` **Accepted**（新 Feature 须标注 + 双报；Decision 001 不变）。
+下一可选：共享 `roll_neighborhood` 实现切片，或新 Feature 实验（须遵守本政策）。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `ATR_COMPRESSION_EXP001` | **Closed** | inconclusive / HOLD |
 | `DATA_CONTINUOUS_CONTRACT_EXP001` | **Closed** | RUN002；material_annotate / HOLD；基线不变 |
 | `DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md` | **Completed** | Artifact index |
+| `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md` | **Accepted** | RQ1–RQ5 关闭；约束新 Feature |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
