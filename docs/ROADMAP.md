@@ -83,7 +83,9 @@ Alpha Not Implemented
 
 Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
 当前：`FEATURE_ROLL_ANNOTATION_POLICY_RFC` **Accepted**（新 Feature 须标注 + 双报；Decision 001 不变）。
-共享 `roll_neighborhood` 纯计算工具已实现；下一步需另开新 Feature 实验并遵守本政策。
+共享 `roll_neighborhood` 已实现。下两条 Feature 已 **Accepted**（分实验、禁合并结论）：
+1. `VOLUME_RATIO`（成交量相对活跃度）→ 下一步实现 Sensor + 单测；跑数另授权
+2. `OI_CHANGE`（持仓相对变化）→ 等 A Evidence 闭环后再实现 / 跑
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
@@ -92,6 +94,8 @@ Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
 | `DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md` | **Completed** | Artifact index |
 | `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md` | **Accepted** | RQ1–RQ5 关闭；约束新 Feature |
 | `data_audit/roll_annotation.py` | **Implemented** | W=60；合成 K 任一 1m 标注；不负责过滤 |
+| `VOLUME_RATIO_*` | **Accepted** | 实验 A；VQ1–VQ5 关闭；待实现 |
+| `OI_CHANGE_*` | **Accepted / Blocked** | 实验 B；OQ1–OQ5 关闭；等待 A 闭环 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |

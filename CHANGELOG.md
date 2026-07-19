@@ -10,6 +10,12 @@
 
 ## [Unreleased]
 
+### Docs / Research（Volume / OI Feature Specs Accepted）
+
+- `VOLUME_RATIO_SENSOR_EXPERIMENT_RFC` + `VOLUME_RATIO_EXP001`：**Accepted**（VQ1–VQ5 关闭）
+- `OI_CHANGE_SENSOR_EXPERIMENT_RFC` + `OI_CHANGE_EXP001`：**Accepted**（OQ1–OQ5 关闭）
+- 两实验独立假设；强制换月双报；串行：先 A 后 B；未授权实现 / 跑数
+
 ### Docs / Research（Roll Annotation Policy Accepted）
 
 - `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md`：**Accepted**（RQ1–RQ5 按建议关闭）
