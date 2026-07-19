@@ -45,9 +45,9 @@ Market State
 | 版本 | 交付 | 状态 |
 |------|------|------|
 | v0.2.0 | `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` | **Accepted**（Decision 013） |
-| v0.2.1 | `DetectionResult` Domain（`Signal` Deprecated） | 下一步 |
+| v0.2.1 | `DetectionResult` / `PatternState` / 必要类型（`Signal` Deprecated） | 实现中（Commit 005/006） |
 | v0.2.2 | Registry `(id, version)` + discover / priority / capability | 待做 |
-| v0.2.3 | `Opportunity` + `evidence_refs` + `DetectorStatus` | 待做 |
+| v0.2.3 | `Opportunity` 目录模型 + `evidence_refs` 关联 | 待做 |
 | v0.2.4 | Demo Detector（非 OPP）+ Contract Tests | 待做 |
 
 原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。

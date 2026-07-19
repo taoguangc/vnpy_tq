@@ -8,6 +8,28 @@
 
 ---
 
+## [0.2.1] — 2026-07-19
+
+### Added（Commit 005 — DetectionResult Domain）
+
+- `DetectionResult`：不可变、可追踪的 Detector 唯一输出契约
+- `PatternState`：独立、不可变、可序列化的显式形态状态
+- `DetectorTag`：标准小枚举 + `custom:<slug>` 扩展
+- `DetectorStatus`：`EXPERIMENT / VALIDATED / PRODUCTION / DEPRECATED`
+- `to_dict()` / `from_dict()`：schema `1.0` JSON 友好往返
+- `schema_version` / UTC `created_at` / `opportunity_id` / `evidence_refs`
+
+### Deprecated
+
+- `Signal`：v0.2 迁移期保留；新 Detector 禁止依赖；v0.3 删除
+
+### Notes
+
+- tags 只作分类、检索和统计，不参与业务逻辑
+- Registry / Opportunity / Capability / Demo Detector 不在本版本实现
+
+---
+
 ## [0.1.1] — 2026-07-19
 
 ### Added（Commit 002 — Domain + Spec freeze）

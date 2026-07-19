@@ -93,6 +93,13 @@ OrderIntent → Execution
 禁止以 `True` / `False` 作为 Detector 主输出。  
 无检测 → 返回 `None`。
 
+`DetectionResult` 必须满足：
+
+- **Stable**：字段语义由本 Spec 与 `schema_version` 管理；
+- **Immutable**：发布后不得修改字段或 `metadata`；
+- **Serializable**：统一提供 `to_dict()` / `from_dict()`；
+- **Traceable**：记录 `opportunity_id`、`evidence_refs` 与 `created_at`。
+
 ### 2.2 冻结形状
 
 ```python
@@ -100,6 +107,8 @@ OrderIntent → Execution
 class DetectionResult:
     detector_id: str
     detector_version: str
+    opportunity_id: str
+    status: DetectorStatus
     direction: Direction
     confidence: float = 1.0              # [0, 1]；Decision 005
     tags: tuple[DetectorTag | str, ...] = ()
@@ -109,7 +118,21 @@ class DetectionResult:
     reason: str = ""
     metadata: Mapping[str, Any] = field(default_factory=dict)  # 发布后只读
     pattern_state: PatternState | None = None
+    evidence_refs: tuple[str, ...] = ()
+    schema_version: str = "1.0"
+    created_at: datetime = field(default_factory=utc_now)
 ```
+
+约束：
+
+- `confidence` 必须为 `float` 语义且在 `[0.0, 1.0]`；禁止 `85` / `92` / `100` 百分制；
+- `created_at` 必须是带时区时间戳，默认 UTC；
+- `to_dict()` 只返回 JSON 友好值（Enum → value，datetime → ISO 8601）；
+- `from_dict()` 按 `schema_version` 分派；v0.2.1 仅接受 `"1.0"`，未知版本明确失败；
+- `to_dict → from_dict` 必须保持对象等价；
+- `status=PRODUCTION` 时 `evidence_refs` 不得为空；
+- `tags` **只用于分类、检索与统计，不得参与业务逻辑**；业务状态读取 `PatternState` / 稳定字段；
+- `pattern_state` 是唯一形态状态入口；禁止在 DetectionResult 增加几十个 pattern bool。
 
 ### 2.3 `Signal` 弃用路径（已决议）
 
@@ -374,9 +397,9 @@ v0.2.4：
 | 版本 | 交付 |
 |------|------|
 | **v0.2.0** | 本 Spec Accepted（本文件） |
-| **v0.2.1** | Domain：`DetectionResult` + `PatternState` + `DetectorTag`；`Signal` Deprecated |
+| **v0.2.1** | Domain：`DetectionResult` + `PatternState` + `DetectorTag` + 必要 `DetectorStatus`；序列化与版本契约；`Signal` Deprecated |
 | **v0.2.2** | Registry：`(id, version)` + `discover` / `priority` / `capability` |
-| **v0.2.3** | Domain：`Opportunity` + `evidence_refs` + `DetectorStatus` |
+| **v0.2.3** | Domain：`Opportunity` + `evidence_refs` 目录关联 |
 | **v0.2.4** | Demo Detector + Contract Tests |
 
 分支：`feature/detector-framework`；验证后 Merge `main`。  
@@ -387,6 +410,10 @@ v0.2.4：
 ## 15. Testing Requirements
 
 - DetectionResult / PatternState / Opportunity frozen；extras/metadata 只读
+- DetectionResult `to_dict → from_dict` 完全一致；未知 `schema_version` 明确失败
+- `created_at` 保留时区与 ISO 8601 语义
+- confidence 接受 `[0.0, 1.0]`，越界失败
+- tags 只验证分类格式，不作为业务分支输入
 - 返回 `None` vs Result；禁止 bool 路径单测
 - Registry 同 id 不同 version 可并存；同 `(id, version)` 重复注册失败
 - Capability 门禁：缺 `requires` 时不进入 discover 结果

@@ -1,4 +1,4 @@
-"""PAAF v0.1 最小配置。指标周期属于配置，不属于 Domain。"""
+"""PAAF 最小配置。指标周期属于配置，不属于 Domain。"""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ class PAAFConfig:
     adx_period: int = 14
     risk_per_trade: float = 0.01
     tick_size: float = 1.0
-    framework_version: str = "0.1.1"
+    framework_version: str = "0.2.1"
 
     def __post_init__(self) -> None:
         if min(self.ema_period, self.atr_period, self.adx_period) <= 0:

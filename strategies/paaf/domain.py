@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from enum import Enum
 from types import MappingProxyType
 from typing import Any, Mapping, Optional
@@ -42,6 +42,27 @@ class Session(str, Enum):
     UNKNOWN = "UNKNOWN"
 
 
+class DetectorTag(str, Enum):
+    """Detector 标准分类标签；仅用于分类、检索与统计。"""
+
+    COMPRESSION = "COMPRESSION"
+    TREND = "TREND"
+    BREAKOUT = "BREAKOUT"
+    REVERSAL = "REVERSAL"
+    PULLBACK = "PULLBACK"
+    LIQUIDITY = "LIQUIDITY"
+    DEMO = "DEMO"
+
+
+class DetectorStatus(str, Enum):
+    """Detector 的证据可见工程状态。"""
+
+    EXPERIMENT = "EXPERIMENT"
+    VALIDATED = "VALIDATED"
+    PRODUCTION = "PRODUCTION"
+    DEPRECATED = "DEPRECATED"
+
+
 @dataclass(frozen=True)
 class Context:
     """ContextEngine 发布的只读市场上下文（Semantic Layer）。
@@ -61,6 +82,197 @@ class Context:
             object.__setattr__(self, "extras", MappingProxyType(dict(self.extras)))
 
 
+def _freeze_json_mapping(value: Mapping[str, Any]) -> Mapping[str, Any]:
+    """复制并深度冻结 JSON 兼容 Mapping。"""
+
+    return MappingProxyType(
+        {str(key): _freeze_json_value(item) for key, item in value.items()}
+    )
+
+
+def _freeze_json_value(value: Any) -> Any:
+    if value is None or isinstance(value, (bool, int, float, str)):
+        return value
+    if isinstance(value, Mapping):
+        if any(not isinstance(key, str) for key in value):
+            raise TypeError("metadata 的键必须是 str")
+        return _freeze_json_mapping(value)
+    if isinstance(value, (list, tuple)):
+        return tuple(_freeze_json_value(item) for item in value)
+    raise TypeError(f"metadata 只允许 JSON 兼容值，收到 {type(value).__name__}")
+
+
+def _thaw_json_value(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {key: _thaw_json_value(item) for key, item in value.items()}
+    if isinstance(value, tuple):
+        return [_thaw_json_value(item) for item in value]
+    return value
+
+
+@dataclass(frozen=True)
+class PatternState:
+    """显式、可序列化的跨 bar 形态状态。"""
+
+    name: str
+    confidence: float = 1.0
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise ValueError("PatternState.name 不能为空")
+        confidence = float(self.confidence)
+        if not 0.0 <= confidence <= 1.0:
+            raise ValueError("PatternState.confidence 必须在 [0, 1]")
+        object.__setattr__(self, "confidence", confidence)
+        object.__setattr__(self, "metadata", _freeze_json_mapping(self.metadata))
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "confidence": self.confidence,
+            "metadata": _thaw_json_value(self.metadata),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "PatternState":
+        return cls(
+            name=str(data["name"]),
+            confidence=float(data.get("confidence", 1.0)),
+            metadata=data.get("metadata", {}),
+        )
+
+
+@dataclass(frozen=True)
+class DetectionResult:
+    """Detector 发布的唯一结构化结果（schema 1.0）。
+
+    这是检测证据，不是交易指令。无检测时 Detector 返回 ``None``。
+    """
+
+    detector_id: str
+    detector_version: str
+    opportunity_id: str
+    status: DetectorStatus
+    direction: Direction
+    confidence: float = 1.0
+    tags: tuple[DetectorTag | str, ...] = ()
+    entry: Optional[float] = None
+    stop: Optional[float] = None
+    target: Optional[float] = None
+    reason: str = ""
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+    pattern_state: Optional[PatternState] = None
+    evidence_refs: tuple[str, ...] = ()
+    schema_version: str = "1.0"
+    created_at: datetime = field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+
+    def __post_init__(self) -> None:
+        if not self.detector_id.strip():
+            raise ValueError("detector_id 不能为空")
+        if not self.detector_version.strip():
+            raise ValueError("detector_version 不能为空")
+        if not self.opportunity_id.strip():
+            raise ValueError("opportunity_id 不能为空")
+        if self.direction is Direction.NONE:
+            raise ValueError("无检测请返回 None，不能使用 Direction.NONE")
+
+        confidence = float(self.confidence)
+        if not 0.0 <= confidence <= 1.0:
+            raise ValueError("DetectionResult.confidence 必须在 [0, 1]")
+        object.__setattr__(self, "confidence", confidence)
+
+        normalized_tags: list[DetectorTag | str] = []
+        for tag in self.tags:
+            if isinstance(tag, DetectorTag):
+                normalized_tags.append(tag)
+            elif isinstance(tag, str) and tag.startswith("custom:") and len(tag) > 7:
+                normalized_tags.append(tag)
+            else:
+                raise ValueError(
+                    "tags 必须是 DetectorTag 或 custom:<slug> 字符串"
+                )
+        object.__setattr__(self, "tags", tuple(normalized_tags))
+        object.__setattr__(self, "metadata", _freeze_json_mapping(self.metadata))
+        object.__setattr__(self, "evidence_refs", tuple(self.evidence_refs))
+
+        if self.schema_version != "1.0":
+            raise ValueError(f"不支持 DetectionResult schema: {self.schema_version}")
+        if self.created_at.tzinfo is None:
+            raise ValueError("created_at 必须包含时区")
+        if self.status is DetectorStatus.PRODUCTION and not self.evidence_refs:
+            raise ValueError("PRODUCTION DetectionResult 必须包含 evidence_refs")
+
+    def to_dict(self) -> dict[str, Any]:
+        """转换为 JSON 友好的 schema 1.0 字典。"""
+
+        return {
+            "detector_id": self.detector_id,
+            "detector_version": self.detector_version,
+            "opportunity_id": self.opportunity_id,
+            "status": self.status.value,
+            "direction": self.direction.value,
+            "confidence": self.confidence,
+            "tags": [
+                tag.value if isinstance(tag, DetectorTag) else tag
+                for tag in self.tags
+            ],
+            "entry": self.entry,
+            "stop": self.stop,
+            "target": self.target,
+            "reason": self.reason,
+            "metadata": _thaw_json_value(self.metadata),
+            "pattern_state": (
+                self.pattern_state.to_dict() if self.pattern_state else None
+            ),
+            "evidence_refs": list(self.evidence_refs),
+            "schema_version": self.schema_version,
+            "created_at": self.created_at.isoformat(),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "DetectionResult":
+        """从 schema 1.0 字典恢复；未知版本明确失败。"""
+
+        schema_version = str(data.get("schema_version", ""))
+        if schema_version != "1.0":
+            raise ValueError(f"不支持 DetectionResult schema: {schema_version}")
+
+        tags: list[DetectorTag | str] = []
+        for raw_tag in data.get("tags", ()):
+            tag = str(raw_tag)
+            try:
+                tags.append(DetectorTag(tag))
+            except ValueError:
+                tags.append(tag)
+
+        raw_pattern = data.get("pattern_state")
+        return cls(
+            detector_id=str(data["detector_id"]),
+            detector_version=str(data["detector_version"]),
+            opportunity_id=str(data["opportunity_id"]),
+            status=DetectorStatus(str(data["status"])),
+            direction=Direction(str(data["direction"])),
+            confidence=float(data.get("confidence", 1.0)),
+            tags=tuple(tags),
+            entry=data.get("entry"),
+            stop=data.get("stop"),
+            target=data.get("target"),
+            reason=str(data.get("reason", "")),
+            metadata=data.get("metadata", {}),
+            pattern_state=(
+                PatternState.from_dict(raw_pattern)
+                if isinstance(raw_pattern, Mapping)
+                else None
+            ),
+            evidence_refs=tuple(data.get("evidence_refs", ())),
+            schema_version=schema_version,
+            created_at=datetime.fromisoformat(str(data["created_at"])),
+        )
+
+
 @dataclass(frozen=True)
 class DetectorInfo:
     """Detector 身份信息，供 Registry / Logger / Dashboard 使用。"""
@@ -74,9 +286,9 @@ class DetectorInfo:
 
 @dataclass(frozen=True)
 class Signal:
-    """Detector 输出。
+    """Deprecated v0.2：遗留 Detector 输出，v0.3 删除。
 
-    ``confidence`` 预留给 Opportunity Score；v0.1 固定为 1.0。
+    新 Detector 必须返回 ``DetectionResult | None``；Signal 仅供迁移期旧路径。
     """
 
     detector: str
