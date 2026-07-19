@@ -87,8 +87,8 @@ Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Engine Implementation RFC（Draft → Accepted）
-    → Evidence Engine Skeleton（models → provenance → repository）
+Evidence Engine Implementation RFC（Accepted）
+    → Evidence Engine Skeleton（models ← 当前 → provenance → repository）
     → Evidence Storage / Evaluation
     → ATR Compression Experiment Sensor
     → Promotion Review
@@ -98,7 +98,7 @@ Evidence Engine Implementation RFC（Draft → Accepted）
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
-| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Draft** | Phase 0 范围 / 包边界 / Repository / 测试 |
+| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | IQ1–IQ5 关闭；Phase 0 models 已授权 |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---

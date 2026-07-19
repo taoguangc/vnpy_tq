@@ -1,13 +1,13 @@
 # Evidence Engine Implementation RFC（Phase 0）
 
-> **Status**: Draft（Implementation RFC — Ready for Review）  
-> **Accepted date**: —  
+> **Status**: Accepted（Frozen for Phase 0 implementation）  
+> **Accepted date**: 2026-07-19  
 > **Target version**: PAAF v0.3.0 Phase 0  
 > **Path**: `docs/specs/EVIDENCE_ENGINE_IMPL_RFC.md`  
 > **Parent Spec**: `docs/specs/EVIDENCE_ENGINE_SPEC.md`（**Accepted**）  
 > **Related**: `FEATURE_SENSOR_SPEC.md`（Accepted）、Decision 015（Accepted）  
 > **规则优先级**: `AGENTS.md` > Parent Spec > 本 Implementation RFC > 代码  
-> **实现门禁**: 本 RFC **Accepted** 之前，禁止提交 Evidence Engine 代码。
+> **实现门禁**: 仅授权 Phase 0 models → provenance → repository 切片；仍禁止 ATR / FeaturePipeline / Evaluation。
 
 本文件限定 **Phase 0 实现切片**：架构契约已在 Parent Spec 冻结；此处冻结范围、包边界、持久化策略与测试契约。
 
@@ -227,6 +227,16 @@ Phase 0 Repository 可校验 Manifest 的 `parameter_fingerprint` 与 parameters
 
 Phase 0：**filesystem only**。不绑定数据库。
 
+Repository 由调用方注入根路径：
+
+```python
+EvidenceRepository(
+    root_path=Path("research/output/evidence"),
+)
+```
+
+测试使用 `tmp_path`；不得硬编码绝对路径。
+
 ### 6.2 目录布局
 
 与 Parent Spec 对齐（冻结路径）：
@@ -264,6 +274,19 @@ register_artifact(experiment_id, path, artifact_type) -> ArtifactReference
 ### 6.4 临时 vs 持久
 
 进入 Evidence 的观测必须先有 Artifact；Phase 0 可不实现 Feature 写出，仅支持**外部已生成文件**的 `register_artifact`。
+
+---
+
+## 6.5 ID Responsibility
+
+| ID | Owner |
+|----|-------|
+| `experiment_id` | Experiment author / coordinator |
+| `artifact_id` | Artifact creator |
+| `evidence_id` | Evidence author |
+| `run_id`（未来） | Experiment runner |
+
+Repository **只存取，不生成领域 ID**。Phase 0 不使用 UUID 自动生成器。
 
 ---
 
@@ -326,27 +349,25 @@ register_artifact(experiment_id, path, artifact_type) -> ArtifactReference
 
 ---
 
-## 10. Open Questions（Implementation）
+## 10. Open Questions（Implementation）— CLOSED
 
-| ID | 问题 | 默认倾向 |
-|----|------|----------|
-| IQ1 | 目录用 `artifacts/<id>/` 还是严格 `runs/<run_id>/`？ | Phase 0：`artifacts/` + Manifest 记录 run 元数据 |
-| IQ2 | `EvidenceRecord.created_at` 默认 UTC now 还是调用方注入？ | 调用方注入；测试固定时刻 |
-| IQ3 | `parameters` value 类型是否允许 nested dict？ | Phase 0：扁平 `str\|int\|float\|bool` only |
-| IQ4 | Repository 根路径配置放哪？ | `strategies/paaf/config.py` 或构造参数；默认 `research/output/evidence` |
-| IQ5 | Phase 0 是否实现 `evidence_id` 自动生成？ | 否；调用方提供稳定业务 ID |
-
-关闭 IQ1–IQ5 后可将本 RFC 标为 **Accepted**。
+| ID | Accepted 决议 |
+|----|---------------|
+| IQ1 | Phase 0 使用 `artifacts/<artifact_id>/`；不引入 Run Lifecycle |
+| IQ2 | `EvidenceRecord.created_at` 必填且由调用方注入 |
+| IQ3 | `parameters` 仅允许扁平 `str\|int\|float\|bool` |
+| IQ4 | `EvidenceRepository(root_path: Path)` 构造注入；默认相对路径 `research/output/evidence` |
+| IQ5 | 不自动生成 `evidence_id`；调用方提供稳定业务 ID |
 
 ---
 
 ## 11. Freeze Criteria
 
-- [ ] IQ1–IQ5 关闭或显式推迟  
-- [ ] 与 `EVIDENCE_ENGINE_SPEC.md` / Feature Spec Storage 无矛盾  
-- [ ] Out of Scope 清单无歧义  
-- [ ] Commit 边界获同意  
-- [ ] `docs/README.md` 已索引  
+- [x] IQ1–IQ5 关闭或显式推迟  
+- [x] 与 `EVIDENCE_ENGINE_SPEC.md` / Feature Spec Storage 无矛盾  
+- [x] Out of Scope 清单无歧义  
+- [x] Commit 边界获同意  
+- [x] `docs/README.md` 已索引  
 
 ---
 
@@ -355,3 +376,4 @@ register_artifact(experiment_id, path, artifact_type) -> ArtifactReference
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Phase 0 Implementation RFC：范围、包边界、Repository、测试与 Commit 切片 |
+| 2026-07-19 | 1.0.0 | **Accepted**：IQ1–IQ5 关闭；ID Responsibility；授权 core models |
