@@ -81,17 +81,18 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-下一阶段：**v0.3 Phase 1 Experiment Workflow**（Context → Persist → Replay）。
-Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，不得跳过 Workflow / Evaluation。
+下一阶段：**v0.3 Phase 2 Evidence Evaluation**（Outcome → Metric → EvaluationResult）。
+Market State 顺延到 v0.4；ATR Compression 仍须等 Evaluation Gate，不得反向塑形 Evaluation。
 
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Engine Phase 0（Accepted / Implemented）
-    → Experiment Workflow Impl RFC（Accepted）
-    → Experiment Workflow Context / Persist / Replay（← 当前）
-    → Evidence Evaluation（另 RFC）
-    → ATR Compression Experiment Sensor（另 RFC）
+Evidence Engine Phase 0（Implemented）
+    → Experiment Workflow Phase 1（Implemented）
+    → Evidence Evaluation Impl RFC（Draft ← 当前）
+    → Evaluation models / repository / workflow link
+    → Feature Sensor Framework（另 RFC）
+    → ATR Compression Experiment（另 RFC）
     → Promotion Review
 ```
 
@@ -99,8 +100,9 @@ Evidence Engine Phase 0（Accepted / Implemented）
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
-| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation 完成 |
-| `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | WQ1–WQ5 关闭；Workflow 实现已授权 |
+| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
+| `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
+| `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Draft** | Phase 2：通用 Outcome/Metric/Evaluation |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---

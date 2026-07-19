@@ -12,11 +12,10 @@
 
 ### Docs（Spec Accepted — 未授权 ATR 实现）
 
-- `FEATURE_SENSOR_SPEC.md` / `EVIDENCE_ENGINE_SPEC.md` / Decision 015：**Accepted**
-- `EVIDENCE_ENGINE_IMPL_RFC.md`：**Accepted**；Phase 0 models + provenance + repository **已实现**
-- `EXPERIMENT_WORKFLOW_IMPL_RFC.md` v1.0.0：**Accepted** — WQ1–WQ5 关闭
-- 当前切片：`feat(paaf): add experiment workflow context`
-- 仍禁止：ATR Sensor、FeaturePipeline、Evaluation、Promotion Automation
+- Phase 0 Evidence Foundation + Phase 1 Experiment Workflow：**已实现**
+- `EVIDENCE_EVALUATION_IMPL_RFC.md`：**Draft** — Phase 2 通用 Evaluation（Outcome/Metric/EvaluationResult）
+- 下一切片：Evaluation RFC Review → Accepted → evaluation models
+- 仍禁止：ATR Sensor、FeaturePipeline、Promotion Automation；禁止用 ATR 反向塑形 Evaluation
 
 ---
 
