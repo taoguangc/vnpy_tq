@@ -83,7 +83,7 @@ Alpha Not Implemented
 
 Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
 当前：`FEATURE_ROLL_ANNOTATION_POLICY_RFC` **Accepted**（新 Feature 须标注 + 双报；Decision 001 不变）。
-下一可选：共享 `roll_neighborhood` 实现切片，或新 Feature 实验（须遵守本政策）。
+共享 `roll_neighborhood` 纯计算工具已实现；下一步需另开新 Feature 实验并遵守本政策。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
@@ -91,6 +91,7 @@ Phase 3.1 ATR EXP001 **已关闭**。路线 C **DATA EXP001 已关闭**。
 | `DATA_CONTINUOUS_CONTRACT_EXP001` | **Closed** | RUN002；material_annotate / HOLD；基线不变 |
 | `DATA_CONTINUOUS_CONTRACT_EXP001_INDEX.md` | **Completed** | Artifact index |
 | `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md` | **Accepted** | RQ1–RQ5 关闭；约束新 Feature |
+| `data_audit/roll_annotation.py` | **Implemented** | W=60；合成 K 任一 1m 标注；不负责过滤 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |

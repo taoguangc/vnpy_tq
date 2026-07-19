@@ -9,6 +9,10 @@ from typing import Sequence
 
 import numpy as np
 
+from strategies.paaf.data_audit.roll_annotation import (
+    roll_neighborhood_mask as neighborhood_mask,
+)
+
 
 @dataclass(frozen=True)
 class RollGapRecord:
@@ -81,23 +85,6 @@ def compute_roll_gaps(
             )
         )
     return tuple(records)
-
-
-def neighborhood_mask(
-    length: int,
-    roll_indices: Sequence[int],
-    window: int,
-) -> np.ndarray:
-    """True for bars within [roll-W, roll+W] inclusive around each roll index."""
-
-    if window < 0:
-        raise ValueError("window 必须非负")
-    mask = np.zeros(length, dtype=bool)
-    for roll_index in roll_indices:
-        start = max(0, int(roll_index) - window)
-        end = min(length, int(roll_index) + window + 1)
-        mask[start:end] = True
-    return mask
 
 
 def _log_returns(closes: np.ndarray) -> np.ndarray:

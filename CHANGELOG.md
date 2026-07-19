@@ -14,7 +14,8 @@
 
 - `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md`：**Accepted**（RQ1–RQ5 按建议关闭）
 - 新 Feature：标注邻域 + 强制双报 `full`/`ex_roll`；`W=60` 默认；不回溯 Closed 实验
-- `docs/07_DATA_SPEC.md` §3.1 指针；Decision 001 不变；未授权跑数 / 实现代码
+- `docs/07_DATA_SPEC.md` §3.1 指针；Decision 001 不变；未授权跑数
+- 共享纯计算工具：`data_audit/roll_annotation.py`；合成 K 采用任一成分 1m 标注
 
 ### Docs / Research（DATA EXP001 Closed）
 
