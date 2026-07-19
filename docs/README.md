@@ -18,7 +18,7 @@
 | [specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md](specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md) | Experiment Workflow Phase 1 实现切片（**Accepted**） |
 | [specs/EVIDENCE_EVALUATION_IMPL_RFC.md](specs/EVIDENCE_EVALUATION_IMPL_RFC.md) | Evidence Evaluation Phase 2 实现切片（**Accepted**） |
 | [specs/EVALUATION_REPOSITORY_INTEGRATION_RFC.md](specs/EVALUATION_REPOSITORY_INTEGRATION_RFC.md) | Evaluation Persistence Phase 2.1（**Accepted**） |
-| [specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md](specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md) | Feature Sensor Framework Phase 3.0（**Draft**） |
+| [specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md](specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md) | Feature Sensor Framework Phase 3.0（**Accepted**） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 

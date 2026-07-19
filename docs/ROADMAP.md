@@ -88,8 +88,8 @@ Market State 顺延到 v0.4；ATRCompression 仅作为 Phase 3.1 EXPERIMENT Sens
 
 ```text
 Evidence + Workflow + Evaluation Persistence（Implemented）
-    → Feature Sensor Implementation RFC（Draft ← 当前）
-    → FeatureResult / SensorRegistry / DEMO sensor
+    → Feature Sensor Implementation RFC（Accepted）
+    → FeatureResult / SensorRegistry / DEMO sensor（← 当前）
     → ATRCompression EXPERIMENT Sensor（Phase 3.1 另 RFC）
     → Decision / Strategy Adaptation
 ```
