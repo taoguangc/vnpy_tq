@@ -466,7 +466,7 @@ def run_evaluation(config: ScalarExperimentConfig) -> int:
         values={
             "mean_rv_full": float(np.mean(full_y)),
             "mean_rv_ex_roll": float(np.mean(ex_y)),
-            "roll_excluded_n": excluded_n,
+            "roll_excluded_n": float(excluded_n),
             "roll_excluded_fraction": excluded_n / int(full["sample_n"]),
         },
         sample_n=float(full["sample_n"]),
