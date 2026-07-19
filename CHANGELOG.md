@@ -18,6 +18,10 @@
 - schema `1.0`、UTC `created_at`、深度只读 `metadata`
 - `to_dict()` / `from_dict()` JSON 友好往返
 
+### Added（Commit 008 — Opportunity Tests）
+
+- `tests/test_paaf_opportunity.py`：引用一致性、血缘、不可变、序列化与证据门禁
+
 ### Notes
 
 - Opportunity 不是订单；状态变化产生新对象
