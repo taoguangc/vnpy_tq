@@ -81,28 +81,29 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-下一阶段：**v0.3 Phase 2 Evidence Evaluation**（Outcome → Metric → EvaluationResult）。
-Market State 顺延到 v0.4；ATR Compression 仍须等 Evaluation Gate，不得反向塑形 Evaluation。
+下一阶段：**v0.3 Phase 2.1 Evaluation Persistence**（EvaluationResult → Auditable Artifact）。
+Market State 顺延到 v0.4；ATR 仍须等 Feature Sensor Framework + Evaluation Gate。
 
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Engine Phase 0（Implemented）
+Evidence Foundation Phase 0（Implemented）
     → Experiment Workflow Phase 1（Implemented）
-    → Evidence Evaluation Impl RFC（Accepted）
-    → Evaluation models（← 当前）→ repository → workflow link
+    → Evaluation Models Phase 2（Implemented）
+    → Evaluation Persistence RFC（Draft ← 当前）
+    → Repository extension / replay helpers
     → Feature Sensor Framework（另 RFC）
     → ATR Compression Experiment（另 RFC）
-    → Promotion Review
 ```
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
-| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
+| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
-| `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Accepted** | EQ1–EQ6 关闭；generic models 已授权 |
+| `EVIDENCE_EVALUATION_IMPL_RFC.md` | **Accepted** | Phase 2 Models |
+| `EVALUATION_REPOSITORY_INTEGRATION_RFC.md` | **Draft** | Phase 2.1 Persistence |
 | Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---

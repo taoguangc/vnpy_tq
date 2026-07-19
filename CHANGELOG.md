@@ -12,10 +12,10 @@
 
 ### Docs（Spec Accepted — 未授权 ATR 实现）
 
-- Phase 0 Evidence Foundation + Phase 1 Experiment Workflow：**已实现**
-- `EVIDENCE_EVALUATION_IMPL_RFC.md` v1.0.0：**Accepted** — EQ1–EQ6 关闭
-- 当前切片：`feat(paaf): add evaluation models`
-- 仍禁止：ATR Sensor、FeaturePipeline、Promotion Automation；禁止用 ATR 反向塑形 Evaluation
+- Phase 0–2：**Foundation + Workflow + Evaluation Models 已实现**
+- `EVALUATION_REPOSITORY_INTEGRATION_RFC.md`：**Draft** — Phase 2.1 Evaluation 持久化接入 EvidenceRepository
+- 下一切片：本 RFC Review → Accepted → extend EvidenceRepository
+- 仍禁止：Metric Calculator、ATR Sensor、Promotion Automation
 
 ---
 
