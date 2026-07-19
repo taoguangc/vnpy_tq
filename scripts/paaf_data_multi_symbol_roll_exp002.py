@@ -493,8 +493,8 @@ def run_evidence() -> int:
         window={
             "neighborhood_w": WINDOW,
             "bar": "1m",
-            "vol_ratio_gate": VOL_RATIO_GATE,
-            "p95_ratio_gate": P95_RATIO_GATE,
+            "vol_ratio_gate": str(VOL_RATIO_GATE),
+            "p95_ratio_gate": str(P95_RATIO_GATE),
         },
         metrics={
             "material_count": float(summary["material_count"]),
