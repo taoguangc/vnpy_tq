@@ -82,16 +82,18 @@ Alpha Not Implemented
 ```
 
 Phase 3.0 Feature Sensor Contract 已实现（FeatureResult / SensorRegistry / DEMO fixture）。
-Phase 3.1 ATR Compression EXPERIMENT Sensor 已实现（RFC **Accepted**；尚未跑数据 / Evaluation）。
-Market State 顺延到 v0.4；ATRCompression 仅作为 EXPERIMENT Feature Sensor，禁止交易 / 方向 / 晋级。
+Phase 3.1 ATR Compression Sensor 已实现（`37baf45`）。
+下一阶段：**ATR_COMPRESSION_EXP001** Run Spec 已 **Accepted**；须用户明确「跑 EXP001」才生成 Feature Artifact；Evaluation / Evidence 另授权。
+Market State 顺延到 v0.4；ATR 仅 EXPERIMENT Feature；禁止交易 / 方向 / 晋级。
 
 实现顺序（禁止跳过）：
 
 ```text
 Evidence + Workflow + Evaluation Persistence（Implemented）
-    → Feature Sensor Implementation RFC（Accepted）
-    → FeatureResult / SensorRegistry / DEMO sensor（Implemented）
-    → ATRCompression EXPERIMENT Sensor（Implemented ← 当前）
+    → Feature Sensor Framework（Implemented）
+    → ATRCompression EXPERIMENT Sensor（Implemented）
+    → ATR EXP001 Run Spec（Accepted ← 当前；跑数未授权）
+    → Feature Artifact →（另授权）Evaluation → Evidence
     → Decision / Strategy Adaptation
 ```
 
@@ -99,7 +101,8 @@ Evidence + Workflow + Evaluation Persistence（Implemented）
 |------|------|------|
 | `FEATURE_SENSOR_SPEC.md` | **Accepted** | 架构契约；Q1–Q5 关闭 |
 | `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` | **Accepted** | SQ1–SQ6 关闭；Sensor framework 已实现 |
-| `ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md` | **Accepted** | AQ1–AQ7 关闭；Sensor v1 已实现；尚未跑数据 |
+| `ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md` | **Accepted** | AQ1–AQ7 关闭；Sensor v1 已实现 |
+| `ATR_COMPRESSION_EXP001.md` | **Accepted** | 区间 2024-01-01–2025-12-31；Feature-only；RQ1–RQ4 关闭 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |

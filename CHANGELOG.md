@@ -10,15 +10,14 @@
 
 ## [Unreleased]
 
-### Docs（Phase 3.1 RFC Accepted — 未跑数据）
+### Docs（EXP001 Accepted — 跑数未授权）
 
-- Phase 0–2.1：**Evidence + Workflow + Evaluation Models + Persistence 已实现**
-- Phase 3.0：**Feature Sensor Framework 已实现**
-- `ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md` v1.0.0：**Accepted** — AQ1–AQ7 关闭
-- 冻结：Universe=`rb`+`1m`；v1 仅 `atr_ratio`；Outcome `N=60` non-overlapping；Spearman primary
-- FeatureResult schema 2.0：values 支持显式 null；schema 1.0 历史结果保持可读取
-- Phase 3.1：`ATRCompressionSensor@1.0` 已实现（EXPERIMENT only；尚未跑数据）
-- 仍禁止：Trading signal、Opportunity Detector、Production 晋级、参数搜索、compression_score
+- Phase 0–3.1：**Evidence + Workflow + Evaluation + Feature Sensor + ATR Sensor 已实现**
+- `37baf45`：`feat(paaf): add atr compression feature sensor`
+- `docs/experiments/ATR_COMPRESSION_EXP001.md` v1.0.0：**Accepted** — RQ1–RQ4 关闭
+- 冻结区间：`2024-01-01`–`2025-12-31`；Dataset Fingerprint = file_manifest + hashes + construction_metadata
+- 授权边界：Accepted 仅准备 Feature Run；须「跑 EXP001」才生成 Artifact；Evaluation / Evidence 另授权
+- 仍禁止：自作主张跑数、Trading signal、Production 晋级、参数搜索、compression_score、显著性 pass/fail 晋级
 
 ---
 

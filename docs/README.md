@@ -20,6 +20,7 @@
 | [specs/EVALUATION_REPOSITORY_INTEGRATION_RFC.md](specs/EVALUATION_REPOSITORY_INTEGRATION_RFC.md) | Evaluation Persistence Phase 2.1（**Accepted**） |
 | [specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md](specs/FEATURE_SENSOR_IMPLEMENTATION_RFC.md) | Feature Sensor Framework Phase 3.0（**Accepted**） |
 | [specs/ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md](specs/ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md) | ATR Compression EXPERIMENT Sensor Phase 3.1（**Accepted**） |
+| [experiments/ATR_COMPRESSION_EXP001.md](experiments/ATR_COMPRESSION_EXP001.md) | ATR Compression EXP001 Run Spec（**Accepted**；跑数须另授权） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 
