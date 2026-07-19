@@ -15,7 +15,8 @@
 - `FEATURE_SENSOR_SPEC.md` v1.0.0：**Accepted** — Q1–Q5 关闭；Observation Key + Storage Envelope
 - `EVIDENCE_ENGINE_SPEC.md` v1.0.0：**Accepted** — Evidence Object + Validation Protocol + Provenance
 - Decision 015：**Accepted** — 双路径；Production = Intent + Evidence + Enablement
-- 下一实现切片：Evidence Engine Skeleton（禁止直接 ATR）
+- `EVIDENCE_ENGINE_IMPL_RFC.md`：**Draft** — Phase 0 Evidence Engine Skeleton 实现切片（models / provenance / repository）
+- 下一实现切片：本 Impl RFC Accepted 后 → Evidence Engine models（禁止直接 ATR）
 
 ---
 

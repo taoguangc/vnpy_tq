@@ -84,20 +84,22 @@ Alpha Not Implemented
 下一阶段：**v0.3 Evidence Engine Core 实现**（Manifest / ArtifactReference / EvidenceRecord / Provenance）。
 Market State 顺延到 v0.4；ATR Compression 仍为 EXPERIMENT Sensor 候选，不得跳过 Evidence。
 
-| Spec / ADR | 状态 | 说明 |
-|------|------|------|
-| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
-| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
-| Decision 015 | **Accepted** | 双路径；分册 Registry；Intent+Evidence+Enablement |
-
 实现顺序（禁止跳过）：
 
 ```text
-Evidence Engine Skeleton
+Evidence Engine Implementation RFC（Draft → Accepted）
+    → Evidence Engine Skeleton（models → provenance → repository）
     → Evidence Storage / Evaluation
     → ATR Compression Experiment Sensor
     → Promotion Review
 ```
+
+| Spec / ADR | 状态 | 说明 |
+|------|------|------|
+| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 双路径；Q1–Q5 关闭 |
+| `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation Protocol + Storage |
+| `EVIDENCE_ENGINE_IMPL_RFC.md` | **Draft** | Phase 0 范围 / 包边界 / Repository / 测试 |
+| Decision 015 | **Accepted** | 双路径；Intent+Evidence+Enablement |
 
 ---
 
