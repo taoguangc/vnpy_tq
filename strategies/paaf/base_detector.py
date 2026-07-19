@@ -5,15 +5,22 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from strategies.paaf.domain import Context, DetectorInfo, Direction, Signal
+from strategies.paaf.domain import (
+    Context,
+    DetectionResult,
+    DetectorInfo,
+    Direction,
+    Signal,
+)
 from strategies.paaf.metadata import DetectorMetadata
 
 
 class BaseDetector(ABC):
-    """纯检测接口：输入行情窗口与 Context，输出 Signal 或 None。
+    """纯检测接口：输入行情窗口与 Context，输出 DetectionResult 或 None。
 
     禁止访问持仓、下单、修改 Strategy。
     ``am`` 是只读行情窗口（例如 vn.py ArrayManager），Domain 不依赖 vn.py。
+    v0.2 兼容遗留 ``Signal`` 返回；新 Detector 禁止使用。
     """
 
     metadata: DetectorMetadata = DetectorMetadata(
@@ -30,7 +37,11 @@ class BaseDetector(ABC):
             raise TypeError(f"{cls.__name__} 必须定义 metadata.name")
 
     @abstractmethod
-    def detect(self, am: Any, context: Context) -> Optional[Signal]:
+    def detect(
+        self,
+        am: Any,
+        context: Context,
+    ) -> Optional[DetectionResult | Signal]:
         """识别形态。无信号返回 None。"""
 
     @property
@@ -47,6 +58,8 @@ class BaseDetector(ABC):
         target: Optional[float] = None,
         reason: str = "",
     ) -> Signal:
+        """Deprecated v0.2；新 Detector 直接构造 DetectionResult。"""
+
         return Signal(
             detector=self.metadata.name,
             direction=direction,

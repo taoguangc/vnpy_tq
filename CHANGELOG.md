@@ -8,6 +8,22 @@
 
 ---
 
+## [0.2.4] — 2026-07-19
+
+### Added（Commit 011 — Detector Pipeline Verification）
+
+- `DetectorPipeline`：Context → Descriptor Factory → DetectionResult → Opportunity → Logger
+- `DEMO_MINIMAL`：仅 `close > open`，状态 `EXPERIMENT`，无 Alpha 声明
+- `OpportunityLogger`：最小 JSONL Opportunity 消费与审计
+- Decision 014：**Framework First, Alpha Later**
+
+### Notes
+
+- 不含 Risk / Execution / Market State / OPP
+- Demo 是 Pipeline 载体，不进入 Production
+
+---
+
 ## [0.2.3] — 2026-07-19
 
 ### Added（Commit 009 — Detector Catalog Registry）

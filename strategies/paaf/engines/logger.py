@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 from typing import Iterable, Optional
 
-from strategies.paaf.domain import TRADE_RECORD_FIELDS, TradeRecord
+from strategies.paaf.domain import Opportunity, TRADE_RECORD_FIELDS, TradeRecord
 
 
 class TradeLogger:
@@ -34,6 +35,33 @@ class TradeLogger:
         if self.path.exists():
             self.path.unlink()
         self._initialized = False
+
+
+class OpportunityLogger:
+    """最小 JSONL Opportunity 审计输出；不改变 Pipeline 结果。"""
+
+    def __init__(self, path: str | Path) -> None:
+        self.path = Path(path)
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+
+    def write(self, opportunity: Opportunity) -> None:
+        with self.path.open("a", encoding="utf-8", newline="") as handle:
+            handle.write(
+                json.dumps(
+                    opportunity.to_dict(),
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+            )
+            handle.write("\n")
+
+    def write_many(self, opportunities: Iterable[Opportunity]) -> None:
+        for opportunity in opportunities:
+            self.write(opportunity)
+
+    def clear(self) -> None:
+        if self.path.exists():
+            self.path.unlink()
 
 
 # 兼容旧骨架名

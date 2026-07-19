@@ -91,6 +91,7 @@
 
 - 小步增量；禁止无关模块大重构
 - **One Commit, One Concept**：一次提交只引入一个架构概念
+- **Framework First, Alpha Later**：先冻结并验证框架，再引入 OPP / Market State / 策略 Alpha
 - 无强理由不改公共接口
 - 不重写整个项目「顺便现代化」
 - 用户未要求不 Commit

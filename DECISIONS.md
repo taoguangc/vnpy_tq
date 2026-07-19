@@ -144,3 +144,14 @@
 - **决策**：采纳 `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` v1.0.0。要点：`DetectionResult` 替换 `Signal`（v0.2 弃用、v0.3 删除）；Opportunity 固定业务 ID（`OPPXX`）；Registry 键 `(id, version)`；`DetectorTag` 小枚举 + `custom:`；`PatternState` 独立 dataclass；Capability / DetectorStatus / evidence_refs 为一等机制。
 - **原因**：研究与交易解耦；多年后实验与 OPP 可互相引用；多版本 Detector 可并存。
 - **后果**：实现按 v0.2.1→0.2.4 切片；无证据不得 PRODUCTION；新代码不得依赖 `Signal`。
+
+---
+
+## Decision 014 — Framework First, Alpha Later
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：AFF 曾在框架未稳定时混入 OPP、Market State 与收益优化，导致契约漂移。
+- **决策**：先完成并验证 Framework，再引入 Alpha。v0.2.4 只验证 Context→Detector→DetectionResult→Opportunity→Logger 管线；`DEMO_MINIMAL` 不构成 Alpha。
+- **原因**：使后续 Detector 只增加实现，不再反复修改基础架构。
+- **后果**：真实 OPP / Market State 必须在 Framework 验收后独立立项，并继续服从 Evidence Gate。
