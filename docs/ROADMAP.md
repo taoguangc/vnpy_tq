@@ -90,6 +90,7 @@ Market State 顺延到 v0.4；在 Evidence Engine 完成前不得把主观状态
 |------|------|------|
 | `docs/specs/FEATURE_SENSOR_SPEC.md` | **Draft** | Feature / Opportunity 双路径；ATR 仅 EXPERIMENT Sensor |
 | `docs/specs/EVIDENCE_ENGINE_SPEC.md` | **Draft** | 证据采集与晋级；Compression 证据 ≠ Buy Breakout |
+| Decision 015 | **Proposed** | 双路径；分册 Registry；v0.3 Removal Window |
 
 ---
 

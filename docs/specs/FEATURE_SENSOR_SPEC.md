@@ -177,11 +177,30 @@ Experiment Sensor
 
 ## 5. 与 Registry / Pipeline 的关系
 
-### 5.1 Registry
+### 5.1 Registry（Q1 Resolved）
 
-- v0.2 Detector Registry 继续只管 **Opportunity Detector Descriptor**
-- Feature Sensor 需要独立 Catalog（建议名 `FeatureSensorRegistry`）或同一 Registry 的 **kind 判别**；最终方案在 Accepted 前关闭（Open Question Q1）
-- 注册键仍建议 `(sensor_id, version)`
+**决议：分册，不共用。**
+
+```text
+Registry
+    |
+    +-- DetectorRegistry   # 可执行机会检测组件
+    |
+    +-- SensorRegistry     # 研究特征生成组件
+```
+
+| | DetectorRegistry | SensorRegistry |
+|--|------------------|----------------|
+| 输出 | DetectionResult | FeatureResult |
+| 目标 | Opportunity | Evidence |
+| Direction | 允许 | **禁止** |
+| 典型状态 | 可至 Production | 默认 Experiment |
+| 验证 | 策略回测 / 机会证据 | 统计验证 |
+
+**禁止** `UniversalComponentRegistry` / `registry.register(anything)`。
+
+- 注册键：`(sensor_id, version)`（与 Detector 的 `(id, version)` 对称但分表）
+- v0.2 `DetectorRegistry` API 形状可参考，**类型与能力契约不得混装**
 
 ### 5.2 Pipeline
 
@@ -240,13 +259,32 @@ OpportunityPipeline:  (现有 DetectorPipeline) → Opportunity[]
 
 ## 10. Open Questions
 
-| ID | 问题 | 默认倾向 |
-|----|------|----------|
-| Q1 | Feature 与 Detector 共用 Registry 还是分 Catalog？ | 分 `FeatureSensorRegistry` |
-| Q2 | Always emit vs Sparse：ATR Compression 默认哪种？ | Always emit（便于 Evidence 连续序列） |
-| Q3 | `metadata` 是否允许非 str 值？ | 初版仅 `Mapping[str, str]`；复杂诊断进 values 旁路需 RFC |
-| Q4 | FeatureResult 是否需要 `lineage` / `evidence_refs`？ | 延后到 Evidence Spec；Sensor 本体保持薄 |
-| Q5 | Capability 是否复用 DetectorCapability？ | 复用子集：requires / produces(feature keys) / timeframe |
+### Q1 — Registry Boundary — **CLOSED**
+
+**决议**：`DetectorRegistry` 与 `SensorRegistry` 分册；禁止通用万能 Registry。  
+依据：输出类型、目标、Direction、生命周期与验证方式均不同。
+
+---
+
+### 待关闭（Review 顺序）
+
+| ID | 主题 | 提案（待你确认） |
+|----|------|------------------|
+| **Q2** | FeatureResult Versioning | `schema_version`（契约）与 `version`（sensor 实现）分列；结果不可变；行为变更 → 新 `version`，不得原地改已发布结果 |
+| **Q3** | Sensor Metadata Ownership | `metadata` 仅 Sensor 自有诊断键（`Mapping[str, str]`）；Pipeline / Evidence 附加信息进各自对象，不回写 FeatureResult |
+| **Q4** | Promotion Criteria | Feature 侧不定义 KEEP/Production 规则；晋级门禁归 Evidence Spec；本 Spec 只要求 EXPERIMENT 默认与禁止 Direction |
+| **Q5** | Experiment Data Storage | 落盘路径与表结构归 Evidence Spec（倾向 `research/output/evidence/<experiment_id>/`）；Feature Spec 不规定存储 |
+
+**附带（原 Draft，建议并入 Q2 旁注）**
+
+| 项 | 提案 |
+|----|------|
+| Emit 策略 | ATR Compression 默认 **Always emit**（连续序列利于 Evidence）；Sparse 仅当「无有效观测」 |
+| Capability | Sensor 使用独立 `SensorCapability`（requires / produces(feature keys) / timeframe）；**不**复用含 directions 的 `DetectorCapability` |
+
+---
+
+确认方式：对 Q2–Q5 回复 `Q2 OK` / 修改意见即可逐条 CLOSED。
 
 ---
 
@@ -267,3 +305,4 @@ OpportunityPipeline:  (现有 DetectorPipeline) → Opportunity[]
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 0.1.0-draft | 首版 Draft：Feature/Opportunity 双路径；FeatureResult；ATR 定位为 EXPERIMENT Sensor |
+| 2026-07-19 | 0.1.1-draft | Review：Q1 CLOSED（DetectorRegistry / SensorRegistry 分册） |
