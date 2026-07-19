@@ -1,11 +1,12 @@
 # Feature Sensor Architecture Specification（RFC）
 
-> **Status**: Draft（RFC — Ready for Architecture Review）  
-> **Target version**: PAAF v0.3.x（接口冻结后实现；本文件不授权实现）  
+> **Status**: Accepted（Frozen for v0.3 Feature Sensor interface）  
+> **Accepted date**: 2026-07-19  
+> **Target version**: PAAF v0.3.x  
 > **Path**: `docs/specs/FEATURE_SENSOR_SPEC.md`  
-> **规则优先级**: `AGENTS.md` > `PAAF_PROJECT_SPEC.md` / 宪章 > Accepted Specs > 本 Draft  
+> **规则优先级**: `AGENTS.md` > `PAAF_PROJECT_SPEC.md` / 宪章 > 本 Spec > 实现代码  
 > **变更规则**: 先改本 Spec，再改代码；破坏性变更须 ADR。  
-> **实现门禁**: 本 Spec **Accepted** 且 Decision 015 Accepted 之前，禁止实现 Feature Sensor / ATRCompression / FeaturePipeline。
+> **实现门禁**: Accepted **不等于**授权 ATR / FeaturePipeline 实现。首个实现切片为 Evidence Engine Core（见 ROADMAP / Decision 015）。
 
 本文件定义 **Feature Sensor（特征传感器）** 的接口与边界。  
 它冻结契约，不冻结任何具体指标算法（ATR / ADX / ER 等）。
@@ -19,13 +20,14 @@
 | 决策 | 约束 |
 |------|------|
 | Decision 002 | Context 基线 `MarketState` 仍为 `UNKNOWN\|TREND\|RANGE`；Compression **不得**进入 Context 基线枚举 |
-| Decision 008 | Feature Layer 曾延后；本 Spec + Decision 015 提议在 **Evidence 之后** 受控引入 Feature Sensor |
+| Decision 008 | Feature Layer 曾延后；本 Spec + Decision 015 在 **Evidence 之后** 受控引入 Feature Sensor |
 | Decision 009 | Context 是 Semantic Layer，不是 Feature Layer |
 | Decision 011 | 无证据不得 Production |
 | Decision 013 | Opportunity 路径继续使用 DetectionResult；本 Spec **不替代** |
 | Decision 014 | Framework First, Alpha Later；Feature Sensor ≠ Alpha |
+| Decision 015 | 双路径、分册 Registry、生命周期与 Storage/Provenance；本 Spec Accepted |
 
-本 Draft 若与 Accepted ADR 冲突，以 Accepted 为准，直至 Decision 015 Accepted 覆盖。
+本 Spec 若与上表冲突，以已 Accepted ADR 为准。
 
 ---
 
@@ -105,13 +107,19 @@ Sensor 生命周期状态（EXPERIMENT / …）属于 **Sensor Descriptor / Regi
 | **Values** | `atr_ratio`, `compression_score`, … | 观测数值 |
 | **Diagnostics（可随实现演进）** | `calculation_status`, `warmup_state`, `missing_data_flag`, `input_timeframe` | debugging / monitoring |
 
-Evidence Store 定位键至少为：
+Evidence Store 定位键（Observation Key）为：
 
 ```text
-(sensor_id, sensor_version, symbol, timeframe, timestamp)
+sensor_id
++ sensor_version
++ parameter_fingerprint
++ symbol
++ timeframe
++ timestamp
 ```
 
-（加上 experiment / parameter 指纹由 Experiment 记录提供。）
+`parameter_fingerprint` **不进入** FeatureResult；由 Storage Envelope / Experiment Manifest 提供。  
+仅靠 `(sensor_id, sensor_version, symbol, timeframe, timestamp)` **不足**唯一区分不同 Parameter Set 下的观测。
 
 ### 2.3 允许的 value 键（示例，非穷尽）
 
@@ -286,6 +294,61 @@ atr_compression v2.0 → EXPERIMENT
 
 ---
 
+## 4.1 Storage and Provenance（Q5 Resolved；细则以 Evidence Spec 为准）
+
+Feature 观测、实验元数据与证据结论 **分存**：
+
+```text
+                 Registry
+                    |
+        +-----------+-----------+
+        |                       |
+ Feature Artifact        Experiment Manifest
+        |                       |
+        +-----------+-----------+
+                    |
+                    v
+              Evidence Store
+```
+
+| 层 | 职责 | 禁止 |
+|----|------|------|
+| Feature Artifact | append-only FeatureResult 行；可 hash / replay | hypothesis、performance、conclusion |
+| Experiment Manifest | 回答「结果如何产生」：parameters、code/data/environment 指纹、artifact_refs | 改写已发布 Artifact |
+| Evidence Store | 回答「是否有价值」：hypothesis / outcome / metric / conclusion + URI/hash 引用 | 复制整表 FeatureResult；回写 FeatureResult |
+| Registry | Descriptor 与治理状态 | 存研究数据集 |
+
+Storage Envelope（不进 FeatureResult）至少含：`parameter_fingerprint`、`experiment_id`、`run_id`。
+
+Artifact Provenance：
+
+```text
+experiment_id + run_id + code_revision
++ data_fingerprint + environment_fingerprint
+```
+
+持久化规则：
+
+1. 进入 Evidence 的 FeatureResult **必须**先持久化为 Feature Artifact。  
+2. 临时 Pipeline 输出允许 memory-only。  
+3. Artifact **append-only**（按 `run_id` 分文件）；禁止覆盖。  
+4. Replay 必须恢复：sensor_version、parameter_fingerprint、code_revision、data_fingerprint、environment。  
+5. Evidence 指标 / 结论不得写回 FeatureResult。  
+6. 相同配置重跑生成新 `run_id`，结果可做确定性比对。
+
+目录约定（Evidence Spec 冻结）：
+
+```text
+research/output/evidence/<experiment_id>/
+├── manifest.json
+├── runs/<run_id>/feature_results.parquet
+├── outcomes.parquet
+├── metrics.json
+└── evidence.json
+```
+
+---
+
 ## 5. 与 Registry / Pipeline 的关系
 
 ### 5.1 Registry（Q1 Resolved）
@@ -404,20 +467,22 @@ DEPRECATED；只有满足正向证据与稳健性 Gate 才可进入 CANDIDATE。
 
 ---
 
-### 待关闭（Review 顺序）
+### Q5 — Storage & Provenance — **CLOSED**
 
-| ID | 主题 | 提案（待你确认） |
-|----|------|------------------|
-| **Q5** | Experiment Data Storage | 落盘路径与表结构归 Evidence Spec（倾向 `research/output/evidence/<experiment_id>/`）；Feature Spec 不规定存储 |
+**决议**：Observation Key 含 `parameter_fingerprint`（不进 FeatureResult）；
+Feature Artifact / Experiment Manifest / Evidence Store / Registry 四层分存；
+Evidence 仅 URI/hash 引用 Artifact；append-only；Replay 五元组。详见 §4.1。
 
-**附带（待 Q5 或 Freeze Review 关闭）**
+---
 
-| 项 | 提案 |
+### 附带决议（Freeze）
+
+| 项 | 决议 |
 |----|------|
 | Emit 策略 | ATR Compression 默认 **Always emit** |
 | Capability | 独立 `SensorCapability`（requires / produces / timeframe）；不含 directions |
 
-确认方式：对 Q5 回复 `Q5 OK` / 修改意见即可关闭。
+Open Questions：**全部关闭**。
 
 ---
 
@@ -425,11 +490,11 @@ DEPRECATED；只有满足正向证据与稳健性 Gate 才可进入 CANDIDATE。
 
 标记 **Accepted** 当且仅当：
 
-- [ ] Open Questions 关闭或显式推迟  
-- [ ] Decision 015 Accepted（或明确声明本 Spec 不覆盖 008）  
-- [ ] 与 Decision 002/009/011/013/014 无未决议冲突  
-- [ ] 明确：Accepted ≠ 授权 ATR 实现；实现另开切片 Commit  
-- [ ] `docs/README.md` 已索引  
+- [x] Open Questions 关闭或显式推迟  
+- [x] Decision 015 Accepted  
+- [x] 与 Decision 002/009/011/013/014 无未决议冲突  
+- [x] 明确：Accepted ≠ 授权 ATR 实现；实现另开切片 Commit  
+- [x] `docs/README.md` 已索引  
 
 ---
 
@@ -442,3 +507,4 @@ DEPRECATED；只有满足正向证据与稳健性 Gate 才可进入 CANDIDATE。
 | 2026-07-19 | 0.1.2-draft | Review：Q2 CLOSED（schema/sensor 双版本；参数集独立；历史结果不可覆盖） |
 | 2026-07-19 | 0.1.3-draft | Review：Q3 CLOSED（四层所有权；symbol/timeframe Identity；diagnostics） |
 | 2026-07-19 | 0.1.4-draft | Review：Q4 CLOSED（单向治理状态机；Production = Intent + Evidence + Enablement） |
+| 2026-07-19 | 1.0.0 | **Accepted**：Q5 Storage/Provenance；Open Questions 全部关闭 |
