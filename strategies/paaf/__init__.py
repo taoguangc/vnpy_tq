@@ -1,4 +1,4 @@
-"""PAAF Framework v0.2.2
+"""PAAF Framework v0.2.3
 
 开发顺序：Domain → Interface → Engine → Strategy → Detector
 Spec-Driven：先改 docs/specs，再改实现。
@@ -35,7 +35,12 @@ from strategies.paaf.engines import (
 )
 from strategies.paaf.metadata import DetectorMetadata
 from strategies.paaf.paaf_strategy import PaafStrategy
-from strategies.paaf.registry import DetectorRegistry, build_registry
+from strategies.paaf.registry import (
+    DetectorCapability,
+    DetectorDescriptor,
+    DetectorRegistry,
+    build_registry,
+)
 
 __all__ = [
     "DEFAULT_CONFIG",
@@ -47,6 +52,8 @@ __all__ = [
     "Context",
     "ContextEngine",
     "DetectionResult",
+    "DetectorCapability",
+    "DetectorDescriptor",
     "DetectorInfo",
     "DetectorMetadata",
     "DetectorRegistry",
@@ -70,4 +77,4 @@ __all__ = [
     "make_experiment_id",
 ]
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"

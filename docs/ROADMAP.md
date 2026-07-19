@@ -47,7 +47,7 @@ Market State
 | v0.2.0 | `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` | **Accepted**（Decision 013） |
 | v0.2.1 | `DetectionResult` / `PatternState` / 必要类型（`Signal` Deprecated） | **完成**（Commit 005/006） |
 | v0.2.2 | `Opportunity` + DetectionResult 引用 + lineage | **完成**（Commit 007/008） |
-| v0.2.3 | Registry `(id, version)` + discover / priority / capability | 待做 |
+| v0.2.3 | Descriptor Catalog Registry + Capability Query | 实现中（Commit 009/010） |
 | v0.2.4 | Demo Detector（非 OPP）+ Contract Tests | 待做 |
 
 原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。

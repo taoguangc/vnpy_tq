@@ -8,6 +8,24 @@
 
 ---
 
+## [0.2.3] — 2026-07-19
+
+### Added（Commit 009 — Detector Catalog Registry）
+
+- `DetectorDescriptor`：不可变目录项，按 factory 延迟实例化
+- `DetectorCapability`：requires / produces / states / directions / timeframe
+- Registry 核心 API：`register / unregister / get / list / find / exists`
+- 唯一键 `(detector_id, detector_version)`；多版本可共存
+- Deprecated 默认可见；Capability 子集查询
+
+### Notes
+
+- Registry 只存 Descriptor，不存 Detector 实例
+- v0.2 暂留旧实例注册与迭代兼容层；v0.3 删除
+- Demo / OPP / Risk / Execution 不在本版本实现
+
+---
+
 ## [0.2.2] — 2026-07-19
 
 ### Added（Commit 007 — Opportunity Domain）

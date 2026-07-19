@@ -14,7 +14,7 @@ class PAAFConfig:
     adx_period: int = 14
     risk_per_trade: float = 0.01
     tick_size: float = 1.0
-    framework_version: str = "0.2.2"
+    framework_version: str = "0.2.3"
 
     def __post_init__(self) -> None:
         if min(self.ema_period, self.atr_period, self.adx_period) <= 0:

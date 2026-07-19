@@ -324,17 +324,17 @@ DetectorStatus =
 
 ---
 
-## 8. Detector Capability
+## 8. Detector Capability（v0.2.3）
 
-Registry 不仅注册实例，还声明**能力**，供发现、门禁与未来 Agent 组合：
+Registry 注册 Descriptor，并以 Capability 供查询、门禁与未来 Agent 组合：
 
 ```python
 @dataclass(frozen=True)
 class DetectorCapability:
-    market_states: tuple[MarketState, ...]   # 所需/适用 Context 状态；空 = 不限制
-    directions: tuple[Direction, ...]        # 可产出方向
-    requires: tuple[str, ...] = ()           # 所需 Context.extras 键等，如 ("trend_bias",)
-    produces: tuple[DetectorTag | str, ...] = ()  # 产出标签
+    market_states: tuple[MarketState, ...] = ()
+    directions: tuple[Direction, ...] = ()
+    requires: frozenset[str] = frozenset()   # 如 trend_bias / session
+    produces: frozenset[DetectorTag | str] = frozenset()
     timeframe: str = "5m"
 ```
 
@@ -346,7 +346,7 @@ class DetectorCapability:
 
 ---
 
-## 9. Registry（升级）
+## 9. Registry / Detector Catalog（v0.2.3）
 
 ### 9.1 注册键（已决议）
 
@@ -361,17 +361,59 @@ class DetectorCapability:
 
 禁止仅用 `detector_id` 覆盖旧版本。
 
-### 9.2 API 目标
+### 9.2 DetectorDescriptor
+
+Registry **只保存不可变 Descriptor，不保存 Detector 实例**：
+
+```python
+@dataclass(frozen=True)
+class DetectorDescriptor:
+    id: str
+    version: str
+    status: DetectorStatus
+    capability: DetectorCapability
+    factory: Callable[[], BaseDetector]
+    evidence_refs: tuple[str, ...] = ()
+    tags: tuple[DetectorTag | str, ...] = ()
+    metadata: Mapping[str, Any] = field(default_factory=dict)
+
+    @property
+    def deprecated(self) -> bool: ...
+
+    def create(self) -> BaseDetector: ...
+```
+
+- `deprecated` 由 `status == DEPRECATED` 推导，禁止重复存储两个可冲突字段；
+- Descriptor 发布后不可修改；状态变化注册新 Descriptor / 新版本；
+- `factory` 延迟实例化；`create()` 必须校验返回 `BaseDetector`，错误则明确失败；
+- `status=PRODUCTION` 时 `evidence_refs` 不得为空；
+- metadata 发布后只读。
+
+### 9.3 核心 API（冻结）
 
 | API | 职责 |
 |-----|------|
-| `register(detector)` | 按 `(id, version)` 注册；冲突则失败 |
-| `discover(profile=..., status=...)` | 过滤可运行集 |
-| `priority()` | 固定显式优先级（**禁止**按收益动态排序） |
-| `capability(id, version)` | 返回 `DetectorCapability` |
+| `register(descriptor)` | 按 `(id, version)` 注册；冲突则失败 |
+| `unregister(id, version)` | 移除精确版本 |
 | `get(id, version)` | 精确取版本 |
+| `list(include_deprecated=True)` | 固定注册顺序列目录 |
+| `find(...)` | 按 Capability / Status / tags 查询 |
+| `exists(id, version)` | 精确版本是否存在 |
 
-继承 Decision 003：不得按回测收益自动启停或晋级。
+`find(requires={"trend_bias"})` 返回声明包含该 requirement 的 Descriptor。
+`produces` / `tags` 同样采用「查询集合是 Descriptor 集合的子集」语义。
+
+默认查询**可见 Deprecated**；调用方可显式 `include_deprecated=False`。
+Registry 不负责 Signal / Opportunity / Risk / Execution，也不得按收益排序或晋级。
+
+### 9.4 v0.2 兼容窗口
+
+为保证现有 v0.1 Strategy 回归：
+
+- `register(BaseDetector | BaseDetector class)` 暂时允许，但必须立即包装为 `EXPERIMENT` Descriptor；
+- `all/names/infos/__iter__` 仅作 Deprecated 兼容 API；
+- v0.3 移除实例注册与旧辅助 API；
+- **新代码只能注册 DetectorDescriptor**。
 
 ---
 
@@ -428,7 +470,7 @@ v0.2.4：
 | **v0.2.0** | 本 Spec Accepted（本文件） |
 | **v0.2.1** | Domain：`DetectionResult` + `PatternState` + `DetectorTag` + 必要 `DetectorStatus`；序列化与版本契约；`Signal` Deprecated |
 | **v0.2.2** | Domain：`Opportunity` + lineage + DetectionResult 引用 |
-| **v0.2.3** | Registry：`(id, version)` + `discover` / `priority` / `capability` |
+| **v0.2.3** | Descriptor Catalog：`(id, version)` + Capability Query |
 | **v0.2.4** | Demo Detector + Contract Tests |
 
 分支：`feature/detector-framework`；验证后 Merge `main`。  
@@ -448,8 +490,10 @@ v0.2.4：
 - Opportunity `to_dict → from_dict` 等价；metadata 深度只读
 - Opportunity id 只接受 `OPPXX` / `DEMO_*`；禁止 UUID / hash
 - Opportunity lineage 覆盖直接 Detector 与全部 evidence refs
+- Descriptor frozen；Deprecated 默认可见
 - Registry 同 id 不同 version 可并存；同 `(id, version)` 重复注册失败
-- Capability 门禁：缺 `requires` 时不进入 discover 结果
+- Capability Query：requires / produces / tags 子集匹配
+- Descriptor factory 延迟实例化且返回类型校验
 - PRODUCTION 且 `evidence_refs` 为空 → 校验失败
 - Detector 不可写 Context（Contract Test）
 - Domain 无 vnpy/numpy/pandas/talib
@@ -473,3 +517,4 @@ v0.2.4：
 | 2026-07-19 | 0.1.0-draft | 首版 RFC |
 | 2026-07-19 | 1.0.0 | Review 合入；五问关闭；Capability/Status/Evidence；Status → Accepted |
 | 2026-07-19 | 1.1.0 | Opportunity-first DDD 顺序；冻结 DetectionResult 引用、lineage 与序列化契约 |
+| 2026-07-19 | 1.2.0 | Registry 冻结为 Descriptor Catalog；核心 API 与 Capability Query |
