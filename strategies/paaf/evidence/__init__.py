@@ -22,13 +22,22 @@ from strategies.paaf.evidence.repository import (
     DEFAULT_EVIDENCE_ROOT,
     EvidenceRepository,
 )
+from strategies.paaf.evidence.workflow import (
+    ExperimentContext,
+    ExperimentWorkflow,
+    RunContext,
+    register_artifact_reference,
+)
 
 __all__ = [
     "ArtifactReference",
     "DEFAULT_EVIDENCE_ROOT",
     "EvidenceRecord",
     "EvidenceRepository",
+    "ExperimentContext",
     "ExperimentManifest",
+    "ExperimentWorkflow",
+    "RunContext",
     "build_observation_key",
     "canonical_json_dumps",
     "fingerprint_evidence_body",
@@ -37,5 +46,6 @@ __all__ = [
     "hash_bytes",
     "hash_canonical_json",
     "hash_file",
+    "register_artifact_reference",
     "verify_parameter_fingerprint",
 ]
