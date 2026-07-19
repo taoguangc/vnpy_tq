@@ -23,6 +23,10 @@
 
 - `Signal`：v0.2 迁移期保留；新 Detector 禁止依赖；v0.3 删除
 
+### Added（Commit 006 — DetectionResult Tests）
+
+- `tests/test_paaf_detection_result.py`：Immutable / Serialization / Schema Version / Evidence Gate Contract Tests
+
 ### Notes
 
 - tags 只作分类、检索和统计，不参与业务逻辑
