@@ -10,14 +10,13 @@
 
 ## [Unreleased]
 
-### Docs / Research（EXP001 Completed — no promotion）
+### Docs / Research（Route C Accepted — run not authorized）
 
-- EXP001 闭环：Feature Artifact → Evaluation → Evidence
-- Evidence：`EV-ATR-COMPRESSION-EXP001-001`；`hypothesis_conclusion=inconclusive`；governance `HOLD`
-- Sensor：`atr_compression@1.0` 仍为 **EXPERIMENT**；禁止原地改参续跑
-- 新增 runners：`scripts/run_atr_compression_exp001{,_evaluation,_evidence}.py`
-- 新增索引：`docs/experiments/ATR_COMPRESSION_EXP001_INDEX.md`（大产物仍 gitignore 于 `research/output/`）
-- 仍禁止：Production 晋级、Trading signal、EXP001 参数/区间事后修改
+- `DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md` v1.0.0：**Accepted**
+- `DATA_CONTINUOUS_CONTRACT_EXP001.md`：**Accepted**
+- 冻结：Method A only；W=60；rb；2024-01-01–2025-12-31；B/C defer
+- Evidence subject：`dataset` / `rb_cbc_unadjusted@1.0`
+- 仍禁止：改 Decision 001、默认 loader、未授权跑数、交易回测
 
 ---
 

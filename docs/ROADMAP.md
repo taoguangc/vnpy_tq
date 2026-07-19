@@ -81,28 +81,15 @@ Detector Framework Complete
 Alpha Not Implemented
 ```
 
-Phase 3.1 ATR Compression Sensor 已实现；**EXP001 已完成** Feature → Evaluation → Evidence（`inconclusive` / `HOLD`；无晋级）。
-Sensor `atr_compression@1.0` 保持 **EXPERIMENT**。继续研究须新 `experiment_id`（如 EXP002），禁止改写 EXP001。
-Market State 顺延到 v0.4；禁止交易 / 方向 / 自动 Production。
-
-实现顺序（禁止跳过）：
-
-```text
-Evidence + Workflow + Evaluation Persistence（Implemented）
-    → Feature Sensor Framework（Implemented）
-    → ATRCompression EXPERIMENT Sensor（Implemented）
-    → ATR EXP001 Run Spec（Accepted）
-    → Feature → Evaluation → Evidence（Completed ← 当前；HOLD / no promotion）
-    → 新 Experiment（可选）或 Decision / Strategy Adaptation（另 RFC）
-```
+Phase 3.1 ATR Compression EXP001 **已关闭**。
+下一阶段：**路线 C — DATA_CONTINUOUS_CONTRACT_EXP001**（RFC + Run Spec **Accepted**；主线无复权换月审计；W=60；跑数未授权）。
+正式基线仍为 Decision 001；禁止复权替换默认 loader。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
-| `FEATURE_SENSOR_SPEC.md` | **Accepted** | 架构契约；Q1–Q5 关闭 |
-| `FEATURE_SENSOR_IMPLEMENTATION_RFC.md` | **Accepted** | SQ1–SQ6 关闭；Sensor framework 已实现 |
-| `ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md` | **Accepted** | AQ1–AQ7 关闭；Sensor v1 已实现 |
-| `ATR_COMPRESSION_EXP001.md` | **Accepted** | Run Spec；生命周期已闭环 |
-| `ATR_COMPRESSION_EXP001_INDEX.md` | **Completed** | Artifact index；inconclusive / HOLD |
+| `ATR_COMPRESSION_EXP001` | **Closed** | inconclusive / HOLD |
+| `DATA_CONTINUOUS_CONTRACT_EXPERIMENT_RFC.md` | **Accepted** | DQ1–DQ8 关闭；仅 Method A |
+| `DATA_CONTINUOUS_CONTRACT_EXP001.md` | **Accepted** | W=60；rb；2024–2025；跑数须另授权 |
 | `EVIDENCE_ENGINE_SPEC.md` | **Accepted** | Evidence Object + Validation |
 | `EVIDENCE_ENGINE_IMPL_RFC.md` | **Accepted** | Phase 0 Foundation |
 | `EXPERIMENT_WORKFLOW_IMPL_RFC.md` | **Accepted** | Phase 1 Workflow |
