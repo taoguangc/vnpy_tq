@@ -111,3 +111,36 @@
 - **决策**：自 v0.1.1 起，核心模块统一流程：`RFC → Architecture Review → Accepted → Implementation → Contract Test → Merge`。模块 Spec 放在 `docs/specs/`。
 - **原因**：几年后仍能回答「代码为何如此」；AI Agent 与人类共享同一边界。
 - **后果**：Detector Engine / Risk / Opportunity Library 等均先 Spec 后实现；无 Accepted Spec 不得宣称接口已冻结。
+
+---
+
+## Decision 011 — No detector enters production without evidence
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：能跑的 Detector 不等于可信任 Alpha；AFF 教训是跳过证据链。
+- **决策**：自 v0.2 起，Production Detector 必须具备 Idea→Experiment→Validation→Evidence→Spec→Implementation 链路；无 CSV/等价审计不得 Production。
+- **原因**：Detector 应是有证据链的可维护资产，而非一次性脚本。
+- **后果**：Demo Detector 不得进生产 profile；跳级晋级无效。
+
+---
+
+## Decision 012 — main 稳定；功能与实验走 Branch
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：仅依赖 `main` 难以隔离研究与稳定架构；需要可回退 Tag + 分支工作流。
+- **决策**：`main` 保持可运行稳定点；新功能用 `feature/*`；证据实验用 `research/*`；验证后再 Merge。发布用 Annotated Tag（如 `v0.1.1`）。
+- **原因**：Git 历史成为架构演化档案；实验失败可弃分支而不污染主线。
+- **后果**：禁止在 `main` 上直接堆未评审 Detector 实验。
+
+---
+
+## Decision 013 — Detector Framework Spec Accepted（v0.2 接口冻结）
+
+- **日期**：2026-07-19
+- **状态**：Accepted
+- **背景**：Phase 2 需要统一 DetectionResult / Opportunity / Registry / Evidence，避免 Detector 直接耦合交易 Signal。
+- **决策**：采纳 `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` v1.0.0。要点：`DetectionResult` 替换 `Signal`（v0.2 弃用、v0.3 删除）；Opportunity 固定业务 ID（`OPPXX`）；Registry 键 `(id, version)`；`DetectorTag` 小枚举 + `custom:`；`PatternState` 独立 dataclass；Capability / DetectorStatus / evidence_refs 为一等机制。
+- **原因**：研究与交易解耦；多年后实验与 OPP 可互相引用；多版本 Detector 可并存。
+- **后果**：实现按 v0.2.1→0.2.4 切片；无证据不得 PRODUCTION；新代码不得依赖 `Signal`。

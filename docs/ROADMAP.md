@@ -7,25 +7,25 @@
 
 ## Sprint 计划
 
-### Sprint 1 — Framework（当前）
+### 阶段总览
+
+```text
+Phase 0  Research Chaos（AFF）           — 已结束
+Phase 1  Architecture Foundation（v0.1） — 已结束（Tag v0.1.1）
+Phase 2  Evidence Platform（v0.2+）      — 当前
+Phase 3  Production CTA                  — 未开始
+```
+
+### Sprint 1 — Framework（已完成）
 
 目标：**框架跑通，不关心收益。**
 
 | 交付物 | 状态 |
 |--------|------|
-| `AGENTS.md` / `docs/` / `PAAF_PROJECT_SPEC.md` | 完成 |
-| `domain.py` / `config.py` / `base_detector.py` / `registry.py` | 完成（Commit 001） |
-| `paaf_strategy.py` + Engine 接口 | 完成（Commit 001 骨架） |
-| Engine 可导入骨架 | 完成（Commit 001） |
-| Foundation 补强：`adapters/vnpy_adapter.py` + `experiments/schema.yaml` | 完成（Commit 001.x，仍属 0.1.0） |
-| Context Engine Spec（`docs/specs/CONTEXT_ENGINE_SPEC.md`） | **Accepted**（Decision 009） |
-| Spec-Driven Development | **Accepted**（Decision 010） |
-| Context Engine：Domain / Lifecycle / Contract Tests | **完成**（Commit 002 / 003 / 004）→ Tag `v0.1.1` |
-| CSV Logger | 待做 |
-| `PAAFStrategy` + vn.py 可加载 | 待做 |
-| OPP16 Detector | 待做 |
+| Foundation + Context Spec + Context Engine | **完成** → Tag `v0.1.1` |
+| CSV Logger / vn.py 可加载 Strategy | 待做（可与 Phase 2 并行） |
 
-#### PAAF v0.1.1 里程碑（Context Framework）
+#### PAAF v0.1.1 里程碑
 
 ```text
 PAAF v0.1.1
@@ -38,21 +38,21 @@ Market State
   Not Implemented
 ```
 
-Detector 可基于冻结 Context 契约开发；Market State 另立项、证据驱动，不与 Framework 混写。
+### Sprint 2 — Evidence Platform / Detector Framework（当前）
 
-验收：
+目标：**先 Framework，后 OPP；无证据不进 Production。**
 
-```text
-vn.py BacktestingEngine → PAAFStrategy → 产生交易 → 输出 CSV
-```
+| 版本 | 交付 | 状态 |
+|------|------|------|
+| v0.2.0 | `docs/specs/DETECTOR_FRAMEWORK_SPEC.md` | **Accepted**（Decision 013） |
+| v0.2.1 | `DetectionResult` Domain（`Signal` Deprecated） | 下一步 |
+| v0.2.2 | Registry `(id, version)` + discover / priority / capability | 待做 |
+| v0.2.3 | `Opportunity` + `evidence_refs` + `DetectorStatus` | 待做 |
+| v0.2.4 | Demo Detector（非 OPP）+ Contract Tests | 待做 |
 
-### Sprint 2 — Core Detector
+原则：Decision 011（无证据不进生产）；Decision 012（`feature/*` / `research/*`）。
 
-OPP16 / OPP01 / OPP02 / OPP04 / OPP09；统一输出 Trade / WR / PF / Expectancy / MAE / MFE。
-
-### Sprint 3 — Research
-
-按 Context / 品种 / 时段做真正研究；积累可追溯证据链，形成 Price Action 知识库。
+真实 OPP（如 OPP16）在 v0.2.4 管线验证之后，进入 v0.3.x 证据驱动实现。
 
 ---
 
@@ -60,10 +60,12 @@ OPP16 / OPP01 / OPP02 / OPP04 / OPP09；统一输出 Trade / WR / PF / Expectanc
 
 | 版本 | 含义 |
 |------|------|
-| v0.1.0 | Framework |
-| v0.1.1 | Context Engine |
-| v0.1.2 | Logger |
-| v0.2.0 | 5 Core Detector |
+| v0.1.0 | Framework Skeleton |
+| v0.1.1 | Context Engine Foundation（**Tagged**） |
+| v0.2.0 | Detector Framework Spec |
+| v0.2.1–0.2.4 | DetectionResult → Registry → Opportunity → Demo |
+| v0.1.2 | Logger（可与 v0.2 并行排期） |
+| v0.3.x | Core OPP Detectors（证据驱动） |
 
 ---
 
@@ -84,9 +86,10 @@ test: add detector unit tests
 
 ### Branch
 
-- `main`：永远可运行
-- 开发：`feature/context-engine`、`feature/opp16`、`feature/logger` …
-- 完成：Merge 回 `main`
+- `main`：永远可运行（稳定点；Decision 012）
+- 功能：`feature/detector-framework`、`feature/market-state` …
+- 实验：`research/e0-compression`、`research/e3-transition` …
+- 完成：Review 后 Merge 回 `main`；发布打 Annotated Tag
 
 ---
 
