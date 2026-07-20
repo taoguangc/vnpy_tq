@@ -10,6 +10,12 @@
 
 ## [Unreleased]
 
+### Docs / Research（Close Location Spec Accepted）
+
+- `CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC` + `CLOSE_LOCATION_EXP001`：**Accepted**（CQ1–CQ4 关闭）
+- Outcome：未来 60 根 **signed** log-return 之和；非 RV_60；强制换月双报
+- 证据门槛与 Volume/OI 同尺；Decision 001 不变；未授权实现 / 跑数
+
 ### Docs / Research（DATA EXP002 + Feature Pause）
 
 - Decision 016：暂停 `rb` 上标量 Feature ↔ RV_60 同构实验

@@ -35,7 +35,8 @@
 | [specs/DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC.md](specs/DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC.md) | 多品种换月审计 DATA EXP002（**Accepted**） |
 | [experiments/DATA_CONTINUOUS_CONTRACT_EXP002.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP002.md) | DATA EXP002（**Closed**；annotate_multi / HOLD） |
 | [experiments/DATA_CONTINUOUS_CONTRACT_EXP002_INDEX.md](experiments/DATA_CONTINUOUS_CONTRACT_EXP002_INDEX.md) | DATA EXP002 Artifact Index |
-| [specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md](specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md) | Close Location Feature（**Draft**；Decision 016 条件 3） |
+| [specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md](specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md) | Close Location Feature（**Accepted**；signed return；非 RV_60） |
+| [experiments/CLOSE_LOCATION_EXP001.md](experiments/CLOSE_LOCATION_EXP001.md) | CLOSE_LOCATION EXP001 Run Spec（**Accepted**；跑数须另授权） |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 

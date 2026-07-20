@@ -84,14 +84,14 @@ Alpha Not Implemented
 ATR / Volume / OI Feature EXP001 均 **Closed（inconclusive）**。
 Decision 016：暂停 rb 上「标量 Feature ↔ RV_60」同构实验。
 DATA EXP002 **Closed**：`roll_effect_material_annotate_multi` / `HOLD`（3/4 品种 material；Decision 001 不变）。
-下一可选：`CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC`（**Draft**；结构特征 / signed return）。
+下一可选：`CLOSE_LOCATION` **Accepted**（结构特征 / signed return）；下一步实现 Sensor + 单测；跑数另授权。
 
 | Spec / ADR | 状态 | 说明 |
 |------|------|------|
 | `ATR_COMPRESSION_EXP001` | **Closed** | inconclusive / HOLD |
 | `DATA_CONTINUOUS_CONTRACT_EXP001` | **Closed** | RUN002；material_annotate / HOLD；基线不变 |
 | `DATA_CONTINUOUS_CONTRACT_EXP002` | **Closed** | 3/4 material；annotate_multi / HOLD |
-| `CLOSE_LOCATION_*` | **Draft** | Decision 016 条件 3；待关 CQ1–CQ4 |
+| `CLOSE_LOCATION_*` | **Accepted** | CQ1–CQ4 关闭；待实现；非 RV_60 同构 |
 | `FEATURE_ROLL_ANNOTATION_POLICY_RFC.md` | **Accepted** | RQ1–RQ5 关闭；约束新 Feature |
 | `VOLUME_RATIO_EXP001` | **Closed** | ρ_ex=0.0646；inconclusive / HOLD；无晋级 |
 | `OI_CHANGE_EXP001` | **Closed** | ρ_ex=-0.0198；inconclusive / HOLD；无晋级 |
