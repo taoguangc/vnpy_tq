@@ -23,8 +23,8 @@ if str(ROOT) not in sys.path:
 from strategies.pa_cta.backtest import run_parquet_backtest
 from strategies.pa_cta.symbol_config import TQ_SYMBOL_ENGINE, cross_symbol_list
 
-WINDOW_START = datetime(2023, 5, 17)
-WINDOW_END = datetime(2026, 5, 16)
+WINDOW_START = datetime(2021, 7, 1)
+WINDOW_END = datetime(2026, 6, 30)
 
 DEFAULT_SYMBOLS = tuple(cross_symbol_list())
 

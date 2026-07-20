@@ -5,7 +5,7 @@
 
 用法:
     .venv/Scripts/python.exe scripts/run_classic_baseline_compare.py
-    .venv/Scripts/python.exe scripts/run_classic_baseline_compare.py --prefix rb --start 2023-05-17 --end 2026-05-16
+    .venv/Scripts/python.exe scripts/run_classic_baseline_compare.py --prefix rb --start 2021-07-01 --end 2026-06-30
 """
 from __future__ import annotations
 
@@ -71,8 +71,8 @@ STRATEGIES = {
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="经典基线策略对照回测")
     parser.add_argument("--prefix", default="rb")
-    parser.add_argument("--start", default="2023-05-17")
-    parser.add_argument("--end", default="2026-05-16")
+    parser.add_argument("--start", default="2021-07-01")
+    parser.add_argument("--end", default="2026-06-30")
     parser.add_argument("--capital", type=float, default=DEFAULT_CAPITAL)
     parser.add_argument("--rate", type=float, default=DEFAULT_RATE)
     parser.add_argument("--slippage", type=float, default=DEFAULT_SLIPPAGE)

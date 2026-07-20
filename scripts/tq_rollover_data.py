@@ -209,7 +209,12 @@ def load_stitched_raw_bars(
             interval=Interval.MINUTE,
             volume=float(row.volume),
             turnover=0.0,
-            open_interest=float(getattr(row, "open_oi", 0) or 0),
+            # 用收盘持仓量（close_oi）作 bar 末 OI；无则回退 open_oi
+            open_interest=float(
+                getattr(row, "close_oi", None)
+                if getattr(row, "close_oi", None) is not None
+                else (getattr(row, "open_oi", 0) or 0)
+            ),
             open_price=float(row.open),
             high_price=float(row.high),
             low_price=float(row.low),

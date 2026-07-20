@@ -210,7 +210,11 @@ def dataframe_to_bars(
                 datetime=row.dt.to_pydatetime(),
                 interval=interval,
                 volume=float(row.volume),
-                open_interest=float(row.open_oi),
+                open_interest=float(
+                    getattr(row, "close_oi", None)
+                    if getattr(row, "close_oi", None) is not None
+                    else (getattr(row, "open_oi", 0) or 0)
+                ),
                 open_price=float(row.open),
                 high_price=float(row.high),
                 low_price=float(row.low),

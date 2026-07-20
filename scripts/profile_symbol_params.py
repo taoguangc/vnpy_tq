@@ -25,8 +25,8 @@ if str(_ROOT) not in sys.path:
 from scripts.tq_rollover_data import load_stitched_raw_bars
 from strategies.pa_cta.symbol_config import TQ_SYMBOL_ENGINE, resolve_symbol_profile
 
-START = datetime(2023, 5, 17)
-END = datetime(2026, 5, 16)
+START = datetime(2021, 7, 1)
+END = datetime(2026, 6, 30)
 ATR_WINDOW = 14
 RB_MIN_ATR = 8.0
 RB_TTR = 5.5
