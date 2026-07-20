@@ -3,8 +3,10 @@
 **Checkpoint:** Epoch 1 Midpoint Stable Checkpoint — Evidence Comparison Capability Established, Research Quality as Next Bottleneck  
 **Tag:** `architecture-baseline-v1`  
 **Status:** Stable Window Active（Sprint 3 ⏸ · v0.4 ⏸ Consider）  
+**Positioning doc:** [`EPOCH_1_POSITIONING.md`](EPOCH_1_POSITIONING.md)  
 **Midpoint Review:** [`../reviews/EPOCH_1_MIDPOINT_REVIEW.md`](../reviews/EPOCH_1_MIDPOINT_REVIEW.md)  
-**Positioning:** Evidence-Driven Quantitative Research Operating System
+**Paradigm:** Evidence-centric（not Strategy-centric）  
+**Stance:** Research First, Architecture Frozen
 
 ## One-sentence definition
 
@@ -68,11 +70,17 @@ Architecture Baseline v1 → Contract → Implementation → Contract Test → A
 ### Research-side freeze principle（非 Decision）
 
 > **Platform capability is ready; research quality becomes the bottleneck.**  
-> 平台能力暂时冻结，研究证据质量成为下一阶段主要优化对象。
+> **Research First, Architecture Frozen.**
 
-避免：发现问题 → 加平台功能 → 仍无可靠证据。
+平台能力暂时冻结；下一瓶颈是 **Evidence Density**（可信证据密度），不是更多 Projection / Dashboard。
 
-下一自然方向若出现，优先 **Research Protocol Review**（可信 Evidence 标准），而非立刻 Approve v0.4。
+v0.4 若启动，应理解为 **Research Protocol**（何为足够 Evidence / 何时 HOLD / 何时可晋级），而非再建分析层。当前仍为 **Consider — Not Start**。
+
+**Epoch 1 结束条件（未满足）**：第一个真实 Alpha 在完整遵守 Epoch 1 Governance 下走完  
+`Hypothesis → Experiment → Evidence → Validation → Promotion → Production Candidate`  
+（不以赚钱为结束条件）。
+
+完整定位叙事：[`EPOCH_1_POSITIONING.md`](EPOCH_1_POSITIONING.md)。
 
 ## Freeze（Stable Window）
 

@@ -1,8 +1,9 @@
 # PAAF 路线图
 
 > 版本：3.4.2 · 更新日期：2026-07-20  
-> **Epoch 1 Midpoint Stable Checkpoint** — Evidence Comparison Established；Research Quality = next bottleneck。  
-> **Stable Window Active** — Sprint 3 ⏸ · v0.4 ⏸ Consider；平台能力冻结，勿为版本推进而推进。
+> **Epoch 1 Midpoint Stable Checkpoint** — Evidence Comparison Established；**Research First, Architecture Frozen**。  
+> **Stable Window Active** — Sprint 3 ⏸ · v0.4 ⏸ Consider；下一瓶颈 = Evidence Density，非更多平台功能。  
+> 定位：`docs/releases/EPOCH_1_POSITIONING.md`
 
 ---
 
