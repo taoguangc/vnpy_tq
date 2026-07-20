@@ -1,33 +1,46 @@
 # Research Directory Policy
 
-> **Status**: Accepted（governance；Decision 017）
-> **Updated**: 2026-07-20
+> **Status**: Accepted（governance；Decision 017）  
+> **Updated**: 2026-07-20  
 > **Rule priority**: `AGENTS.md` > Decision 017 > 本文件
 
-本目录存放研究脚本、遗留实验与分析工具。  
-**它不是** Active PAAF 实验的权威登记处。权威实验身份在 `docs/experiments/`，证据产物在
-`research/output/`（通常 gitignore）。
+本目录存放研究治理说明与**本地**证据产物。  
+**它不是** Active PAAF 实验的权威登记处。权威实验身份在 `docs/experiments/`。
 
 ---
 
-## Archived Research
+## Layout（当前树）
 
-下列研究线视为 **ARCHIVED**（来自 AFF 迁移与历史优化阶段）：
+```text
+research/
+├── README.md          # 本文件
+├── __init__.py
+└── output/            # 本地 Evidence 产物（gitignore；勿提交大文件）
+    └── evidence/<experiment_id>/
+```
+
+AFF / `pa_minimal` / `pa_cta` / `event_engine` / 历史 `run_*.py` 等 **Archived 源码已从工作树移除**（仍可在 git 历史检索）。  
+**禁止**从历史提交复活为 Active Research。
+
+---
+
+## Archived Research（语义仍有效）
 
 | 模式 / 区域 | Origin | Status |
 |-------------|--------|--------|
-| `run_pa_minimal_*.py` 及同类 pa_minimal 研究脚本 | AFF / pa_minimal | **ARCHIVED** |
-| `pa_cta` / `brooks_scalp` / 历史 CTA 研究入口（若仍出现在本树或 git 历史） | AFF migration | **ARCHIVED** |
-| 无 `experiment_id`、无 Evidence 输出的一次性 `run_*.py` 优化脚本 | historical | **ARCHIVED** |
-| 旧 `ALPHA_PROTOCOL` / 未挂 Decision 017 的研究备忘 | pre-PAAF | **ARCHIVED** |
+| `run_pa_minimal_*.py` 及同类 | AFF / pa_minimal | **ARCHIVED**（源码已移除） |
+| `pa_cta` / `brooks_scalp` / 历史 CTA | AFF migration | **ARCHIVED**（源码已移除） |
+| `research/event_engine/` | historical | **ARCHIVED**（源码已移除） |
+| 无 `experiment_id`、无 Evidence 的一次性优化脚本 | historical | **ARCHIVED** |
 
 ### Rules（强制）
 
 ```text
 Do not extend.
-Do not create new experiments from these scripts.
+Do not create new experiments from archived history.
 Do not treat Archived scripts as Active Research.
 Do not optimize them to chase backtest PnL.
+Do not delete research/output/evidence/ — Negative Evidence is first-class.
 ```
 
 需要延续某条历史假设时：
@@ -36,9 +49,6 @@ Do not optimize them to chase backtest PnL.
 2. 可选声明 `parent = <旧实验或旧标签>`；
 3. 在 PAAF `strategies/paaf/` + Evidence Domain 路径上重做；
 4. 服从 Decision 017（append-only；Closed 不可原地复活）。
-
-**本轮不移动文件**：避免巨大 diff。语义治理优先于物理搬家。日后若整理为
-`research/archive/`，须另授权且保持 git 历史可追溯。
 
 ---
 
@@ -60,23 +70,9 @@ Active 研究必须同时满足：
 | Domain / Engine Spec | `docs/specs/` |
 | PAAF 实现 | `strategies/paaf/` |
 | 授权 runners | `scripts/run_*_exp*.py`、`scripts/paaf_*.py` |
-| 本地证据产物 | `research/output/`（勿提交大产物） |
+| 本地证据产物 | `research/output/evidence/`（勿提交大产物） |
 
-AI Agent / 协作者：**优先**读 `docs/experiments/` 与 `DECISIONS.md`；**不要**把 Archived
-`pa_minimal` 脚本当作当前研究主线。
-
----
-
-## Portfolio 提示（概念）
-
-Decision 017 Research Portfolio 五桶：
-
-```text
-DATA | FEATURE | PATTERN | DETECTOR | EXECUTION
-```
-
-归档脚本通常不属于 Active Portfolio 计数；Closed 实验的 Evidence 仍按 Portfolio 归档统计
-（含 Negative / Inconclusive）。
+AI Agent / 协作者：**优先**读 `docs/experiments/` 与 `DECISIONS.md`。
 
 ---
 
@@ -84,4 +80,5 @@ DATA | FEATURE | PATTERN | DETECTOR | EXECUTION
 
 | 日期 | 说明 |
 |------|------|
-| 2026-07-20 | 首版：Archived vs Active 语义治理；不移动文件 |
+| 2026-07-20 | 首版：Archived vs Active 语义治理 |
+| 2026-07-20 | 清理：移除 Archived 源码与 `__pycache__`；保留 `output/evidence/` |

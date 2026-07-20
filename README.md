@@ -105,7 +105,7 @@ $env:PYTHONIOENCODING='utf-8'
 .venv\Scripts\python.exe scripts\run_backtest.py --prefix rb --start 2023-07-01 --end 2026-06-30
 ```
 
-PA 最小集 / 研究臂请用 `strategies/pa_minimal/` 与 `research/run_pa_minimal_*.py`（见 `docs/04`、`docs/07` 与 skill `vnpy-cta-backtest`）。
+PA / Evidence 研究请用 `strategies/paaf/` 与 `docs/experiments/`（见 `AGENTS.md`、`research/README.md`）。
 
 ---
 
