@@ -14,10 +14,16 @@
 | [releases/EPOCH_1_SUMMARY.md](releases/EPOCH_1_SUMMARY.md) | Epoch 1 阶段总结（基础设施设计收束） |
 | [development/PLATFORM_CONSTRUCTION_PHASE.md](development/PLATFORM_CONSTRUCTION_PHASE.md) | Platform Construction Phase 定位与纪律 |
 | [development/SPRINT_1_PROJECTION.md](development/SPRINT_1_PROJECTION.md) | Sprint 1：Projection consumes Evidence（**Closed**） |
+| [development/SPRINT_2_PROPOSAL.md](development/SPRINT_2_PROPOSAL.md) | Sprint 2 Proposal：Validation Projection |
+| [development/SPRINT_2_VALIDATION.md](development/SPRINT_2_VALIDATION.md) | Sprint 2：Validation Projection（**Closed**） |
+| [releases/SPRINT_2_REPORT.md](releases/SPRINT_2_REPORT.md) | Sprint 2 Report |
+| [development/SPRINT_2_CONTRACT_REVIEW.md](development/SPRINT_2_CONTRACT_REVIEW.md) | Sprint 2 Contract 落位审查（**PASS**） |
 | [releases/SPRINT_1_REPORT.md](releases/SPRINT_1_REPORT.md) | Sprint 1 Report（平台建设里程碑） |
 | [development/REVIEW_CHECKLIST.md](development/REVIEW_CHECKLIST.md) | Pre-Merge 三问（工程规范；非 ADR） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |
 | [reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md](reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md) | ABR-002 Infrastructure Compliance（**PASS WITH BACKLOG**） |
+| [reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md](reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md) | PBR-001 Post-Baseline Gap Review（Consider Sprint 2） |
+| [reviews/ABR-003_CAPABILITY_COMPLIANCE.md](reviews/ABR-003_CAPABILITY_COMPLIANCE.md) | ABR-003 Capability Compliance（**PASS WITH BACKLOG**） |
 | [specs/CONTEXT_ENGINE_SPEC.md](specs/CONTEXT_ENGINE_SPEC.md) | Context Engine Spec（v0.1.1 接口；**Accepted**） |
 | [specs/DETECTOR_FRAMEWORK_SPEC.md](specs/DETECTOR_FRAMEWORK_SPEC.md) | Detector Framework Spec（v0.2；**Accepted**） |
 | [specs/FEATURE_SENSOR_SPEC.md](specs/FEATURE_SENSOR_SPEC.md) | Feature Sensor Architecture（v0.3；**Accepted**） |

@@ -26,8 +26,8 @@ Sprint 1 — Projection Layer
 ABR-002 Infrastructure Compliance
         ✓ PASS WITH BACKLOG
 
-Sprint 2
-        ⏸ Frozen / Not Started
+Sprint 2 — Validation Projection
+        ✓ Closed（ABR-003 PASS WITH BACKLOG）
 ```
 
 > **PAAF 已完成“如何可靠演进”的证明，下一阶段才开始证明“如何持续产生有效研究能力”。**
@@ -79,7 +79,11 @@ Baseline change: No
 
 ## Sprint 2（未启动）
 
-须由**明确问题**驱动，非功能愿望。启动语：
+须由**明确问题**驱动，非功能愿望。  
+缺口审查：[`../reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md`](../reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md) → **Consider Sprint 2**（F1）；**未授权启动**。  
+提案草稿：[`../development/SPRINT_2_PROPOSAL.md`](../development/SPRINT_2_PROPOSAL.md)（Validation Projection）。
+
+启动语模板：
 
 > **Start Platform Construction Sprint 2: [具体能力] under Architecture Baseline v1.**
 
