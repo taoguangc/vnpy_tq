@@ -8,8 +8,22 @@ from strategies.paaf.detectors.demo_minimal import (
     DEMO_MINIMAL_DESCRIPTOR,
     DemoMinimalDetector,
 )
+from strategies.paaf.detectors.opp16_two_bar_reversal import (
+    DEFAULT_BODY_RATIO,
+    OPP16_DESCRIPTOR,
+    OPP16_DETECTOR_ID,
+    OPP16_DETECTOR_VERSION,
+    OPP16_OPPORTUNITY_ID,
+    OPP16TwoBarReversalDetector,
+)
 
 __all__ = [
     "DEMO_MINIMAL_DESCRIPTOR",
     "DemoMinimalDetector",
+    "DEFAULT_BODY_RATIO",
+    "OPP16_DESCRIPTOR",
+    "OPP16_DETECTOR_ID",
+    "OPP16_DETECTOR_VERSION",
+    "OPP16_OPPORTUNITY_ID",
+    "OPP16TwoBarReversalDetector",
 ]
