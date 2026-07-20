@@ -184,6 +184,17 @@ class EvidenceRepository(ForbiddenStorageOperations):
             sorted(path.stem for path in evidence_dir.glob("*.json"))
         )
 
+    def list_experiment_ids(self) -> tuple[str, ...]:
+        """List experiment IDs with a persisted manifest (sorted)."""
+
+        if not self.root_path.is_dir():
+            return ()
+        ids: list[str] = []
+        for path in sorted(self.root_path.iterdir()):
+            if path.is_dir() and (path / "manifest.json").is_file():
+                ids.append(path.name)
+        return tuple(ids)
+
     def save_outcome_definition(
         self,
         experiment_id: str,

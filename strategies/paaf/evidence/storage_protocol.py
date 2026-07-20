@@ -60,3 +60,6 @@ class AppendOnlyEvidenceStore(Protocol):
 
     def list_evidence_ids(self, experiment_id: str) -> tuple[str, ...]:
         """List evidence IDs for one experiment; empty if none."""
+
+    def list_experiment_ids(self) -> tuple[str, ...]:
+        """List experiment IDs that have a persisted manifest; empty if none."""

@@ -63,3 +63,6 @@ class MemoryEvidenceRepository(ForbiddenStorageOperations):
             if exp_id == experiment_id
         ]
         return tuple(sorted(ids))
+
+    def list_experiment_ids(self) -> tuple[str, ...]:
+        return tuple(sorted(self._manifests))

@@ -1,9 +1,9 @@
 # PAAF 路线图
 
-> 版本：3.3.0 · 更新日期：2026-07-20  
+> 版本：3.4.0 · 更新日期：2026-07-20  
 > 路线图**可变**；宪章与规格冻结后，改路线图不等于改哲学。  
 > **研究顺序以 Decision 017 为准**；基础设施契约以 Decision 018 为准。  
-> **架构基线**：ABR-001；**Contract Freeze**：Storage + Projection Specs Accepted。
+> **架构基线**：`architecture-baseline-v1`（ABR-001）；**Epoch 1** 总结见 `docs/releases/EPOCH_1_SUMMARY.md`；**工程姿态**：Platform Construction（基础设施设计已收束）。
 
 ---
 
@@ -13,10 +13,13 @@
 Phase 0  Research Chaos（AFF）                 — 已结束
 Phase 1  Architecture Foundation（v0.1）       — 已结束
 Phase 2  Evidence Foundation                   — Completed（≠ v0.3 Completed）
-Phase 3  Evidence Platform（v0.3）             — In Progress（Contract Freeze 已完成）
-Phase 4  Validation Protocol（v0.4）           — 下一
+Phase 3  Evidence Platform（v0.3）             — In Progress（Architecture 已结束；能力建设中）
+Phase 4  Validation Protocol（v0.4）           — 其后（须 ABR-002）
 Phase 5+ Market State → Opportunity → …      — 其后
 ```
+
+**工程姿态（叠加，非替换产品 Phase）**：Architecture Phase **结束** → **Platform Construction** 开始；Research（Alpha）继续冻结。  
+权威说明：`docs/development/PLATFORM_CONSTRUCTION_PHASE.md`。
 
 大版本进入下一阶段前须通过 **ABR**。
 
@@ -45,18 +48,18 @@ PAAF v0.3
 ✓ Storage Contract Frozen（APPEND_ONLY_STORAGE_SPEC）
 ✓ Projection Contract Frozen（PROJECTION_LAYER_SPEC）
 ✓ Decision 018（Stable Contracts, Replaceable Infrastructure）
-
-□ Repository Append-only（实现对齐 Contract；不急 rename）
-□ Portfolio Projection（只读实现）
-□ ABR-002
+✓ Repository Append-only（Contract-driven Implementation + Contract Tests）
+✓ Tag architecture-baseline-v1（本地 RC；Push 待 Projection + ABR-002）
+✓ Projection Layer consumes Evidence（Sprint 1 Implementation）
+✓ Portfolio Projection（只读 First Consumer）
+✓ ABR-002（First Infrastructure Compliance Review）— **PASS WITH BACKLOG**
 
 Status:
-In Progress
+Sprint 1 Closed — Platform Construction continues under Baseline
 ```
 
-**Contract Freeze（本节点）**：语言 / 契约 / 治理三条线中，**基础设施契约**已齐。  
-下一重心：利用契约构建能力（Repository refinement → Portfolio Projection → ABR-002），
-而非继续改地基。
+**Contract Freeze（已完成）**：基础设施契约已齐。  
+下一重心：**Projection 消费 Repository**（不新增 Domain / 基础 Contract）→ ABR-002。
 
 | Backlog | 说明 |
 |---------|------|

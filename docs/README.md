@@ -10,7 +10,14 @@
 | [06_RESEARCH_WORKFLOW.md](06_RESEARCH_WORKFLOW.md) | 单假设实验、证据晋级与 Commit 门禁 |
 | [07_DATA_SPEC.md](07_DATA_SPEC.md) | 冻结数据、换月与成本（含 §3.1 Feature 换月标注指针） |
 | [ROADMAP.md](ROADMAP.md) | 阶段目标（可变）；Phase 2 Completed ≠ v0.3 Completed |
+| [releases/architecture-baseline-v1.md](releases/architecture-baseline-v1.md) | Architecture Baseline v1 Release Note（**Frozen**） |
+| [releases/EPOCH_1_SUMMARY.md](releases/EPOCH_1_SUMMARY.md) | Epoch 1 阶段总结（基础设施设计收束） |
+| [development/PLATFORM_CONSTRUCTION_PHASE.md](development/PLATFORM_CONSTRUCTION_PHASE.md) | Platform Construction Phase 定位与纪律 |
+| [development/SPRINT_1_PROJECTION.md](development/SPRINT_1_PROJECTION.md) | Sprint 1：Projection consumes Evidence（**Closed**） |
+| [releases/SPRINT_1_REPORT.md](releases/SPRINT_1_REPORT.md) | Sprint 1 Report（平台建设里程碑） |
+| [development/REVIEW_CHECKLIST.md](development/REVIEW_CHECKLIST.md) | Pre-Merge 三问（工程规范；非 ADR） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |
+| [reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md](reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md) | ABR-002 Infrastructure Compliance（**PASS WITH BACKLOG**） |
 | [specs/CONTEXT_ENGINE_SPEC.md](specs/CONTEXT_ENGINE_SPEC.md) | Context Engine Spec（v0.1.1 接口；**Accepted**） |
 | [specs/DETECTOR_FRAMEWORK_SPEC.md](specs/DETECTOR_FRAMEWORK_SPEC.md) | Detector Framework Spec（v0.2；**Accepted**） |
 | [specs/FEATURE_SENSOR_SPEC.md](specs/FEATURE_SENSOR_SPEC.md) | Feature Sensor Architecture（v0.3；**Accepted**） |
