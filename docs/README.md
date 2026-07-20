@@ -14,6 +14,7 @@
 | [specs/DETECTOR_FRAMEWORK_SPEC.md](specs/DETECTOR_FRAMEWORK_SPEC.md) | Detector Framework Spec（v0.2；**Accepted**） |
 | [specs/FEATURE_SENSOR_SPEC.md](specs/FEATURE_SENSOR_SPEC.md) | Feature Sensor Architecture（v0.3；**Accepted**） |
 | [specs/EVIDENCE_ENGINE_SPEC.md](specs/EVIDENCE_ENGINE_SPEC.md) | Evidence Engine（v0.3；**Accepted**） |
+| [specs/EVIDENCE_DOMAIN_SPEC.md](specs/EVIDENCE_DOMAIN_SPEC.md) | Evidence Domain Contract（v1.0；**Accepted**；Decision 017） |
 | [specs/EVIDENCE_ENGINE_IMPL_RFC.md](specs/EVIDENCE_ENGINE_IMPL_RFC.md) | Evidence Engine Phase 0 实现切片（**Accepted**） |
 | [specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md](specs/EXPERIMENT_WORKFLOW_IMPL_RFC.md) | Experiment Workflow Phase 1 实现切片（**Accepted**） |
 | [specs/EVIDENCE_EVALUATION_IMPL_RFC.md](specs/EVIDENCE_EVALUATION_IMPL_RFC.md) | Evidence Evaluation Phase 2 实现切片（**Accepted**） |

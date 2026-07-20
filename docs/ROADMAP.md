@@ -79,10 +79,12 @@ Experiment → Evaluation → Evidence → Portfolio → Query
 | 范围 | 状态 |
 |------|------|
 | Evidence / Evaluation 切片（已跑通多轮 EXP） | **部分完成** |
+| `EVIDENCE_DOMAIN_SPEC.md` Domain Contract | **Accepted**（v1.0.0） |
 | Experiment Repository 产品化 | 待做 |
 | Research Portfolio 索引（DATA/FEATURE/PATTERN/DETECTOR/EXECUTION） | 待做 |
 | Cross-Experiment Query | 待做 |
 | Dashboard（最小版） | 待做（可后置） |
+| **CLEANUP-001** Registry `_adapt_legacy` 删除 | **Backlog**（Domain 之后；非本轮） |
 
 **明确不做（v0.3）：** 新 OPP、新 Market State、新 Alpha、Feature→交易主链。
 
@@ -186,6 +188,7 @@ test: add detector unit tests
 | Feature Layer（ATR/EMA/ADX 等） | E0 假设 | 若实现，只作 Context/Risk 的计算依赖；**不得**改主链为 Market→Feature→Context |
 | `research/run_*.py` 三层治理 | 待治理专项 | experiments / validation / reports；纳入 v0.3 Portfolio/Query |
 | Research Portfolio Dashboard | 概念已定 | UI 后置；ADR 不绑实现 |
+| **CLEANUP-001** | Backlog | 删除 `DetectorRegistry._adapt_legacy` / 旧实例注册兼容；v0.3 Domain 冻结后执行 |
 
 ---
 

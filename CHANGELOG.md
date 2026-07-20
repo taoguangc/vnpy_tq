@@ -10,6 +10,18 @@
 
 ## [Unreleased]
 
+### Docs / Spec（Evidence Domain Frozen）
+
+- `docs/specs/EVIDENCE_DOMAIN_SPEC.md`：**Accepted** v1.0.0（Decision 017）
+- 冻结 ExperimentManifest / ArtifactReference / EvaluationResult / EvidenceRecord 合同
+- 明确：append-only；Evaluation ≠ Evidence；Negative Evidence；Classification 枚举
+- 本轮不改 Domain / Workflow / Repository 行为；DQ1–DQ5 Deferred
+
+### Docs / Research（Legacy Archive Policy）
+
+- `research/README.md`：Archived vs Active 语义治理（不移动文件）
+- AFF / pa_minimal / 无 Evidence 的历史 `run_*`：**ARCHIVED — Do not extend**
+
 ### Docs / ADR（Decision 017 Accepted）
 
 - Decision 017：**Evidence-first Research Roadmap**（Accepted）
