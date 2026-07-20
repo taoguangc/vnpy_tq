@@ -1,11 +1,13 @@
 # OPP16_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted（Frozen；实现完成后跑数仍须另授权）
+> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；no promotion）
 > **Accepted date**: 2026-07-20
+> **Closed date**: 2026-07-20
 > **Experiment ID**: `OPP16_EXP001`
 > **Parent RFC**: `docs/specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md`
+> **Artifact Index**: `docs/experiments/OPP16_EXP001_INDEX.md`
 > **规则优先级**: `AGENTS.md` > Parent RFC > 本 Run Spec > 脚本
-> **运行门禁**: Accepted ≠ 自动跑数。须先实现 Detector + 单测，再明确授权「跑 OPP16 EXP001」。
+> **运行门禁**: 本实验已关闭；禁止覆盖产物。继续研究须新 `experiment_id`。
 
 **一句话**：登记 OPP16 两棒反转的第一次可审计事件研究 Run；只验证裸形态边沿。
 
@@ -77,9 +79,25 @@ H1: OPP16 事件后 aligned SR_N 可检出正边沿
 
 ---
 
+## 4. Lifecycle Result（Closed）
+
+| 项 | 值 |
+|----|-----|
+| conclusion | `inconclusive` |
+| governance | `HOLD` |
+| `mean(aligned)_ex_roll` | `-0.000134`（n=4557） |
+| 95% CI | `[-0.000423, 0.000141]` |
+| `mean_full` | `-0.000124`（n=4572） |
+| promotion | none |
+
+详见 `OPP16_EXP001_INDEX.md`。
+
+---
+
 ## 修订记录
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-20 | 0.1.0-draft | 首稿；待 Parent OQ1–OQ6 Accept |
 | 2026-07-20 | 1.0.0 | Accepted：与 Parent 同步冻结；门槛写入 §2.2 |
+| 2026-07-20 | 1.1.0 | Lifecycle Completed：inconclusive / HOLD；无晋级 |

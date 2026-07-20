@@ -1,13 +1,13 @@
 # OPP16 Two-Bar Reversal Detector Experiment RFC
 
-> **Status**: Accepted（Frozen for `OPP16_EXP001`）
+> **Status**: Accepted（Frozen；`OPP16_EXP001` **Closed**）
 > **Accepted date**: 2026-07-20
 > **Experiment family**: `OPP16`
-> **First run id**: `OPP16_EXP001`
+> **First run id**: `OPP16_EXP001`（Closed：inconclusive / HOLD）
 > **Path**: `docs/specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md`
 > **Parent**: `DETECTOR_FRAMEWORK_SPEC.md`、`docs/03_DETECTOR_SPEC.md`、Decision 011 / 015
 > **规则优先级**: `AGENTS.md` > Parent Spec > 本 RFC > Run Spec > 代码
-> **实现门禁**: Accepted 授权实现 Candidate Detector + 单测；**不授权**跑数 / 交易 / Production。跑数须按 Run Spec 另授权。
+> **实现门禁**: EXP001 已闭环。继续 OPP16 研究须新 `experiment_id` / `detector_version`；本 RFC 不授权交易。
 
 **一句话**：在 PAAF 干净架构上，第一次用可审计证据检验「两棒反转」是否具备事件后边沿；不是复刻遗留 `pa_minimal` 收益叙事。
 
@@ -180,3 +180,4 @@ OQ1–OQ6 已关闭。Decision 001 不变。
 |------|------|------|
 | 2026-07-20 | 0.1.0-draft | 首稿：PAAF 首个真实 OPP Candidate 实验线 |
 | 2026-07-20 | 1.0.0 | Accepted：OQ1–OQ6 全按建议冻结 |
+| 2026-07-20 | 1.1.0 | EXP001 Closed：inconclusive / HOLD |

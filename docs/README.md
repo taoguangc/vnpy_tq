@@ -38,8 +38,9 @@
 | [specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md](specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md) | Close Location Feature（**Accepted**；signed return；非 RV_60） |
 | [experiments/CLOSE_LOCATION_EXP001.md](experiments/CLOSE_LOCATION_EXP001.md) | CLOSE_LOCATION EXP001（**Closed**；inconclusive / HOLD） |
 | [experiments/CLOSE_LOCATION_EXP001_INDEX.md](experiments/CLOSE_LOCATION_EXP001_INDEX.md) | CLOSE_LOCATION EXP001 Artifact Index |
-| [specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md](specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md) | OPP16 两棒反转（**Accepted**；Candidate/E0；跑数另授权） |
-| [experiments/OPP16_EXP001.md](experiments/OPP16_EXP001.md) | OPP16 EXP001 Run Spec（**Accepted**；实现后另授权跑数） |
+| [specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md](specs/OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC.md) | OPP16 两棒反转（**Accepted**；EXP001 Closed） |
+| [experiments/OPP16_EXP001.md](experiments/OPP16_EXP001.md) | OPP16 EXP001（**Closed**；inconclusive / HOLD） |
+| [experiments/OPP16_EXP001_INDEX.md](experiments/OPP16_EXP001_INDEX.md) | OPP16 EXP001 Artifact Index |
 
 AI 每轮操作契约在 [`AGENTS.md`](../AGENTS.md)，总设计书在 [`PAAF_PROJECT_SPEC.md`](../PAAF_PROJECT_SPEC.md)，架构决策见 [`DECISIONS.md`](../DECISIONS.md)。
 
