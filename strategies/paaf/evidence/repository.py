@@ -1,4 +1,9 @@
-"""Filesystem persistence boundary for Evidence Engine Phase 0/2.1."""
+"""Filesystem persistence boundary for Evidence Engine Phase 0/2.1.
+
+Complies with ``docs/specs/APPEND_ONLY_STORAGE_SPEC.md`` (Decision 018):
+create-only writes, immutable records, read paths never mutate.
+``save_*`` names are retained; semantics are create-once (not update).
+"""
 
 from __future__ import annotations
 
@@ -8,6 +13,7 @@ from typing import TYPE_CHECKING, Any, Mapping
 
 from strategies.paaf.evidence.hashing import canonical_json_dumps
 from strategies.paaf.evidence.models import EvidenceRecord, ExperimentManifest
+from strategies.paaf.evidence.storage_protocol import ForbiddenStorageOperations
 
 if TYPE_CHECKING:
     from strategies.paaf.evaluation.models import (
@@ -43,13 +49,21 @@ def _load_json(path: Path) -> Mapping[str, Any]:
 
 
 def _write_new_json(path: Path, payload: Mapping[str, Any]) -> None:
+    """Create-only write; never overwrite an existing path."""
+
     serialized = f"{canonical_json_dumps(payload)}\n"
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("x", encoding="utf-8", newline="\n") as file:
-        file.write(serialized)
+    try:
+        with path.open("x", encoding="utf-8", newline="\n") as file:
+            file.write(serialized)
+    except FileExistsError as exc:
+        raise FileExistsError(
+            "Storage Contract create-only: "
+            f"record already exists: {path}"
+        ) from exc
 
 
-class EvidenceRepository:
+class EvidenceRepository(ForbiddenStorageOperations):
     """Append-only filesystem repository for manifests, evidence, and evaluations."""
 
     def __init__(self, root_path: Path = DEFAULT_EVIDENCE_ROOT) -> None:
@@ -158,6 +172,17 @@ class EvidenceRepository:
 
     def evidence_exists(self, experiment_id: str, evidence_id: str) -> bool:
         return self._evidence_path(experiment_id, evidence_id).is_file()
+
+    def list_evidence_ids(self, experiment_id: str) -> tuple[str, ...]:
+        """List evidence IDs for one experiment (sorted); empty if none."""
+
+        _validate_path_segment(experiment_id, "experiment_id")
+        evidence_dir = self._experiment_dir(experiment_id) / "evidence"
+        if not evidence_dir.is_dir():
+            return ()
+        return tuple(
+            sorted(path.stem for path in evidence_dir.glob("*.json"))
+        )
 
     def save_outcome_definition(
         self,
