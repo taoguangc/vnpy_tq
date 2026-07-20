@@ -72,7 +72,7 @@ Active 研究必须同时满足：
 | 授权 runners | `scripts/run_*_exp*.py`、`scripts/paaf_*.py` |
 | 本地证据产物 | `research/output/evidence/`（勿提交大产物） |
 
-AI Agent / 协作者：**优先**读 `docs/experiments/` 与 `DECISIONS.md`。
+AI Agent / 协作者：**优先**读 `docs/research/PAAF_RESEARCH_METHOD.md`（PRM）、`docs/experiments/` 与 `DECISIONS.md`。
 
 ---
 
