@@ -2,7 +2,7 @@
 
 **Announced:** 2026-07-20  
 **Anchor:** `architecture-baseline-v1`  
-**Status:** Active（infrastructure design **closed**）  
+**Status:** Active — **Epoch 1 Stable Checkpoint hold**（Sprint 2 ⏸ Frozen）  
 **Epoch:** 1 — Evidence-driven Architecture  
 **Epoch summary:** [`../releases/EPOCH_1_SUMMARY.md`](../releases/EPOCH_1_SUMMARY.md)
 
@@ -10,9 +10,10 @@
 
 ```text
 Architecture Phase     — Ended
-Platform Construction  — Started
-Research (Alpha)       — Remains frozen until Research track resumes
-Infrastructure design  — Closed（只建设、不扩地基）
+Platform Construction  — Active（Sprint 1 Closed）
+Research (Alpha)       — Frozen
+Infrastructure design  — Closed
+Sprint 2               — ⏸ Frozen / Not Started
 ```
 
 This is **not** a new numbered product Phase replacing v0.3.  

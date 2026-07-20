@@ -1,9 +1,8 @@
 # PAAF 路线图
 
-> 版本：3.4.0 · 更新日期：2026-07-20  
-> 路线图**可变**；宪章与规格冻结后，改路线图不等于改哲学。  
-> **研究顺序以 Decision 017 为准**；基础设施契约以 Decision 018 为准。  
-> **架构基线**：`architecture-baseline-v1`（ABR-001）；**Epoch 1** 总结见 `docs/releases/EPOCH_1_SUMMARY.md`；**工程姿态**：Platform Construction（基础设施设计已收束）。
+> 版本：3.4.1 · 更新日期：2026-07-20  
+> **Epoch 1 Stable Checkpoint** — Baseline v1 + Sprint 1 Complete；Sprint 2 ⏸ Frozen（`docs/releases/EPOCH_1_SUMMARY.md`）。  
+> 空窗期故意保留：防 Baseline 侵蚀优先于加能力。Sprint 启动须过 `docs/development/REVIEW_CHECKLIST.md` Sprint Start Check。
 
 ---
 
