@@ -10,6 +10,15 @@
 
 ## [Unreleased]
 
+### Docs / ADR（Decision 017 Accepted）
+
+- Decision 017：**Evidence-first Research Roadmap**（Accepted）
+- 版本顺序：v0.3 Evidence Platform → v0.4 Validation Protocol → v0.5 Market State → v0.6 Opportunity Library
+- 原则：Closed 实验不可变；Research append-only；Negative Evidence 一等公民；Alpha 不跳过 Evidence（重申 011）
+- Research Portfolio 概念：DATA / FEATURE / PATTERN / DETECTOR / EXECUTION（不绑 UI）
+- 重申 Decision 001 / 011 / 015 / 016 仍有效；暂停未经立项的新 OPP / Alpha
+- `docs/ROADMAP.md` 同步至 3.1.0
+
 ### Docs / Research（OPP16 EXP001 Closed）
 
 - `OPP16TwoBarReversalDetector@1.0.0`：Candidate；裸两棒反转；不下单

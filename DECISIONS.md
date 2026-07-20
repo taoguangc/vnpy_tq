@@ -220,3 +220,130 @@ FeatureResult   DetectionResult
 - **原因**：遵守复杂度预算与不追逐利润；避免用连跑换输入凑显著性。
 - **后果**：下一优先线为数据侧多品种换月审计（DATA EXP002）或满足上述立项条件的新 Feature Spec；不得静默恢复同构搜索。
 
+---
+
+## Decision 017 — Evidence-first Research Roadmap
+
+- **日期**：2026-07-20
+- **状态**：Accepted
+- **主题**：Evidence-first Research Roadmap（证据优先的研究路线）
+- **背景**：v0.2.4 Detector Pipeline 已完成；Evidence 切片已可跑通多轮实验。Feature EXP001×4 与 `OPP16_EXP001` 均给出
+  `inconclusive` / Negative Evidence。继续急着开 OPP17 / Market State / Alpha，会把「可证伪平台」重新压回
+  AFF 式调参循环。本次调整不是排期微调，而是把已实践的研究哲学升格为长期路线。
+- **决策**：采纳下列长期原则与版本顺序（细节以本 ADR 为准；`docs/ROADMAP.md` 同步，不得与之冲突）。
+
+### A. 版本顺序（研究优先，非交易优先）
+
+| 版本 | 名称 | 完成标准（Done Definition） |
+|------|------|---------------------------|
+| **v0.3** | **Evidence Platform** | `Experiment → Evaluation → Evidence → Portfolio → Query` 全闭环；研究能力产品化 |
+| **v0.4** | **Multi-Symbol Validation Protocol** | 任一 Candidate Detector **默认**进入统一验证流程（多品种、roll-aware、自动产出 Evidence） |
+| **v0.5** | Market State | 证据与验证协议就绪之后 |
+| **v0.6** | Opportunity Library | 真实 OPP 库；仍服从 Evidence Gate |
+| **v0.7** | Decision Engine | 决策编排 |
+| 其后 | Execution / Production CTA | 仍服从 Decision 011 |
+
+相对旧路线图：原「v0.4 Market State → v0.5 Opportunity」**后移**；在 Market State / Opportunity Library
+之前插入 **Validation Protocol**。名称必须是 **Validation Protocol**，不是 Multi-Symbol Engine——研究的是验证协议，不是引擎花样。
+
+### B. v0.3 Evidence Platform（范围）
+
+**包含（概念层；不规定 UI 实现）：**
+
+1. Experiment Repository  
+2. Evidence Repository  
+3. Evaluation Engine  
+4. Research Portfolio（见 §E）  
+5. Cross-Experiment Query  
+6. Dashboard（**最小版**即可；可后置实现）
+
+**明确不包含：**
+
+- 新 OPP / 新 Alpha 实验（暂停，直至 v0.3 Done Definition 满足或用户单独立项授权）  
+- 新 Market State  
+- 把 Feature 插入交易主链  
+
+v0.3 完成标准不是「代码行数」，而是上述链路可运营、可查询、可按 Portfolio 汇总。
+
+### C. v0.4 Validation Protocol（范围）
+
+冻结并强制 Candidate 默认遵守的验证协议（具体阈值在 v0.4 Spec 中预注册，本 ADR 只定方向）：
+
+- 最少品种数、最少样本量  
+- HOLD / Accepted（KEEP）条件  
+- E2 晋级条件  
+- Roll Annotation / 双报要求  
+
+Done Definition：
+
+```text
+Every Candidate Detector
+  → Automatically Validated
+  → Multi-Symbol
+  → Roll-aware
+  → Evidence Generated
+```
+
+研究不得依赖「人工记得跑哪些脚本」。
+
+### D. Closed Experiments are Immutable
+
+- Closed 实验的产物、门槛与结论 **禁止覆盖 / 改写 / 原地复活**。  
+- 条件变化（加 Context、改 Outcome、改数据协议、改品种集等）→ **新 `experiment_id`**。  
+- 允许声明 `parent = <closed_experiment_id>` 以保留谱系；Evidence 保持 append-only。  
+- 例：`OPP16_EXP001` Closed 后，即使加 Context，也开 `OPP16_EXP00N`（或新家族 ID），不得续写 EXP001。
+
+### E. Research Portfolio（概念，不绑 UI）
+
+研究资产按五个 Portfolio 归类（Dashboard 画法另议）：
+
+```text
+DATA | FEATURE | PATTERN | DETECTOR | EXECUTION
+```
+
+Portfolio 是研究治理视图，不是交易层。汇总应能区分 Accepted / HOLD / Rejected / Negative 等状态，
+而不是只展示「成功」实验。
+
+### F. Negative Evidence 是一等公民
+
+> Negative Evidence has equal archival value as Positive Evidence.
+
+`inconclusive` / `REVERT` / 明确否定边沿的结论与 Positive KEEP 同等归档价值。  
+不得因「没赚到」删除、淡化或拒绝登记 Negative Evidence。  
+OPP16 EXP001 等 Negative Evidence 是 Repository 资产，不是项目失败记录。
+
+### G. Alpha Never Skips Evidence
+
+引用并强调 Decision 011：
+
+> No detector enters Production without Evidence.
+
+路线图上的 Opportunity Library / Decision Engine / Production **不得**跳过 Evidence Gate。  
+KEEP ≠ Production；Production 仍须 E4 + 用户确认 + Explicit Enablement（Decision 015）。
+
+### H. Research is append-only（长期原则）
+
+> Research is append-only.
+
+- 不覆盖实验；不修改历史 Evidence；不重写已 Closed 结论  
+- 新假设 / 新 Context / 新数据协议 → 新 Experiment  
+- 历史实现可 Deprecated，但版本、指纹与输出定义须保留  
+
+### I. 重申仍然有效的决策
+
+本 ADR **不废止**下列 Accepted 决策：
+
+| Decision | 要点 |
+|----------|------|
+| **001** | TQ 离线 / 1m / CbC 无复权 / 真实成本；正式基线不变 |
+| **011** | 无证据不进 Production |
+| **015** | Feature / Opportunity 双路径；Intent + Evidence + Enablement |
+| **016** | 暂停 rb 上标量 Feature ↔ RV_60 同构搜索 |
+
+- **原因**：把 AFF→PAAF 已验证的工作方式写成可执行的长期顺序，避免用新 Alpha 冲动稀释证据平台。  
+- **后果**：研发重心切换为 Evidence Platform（v0.3）→ Validation Protocol（v0.4）；暂停新的 OPP/Alpha
+  跑数线（用户单独立项授权除外）；ROADMAP Release 表按本 ADR 更新；后续 Spec 不得与本 ADR 冲突。  
+- **实现门禁**：本 ADR **不授权**立即实现 Dashboard / 多品种引擎 / 新 Detector。v0.3 实现须另开
+  Spec 切片并获用户授权；先 Spec，后代码。
+
+
