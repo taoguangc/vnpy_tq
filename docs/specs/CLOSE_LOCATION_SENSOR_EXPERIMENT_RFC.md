@@ -1,13 +1,13 @@
 # Close Location Sensor Experiment RFC
 
-> **Status**: Accepted（Frozen for `CLOSE_LOCATION_EXP001`）
+> **Status**: Accepted（Frozen；`CLOSE_LOCATION_EXP001` **Closed**）
 > **Accepted date**: 2026-07-19
 > **Experiment family**: `CLOSE_LOCATION`
-> **First run id**: `CLOSE_LOCATION_EXP001`
+> **First run id**: `CLOSE_LOCATION_EXP001`（Closed：inconclusive / HOLD）
 > **Path**: `docs/specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md`
 > **Parent**: `FEATURE_SENSOR_SPEC.md`、`FEATURE_ROLL_ANNOTATION_POLICY_RFC.md`、Decision 016
 > **规则优先级**: `AGENTS.md` > Parent Spec > 本 RFC > Run Spec > 代码
-> **实现门禁**: Accepted 授权后续实现 EXPERIMENT Sensor；**不授权跑数 / 交易**。跑数须按 Run Spec 另授权。
+> **实现门禁**: EXP001 已闭环。继续 Close Location 研究须新 `experiment_id`；本 RFC 不授权交易。
 
 **一句话**：测 bar 内收盘位置是否与后续短窗 **signed** 收益有关；不是买卖信号。
 

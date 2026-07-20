@@ -1,11 +1,13 @@
 # CLOSE_LOCATION_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted（Frozen；实现完成后跑数仍须另授权）
+> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；no promotion）
 > **Accepted date**: 2026-07-19
+> **Closed date**: 2026-07-20
 > **Experiment ID**: `CLOSE_LOCATION_EXP001`
 > **Parent RFC**: `docs/specs/CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC.md`
+> **Artifact Index**: `docs/experiments/CLOSE_LOCATION_EXP001_INDEX.md`
 > **规则优先级**: `AGENTS.md` > Parent RFC > 本 Run Spec > 脚本
-> **运行门禁**: Accepted ≠ 自动跑数。须先实现 Sensor + 单测，再明确授权「跑 CLOSE_LOCATION EXP001」。
+> **运行门禁**: 本实验已关闭；禁止覆盖产物。继续研究须新 `experiment_id`。
 
 **一句话**：登记 bar 内收盘位置的第一次可审计 Run；Outcome 为 signed return；强制换月双报。
 
@@ -65,8 +67,24 @@ SR_N = sum(log_return[t+1:t+N])
 
 ---
 
+## 4. Lifecycle Result（Closed）
+
+| 项 | 值 |
+|----|-----|
+| conclusion | `inconclusive` |
+| governance | `HOLD` |
+| `ρ_ex_roll` | `-0.004569`（n=2747） |
+| 95% CI | `[-0.041961, 0.032836]` |
+| `ρ_full` | `-0.004706`（n=2761） |
+| promotion | none |
+
+详见 `CLOSE_LOCATION_EXP001_INDEX.md`。
+
+---
+
 ## 修订记录
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-19 | 1.0.0 | Accepted：CQ1–CQ4 按建议冻结；跑数须另授权 |
+| 2026-07-20 | 1.1.0 | Lifecycle Completed：inconclusive / HOLD；无晋级 |

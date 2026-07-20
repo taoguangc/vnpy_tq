@@ -10,11 +10,19 @@
 
 ## [Unreleased]
 
+### Docs / Research（Close Location EXP001 Closed）
+
+- `CloseLocationSensor@1.0`：EXPERIMENT；只产出 `close_location`；零区间 → null
+- runner：`scripts/paaf_scalar_feature_experiment.py` 支持 `ohlc` + `signed_sum`（SR_60）
+- Artifact → Evaluation → Evidence 完成；主样本 `ρ_ex_roll=-0.004569`（n=2747）
+- Evidence：`inconclusive` / `HOLD`；无晋级；Decision 001 / 016 不变
+- Index：`docs/experiments/CLOSE_LOCATION_EXP001_INDEX.md`
+
 ### Docs / Research（Close Location Spec Accepted）
 
 - `CLOSE_LOCATION_SENSOR_EXPERIMENT_RFC` + `CLOSE_LOCATION_EXP001`：**Accepted**（CQ1–CQ4 关闭）
 - Outcome：未来 60 根 **signed** log-return 之和；非 RV_60；强制换月双报
-- 证据门槛与 Volume/OI 同尺；Decision 001 不变；未授权实现 / 跑数
+- 证据门槛与 Volume/OI 同尺；Decision 001 不变
 
 ### Docs / Research（DATA EXP002 + Feature Pause）
 
