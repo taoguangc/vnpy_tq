@@ -1,9 +1,11 @@
 # PAAF 系统架构
 
-> 版本：3.0.0 · 更新日期：2026-07-20  
+> 版本：3.1.0 · 更新日期：2026-07-20  
 > 哲学见 `01_CONSTITUTION.md`。编码细节见 `05_CODING_STYLE.md`。  
 > **架构基线**：`docs/reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md`（ABR-001）。  
-> 研究顺序见 Decision 017；Evidence Domain 合同见 `docs/specs/EVIDENCE_DOMAIN_SPEC.md`。
+> 研究顺序见 Decision 017；基础设施契约见 Decision 018。  
+> Evidence Domain：`docs/specs/EVIDENCE_DOMAIN_SPEC.md`；Storage：`APPEND_ONLY_STORAGE_SPEC.md`；
+> Projection：`PROJECTION_LAYER_SPEC.md`。
 
 ---
 
@@ -56,8 +58,15 @@ Decision 017 §G 重申。
 
 **Principle 2 — Projection never mutates Domain.**  
 Portfolio / Timeline / Dashboard / Knowledge Graph 等均为 **Projection**：只读观察方式，
-不得调用写路径改写 Experiment / Evaluation / Evidence。引用 Decision 017（Research
-append-only；Portfolio 为治理视图而非交易层）。
+不得调用写路径改写 Experiment / Evaluation / Evidence。引用 Decision 017 / 018 Principle 4。
+
+**Principle 3 — Storage is Replaceable; Contracts are Stable.**  
+持久化后端可替换（JSON / DuckDB / SQLite / …）；Append-only Storage Contract 与 Domain
+合同不变。引用 Decision 018；细则见 `APPEND_ONLY_STORAGE_SPEC.md`。
+
+**Principle 4 — Projection is Derived; Domain is Authoritative.**  
+一切 Projection 由 Domain 派生；冲突时以 Domain 为准。禁止为 UI 改权威记录。
+引用 Decision 018；细则见 `PROJECTION_LAYER_SPEC.md`。
 
 | 层 | 职责 | 禁止 |
 |----|------|------|

@@ -71,7 +71,7 @@ Opportunity ────┘         │
 
 ---
 
-## 2. Evidence Object（接口草案）
+## 2. Evidence Object
 
 ### 2.1 核心形状
 

@@ -80,7 +80,7 @@
 
 ---
 
-## 2. FeatureResult（接口草案）
+## 2. FeatureResult
 
 ### 2.1 形状
 
