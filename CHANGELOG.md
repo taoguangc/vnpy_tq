@@ -10,6 +10,13 @@
 
 ## [Unreleased]
 
+### Docs / Research（OPP16 Spec Accepted）
+
+- `OPP16_TWO_BAR_REVERSAL_EXPERIMENT_RFC` + `OPP16_EXP001`：**Accepted**（OQ1–OQ6 关闭）
+- 裸两棒反转、5m、`body_ratio=0.5`、无 Context 门禁；主指标 aligned SR_60 + CI
+- 换月双报；主结论不含交易成本；Candidate / E0；不继承遗留 E2
+- 授权实现 Detector + 单测；**未授权**跑数 / 交易
+
 ### Docs / Research（Close Location EXP001 Closed）
 
 - `CloseLocationSensor@1.0`：EXPERIMENT；只产出 `close_location`；零区间 → null
