@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import unittest
 
+import numpy as np
 import pandas as pd
 
 from scripts.paaf_scalar_feature_experiment import (
+    N_BARS,
     _frame_values,
+    _signed_return_sum,
     classify_association,
 )
 
@@ -33,6 +36,14 @@ class TestScalarFeatureEvidenceGate(unittest.TestCase):
             ),
             "association_detected",
         )
+
+    def test_signed_return_sum_matches_definition(self) -> None:
+        closes = np.exp(np.linspace(0.0, 1.0, N_BARS + 1))
+        actual = _signed_return_sum(closes, 0)
+        expected = float(np.sum(np.diff(np.log(closes))))
+        self.assertIsNotNone(actual)
+        self.assertAlmostEqual(float(actual), expected)
+        self.assertIsNone(_signed_return_sum(closes[:-1], 0))
 
     def test_rejects_small_crossing_or_roll_unstable_effects(self) -> None:
         cases = (

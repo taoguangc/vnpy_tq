@@ -9,6 +9,13 @@ from strategies.paaf.sensors.atr_compression import (
     ATRCompressionSensor,
 )
 from strategies.paaf.sensors.base import BaseFeatureSensor
+from strategies.paaf.sensors.close_location import (
+    CLOSE_LOCATION_DESCRIPTOR,
+    CLOSE_OUTPUT_KEY,
+    CLOSE_SENSOR_ID,
+    CLOSE_SENSOR_VERSION,
+    CloseLocationSensor,
+)
 from strategies.paaf.sensors.demo_constant import (
     DEMO_CONSTANT_DESCRIPTOR,
     DEMO_OUTPUT_KEY,
@@ -48,6 +55,11 @@ __all__ = [
     "ATR_SENSOR_ID",
     "ATR_SENSOR_VERSION",
     "ATRCompressionSensor",
+    "CLOSE_LOCATION_DESCRIPTOR",
+    "CLOSE_OUTPUT_KEY",
+    "CLOSE_SENSOR_ID",
+    "CLOSE_SENSOR_VERSION",
+    "CloseLocationSensor",
     "DEMO_CONSTANT_DESCRIPTOR",
     "DEMO_OUTPUT_KEY",
     "DEMO_SENSOR_ID",

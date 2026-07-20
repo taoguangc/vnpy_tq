@@ -77,6 +77,9 @@ class ScalarExperimentConfig:
     lookback: int
     parameters: dict[str, int]
     hypothesis: str
+    window_mode: str = "series"
+    outcome_kind: str = "rv"
+    outcome_label: str = "RV_60"
 
 
 def _git_revision() -> str:
@@ -211,7 +214,19 @@ def run_artifact(
         yymms,
         window=DEFAULT_ROLL_WINDOW,
     )
-    values = _frame_values(frame, config.frame_column)
+    if config.window_mode not in {"series", "ohlc"}:
+        raise ValueError("window_mode 必须是 series 或 ohlc")
+    if config.outcome_kind not in {"rv", "signed_sum"}:
+        raise ValueError("outcome_kind 必须是 rv 或 signed_sum")
+
+    series_values = None
+    highs = lows = closes_arr = None
+    if config.window_mode == "series":
+        series_values = _frame_values(frame, config.frame_column)
+    else:
+        highs = frame["high"].to_numpy(dtype=float)
+        lows = frame["low"].to_numpy(dtype=float)
+        closes_arr = frame["close"].to_numpy(dtype=float)
 
     data_dir = symbol_dir("rb")
     rollover_map = pd.read_parquet(data_dir / "rollover_map.parquet")
@@ -237,14 +252,26 @@ def run_artifact(
             if not bool(period_mask.iloc[index]):
                 continue
             start = max(0, index + 1 - config.lookback)
+            if config.window_mode == "series":
+                assert series_values is not None
+                observe_window: dict[str, Any] = {
+                    config.input_key: series_values[start:index + 1].tolist(),
+                    "roll_neighborhood": bool(roll_mask[index]),
+                }
+            else:
+                assert highs is not None and lows is not None
+                assert closes_arr is not None
+                observe_window = {
+                    "high": highs[start:index + 1].tolist(),
+                    "low": lows[start:index + 1].tolist(),
+                    "close": closes_arr[start:index + 1].tolist(),
+                    "roll_neighborhood": bool(roll_mask[index]),
+                }
             result = sensor.observe(
                 symbol="rb",
                 timeframe="1m",
                 timestamp=_aware_timestamp(frame["dt_cst"].iloc[index]),
-                window={
-                    config.input_key: values[start:index + 1].tolist(),
-                    "roll_neighborhood": bool(roll_mask[index]),
-                },
+                window=observe_window,
                 parameters=config.parameters,
             )
             if not isinstance(result, FeatureResult):
@@ -336,6 +363,30 @@ def _realized_vol(
     if np.any(window <= 0):
         return None
     return float(np.std(np.diff(np.log(window)), ddof=0))
+
+
+def _signed_return_sum(
+    closes: np.ndarray,
+    index: int,
+) -> float | None:
+    if index + N_BARS >= len(closes):
+        return None
+    window = closes[index:index + N_BARS + 1]
+    if np.any(window <= 0):
+        return None
+    return float(np.sum(np.diff(np.log(window))))
+
+
+def _future_outcome(
+    closes: np.ndarray,
+    index: int,
+    outcome_kind: str,
+) -> float | None:
+    if outcome_kind == "rv":
+        return _realized_vol(closes, index)
+    if outcome_kind == "signed_sum":
+        return _signed_return_sum(closes, index)
+    raise ValueError(f"未知 outcome_kind: {outcome_kind}")
 
 
 def _correlation(
@@ -437,7 +488,11 @@ def run_evaluation(config: ScalarExperimentConfig) -> int:
         if frame_index is None:
             rejected["incomplete_future"] += 1
             continue
-        realized = _realized_vol(closes, frame_index)
+        realized = _future_outcome(
+            closes,
+            frame_index,
+            config.outcome_kind,
+        )
         if realized is None:
             rejected["incomplete_future"] += 1
             continue
@@ -451,28 +506,48 @@ def run_evaluation(config: ScalarExperimentConfig) -> int:
     ex_roll = _correlation(np.asarray(ex_x), np.asarray(ex_y))
     excluded_n = int(full["sample_n"]) - int(ex_roll["sample_n"])
 
+    if config.outcome_kind == "rv":
+        outcome_name = "future_realized_volatility_60"
+        outcome_definition = "std(log_return[t+1:t+N])"
+        outcome_unit = "log_return_std"
+        mean_full_key = "mean_rv_full"
+        mean_ex_key = "mean_rv_ex_roll"
+    else:
+        outcome_name = "future_signed_log_return_sum_60"
+        outcome_definition = "sum(log_return[t+1:t+N])"
+        outcome_unit = "log_return_sum"
+        mean_full_key = "mean_sr_full"
+        mean_ex_key = "mean_sr_ex_roll"
+
     outcome = OutcomeDefinition(
         outcome_id=config.outcome_id,
-        name="future_realized_volatility_60",
+        name=outcome_name,
         window={
             "bars_forward": N_BARS,
             "bar": "1m",
             "sampling_interval": SAMPLE_INTERVAL,
-            "definition": "std(log_return[t+1:t+N])",
+            "definition": outcome_definition,
+            "outcome_kind": config.outcome_kind,
         },
-        unit="log_return_std",
-        description="Non-overlapping future RV_60 for scalar Feature observations.",
+        unit=outcome_unit,
+        description=(
+            f"Non-overlapping future {config.outcome_label} "
+            "for scalar Feature observations."
+        ),
     )
     metric_full = MetricDefinition(
         metric_id=config.metric_full_id,
-        name=f"spearman_{config.feature_key}_vs_rv60_full",
+        name=f"spearman_{config.feature_key}_vs_{config.outcome_label}_full",
         formula_id="spearman_rank_corr_v1",
         higher_is_better=None,
         description="Spearman correlation on full sample.",
     )
     metric_ex = MetricDefinition(
         metric_id=config.metric_ex_roll_id,
-        name=f"spearman_{config.feature_key}_vs_rv60_ex_roll",
+        name=(
+            f"spearman_{config.feature_key}_vs_"
+            f"{config.outcome_label}_ex_roll"
+        ),
         formula_id="spearman_rank_corr_v1",
         higher_is_better=None,
         description="Primary Spearman correlation excluding roll neighborhoods.",
@@ -480,8 +555,8 @@ def run_evaluation(config: ScalarExperimentConfig) -> int:
     outcome_record = OutcomeRecord(
         definition_id=config.outcome_id,
         values={
-            "mean_rv_full": float(np.mean(full_y)),
-            "mean_rv_ex_roll": float(np.mean(ex_y)),
+            mean_full_key: float(np.mean(full_y)),
+            mean_ex_key: float(np.mean(ex_y)),
             "roll_excluded_n": float(excluded_n),
             "roll_excluded_fraction": excluded_n / int(full["sample_n"]),
         },
@@ -589,6 +664,19 @@ def run_evidence(config: ScalarExperimentConfig) -> int:
         if ref.artifact_id == config.artifact_id
     )
     created_at = datetime.now(tz=timezone.utc)
+    outcome_values = evaluation.outcomes[0].values
+    if config.outcome_kind == "rv":
+        outcome_payload = {
+            "name": config.outcome_label,
+            "definition": "std(log_return[t+1:t+N])",
+            "mean_rv_ex_roll": float(outcome_values["mean_rv_ex_roll"]),
+        }
+    else:
+        outcome_payload = {
+            "name": config.outcome_label,
+            "definition": "sum(log_return[t+1:t+N])",
+            "mean_sr_ex_roll": float(outcome_values["mean_sr_ex_roll"]),
+        }
     evidence = EvidenceRecord(
         evidence_id=config.evidence_id,
         experiment_id=config.experiment_id,
@@ -606,18 +694,13 @@ def run_evidence(config: ScalarExperimentConfig) -> int:
             "universe": "rb/1m",
             "period": "2024-01-01..2025-12-31",
         },
-        outcome={
-            "name": "RV_60",
-            "definition": "std(log_return[t+1:t+N])",
-            "mean_rv_ex_roll": float(
-                evaluation.outcomes[0].values["mean_rv_ex_roll"]
-            ),
-        },
+        outcome=outcome_payload,
         window={
             "n_bars": N_BARS,
             "sampling_interval": SAMPLE_INTERVAL,
             "roll_window": DEFAULT_ROLL_WINDOW,
             "primary_sample": "ex_roll",
+            "outcome_kind": config.outcome_kind,
         },
         metrics={
             "spearman_rho_ex_roll": rho_ex,
