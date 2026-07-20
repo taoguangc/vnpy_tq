@@ -175,6 +175,7 @@ CSV / 研究输出保持向后兼容；破坏性字段变更须升级 schema 版
 - 已发布 Detector 版本不可原地覆盖；行为变化必须生成新版本号
 - 历史实现可 Deprecated，但不得抹去其版本、实验记录与输出定义
 - **Decision 017（Evidence-first）**：研究顺序以 ADR 为准——先 Evidence Platform（v0.3），再 Validation Protocol（v0.4）；Closed 实验不可变；Research append-only；Negative Evidence 一等公民；无用户单独立项授权时，v0.3 期间不新开 OPP/Alpha 跑数
+- **ABR**：大架构阶段完成须通过 Architecture Baseline Review（见 `docs/reviews/`；ABR-001 为基线）后方可进入下一阶段
 
 编码工作流：接口优先 → 实现 → 单测 → 回测 → 研究报告。
 

@@ -10,6 +10,14 @@
 
 ## [Unreleased]
 
+### Docs / Architecture（ABR-001 Baseline）
+
+- `docs/reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md`：**Completed**
+- Phase 2 Evidence Foundation：**Completed**（明确 ≠ v0.3 Completed）
+- `docs/02_ARCHITECTURE.md` v3.0.0：顶层图 + Evidence Gate / Projection 原则
+- `docs/ROADMAP.md` 3.2.0：v0.3 checklist（ABR ✓；Repository / Projection / Portfolio □）
+- 制度：大版本须 ABR 后方可进入下一阶段；本轮不改 Python
+
 ### Docs / Spec（Evidence Domain Frozen）
 
 - `docs/specs/EVIDENCE_DOMAIN_SPEC.md`：**Accepted** v1.0.0（Decision 017）
