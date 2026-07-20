@@ -1,15 +1,16 @@
 # Epoch 1 Summary — Evidence-driven Architecture
 
-**Checkpoint:** PAAF Epoch 1 Stable Checkpoint — Baseline v1 + Sprint 1 Complete  
+**Checkpoint:** Epoch 1 Midpoint Stable Checkpoint — Evidence Comparison Capability Established, Research Quality as Next Bottleneck  
 **Tag:** `architecture-baseline-v1`  
-**Status:** Frozen hold（Sprint 2 ⏸ Not Started）  
+**Status:** Stable Window Active（Sprint 3 ⏸ · v0.4 ⏸ Consider）  
+**Midpoint Review:** [`../reviews/EPOCH_1_MIDPOINT_REVIEW.md`](../reviews/EPOCH_1_MIDPOINT_REVIEW.md)  
 **Positioning:** Evidence-Driven Quantitative Research Operating System
 
 ## One-sentence definition
 
 > **PAAF 已完成第一代架构（Architecture Baseline v1）的建立，并正式进入以 Evidence 为中心的平台建设阶段。后续工作的重点不再是设计基础设施，而是在不改变 Baseline 的前提下持续构建平台能力，并让研究成果通过统一的 Evidence Repository 被沉淀、消费和复用。**
 
-## Stable checkpoint（内部共识 · 2026-07-20）
+## Current state（内部共识 · 2026-07-20）
 
 ```text
 PAAF Epoch 1 — Evidence-driven Architecture
@@ -17,88 +18,78 @@ PAAF Epoch 1 — Evidence-driven Architecture
 Architecture Baseline v1
         ✓
 
-Platform Construction Phase
-        ✓
-
 Sprint 1 — Projection Layer
-        ✓
+        ✓ Closed
 
-ABR-002 Infrastructure Compliance
+ABR-002
         ✓ PASS WITH BACKLOG
 
+PBR-001
+        ✓
+
 Sprint 2 — Validation Projection
-        ✓ Closed（ABR-003 PASS WITH BACKLOG）
+        ✓ Closed
+
+ABR-003
+        ✓ PASS WITH BACKLOG
+
+Epoch 1 Midpoint Review
+        ✓
+
+Current:
+        Stable Window Active
+        Sprint 3 ⏸ Not Started
+        v0.4 Not Started
 ```
-
-> **PAAF 已完成“如何可靠演进”的证明，下一阶段才开始证明“如何持续产生有效研究能力”。**
-
-空窗期是故意保留的：基础规则已稳，下一步需求尚未被证据驱动明确提出。继续堆功能收益低、侵蚀 Baseline 风险高。
 
 ## Proven loops
 
-Research knowledge loop:
+Research knowledge loop（完整）:
 
 ```text
-Hypothesis → Experiment → Evidence → Evaluation → Repository → Projection → Knowledge → Next Hypothesis
+Hypothesis → Experiment → Evidence → Evaluation → Repository → Projection → Validation View → Knowledge
 ```
 
-Engineering loop（Sprint 1 已跑通）:
+Engineering loop（Sprint 1 + Sprint 2 已跑通）:
 
 ```text
 Architecture Baseline v1 → Contract → Implementation → Contract Test → ABR → Release
 ```
 
-## Freeze（当前禁止）
+## Midpoint findings（摘要）
 
-- 新 Contract / Domain / 基础设施
-- 新 Alpha 假设 / OPP 扩展
-- Market State / Decision Engine
-- Repository cleanup / Portfolio 增强 / Validation 设计混入本 checkpoint
+| Question | Answer |
+|----------|--------|
+| Architecture 达预期？ | Yes（Midpoint）— 工程事实，非设计假设 |
+| Platform 支撑 Research？ | Capability Ready；Research track 仍冻结 |
+| v0.4 必要？ | Consider — Not Start |
+| 下一瓶颈？ | **Research protocol / evidence quality** — 不是更多 Projection |
 
-## Sprint Start Check（非 Decision；启动门槛）
+### Research-side freeze principle（非 Decision）
 
-任何 Sprint 开始前须回答：
+> **Platform capability is ready; research quality becomes the bottleneck.**  
+> 平台能力暂时冻结，研究证据质量成为下一阶段主要优化对象。
 
-```text
-1. What existing Contract does this consume?
-2. What Evidence/Capability gap does it solve?
-3. Why cannot this wait?
-4. Does it modify Baseline?
-```
+避免：发现问题 → 加平台功能 → 仍无可靠证据。
 
-理想答案：
+下一自然方向若出现，优先 **Research Protocol Review**（可信 Evidence 标准），而非立刻 Approve v0.4。
 
-```text
-Consumes existing Contract: Yes
-Solves identified gap: Yes
-Cannot wait: Explained
-Baseline change: No
-```
+## Freeze（Stable Window）
 
-若第 4 项为 Yes → 回到 Decision / Contract 流程，不得直接开 Sprint。
+- 新 Contract / Domain / 基础设施扩张
+- 新 Alpha / OPP / Market State / Decision Engine
+- Sprint 3 / v0.4 — 未经证据驱动 Need + Start line
 
-## Sprint 2（未启动）
+## Sprint Start Check
 
-须由**明确问题**驱动，非功能愿望。  
-缺口审查：[`../reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md`](../reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md) → **Consider Sprint 2**（F1）；**未授权启动**。  
-提案草稿：[`../development/SPRINT_2_PROPOSAL.md`](../development/SPRINT_2_PROPOSAL.md)（Validation Projection）。
-
-启动语模板：
-
-> **Start Platform Construction Sprint 2: [具体能力] under Architecture Baseline v1.**
-
-例：`Validation Infrastructure consumes Evidence Repository under Architecture Baseline v1.`
-
-Validation（若进入）须遵守：判断证据质量，不制造 / 重算 Evidence。
+见 `docs/development/REVIEW_CHECKLIST.md`。
 
 ## Two tracks
 
 ```text
 PAAF
-├── Platform — Projection / Repository / Query / …（Baseline 下生长）
-└── Research — OPP / Feature / …（经 Evidence Repository 连接）
+├── Platform — Repository / Projection / Validation View（Baseline 下已验证）
+└── Research — 待证据驱动 Need（经 Evidence Repository 连接）
 ```
 
-Operating detail: `docs/development/PLATFORM_CONSTRUCTION_PHASE.md`  
-Sprint Start Check also: `docs/development/REVIEW_CHECKLIST.md`  
-Sprint 1 report: `docs/releases/SPRINT_1_REPORT.md`
+Reports: `SPRINT_1_REPORT.md` · `SPRINT_2_REPORT.md`

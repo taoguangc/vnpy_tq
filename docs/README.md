@@ -10,8 +10,8 @@
 | [06_RESEARCH_WORKFLOW.md](06_RESEARCH_WORKFLOW.md) | 单假设实验、证据晋级与 Commit 门禁 |
 | [07_DATA_SPEC.md](07_DATA_SPEC.md) | 冻结数据、换月与成本（含 §3.1 Feature 换月标注指针） |
 | [ROADMAP.md](ROADMAP.md) | 阶段目标（可变）；Phase 2 Completed ≠ v0.3 Completed |
-| [releases/architecture-baseline-v1.md](releases/architecture-baseline-v1.md) | Architecture Baseline v1 Release Note（**Frozen**） |
-| [releases/EPOCH_1_SUMMARY.md](releases/EPOCH_1_SUMMARY.md) | Epoch 1 阶段总结（基础设施设计收束） |
+| [releases/EPOCH_1_SUMMARY.md](releases/EPOCH_1_SUMMARY.md) | Epoch 1 总结 / Midpoint Candidate |
+| [reviews/EPOCH_1_MIDPOINT_REVIEW.md](reviews/EPOCH_1_MIDPOINT_REVIEW.md) | Epoch 1 Midpoint Review（**Completed**；Stable Window） |
 | [development/PLATFORM_CONSTRUCTION_PHASE.md](development/PLATFORM_CONSTRUCTION_PHASE.md) | Platform Construction Phase 定位与纪律 |
 | [development/SPRINT_1_PROJECTION.md](development/SPRINT_1_PROJECTION.md) | Sprint 1：Projection consumes Evidence（**Closed**） |
 | [development/SPRINT_2_PROPOSAL.md](development/SPRINT_2_PROPOSAL.md) | Sprint 2 Proposal：Validation Projection |

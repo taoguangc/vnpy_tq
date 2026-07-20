@@ -2,18 +2,19 @@
 
 **Announced:** 2026-07-20  
 **Anchor:** `architecture-baseline-v1`  
-**Status:** Active — **Epoch 1 Stable Checkpoint hold**（Sprint 2 ⏸ Frozen）  
+**Status:** Active — **Epoch 1 Midpoint / Stable Window**（Sprint 3 ⏸ · v0.4 ⏸）  
 **Epoch:** 1 — Evidence-driven Architecture  
-**Epoch summary:** [`../releases/EPOCH_1_SUMMARY.md`](../releases/EPOCH_1_SUMMARY.md)
+**Epoch summary:** [`../releases/EPOCH_1_SUMMARY.md`](../releases/EPOCH_1_SUMMARY.md)  
+**Midpoint:** [`../reviews/EPOCH_1_MIDPOINT_REVIEW.md`](../reviews/EPOCH_1_MIDPOINT_REVIEW.md)
 
 ## Positioning
 
 ```text
 Architecture Phase     — Ended
-Platform Construction  — Active（Sprint 1 Closed）
+Platform Construction  — Midpoint（Sprint 1–2 Closed）
 Research (Alpha)       — Frozen
 Infrastructure design  — Closed
-Sprint 2               — ⏸ Frozen / Not Started
+Sprint 3 / v0.4        — ⏸ Not Started
 ```
 
 This is **not** a new numbered product Phase replacing v0.3.  

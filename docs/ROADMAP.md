@@ -1,8 +1,8 @@
 # PAAF 路线图
 
-> 版本：3.4.1 · 更新日期：2026-07-20  
-> **Epoch 1 Stable Checkpoint** — Baseline v1 + Sprint 1 Complete；Sprint 2 ⏸ Frozen（`docs/releases/EPOCH_1_SUMMARY.md`）。  
-> 空窗期故意保留：防 Baseline 侵蚀优先于加能力。Sprint 启动须过 `docs/development/REVIEW_CHECKLIST.md` Sprint Start Check。
+> 版本：3.4.2 · 更新日期：2026-07-20  
+> **Epoch 1 Midpoint Stable Checkpoint** — Evidence Comparison Established；Research Quality = next bottleneck。  
+> **Stable Window Active** — Sprint 3 ⏸ · v0.4 ⏸ Consider；平台能力冻结，勿为版本推进而推进。
 
 ---
 
@@ -52,9 +52,11 @@ PAAF v0.3
 ✓ Projection Layer consumes Evidence（Sprint 1 Implementation）
 ✓ Portfolio Projection（只读 First Consumer）
 ✓ ABR-002（First Infrastructure Compliance Review）— **PASS WITH BACKLOG**
+✓ Sprint 2 Validation Projection + ABR-003 — **PASS WITH BACKLOG**
+✓ Epoch 1 Midpoint Review — Midpoint Candidate；Stable Window Active
 
 Status:
-Sprint 1 Closed — Platform Construction continues under Baseline
+Stable Window — Sprint 3 / v0.4 Not Started
 ```
 
 **Contract Freeze（已完成）**：基础设施契约已齐。  
