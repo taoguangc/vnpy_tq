@@ -1,6 +1,6 @@
 # ATR Compression EXP001 — Experiment Run Specification
 
-> **Status**: Accepted / **Lifecycle Completed**（Evidence closed 2026-07-19；no promotion）
+> **Status**: Archived（Evidence closed 2026-07-19；no promotion）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `ATR_COMPRESSION_EXP001`
 > **Parent**: `docs/specs/ATR_COMPRESSION_SENSOR_EXPERIMENT_RFC.md`（Accepted）

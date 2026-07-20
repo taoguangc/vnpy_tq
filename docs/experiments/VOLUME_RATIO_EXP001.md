@@ -1,6 +1,6 @@
 # VOLUME_RATIO_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；no promotion）
+> **Status**: Archived（Evidence closed；no promotion）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `VOLUME_RATIO_EXP001`
 > **Parent RFC**: `docs/specs/VOLUME_RATIO_SENSOR_EXPERIMENT_RFC.md`

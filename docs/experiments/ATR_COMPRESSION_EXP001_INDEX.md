@@ -1,6 +1,6 @@
 # ATR_COMPRESSION_EXP001 — Artifact Index
 
-> **Status**: Completed（Evidence closed；no promotion）
+> **Status**: Archived（Evidence closed；no promotion）
 > **Indexed date**: 2026-07-19
 > **Experiment Spec**: `docs/experiments/ATR_COMPRESSION_EXP001.md`
 > **Local artifact root**（gitignored）: `research/output/evidence/ATR_COMPRESSION_EXP001/`

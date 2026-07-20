@@ -1,6 +1,6 @@
 # OPP16_EXP001 — Artifact Index
 
-> **Status**: Completed（Evidence closed；no promotion）
+> **Status**: Archived（Evidence closed；no promotion）
 > **Indexed date**: 2026-07-20
 > **Experiment Spec**: `docs/experiments/OPP16_EXP001.md`
 > **Local artifact root**（gitignored）: `research/output/evidence/OPP16_EXP001/`

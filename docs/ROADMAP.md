@@ -1,9 +1,9 @@
 # PAAF 路线图
 
-> 版本：3.2.0 · 更新日期：2026-07-20  
+> 版本：3.3.0 · 更新日期：2026-07-20  
 > 路线图**可变**；宪章与规格冻结后，改路线图不等于改哲学。  
-> **研究顺序以 Decision 017 为准**；本文件不得与之冲突。  
-> **架构基线**：`docs/reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md`
+> **研究顺序以 Decision 017 为准**；基础设施契约以 Decision 018 为准。  
+> **架构基线**：ABR-001；**Contract Freeze**：Storage + Projection Specs Accepted。
 
 ---
 
@@ -11,171 +11,110 @@
 
 ```text
 Phase 0  Research Chaos（AFF）                 — 已结束
-Phase 1  Architecture Foundation（v0.1）       — 已结束（Tag v0.1.1）
+Phase 1  Architecture Foundation（v0.1）       — 已结束
 Phase 2  Evidence Foundation                   — Completed（≠ v0.3 Completed）
-Phase 3  Evidence Platform（v0.3）             — In Progress
+Phase 3  Evidence Platform（v0.3）             — In Progress（Contract Freeze 已完成）
 Phase 4  Validation Protocol（v0.4）           — 下一
 Phase 5+ Market State → Opportunity → …      — 其后
 ```
 
-大版本进入下一阶段前须通过 **ABR**（Architecture Baseline Review）。
+大版本进入下一阶段前须通过 **ABR**。
 
 ---
 
 ## PAAF Phase 2 — Evidence Foundation
 
 ```text
-PAAF Phase 2 — Evidence Foundation
-
 ✓ Detector Framework Frozen
 ✓ Evidence Domain Frozen
 ✓ Research Governance Frozen
-
-Status:
-Completed
+Status: Completed
 ```
 
-> **Completed ≠ v0.3 Completed。**  
-> Phase 2 收口的是「框架 + Evidence Domain 合同 + 研究治理语义」。  
-> v0.3 Evidence Platform（Repository Append-only / Projection / Portfolio）仍在进行。
-
-依据：v0.2.4 Pipeline；`EVIDENCE_DOMAIN_SPEC.md` v1.0；`research/README.md`；ABR-001。
-
-### Detector Framework（已完成明细）
-
-| 版本 | 交付 | 状态 |
-|------|------|------|
-| v0.2.0–0.2.4 | Spec → DetectionResult → Opportunity → Registry → Pipeline + DEMO | **完成** |
-
-```text
-✓ Context / DetectionResult / Opportunity / Registry
-✓ Detector Pipeline Verification / Minimal Opportunity Logger
-Detector Framework Complete — Alpha Not Implemented
-```
+> **Completed ≠ v0.3 Completed。**
 
 ---
 
-## PAAF v0.3 — Evidence Platform
+## PAAF v0.3 — Evidence Platform / Contract Freeze
 
 ```text
-PAAF v0.3 — Evidence Platform
+PAAF v0.3
 
-✓ Architecture Freeze Review（ABR-001）
-□ Repository Append-only
-□ Projection Layer
-□ Portfolio Projection
+✓ Evidence Domain Frozen
+✓ ABR-001（Architecture Baseline v1）
+✓ Storage Contract Frozen（APPEND_ONLY_STORAGE_SPEC）
+✓ Projection Contract Frozen（PROJECTION_LAYER_SPEC）
+✓ Decision 018（Stable Contracts, Replaceable Infrastructure）
+
+□ Repository Append-only（实现对齐 Contract；不急 rename）
+□ Portfolio Projection（只读实现）
+□ ABR-002
 
 Status:
 In Progress
 ```
 
-| 项 | 说明 |
-|----|------|
-| ABR-001 | **Completed** — 架构基线已建立；本项勾选 |
-| Repository Append-only | 强化 create-only 合同与测试；禁止 update/replace/overwrite |
-| Projection Layer | 概念 Spec：Projection ≠ Domain；只读 |
-| Portfolio Projection | Portfolio 作为第一种 Projection；不反向写 Domain |
+**Contract Freeze（本节点）**：语言 / 契约 / 治理三条线中，**基础设施契约**已齐。  
+下一重心：利用契约构建能力（Repository refinement → Portfolio Projection → ABR-002），
+而非继续改地基。
 
-**Done Definition（v0.3）**：上表除 ABR 外三项完成，且不引入新 OPP/Alpha/Market State。
+| Backlog | 说明 |
+|---------|------|
+| REPO-001 | `save_*` → 未来倾向 `record_*`；**不为命名改 API** |
+| CLEANUP-001/002 | Legacy Adapter + Signal 表述 → **v0.3 Cleanup Sprint** |
+| DOC-001 | Status 四态统一 → **本轮已处理主要项** |
 
-**明确不做（v0.3）**：新 OPP、新 Market State、新 Alpha、Feature→交易主链、Dashboard 强绑 Domain。
-
-**切片备忘**：Evidence/Evaluation 实现切片已部分可用；产品化与 append-only 收紧仍属上表 □ 项。
-
-| 附属 backlog | 状态 |
-|--------------|------|
-| **CLEANUP-001** Registry `_adapt_legacy` | Low / Backlog |
-| **CLEANUP-002** 扫除遗留 Signal 主输出表述 | Low / Backlog（ABR VOC-001） |
-| **REPO-001** Repository refinement | High（v0.3 主线） |
-| **SPEC-001** Projection Layer Spec | Medium（v0.3） |
+**明确不做（v0.3）**：新 OPP / Market State / Alpha；Projection 回写 Domain；为 rename 大改 API。
 
 ---
 
-## PAAF v0.4 — Validation Protocol（下一）
+## PAAF v0.4 — Validation Protocol
 
-目标：**验证协议**，不是 Multi-Symbol Engine。
+进入前：v0.3 Done Definition + **ABR-002**。
 
 ```text
-Every Candidate Detector
-  → Automatically Validated
-  → Multi-Symbol
-  → Roll-aware
-  → Evidence Generated
+Every Candidate Detector → Multi-Symbol → Roll-aware → Evidence Generated
 ```
 
-进入 v0.4 前须完成 v0.3 Done Definition + **ABR-002**。
+---
+
+## 已关闭研究快照
+
+Closed 实验 Run Spec **Status = Archived**（DOC-001）。产物不可变。
+
+| ADR / Spec | 状态 |
+|------------|------|
+| Decision 017 / 018 | **Accepted** |
+| ABR-001 | **Completed** |
+| EVIDENCE_DOMAIN / APPEND_ONLY_STORAGE / PROJECTION_LAYER | **Accepted** |
 
 ---
 
-## 已关闭研究快照（append-only；禁止原地复活）
-
-ATR / Volume / OI / Close Location Feature EXP001 与 `OPP16_EXP001` 均 **Closed（inconclusive / Negative Evidence）**。  
-Decision 016：暂停 rb「标量 Feature ↔ RV_60」同构。  
-Decision 017：Closed 实验不可变；新条件 → 新 `experiment_id`。
-
-| Spec / ADR | 状态 | 说明 |
-|------|------|------|
-| Decision 017 | **Accepted** | Evidence-first 路线 |
-| ABR-001 | **Completed** | Architecture Baseline |
-| `EVIDENCE_DOMAIN_SPEC.md` | **Accepted** | Domain Contract v1.0 |
-| Feature / DATA / OPP16 EXP001 族 | **Closed** | 见各 Index |
-
----
-
-## Release（Decision 017）
+## Release
 
 | 版本 | 含义 |
 |------|------|
-| v0.1.x | Context Foundation |
 | v0.2.x | Detector Framework |
-| **v0.3.x** | **Evidence Platform**（当前） |
-| **v0.4.x** | **Validation Protocol** |
-| v0.5.x | Market State |
-| v0.6.x | Opportunity Library |
-| v0.7.x | Decision Engine |
-| 其后 | Execution / Production CTA |
+| **v0.3.x** | Evidence Platform + Contract Freeze（当前） |
+| **v0.4.x** | Validation Protocol |
+| v0.5+ | Market State → Opportunity → Decision → Execution |
 
 ---
 
-## Git 约定
+## 明确不做
 
-### Commit
+- 未经立项 OPP/Alpha；覆盖 Closed 实验；Projection 改 Domain  
+- 无 Replaceability Checklist 的「换存储」宣称  
 
-```text
-feat(context): add Context Engine
-docs(paaf): accept decision 017 evidence-first roadmap
-docs(arch): complete abr-001 architecture baseline review
-```
+## 后续
 
-禁止：`update` / `fix` / `modify` 这类无信息提交说明。
-
-### Branch
-
-- `main`：永远可运行（Decision 012）
-- 功能：`feature/*`；实验：`research/*`
-- 完成：Review 后 Merge；发布打 Annotated Tag
-
----
-
-## 明确不做（在论证通过前）
-
-- 机器学习 / 无约束参数搜索 / 为 Brooks 扭曲数据
-- 大爆炸式重写 `strategies/`
-- Feature 插入冻结交易主链
-- **v0.3 期间未经立项的新 OPP / Alpha**
-- **覆盖或原地复活 Closed 实验**
-- Projection 回写 Domain
-
-## 后续项
-
-| 项 | 状态 | 说明 |
-|----|------|------|
-| Feature Layer | E0 | 只作计算依赖；禁交易捷径 |
-| Architecture Whitepaper v1.0 | 后置 | Repository + Projection 概念稳定后 |
-| Research Portfolio Dashboard | Projection | UI 后置 |
+| 项 | 状态 |
+|----|------|
+| Architecture Whitepaper v1.0 | 后置（ABR-002 后） |
+| Cleanup Sprint | Signal + `_adapt_legacy` |
 
 ---
 
 ## 变更方式
 
-改本文件须同步检查 Decision 017 与最新 ABR；哲学级变更走新 ADR。
+哲学级变更走新 ADR；契约变更先改 Spec。

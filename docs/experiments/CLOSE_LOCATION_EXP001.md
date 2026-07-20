@@ -1,6 +1,6 @@
 # CLOSE_LOCATION_EXP001 — Experiment Run Specification
 
-> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；no promotion）
+> **Status**: Archived（Evidence closed；no promotion）
 > **Accepted date**: 2026-07-19
 > **Closed date**: 2026-07-20
 > **Experiment ID**: `CLOSE_LOCATION_EXP001`

@@ -1,6 +1,6 @@
 # DATA_CONTINUOUS_CONTRACT_EXP002 — Artifact Index
 
-> **Status**: Completed（Evidence closed；Decision 001 unchanged）
+> **Status**: Archived（Evidence closed；Decision 001 unchanged）
 > **Indexed date**: 2026-07-19
 > **Experiment Spec**: `docs/experiments/DATA_CONTINUOUS_CONTRACT_EXP002.md`
 > **Local artifact root**（gitignored）: `research/output/evidence/DATA_CONTINUOUS_CONTRACT_EXP002/`

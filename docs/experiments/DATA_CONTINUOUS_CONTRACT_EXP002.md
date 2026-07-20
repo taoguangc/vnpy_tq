@@ -1,6 +1,6 @@
 # DATA_CONTINUOUS_CONTRACT_EXP002 — Experiment Run Specification
 
-> **Status**: Accepted / **Lifecycle Completed**（Evidence closed；Decision 001 unchanged）
+> **Status**: Archived（Evidence closed；Decision 001 unchanged）
 > **Accepted date**: 2026-07-19
 > **Experiment ID**: `DATA_CONTINUOUS_CONTRACT_EXP002`
 > **Parent RFC**: `docs/specs/DATA_MULTI_SYMBOL_ROLL_EXPERIMENT_RFC.md`

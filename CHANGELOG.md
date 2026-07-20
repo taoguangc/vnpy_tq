@@ -10,6 +10,16 @@
 
 ## [Unreleased]
 
+### Docs / ADR（Decision 018 + v0.3 Contract Freeze）
+
+- Decision 018：**Stable Contracts, Replaceable Infrastructure**（Accepted）
+- Principle 3：Storage replaceable / Contracts stable
+- Principle 4：Projection derived / Domain authoritative
+- `APPEND_ONLY_STORAGE_SPEC.md` + `PROJECTION_LAYER_SPEC.md`：**Accepted**
+- DOC-001：Status 仅 Draft/Accepted/Deprecated/Archived；Closed 实验 → Archived；去掉「接口草案」误导措辞
+- ROADMAP 3.3.0：Contract Freeze 勾选；下一步 Repository → Portfolio → ABR-002
+- 本轮不改 Python
+
 ### Docs / Architecture（ABR-001 Baseline）
 
 - `docs/reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md`：**Completed**
