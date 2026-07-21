@@ -23,7 +23,12 @@
 | [development/REVIEW_CHECKLIST.md](development/REVIEW_CHECKLIST.md) | Pre-Merge 三问（工程规范；非 ADR） |
 | [research/PAAF_RESEARCH_METHOD.md](research/PAAF_RESEARCH_METHOD.md) | **PRM v1.0.1** — Scientific Method + Campaign Lifecycle |
 | [research/CONTEXT_CAPABILITY_GATE.md](research/CONTEXT_CAPABILITY_GATE.md) | Context Capability Gate v1（Methodology；Current **BLOCKED**） |
-| [research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md](research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md) | Context Capability Proposal v0.2 — **Review Passed**（CAP-CTX-001 Candidate） |
+| [research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md](research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md) | Context Capability Proposal v0.3 — **Review PASS** |
+| [research/CAPABILITY_EXPERIMENT_SPECIFICATION_CAP_CTX_001.md](research/CAPABILITY_EXPERIMENT_SPECIFICATION_CAP_CTX_001.md) | CAP-CTX-001 Experiment Spec v0.2 — **Confirmation PASS** |
+| [research/CAP_CTX_001_PROMOTE_DECISION.md](research/CAP_CTX_001_PROMOTE_DECISION.md) | CAP-CTX-001 — **CONFIRM PROMOTE**（Controlled Research Object） |
+| [research/CAP_CTX_001_RUN_SPEC.md](research/CAP_CTX_001_RUN_SPEC.md) | CAP-CTX-001 Run Spec v0.2 — **Confirmation PASS** |
+| [research/CAP_CTX_001_EXECUTION_AUTHORIZATION.md](research/CAP_CTX_001_EXECUTION_AUTHORIZATION.md) | Execution Authorization — **NOT GRANTED**（B1–B4） |
+| [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Pre-Registration Fill Proposal **v0.1**（Draft） |
 | [campaigns/README.md](campaigns/README.md) | **Epoch 2.0** — Research Campaigns |
 | [campaigns/RC001_RESEARCH_PLAN.md](campaigns/RC001_RESEARCH_PLAN.md) | RC001 Plan v0.2 — Review Passed（Not Accepted） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |

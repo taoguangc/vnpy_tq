@@ -42,8 +42,8 @@ Current:
         Epoch 2.0 — Evidence-driven Knowledge Growth
         RC001 Plan v0.2 — Review Passed（Not Accepted）
         Blocking: Context Capability Gate v1（BLOCKED）
-        Upstream: Capability Proposal v0.2 Review Passed → CAP-CTX-001 Candidate
-        Gate: BLOCKED
+        Upstream: Fill Proposal Draft → Auth still NOT GRANTED
+        Gate: BLOCKED | Observation: NONE
         EXP Implementation ⏸
 ```
 

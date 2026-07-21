@@ -231,19 +231,23 @@ Limitation: only TREND|RANGE; Compression not first-level; single-symbol smoke o
 ## Relationship to Capability Research & RC001
 
 ```text
-Context Capability Research Proposal（Review Passed）
+Proposal v0.3 Review PASS
         ↓
-CAP-CTX-001 Candidate（未 Promote）
+Capability Experiment Spec v0.2 Confirmation PASS
         ↓
-Context Capability Gate   ← 本文件
+CAP-CTX-001 PROMOTED（Controlled Research Object）
+        ↓
+Run Spec Draft → Review → Execution Auth
+        ↓
+Context Capability Gate   ← 本文件（仍 BLOCKED）
         ↓
 RC001 Ready → Accepted → EXP001 …
 ```
 
-- Gate **BLOCKED** → 先完成 Capability 研究（Proposal / 未来 CAP-CTX-001），或授权 early-close。  
-- Gate **PASS / PASS WITH LIMITATION** → 才讨论 RC001 Ready。  
-- **禁止**用 RC001 实验反推 Context「有资格」。  
-- Proposal 权威：[`CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md`](CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md)。
+- Gate **BLOCKED**；CAP Promote **不**改变 Gate。  
+- C1–C5 绑定；Experiment Result ≠ Knowledge。  
+- Run Spec：[CAP_CTX_001_RUN_SPEC.md](CAP_CTX_001_RUN_SPEC.md)（v0.2；R1 Dataset Fingerprint + R2 Pre-Registration）  
+- Promote：[CAP_CTX_001_PROMOTE_DECISION.md](CAP_CTX_001_PROMOTE_DECISION.md)
 
 ---
 

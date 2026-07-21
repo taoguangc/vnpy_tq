@@ -8,7 +8,7 @@
 > **Parent**: Epoch 2.0 — Evidence-driven Knowledge Growth  
 > **Method**: [`PAAF_RESEARCH_METHOD.md`](../research/PAAF_RESEARCH_METHOD.md)（PRM v1.0 + Campaign Lifecycle）  
 > **P0 Gate**: [`CONTEXT_CAPABILITY_GATE.md`](../research/CONTEXT_CAPABILITY_GATE.md)（v1；Current = **BLOCKED**）  
-> **Upstream**: [`CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md`](../research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md)（v0.2 **Review Passed**；CAP-CTX-001 Candidate，未 Promote）  
+> **Upstream**: CAP-CTX-001 PROMOTED · Run Spec Confirmation PASS · Execution Auth **NOT GRANTED**；Gate **BLOCKED**  
 > **Path**: `docs/campaigns/RC001_RESEARCH_PLAN.md`  
 > **Implementation**: ⏸ 未授权（Gate 非 PASS 前不 Ready / Accepted、不写 Run Spec、不写代码、不跑回测）
 
@@ -385,3 +385,5 @@ Executable campaign: blocked on Context Capability Gate (P0)
 | 2026-07-20 | 0.2.1 | 引用 `CONTEXT_CAPABILITY_GATE.md`；§5.1 改为摘要；Verdict 量表对齐 |
 | 2026-07-20 | 0.2.2 | 链接 Capability Research Proposal；明确 Proposal → Gate → RC001 |
 | 2026-07-20 | 0.2.3 | Upstream → Proposal v0.2 Review Passed；CAP-CTX-001 Candidate |
+| 2026-07-21 | 0.2.4 | Upstream → Proposal v0.3（Observation Space + Falsification） |
+| 2026-07-21 | 0.2.5 | Proposal PASS；链接 Capability Experiment Spec Draft |
