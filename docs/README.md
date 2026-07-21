@@ -21,7 +21,11 @@
 | [development/SPRINT_2_CONTRACT_REVIEW.md](development/SPRINT_2_CONTRACT_REVIEW.md) | Sprint 2 Contract 落位审查（**PASS**） |
 | [releases/SPRINT_1_REPORT.md](releases/SPRINT_1_REPORT.md) | Sprint 1 Report（平台建设里程碑） |
 | [development/REVIEW_CHECKLIST.md](development/REVIEW_CHECKLIST.md) | Pre-Merge 三问（工程规范；非 ADR） |
-| [research/PAAF_RESEARCH_METHOD.md](research/PAAF_RESEARCH_METHOD.md) | **PRM v1.0** — PAAF Scientific Method（Accepted） |
+| [research/PAAF_RESEARCH_METHOD.md](research/PAAF_RESEARCH_METHOD.md) | **PRM v1.0.1** — Scientific Method + Campaign Lifecycle |
+| [research/CONTEXT_CAPABILITY_GATE.md](research/CONTEXT_CAPABILITY_GATE.md) | Context Capability Gate v1（Methodology；Current **BLOCKED**） |
+| [research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md](research/CONTEXT_CAPABILITY_RESEARCH_PROPOSAL.md) | Context Capability Proposal v0.2 — **Review Passed**（CAP-CTX-001 Candidate） |
+| [campaigns/README.md](campaigns/README.md) | **Epoch 2.0** — Research Campaigns |
+| [campaigns/RC001_RESEARCH_PLAN.md](campaigns/RC001_RESEARCH_PLAN.md) | RC001 Plan v0.2 — Review Passed（Not Accepted） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |
 | [reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md](reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md) | ABR-002 Infrastructure Compliance（**PASS WITH BACKLOG**） |
 | [reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md](reviews/PBR-001_POST_BASELINE_GAP_REVIEW.md) | PBR-001 Post-Baseline Gap Review（Consider Sprint 2） |

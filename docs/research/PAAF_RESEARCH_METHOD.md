@@ -4,7 +4,7 @@
 > This document serves as the **research playbook** for all Research Campaigns.
 
 > **Status**: Accepted  
-> **Version**: 1.0.0  
+> **Version**: 1.0.1  
 > **Date**: 2026-07-20  
 > **Kind**: Scientific Method（哲学层）+ Playbook（操作层）  
 > **Epoch**: 1.5 — Research Methodology；**Epoch 1 最后一个值得沉淀的文档**  
@@ -69,7 +69,40 @@ Campaign (RC001)
 
 PRM 是 Layer 3 的**母协议（Meta Protocol）**；**不是**新 Contract。
 
-**当前状态**：Layer 1–2 就绪；PRM v1.0 **Accepted**；RC-001 **未启动**。
+**当前状态**：Layer 1–2 就绪；PRM v1.0 **Accepted**；**Epoch 2.0** 已开始；RC001 **Review Passed**（Plan v0.2，Not Accepted；见 `docs/campaigns/`）。
+
+---
+
+## 1.1 Campaign Lifecycle
+
+Experiment / Evidence 已有生命周期；Campaign 统一使用：
+
+```text
+Draft
+  → Review Passed
+  → Ready
+  → Accepted
+  → Running
+  → Completed
+  → Archived
+```
+
+| 状态 | 含义 | 可执行？ |
+|------|------|----------|
+| **Draft** | Plan 初稿；科学问题未审完 | 否 |
+| **Review Passed** | RQ / Design / Promotion 审查通过；执行前置可能未齐 | 否 |
+| **Ready** | Research Preconditions（含 Capability Gate）已满足 | 否（待用户 Accepted） |
+| **Accepted** | 用户明确授权开跑 | 是（可写 Run Spec / 开 EXP） |
+| **Running** | 至少一个 EXP 在执行或证据入库中 | 是 |
+| **Completed** | Exit Criteria 满足；Knowledge 已陈述 | — |
+| **Archived** | Campaign 关闭；产物不可原地改写 | — |
+
+**规则**：
+
+- Review Passed ≠ Accepted。科学问题通过 ≠ 可执行。
+- Metric 属于 Experiment（Run Spec 预注册），**不是** Campaign Accepted Gate。
+- Capability / 数据 / 协议等执行前置写在各 RC 的 Research Preconditions；未满足不得进入 Ready / Accepted。
+- Closed Experiment 不可变；跨 Campaign 用 Evidence Lineage（`parent=`），不「复用结果继续跑」（Decision 017）。
 
 ---
 
@@ -93,11 +126,11 @@ PRM 是 Layer 3 的**母协议（Meta Protocol）**；**不是**新 Contract。
 
 ### Step 2 — Campaign（RC-xxx）
 
-见 §4 Research Campaign 模板。Campaign 结束：实验矩阵完成 / Negative 足以关闭 Question / 用户授权关闭并写入 Evidence。
+见 §1.1 Lifecycle 与 §4 模板。Campaign 须先 **Review Passed**，再满足 Preconditions → **Ready**，经用户授权 → **Accepted** 后方可 Running。结束：实验矩阵完成 / Negative 足以关闭 Question / 用户授权关闭并写入 Evidence → Completed → Archived。
 
 ### Step 3 — Experiment Design
 
-每 EXP 满足 `experiments/schema.yaml` 与 `docs/06_RESEARCH_WORKFLOW.md` §3。Closed 不可复活；跨品种用新 `experiment_id`（可 `parent=`）。
+每 EXP 满足 `experiments/schema.yaml` 与 `docs/06_RESEARCH_WORKFLOW.md` §3。**Metric / HOLD 门槛在该 EXP Run Spec 预注册**（执行前），不在 Campaign Plan 层冻结为 Accepted 条件。Closed 不可复活；跨品种或条件变化用新 `experiment_id`（可 `parent=` Lineage）。
 
 ### Step 4 — Evidence
 
@@ -143,17 +176,23 @@ Idea → Backtest profit → Production
 ```markdown
 # RC-xxx — <Campaign Title>
 
+Status: Draft | Review Passed | Ready | Accepted | Running | Completed | Archived
+
 ## Research Question
 
 <可证伪问题>
 
 ## Background
 
-<为何现在问；与既有 Evidence 的关系>
+<为何现在问；与既有 Evidence 的关系；Lineage 父节点>
 
 ## Hypothesis
 
 <单句或假设族；每 EXP 一个主要假设>
+
+## Research Preconditions
+
+<P0 Capability Gate（若适用） / Opportunity baseline / Evaluation protocol per EXP>
 
 ## Evidence Needed
 
@@ -166,9 +205,9 @@ Idea → Backtest profit → Production
 | RCxxx_EXP001 | rb | … | … |
 | RCxxx_EXP002 | hc | … | … |
 
-## Acceptance Criteria
+## Exit Criteria
 
-<Campaign 何时算完成；HOLD/REVERT 是否足以关闭>
+<Campaign 何时算完成；HOLD/REVERT 是否足以关闭；Expected Knowledge>
 
 ## Promotion Boundary
 
@@ -176,7 +215,7 @@ Idea → Backtest profit → Production
 
 ## Expected Outputs
 
-- docs/experiments/<EXP>.md
+- docs/experiments/<EXP>.md（Run Spec：metric 预注册）
 - research/output/evidence/<experiment_id>/
 - Validation Comparison（若多 EXP）
 ```
@@ -261,7 +300,11 @@ PRM v1.0 Accepted ✓
         ↓
 Research Question（证据驱动）
         ↓
-RC-001（第一个按 PRM 执行的 Campaign）
+RC-001 Review Passed（Plan v0.2）
+        ↓
+Context Capability Gate（docs/research/CONTEXT_CAPABILITY_GATE.md）
+        ↓
+Ready → Accepted → Running
 ```
 
 **Stable Window**：Architecture Frozen；Research First。
@@ -277,3 +320,4 @@ RC-001（第一个按 PRM 执行的 Campaign）
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-20 | 1.0.0 | Accepted：Scientific Method + Playbook；Chapter 0 / Failure / RC 模板 |
+| 2026-07-20 | 1.0.1 | Playbook：§1.1 Campaign Lifecycle；模板补 Preconditions；Metric 属 EXP |

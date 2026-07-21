@@ -39,9 +39,12 @@ Epoch 1 Midpoint Review
         ✓
 
 Current:
-        Stable Window Active
-        Sprint 3 ⏸ Not Started
-        v0.4 Not Started
+        Epoch 2.0 — Evidence-driven Knowledge Growth
+        RC001 Plan v0.2 — Review Passed（Not Accepted）
+        Blocking: Context Capability Gate v1（BLOCKED）
+        Upstream: Capability Proposal v0.2 Review Passed → CAP-CTX-001 Candidate
+        Gate: BLOCKED
+        EXP Implementation ⏸
 ```
 
 ## Proven loops
