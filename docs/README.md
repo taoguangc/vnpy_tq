@@ -27,8 +27,14 @@
 | [research/CAPABILITY_EXPERIMENT_SPECIFICATION_CAP_CTX_001.md](research/CAPABILITY_EXPERIMENT_SPECIFICATION_CAP_CTX_001.md) | CAP-CTX-001 Experiment Spec v0.2 — **Confirmation PASS** |
 | [research/CAP_CTX_001_PROMOTE_DECISION.md](research/CAP_CTX_001_PROMOTE_DECISION.md) | CAP-CTX-001 — **CONFIRM PROMOTE**（Controlled Research Object） |
 | [research/CAP_CTX_001_RUN_SPEC.md](research/CAP_CTX_001_RUN_SPEC.md) | CAP-CTX-001 Run Spec v0.2 — **Confirmation PASS** |
-| [research/CAP_CTX_001_EXECUTION_AUTHORIZATION.md](research/CAP_CTX_001_EXECUTION_AUTHORIZATION.md) | Execution Authorization — **NOT GRANTED**（B1–B4） |
-| [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Pre-Registration Fill Proposal **v0.1**（Draft） |
+| [research/CAP_CTX_001_RUN001_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN001_EXECUTION_REPORT.md) | RUN001 Observation COMPLETE |
+| [research/CAP_CTX_001_RUN001_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN001_EVIDENCE_REVIEW.md) | Evidence **PASS** · led to K001 Review |
+| [research/K001_KNOWLEDGE_REVIEW.md](research/K001_KNOWLEDGE_REVIEW.md) | K001 **ACCEPT WITH QUALIFICATION**（Gate unchanged） |
+| [research/CAP_CTX_CROSS_EVIDENCE_NEXT.md](research/CAP_CTX_CROSS_EVIDENCE_NEXT.md) | Cross Evidence roadmap |
+| [research/CAP_CTX_001_RUN002_RUN_SPEC.md](research/CAP_CTX_001_RUN002_RUN_SPEC.md) | RUN002 Spec v0.2 — **Review PASS**（Temporal OOS） |
+| [research/CAP_CTX_001_RUN002_PRE_REGISTRATION_FILL.md](research/CAP_CTX_001_RUN002_PRE_REGISTRATION_FILL.md) | RUN002 Fill v0.2 — **Confirmation PASS** |
+| [research/CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md](research/CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md) | RUN002 Auth **Draft v0.1** — NOT GRANTED |
+| [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
 | [campaigns/README.md](campaigns/README.md) | **Epoch 2.0** — Research Campaigns |
 | [campaigns/RC001_RESEARCH_PLAN.md](campaigns/RC001_RESEARCH_PLAN.md) | RC001 Plan v0.2 — Review Passed（Not Accepted） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |

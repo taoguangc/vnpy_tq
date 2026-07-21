@@ -55,16 +55,19 @@ Context Capability
 
 ---
 
-## Current Verdict（as-of 2026-07-20）
+## Current Verdict（as-of 2026-07-21）
 
 ```text
 Context Capability Gate v1
 
 Status: BLOCKED
 
-Reason:
-  ContextEngine publishes market_state = UNKNOWN only
-  → Context Signal does not yet exist as a research variable
+Reasons:
+  1) ContextEngine still publishes market_state = UNKNOWN only
+     (engineering signal not yet a research-usable first-level state)
+  2) K001 is ACCEPT WITH QUALIFICATION only
+     — not unconditional Capability Knowledge
+     — Gate does not auto-open from RUN001
 ```
 
 此 Verdict 本身可作为 **Process Evidence**：Framework 存在、Signal 未就绪。  
@@ -237,16 +240,22 @@ Capability Experiment Spec v0.2 Confirmation PASS
         ↓
 CAP-CTX-001 PROMOTED（Controlled Research Object）
         ↓
-Run Spec Draft → Review → Execution Auth
+Run Spec Confirmation PASS → Fill Confirmation PASS
+        ↓
+Execution Authorization GRANTED WITH CONDITIONS
+        ↓
+CP3 OPEN（Observation Authorized；未执行）
         ↓
 Context Capability Gate   ← 本文件（仍 BLOCKED）
         ↓
 RC001 Ready → Accepted → EXP001 …
 ```
 
-- Gate **BLOCKED**；CAP Promote **不**改变 Gate。  
-- C1–C5 绑定；Experiment Result ≠ Knowledge。  
-- Run Spec：[CAP_CTX_001_RUN_SPEC.md](CAP_CTX_001_RUN_SPEC.md)（v0.2；R1 Dataset Fingerprint + R2 Pre-Registration）  
+- Gate **BLOCKED**；Auth GRANTED / CP3 OPEN **不**改变 Gate。  
+- C1–C5 + Auth C-ENV…C-NO-DRIFT 绑定。  
+- Run Spec：[CAP_CTX_001_RUN_SPEC.md](CAP_CTX_001_RUN_SPEC.md)  
+- Fill：[CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md)（Confirmation PASS）  
+- Auth：[CAP_CTX_001_EXECUTION_AUTHORIZATION.md](CAP_CTX_001_EXECUTION_AUTHORIZATION.md)  
 - Promote：[CAP_CTX_001_PROMOTE_DECISION.md](CAP_CTX_001_PROMOTE_DECISION.md)
 
 ---

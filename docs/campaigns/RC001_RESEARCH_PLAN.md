@@ -8,7 +8,7 @@
 > **Parent**: Epoch 2.0 — Evidence-driven Knowledge Growth  
 > **Method**: [`PAAF_RESEARCH_METHOD.md`](../research/PAAF_RESEARCH_METHOD.md)（PRM v1.0 + Campaign Lifecycle）  
 > **P0 Gate**: [`CONTEXT_CAPABILITY_GATE.md`](../research/CONTEXT_CAPABILITY_GATE.md)（v1；Current = **BLOCKED**）  
-> **Upstream**: CAP-CTX-001 PROMOTED · Run Spec Confirmation PASS · Execution Auth **NOT GRANTED**；Gate **BLOCKED**  
+> **Upstream**: CAP-CTX-001 PROMOTED · Fill Confirmation PASS · Execution Auth **GRANTED WITH CONDITIONS** · CP3 OPEN；Observation 未执行；Gate **BLOCKED**  
 > **Path**: `docs/campaigns/RC001_RESEARCH_PLAN.md`  
 > **Implementation**: ⏸ 未授权（Gate 非 PASS 前不 Ready / Accepted、不写 Run Spec、不写代码、不跑回测）
 

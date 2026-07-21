@@ -391,8 +391,11 @@ Capability exists
 ```text
 Promote: ✓
 Run Spec v0.2: Confirmation PASS ✓
-Execution Authorization: see CAP_CTX_001_EXECUTION_AUTHORIZATION.md（NOT GRANTED）
-Observation: NONE
+Fill Proposal v0.2: Confirmation PASS ✓ · Pre-Registration COMPLETE
+Execution Authorization: GRANTED WITH CONDITIONS
+CP3: OPEN（Authorized）
+Run Manifest: research/output/evidence/CAP_CTX_001_RUN001/CAP_CTX_001_RUN_MANIFEST.json
+Observation executed: NO（待显式执行指令）
 Evidence: NONE
 Gate: BLOCKED
 RC001: Review Passed / Not Accepted
@@ -404,35 +407,41 @@ RC001: Review Passed / Not Accepted
 
 1. **Further Revise** — 改 Run Spec  
 2. **Confirmation Review PASS** — ✓ 已达成（2026-07-21）  
-3. **Execution Authorization** — 见 [`CAP_CTX_001_EXECUTION_AUTHORIZATION.md`](CAP_CTX_001_EXECUTION_AUTHORIZATION.md)；须清除 B1–B4  
-4. **Park**
+3. **Fill Proposal Confirmation** — ✓ 已达成（v0.2）  
+4. **Execution Authorization** — **GRANTED WITH CONDITIONS** — [`CAP_CTX_001_EXECUTION_AUTHORIZATION.md`](CAP_CTX_001_EXECUTION_AUTHORIZATION.md)  
+5. **Observation** — CP3 OPEN；须满足 C-ENV 后另授实现  
+6. **Park**
 
-**当前默认**：Confirmation PASS；Execution **未**授权；**不** Observation。
+**当前默认**：Execution **GRANTED WITH CONDITIONS**；CP3 **OPEN**；Observation **未**执行；Gate/RC001 不变。
 
 ---
 
-## Appendix A — Pre-Registration Record（R2）
+## Appendix A — Pre-Registration Record（Synced from Fill Proposal v0.2）
 
-> 证明 **设计先于结果**。结构已 Confirmation PASS；**具体填值**须在 Execution Authorization 前冻结（见 Auth 审查 B1–B4）。
+> 权威实例以 [`CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md`](CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) **v0.2 §9** 为准（**Confirmation PASS**）。  
+> 下表为同步副本。改字段 → 新 `run_id`。
 
 ### A.1 Identity & Universe
 
 | 项 | 值 |
 |----|-----|
-| `run_id` | _TBD — freeze before Execution Auth_ |
+| `run_id` | `CAP_CTX_001_RUN001` |
 | `campaign_id` | `CAP-CTX-001` |
 | `spec_version` | `0.2` |
-| Initial evaluation universe | `rb`, `i`, `ma`（结构已确认；替换须 Observation 前） |
+| `fill_proposal_version` | `0.2` |
+| Frozen evaluation universe | `rb`, `i`, `MA` |
 | Hold-out | none |
 
 ### A.2 Time & Data Identity
 
 | 项 | 值 |
 |----|-----|
-| Full `start` / `end` | _TBD_ |
-| Period A / Period B | _TBD_ |
-| Timezone / session filter | _TBD_ |
-| Dataset Fingerprint（§2.3） | 结构 Accepted；**实例值** _TBD_ |
+| Full | `2024-01-01` … `2025-12-31` |
+| Period A / B | `2024` / `2025` |
+| Timezone / storage | Asia/Shanghai calendar；`ns_utc` |
+| Session | all bars in CbC 1m stream |
+| Dataset fingerprints | Fill Proposal §1.2（SHA256 ceremony 2026-07-21） |
+| Lineage | OPP16_EXP001 period = provenance reference only |
 
 ### A.3 Observation Families & Metrics
 
@@ -440,9 +449,9 @@ RC001: Review Passed / Not Accepted
 |----|-----|
 | Families in | Volatility Structure, Price Structure |
 | Families out | Liquidity, Market Geometry |
-| M1 definition + window | _TBD_ |
-| M2 definition + window | _TBD_ |
-| Partition rule on M1 | _TBD_ |
+| M1 | `M1_realized_volatility`, W=20（descriptive only） |
+| M2 | `M2_directional_efficiency`, W=20（descriptive only） |
+| Partition | `causal_rolling_median_threshold`, L=240 |
 
 ### A.4 Evaluation Order（冻结）
 
@@ -452,16 +461,17 @@ E1 → E2 → E3
 
 | 项 | 值 |
 |----|-----|
-| E1/E2/E3 numeric thresholds | _TBD_ |
-| min sample / min duration | _TBD_ |
+| E1 | `SMD_M1` > N1 q95；min 5000/label |
+| E2 | mean_run_length > N2 q95；min_runs 100 |
+| E3 | E1 Pass on i and MA |
 
 ### A.5 Null Baselines（冻结）
 
 | 项 | 值 |
 |----|-----|
-| N1 method + repetitions | _TBD_ |
-| N2 method + repetitions | _TBD_ |
-| N3 rule | isolated-sample check as Spec |
+| N1 | iid_label_permutation；200；seed 20240721 |
+| N2 | block_label_permutation；block=60；200；seed 20240721 |
+| N3 | isolated-sample check |
 
 ### A.6 Falsification Mapping（冻结引用）
 
@@ -472,12 +482,12 @@ E1 → E2 → E3
 | F3 | K002 / K004 |
 | F4 | K004 / K002 |
 
-### A.7 Environment（执行时补齐）
+### A.7 Environment（Auth 后、Observation 前补齐）
 
 | 项 | 值 |
 |----|-----|
-| `code_revision` | _TBD at execution（Auth 后、Observation 前）_ |
-| `environment_identity` | _TBD at execution（Auth 后、Observation 前）_ |
+| `code_revision` | _TBD until Auth GRANTED_ |
+| `environment_identity` | _TBD until Auth GRANTED_ |
 | Run Manifest path | `CAP_CTX_001_RUN_MANIFEST.json` |
 
 ---
@@ -489,3 +499,5 @@ E1 → E2 → E3
 | 2026-07-21 | 0.1 | Draft：Run Objective；Dataset Lock；Universe；Eval/Null；Checkpoints |
 | 2026-07-21 | 0.2 | R1 Dataset Fingerprint；R2 Pre-Registration；Time Scope；Run Manifest；CP3 |
 | 2026-07-21 | 0.2.1 | Confirmation PASS 归档；链接 Execution Authorization Review |
+| 2026-07-21 | 0.2.2 | Sync Appendix A from Fill Proposal v0.2 |
+| 2026-07-21 | 0.2.3 | Fill Confirmation PASS；Execution Auth GRANTED WITH CONDITIONS；CP3 OPEN |
