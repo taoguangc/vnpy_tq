@@ -17,7 +17,7 @@ CCED_CID_002_V0_1
 Purpose: Define how a Bindable CID_002 surface may be consumed
          by Context under Decision 019 roles ONLY.
 
-Fill / Observation: CTX_CID002_EXP001 CLOSED · KEEP（H_CTX_FILTER）
+Fill / Observation: CTX_CID002_EXP001 KEEP · CTX_CID002_EXP002 OOS KEEP
 Alpha / Trading value of Context: NOT CLAIMED
 RC001-B: NOT REOPENED
 ================================================
@@ -96,10 +96,11 @@ for the first Context Consumer EXP.
 ❌ Mutate CID_002 binding bytes to “fit” Context
 ```
 
-## 7. First consumer EXP status
+## 7. Consumer EXP status
 
 ```text
-CTX_CID002_EXP001: CLOSED · KEEP · ER PASS
+CTX_CID002_EXP001: CLOSED · KEEP（rb/2024）
+CTX_CID002_EXP002: CLOSED · KEEP（rb/2025 OOS）
 Further Context EXPs: new experiment_id + authorization required
 ```
 
@@ -110,3 +111,4 @@ Further Context EXPs: new experiment_id + authorization required
 | 2026-07-22 | Design COMPLETE under Delegation-50I |
 | 2026-07-22 | Fill PRE-REGISTERED · `CTX_CID002_EXP001` |
 | 2026-07-22 | First Observation KEEP · CLOSED |
+| 2026-07-22 | EXP002 OOS KEEP · Delegation-50J STOP |
