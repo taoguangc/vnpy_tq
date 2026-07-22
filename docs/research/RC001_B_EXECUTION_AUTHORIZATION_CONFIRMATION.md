@@ -6,6 +6,7 @@
 > **Command**: `Authorize RC001-B Execution Authorization Confirmation`  
 > **Parent Auth**: [`RC001_B_EXECUTION_AUTHORIZATION.md`](RC001_B_EXECUTION_AUTHORIZATION.md) — GRANTED WITH CONDITIONS  
 > **Contract**: [`RC001_B_CONTRACT_FREEZE.md`](RC001_B_CONTRACT_FREEZE.md) — FROZEN  
+> **Permanent Closure**: [`RC001_B_PERMANENT_CLOSURE_DECISION.md`](RC001_B_PERMANENT_CLOSURE_DECISION.md) — **CONFIRMED**
 > **Artifacts**: `research/output/evidence/RC001_B_EXP001/`
 
 ### Confirmation Record（binding）
@@ -73,11 +74,11 @@ verdict: NO_VALID_STRATEGY_PAIR
 
 Report: `research/output/evidence/RC001_B_EXP001/bind_attempt_report.json`
 
-### Correct terminal state for EXP001（current）
+### Correct terminal state for EXP001
 
 ```text
 RC001-B EXP001:
-  BLOCKED — NO VALID STRATEGY PAIR
+  CLOSED — BLOCKED — NO VALID STRATEGY PAIR
 ```
 
 **Not:**
@@ -115,12 +116,12 @@ Governance integrity: Contract held; bind gate worked as designed.
 
 ---
 
-## 5. Next legal paths（all 另授）
+## 5. Closure and permitted future paths（all 另授）
 
 | Path | Meaning |
 |------|---------|
 | **A** | Import/restore **existing** orthogonal Closed strategies into repo → re-bind under same Contract（new bind timestamp；no RP change） |
-| **B** | Close RC001-B EXP001 as **BLOCKED**（campaign decision） |
+| **B** | Asset Inventory Review → audit existing/history/archives for bindable assets; no fabrication |
 | **C** | New experiment_id only if Contract/Design change required |
 
 ```text

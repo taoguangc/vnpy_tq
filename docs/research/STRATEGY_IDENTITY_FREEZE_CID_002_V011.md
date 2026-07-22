@@ -16,9 +16,9 @@ SIF_CID_002_V0_1_1
 
 strategy_id: STRAT_TREND_BROOKS_SCALP_02
 version:     0.1.1
-lifecycle:   Verified（H_MECH auditability · E3 · see VR_CID_002_MECH_V0_1_1 + A1）
+lifecycle:   Verified（H_MECH · E3）· **Bindable**（Research Mechanism Asset · BDR_CID_002_V0_1）
 change:      on_rollover_adjust only
-Bindable:    NO
+Bindable:    YES（Research Mechanism Asset · ≠ Alpha · ≠ Production）
 Alpha:       NONE
 ================================================
 ```
@@ -62,8 +62,9 @@ Alpha:       NONE
 IS: Candidate repair identity for rollover price continuity
 IS: Mechanism Surface lifecycle Verified（H_MECH · E3）
     after VR_CID_002_MECH_V0_1_1 + A1（EXP011 OOS）
+IS: Bindable Research Mechanism Asset（BDR_CID_002_V0_1）
 IS NOT: replacement that erases 0.1.0 evidence
-IS NOT: Bindable / Alpha / Production / E4 / Capital Surface Verified
+IS NOT: Alpha / Production / E4 / Capital Surface identity
 ```
 
 ## Revision record
@@ -74,3 +75,4 @@ IS NOT: Bindable / Alpha / Production / E4 / Capital Surface Verified
 | 2026-07-22 | Lifecycle → Verified（H_MECH · E2）via `VR_CID_002_MECH_V0_1_1` |
 | 2026-07-22 | Evidence → E3 via EXP011 / `VR_CID_002_MECH_V0_1_1_A1` |
 | 2026-07-22 | G5：`source_revision` → `833ae4740e6da3e2e3a42899d2bd4229f61785d6` |
+| 2026-07-22 | Bindable GRANTED（Research Mechanism Asset）via `BDR_CID_002_V0_1` |

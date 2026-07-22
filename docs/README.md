@@ -14,6 +14,8 @@
 | [releases/EPOCH_2_SUMMARY.md](releases/EPOCH_2_SUMMARY.md) | Epoch 2 总结 — Capability Research Validation（**Complete**） |
 | [releases/EPOCH_3_POSITIONING.md](releases/EPOCH_3_POSITIONING.md) | **Epoch 3** — Capability Expansion（**CLOSED at Gate CONDITIONAL**） |
 | [releases/EPOCH_3_SUMMARY.md](releases/EPOCH_3_SUMMARY.md) | Epoch 3 Summary — Closure · Route A · Phase 3.6 pointer |
+| [releases/EPOCH_4_CLOSURE.md](releases/EPOCH_4_CLOSURE.md) | **Epoch 4 Closure** — CAP-CTX-001 **CLOSED** · Narrow Candidate · Trading Value NOT PROVEN |
+| [releases/EPOCH_5_POSITIONING.md](releases/EPOCH_5_POSITIONING.md) | **Epoch 5** — Strategy Research **ACTIVE** · Asset Layer · ≠ RC001-B reopen |
 | [releases/EPOCH_1_POSITIONING.md](releases/EPOCH_1_POSITIONING.md) | Epoch 1 范式定位（Evidence-centric / Research Governance） |
 | [reviews/EPOCH_1_MIDPOINT_REVIEW.md](reviews/EPOCH_1_MIDPOINT_REVIEW.md) | Epoch 1 Midpoint Review（**Completed**；Stable Window） |
 | [development/PLATFORM_CONSTRUCTION_PHASE.md](development/PLATFORM_CONSTRUCTION_PHASE.md) | Platform Construction Phase 定位与纪律 |
@@ -87,6 +89,9 @@
 | [research/RC001_B_CONTRACT_FREEZE.md](research/RC001_B_CONTRACT_FREEZE.md) | RC001-B Contract — **FROZEN** ✓ |
 | [research/RC001_B_EXECUTION_AUTHORIZATION.md](research/RC001_B_EXECUTION_AUTHORIZATION.md) | RC001-B Execution Auth — **GWC** · Confirm **PASS** · EXP001 **BLOCKED** |
 | [research/RC001_B_EXECUTION_AUTHORIZATION_CONFIRMATION.md](research/RC001_B_EXECUTION_AUTHORIZATION_CONFIRMATION.md) | RC001-B Exec Auth Confirmation — **PASS** ✓ · **NO VALID STRATEGY PAIR** |
+| [research/RC001_B_ASSET_INVENTORY_REVIEW.md](research/RC001_B_ASSET_INVENTORY_REVIEW.md) | RC001-B Asset Inventory — **COMPLETE** · Valid S1/S2 **NOT FOUND** |
+| [research/RC001_B_EXP001_CLOSURE_REVIEW.md](research/RC001_B_EXP001_CLOSURE_REVIEW.md) | RC001-B EXP001 Closure — **PERMANENTLY CLOSED — BLOCKED** |
+| [research/RC001_B_PERMANENT_CLOSURE_DECISION.md](research/RC001_B_PERMANENT_CLOSURE_DECISION.md) | RC001-B Permanent Closure — **CONFIRMED** ✓ |
 | [research/PHASE_A1_ENGINEERING_PUBLISHED_STATE_PROPOSAL.md](research/PHASE_A1_ENGINEERING_PUBLISHED_STATE_PROPOSAL.md) | Phase A1 Engineering Proposal — **Confirmation PASS** ✓ |
 | [research/CAP_CTX_A1_ENGINEERING_PUBLISHED_STATE_SPECIFICATION.md](research/CAP_CTX_A1_ENGINEERING_PUBLISHED_STATE_SPECIFICATION.md) | A1 Published State Spec — **Confirmation PASS** ✓ |
 | [research/CAP_CTX_A1_PRE_REGISTRATION_FILL.md](research/CAP_CTX_A1_PRE_REGISTRATION_FILL.md) | A1 Pre-registration Fill — **Confirmation PASS** ✓ |
@@ -109,7 +114,45 @@
 | [research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md) | RUN002 Observation **COMPLETE** — SUPPORTED → STRENGTHEN（Action only） |
 | [research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md) | RUN002 Evidence Review **PASS** · SUPPORTED |
 | [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
-| [campaigns/README.md](campaigns/README.md) | **Epoch 3** — Capability Expansion（active） |
+| [campaigns/README.md](campaigns/README.md) | **Epoch 5** — Strategy Research active · Contract Design DRAFT |
+| [research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md](research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md) | Strategy Research Phase — **GRANTED** ✓ |
+| [research/STRATEGY_ASSET_CONTRACT_DESIGN.md](research/STRATEGY_ASSET_CONTRACT_DESIGN.md) | Strategy Asset Contract Design — **CONFIRMED** v0.1 |
+| [research/STRATEGY_ASSET_CONTRACT_CONFIRMATION.md](research/STRATEGY_ASSET_CONTRACT_CONFIRMATION.md) | Strategy Asset Contract Confirmation — **PASS** ✓ |
+| [research/STRATEGY_ASSET_CONTRACT_FREEZE.md](research/STRATEGY_ASSET_CONTRACT_FREEZE.md) | Strategy Asset Contract `SAC-v1` — **FROZEN** ✓ |
+| [research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_DESIGN.md](research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_DESIGN.md) | Strategy Evidence + Validation Framework — **CONFIRMED** v0.1 |
+| [research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_CONFIRMATION.md](research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_CONFIRMATION.md) | Strategy Evidence + Validation Framework Confirmation — **PASS** ✓ |
+| [research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_FREEZE.md](research/STRATEGY_EVIDENCE_VALIDATION_FRAMEWORK_FREEZE.md) | Strategy Evidence + Validation Framework `SEVF-v1` — **FROZEN** ✓ |
+| [research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_DESIGN.md](research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_DESIGN.md) | Strategy Asset Family Inventory Protocol — **CONFIRMED** v0.1 |
+| [research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_CONFIRMATION.md](research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_CONFIRMATION.md) | Family Inventory Protocol Confirmation — **PASS** ✓ |
+| [research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_FREEZE.md](research/STRATEGY_ASSET_FAMILY_INVENTORY_PROTOCOL_FREEZE.md) | Family Inventory Protocol `SAFIP-v1` — **FROZEN** ✓ |
+| [research/STRATEGY_ASSET_FAMILY_INVENTORY_REVIEW.md](research/STRATEGY_ASSET_FAMILY_INVENTORY_REVIEW.md) | Strategy Asset Family Inventory — **COMPLETE** · no Testing-eligible asset |
+| [research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_DESIGN.md](research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_DESIGN.md) | Candidate Admission Protocol — **CONFIRMED** v0.1 |
+| [research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_CONFIRMATION.md](research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_CONFIRMATION.md) | Candidate Admission Protocol Confirmation — **PASS** ✓ |
+| [research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_FREEZE.md](research/STRATEGY_CANDIDATE_ADMISSION_PROTOCOL_FREEZE.md) | Candidate Admission Protocol `SCAP-v1` — **FROZEN** ✓ |
+| [research/STRATEGY_CANDIDATE_ADMISSION_REVIEW.md](research/STRATEGY_CANDIDATE_ADMISSION_REVIEW.md) | Candidate Admission — `brooks_scalp` **source only** |
+| [research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_DESIGN.md](research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_DESIGN.md) | Candidate Identity Draft + Source Recovery Design — **CONFIRMED** |
+| [research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_CONFIRMATION.md](research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_CONFIRMATION.md) | SCIDR Confirmation — **PASS** ✓ |
+| [research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_FREEZE.md](research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_SOURCE_RECOVERY_FREEZE.md) | SCIDR Protocol `SCIDR-v1` — **FROZEN** ✓ |
+| [research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_001.md](research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_001.md) | Identity Draft CID_001 — **DRAFT** · `WORKING_TREE_RESTORE` · Freeze **NOT READY** |
+| [research/STRATEGY_CANDIDATE_WORKING_TREE_RESTORE_CID_001.md](research/STRATEGY_CANDIDATE_WORKING_TREE_RESTORE_CID_001.md) | Working-Tree Restore CID_001 — **COMPLETE** · hashes MATCH |
+| [research/STRATEGY_ARCHAEOLOGY_NOTE_BACKUP_PA_MINIMAL.md](research/STRATEGY_ARCHAEOLOGY_NOTE_BACKUP_PA_MINIMAL.md) | Backup `pa_minimal.py` — **REFERENCE_ONLY** · 不改准入 |
+| [research/STRATEGY_ARCHITECTURE_DEVIATION_ACCEPTANCE_PROTOCOL_FREEZE.md](research/STRATEGY_ARCHITECTURE_DEVIATION_ACCEPTANCE_PROTOCOL_FREEZE.md) | Architecture Deviation Acceptance `ADAP-v1` — **FROZEN** |
+| [research/STRATEGY_CANDIDATE_EXECUTION_MARKET_BINDING_PROTOCOL_FREEZE.md](research/STRATEGY_CANDIDATE_EXECUTION_MARKET_BINDING_PROTOCOL_FREEZE.md) | Execution/Market Binding `CEMB-v1` — **FROZEN** |
+| [research/STRATEGY_CANDIDATE_IDENTITY_FREEZE_READINESS_CID_001.md](research/STRATEGY_CANDIDATE_IDENTITY_FREEZE_READINESS_CID_001.md) | Identity Freeze Readiness — **NOT READY** |
+| [research/STRATEGY_PAAF_REWRITE_CHARTER_BROOKS_SCALP.md](research/STRATEGY_PAAF_REWRITE_CHARTER_BROOKS_SCALP.md) | PAAF Rewrite Charter — **impl authorized** · v0.1 delivered |
+| [research/STRATEGY_PAAF_REWRITE_IMPLEMENTATION_BROOKS_SCALP.md](research/STRATEGY_PAAF_REWRITE_IMPLEMENTATION_BROOKS_SCALP.md) | Rewrite Implementation — **STRAT_TREND_BROOKS_SCALP_02** v0.1.0 |
+| [research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_002.md](research/STRATEGY_CANDIDATE_IDENTITY_DRAFT_002.md) | Identity Draft CID_002 — superseded by Freeze |
+| [research/STRATEGY_IDENTITY_FREEZE_CID_002.md](research/STRATEGY_IDENTITY_FREEZE_CID_002.md) | Identity Freeze CID_002 — **FROZEN** · Candidate · not Bindable |
+| [research/STRATEGY_SEVF_SPECIFICATION_CID_002.md](research/STRATEGY_SEVF_SPECIFICATION_CID_002.md) | SEVF Spec CID_002 — **SPECIFIED** |
+| [research/STRATEGY_SEVF_FILL_CID_002_EXP001.md](research/STRATEGY_SEVF_FILL_CID_002_EXP001.md) | SEVF Fill `STRAT_BS02_EXP001` — PRE-REGISTERED |
+| [research/STRATEGY_SEVF_EVALUATION_CID_002_EXP001.md](research/STRATEGY_SEVF_EVALUATION_CID_002_EXP001.md) | SEVF Eval EXP001 — **CLOSED · KEEP**（H_MECH · not Alpha） |
+| [research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_002_EXP001.md](research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_002_EXP001.md) | Evidence Review EXP001 — **PASS** · H_MECH retained |
+| [research/STRATEGY_ASSET_REVIEW_CID_002.md](research/STRATEGY_ASSET_REVIEW_CID_002.md) | Asset Review CID_002 — **SAR_CID_002_V0_4** · capital OPEN |
+| [research/STRATEGY_ENGINEERING_REVIEW_CID_002_POSITIONING.md](research/STRATEGY_ENGINEERING_REVIEW_CID_002_POSITIONING.md) | Positioning Review — **COMPLETE** · 0.2.0 design-only |
+| [research/STRATEGY_PAAF_POSITIONING_CHARTER_BROOKS_SCALP_V020.md](research/STRATEGY_PAAF_POSITIONING_CHARTER_BROOKS_SCALP_V020.md) | Positioning Charter 0.2.0 — **design frozen** · impl **NO** |
+| [research/STRATEGY_DELEGATION_50C_EXECUTION_LOG.md](research/STRATEGY_DELEGATION_50C_EXECUTION_LOG.md) | Delegation-50C — **STOP** 24/50 |
+| [research/STRATEGY_DELEGATION_50C_EVIDENCE_BUNDLE.md](research/STRATEGY_DELEGATION_50C_EVIDENCE_BUNDLE.md) | EXP006–007 evidence bundle |
+| [research/STRATEGY_DELEGATION_20_EXECUTION_LOG.md](research/STRATEGY_DELEGATION_20_EXECUTION_LOG.md) | Delegation-20 log — **STOP** 16/20 |
 | [campaigns/RC001_RESEARCH_PLAN.md](campaigns/RC001_RESEARCH_PLAN.md) | RC001 Plan v0.2 — Review Passed（Not Accepted） |
 | [reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md](reviews/ABR-001_ARCHITECTURE_FREEZE_REVIEW.md) | ABR-001 Architecture Baseline Review（**Completed**） |
 | [reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md](reviews/ABR-002_INFRASTRUCTURE_COMPLIANCE.md) | ABR-002 Infrastructure Compliance（**PASS WITH BACKLOG**） |

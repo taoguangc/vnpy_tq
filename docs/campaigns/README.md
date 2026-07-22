@@ -1,30 +1,23 @@
-# Epoch 3 / 4 — Capability Expansion
+# Epoch 5 — Strategy Research（Bindable · Context Design ready）
 
 ```text
-RC001-B Exec Auth Confirmation   PASS ✓
-C-ENV                            SATISFIED ✓
-C-BIND                           UNSATISFIED
-RC001-B EXP001                   BLOCKED — NO VALID STRATEGY PAIR
-Observation / Backtest           NONE
+SAR:              SAR_CID_002_V0_15
+Bindable:         GRANTED
+Context Consumer: DESIGNED · Fill NOT authorized
+Delegation-50I:   STOP 30/50
 ```
 
-## State
-
-```text
-Gate worked: no fabrication
-BLOCKED ≠ K001 false ≠ Context useless
-Next: Decision on Path A（restore pair）/ B（close BLOCKED）/ C（new id）
-```
+## Pointers
 
 | Item | Status |
 |------|--------|
-| Confirmation | [PASS · BLOCKED](../research/RC001_B_EXECUTION_AUTHORIZATION_CONFIRMATION.md) ✓ |
-| Manifest | `research/output/evidence/RC001_B_EXP001/RC001_B_RUN_MANIFEST.json` |
-| Bind | UNBOUND · attempt report present |
+| Bindable Designation | [GRANTED](../research/STRATEGY_BINDABLE_DESIGNATION_CID_002.md) |
+| Context Consumer Design | [CCED_CID_002_V0_1](../research/STRATEGY_CONTEXT_CONSUMER_EXPERIMENT_DESIGN_CID_002.md) |
+| Delegation-50I | [STOP](../research/STRATEGY_DELEGATION_50I_EXECUTION_LOG.md) |
+| Asset Review | [SAR_CID_002_V0_15](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
 
-## Next
+## Next（须另授）
 
 ```text
-Authorize RC001-B EXP001 Closure（BLOCKED）
-  or restore existing orthogonal S1/S2 then re-bind（另授）
+Authorize Context Consumer Experiment Fill
 ```

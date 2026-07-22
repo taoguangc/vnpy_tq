@@ -18,10 +18,10 @@ SIF_CID_002_V0_2_0
 
 strategy_id: STRAT_TREND_BROOKS_SCALP_02
 version:     0.2.0
-lifecycle:   Candidate / Testing（positioning · capital gate）
+lifecycle:   Bindable Capital-Gated Research Consumer（BDR_CID_002_V0_1）
 change:      risk-fraction sizing · hard_max_lots · cost-aware equity kill-switch
 detector:    BROOKS_SCALP_FP@0.1.0（unchanged）
-Bindable:    NO
+Bindable:    YES（Capital-Gated Research Consumer · BDR_CID_002_V0_1）
 Alpha:       NONE
 ================================================
 ```
@@ -135,7 +135,8 @@ Attested for @0.2.0:
 IS: Candidate positioning identity for capital-safety consumption tests
 IS: SAC-complete freeze body after 50D amendment（same hashes）
 IS NOT: erasure of @0.1.0 / @0.1.1 mechanism evidence
-IS NOT: Verified / Bindable / Alpha
+IS NOT: Verified-as-Alpha / Production
+IS: Bindable Capital-Gated Research Consumer（BDR_CID_002_V0_1）
 IS NOT: claim that H_MECH improved
 ```
 
@@ -159,3 +160,4 @@ IS NOT: claim that H_MECH improved
 | 2026-07-22 | SAC field amendment（G1/G3/G4）under Delegation-50D · hashes unchanged |
 | 2026-07-22 | evidence_lineage append EXP010（Delegation-100E · G6） |
 | 2026-07-22 | G5：`source_revision` → `833ae4740e6da3e2e3a42899d2bd4229f61785d6` |
+| 2026-07-22 | Bindable GRANTED（RISK）via `BDR_CID_002_V0_1` |
