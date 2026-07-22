@@ -155,3 +155,4 @@ Until later scoped authorization: **no restore · no rewrite · no Identity Free
 | 2026-07-22 | Five-round delegation: `SCIDR-v1` FROZEN; CID_001 draft complete; recovery REFERENCE_ONLY_IN_GIT |
 | 2026-07-22 | Twenty-round delegation: ADAP/CEMB frozen; Freeze readiness NOT READY; Rewrite charter design-only; STOP 16/20 |
 | 2026-07-22 | Epoch 5 phase activity **CLOSED**（`E5C_V0_1`）under Delegation-50K；re-entry needs new phase auth |
+| 2026-07-22 | Successor: Epoch 6 GRANTED — see [`STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md`](STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) |

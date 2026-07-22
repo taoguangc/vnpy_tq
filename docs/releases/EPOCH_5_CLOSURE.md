@@ -25,12 +25,16 @@ CID_002 Lifecycle
   Alpha:                 NONE
   Production Readiness:  NO
 
-Active phase:            NO ACTIVE PHASE
-Successor:               future Strategy Research Phase
-                         requires separate authorization
+Active phase:            SUPERSEDED → Epoch 6 ACTIVE（2026-07-22）
+Successor:               [`EPOCH_6_POSITIONING.md`](EPOCH_6_POSITIONING.md)
+                         · [`STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md`](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md)
 CAP-CTX-001 / RC001-B:   remain CLOSED（not reopened）
 ================================================
 ```
+
+> **Supersession note**: Epoch 5 terminal statuses remain **locked**.  
+> Project activity moved to Epoch 6 via new Strategy Research Phase authorization.  
+> This file does **not** reopen Epoch 5 Closed EXPs or upgrade Alpha/Production.
 
 ## 1. Final conclusion（locked）
 

@@ -1,31 +1,26 @@
-# Epoch 5 — CLOSED
+# Epoch 6 — Strategy Research（Agenda A+C）
 
 ```text
-Epoch 5:             CLOSED（E5C_V0_1）
-Release Checkpoint:  E5RC_V0_1
-SAR:                 SAR_CID_002_V0_27（terminal）
-Delegation-50K:      STOP
-```
-
-## Archived CID_002
-
-```text
-Research Asset ✓ · Research Bindable ✓ · CXSD v0.1 FROZEN ✓
-Impl NONE · Production Bindable WITHHELD · Alpha NONE
+Phase:     Epoch 6 ACTIVE
+50L:       STOP
+Theme A:   CXSDIC CHARTERED · Impl NO
+Theme C:   PBRR DESIGNED
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Closure | [E5C CLOSED](../releases/EPOCH_5_CLOSURE.md) |
-| Checkpoint | [E5RC](../releases/EPOCH_5_RELEASE_CHECKPOINT.md) |
+| CXSD Implementation Charter | [CHARTERED](../research/STRATEGY_CXSD_IMPLEMENTATION_CHARTER_CID_002.md) |
+| Production Residual Roadmap | [DESIGNED](../research/STRATEGY_PRODUCTION_BINDABLE_RESIDUAL_ROADMAP_CID_002.md) |
+| Agenda | [E6A_V0_2](../research/STRATEGY_EPOCH_6_AGENDA_NOTE.md) |
+| E6 Auth | [GRANTED](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) |
 | CXSD Contract | [FROZEN](../research/STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md) |
-| Asset Review | [SAR_CID_002_V0_27](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
-| 50K Log | [STOP](../research/STRATEGY_DELEGATION_50K_EXECUTION_LOG.md) |
+| 50L Log | [STOP](../research/STRATEGY_DELEGATION_50L_EXECUTION_LOG.md) |
 
-## Next（须新授权）
+## Next（须另授）
 
 ```text
-New Strategy Research Phase — OR — CXSD Implementation Charter
+Authorize CXSD Implementation
+  — OR — Pause Epoch 6
 ```

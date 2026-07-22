@@ -40,9 +40,8 @@ CC-CID_002-v1 · EI_CID_002_V0_1 · ACL_CID_002_V0_1
 ## Future entry
 
 ```text
-Authorize Strategy Research Phase（new epoch / scoped wake）
-  — OR —
-Authorize CXSD Implementation Charter（conformance only）
+DONE: Authorize Strategy Research Phase → Epoch 6 GRANTED
+Optional: Authorize CXSD Implementation Charter（conformance only）
 ```
 
 ## Revision record
@@ -50,3 +49,4 @@ Authorize CXSD Implementation Charter（conformance only）
 | Date | Change |
 |------|--------|
 | 2026-07-22 | E5RC_V0_1 COMPLETE |
+| 2026-07-22 | Successor Epoch 6 phase GRANTED |

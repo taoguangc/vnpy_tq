@@ -28,9 +28,8 @@ Active phase:          NO
 ## Next（须新阶段授权）
 
 ```text
-Authorize Strategy Research Phase（new / scoped）
-  — OR —
-Authorize CXSD Implementation Charter
+DONE: Epoch 6 Strategy Research Phase GRANTED
+See: STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md
 ```
 
 ## Revision record
