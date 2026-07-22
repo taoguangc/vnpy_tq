@@ -1,38 +1,41 @@
-# Strategy Asset Review — CID_002（V0.18 · Context Filter OOS）
+# Strategy Asset Review — CID_002（V0.27 · Epoch 5 Closure）
 
-> **Review ID**: `SAR_CID_002_V0_18`  
-> **Status**: **COMPLETE** ✓  
+> **Review ID**: `SAR_CID_002_V0_27`  
+> **Status**: **COMPLETE** ✓ · **TERMINAL for Epoch 5**  
 > **Date**: 2026-07-22  
-> **Delegation**: [`STRATEGY_DELEGATION_50J_EXECUTION_LOG.md`](STRATEGY_DELEGATION_50J_EXECUTION_LOG.md)
+> **Closure**: [`EPOCH_5_CLOSURE.md`](../releases/EPOCH_5_CLOSURE.md) · `E5C_V0_1`  
+> **Checkpoint**: [`EPOCH_5_RELEASE_CHECKPOINT.md`](../releases/EPOCH_5_RELEASE_CHECKPOINT.md)
 
-## Ledger
+## Ledger（authoritative · archived）
 
 ```text
 ================================================
-SAR_CID_002_V0_18
+SAR_CID_002_V0_27 ≡ Epoch 5 terminal
 
-Bindable:                 GRANTED（dual-surface）
-CTX_CID002_EXP001:        CLOSED KEEP（rb/2024）
-CTX_CID002_EXP002:        CLOSED KEEP（rb/2025 OOS）
-Evidence Reviews:         PASS · PASS
-H_CTX_FILTER:             ADMITTED in-sample + temporal OOS（non-inert）
-Alpha / Production:       NONE / NO
-RC001-B:                  CLOSED
-Delegation-50J:           STOP
+Mechanism Asset:       Research Asset ✓
+Research Bindable:     ✓
+CXSD:                  v0.1 FROZEN ✓
+Implementation:        NONE
+Production Bindable:   WITHHELD
+Alpha:                 NONE
+Production Readiness:  NO
+
+Epoch 5:               CLOSED
+Active phase:          NO
 ================================================
 ```
 
-## Next（须另授）
+## Next（须新阶段授权）
 
 ```text
-Multi-symbol Context filter · RISK-surface Context ·
-or any PnL-primary Context value claim
-— not implied by EXP001/002 KEEP.
+Authorize Strategy Research Phase（new / scoped）
+  — OR —
+Authorize CXSD Implementation Charter
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-22 | V0.17 EXP001 Observation |
-| 2026-07-22 | V0.18 EXP002 OOS KEEP · 50J STOP |
+| 2026-07-22 | V0.26 CXSD freeze |
+| 2026-07-22 | V0.27 Epoch 5 CLOSED · terminal ledger |

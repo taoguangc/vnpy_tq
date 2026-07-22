@@ -124,6 +124,19 @@ C. Keep Epoch 5 research pause otherwise
 ✓ G5 hash lock re-verified at review time
 ```
 
+## Post-milestone lock（2026-07-22）
+
+```text
+After MEM_CID_002_V0_1（CTX EXP001/002 OOS KEEP）:
+
+  BDR_CID_002_V0_1 remains on file as research-consumption designation.
+
+  After BMGCP_CID_002_V0_1 + BMDR_CID_002_V0_1:
+    Research Maturity Bindable: GRANTED（cite CC+EI+ACL+VMP）
+    Production Maturity Bindable: WITHHELD
+    Alpha / Production / E4: NONE / NO
+```
+
 ## Machine record
 
 `research/output/evidence/STRATEGY_BINDABLE_DESIGNATION_CID_002/designation.json`
@@ -133,3 +146,5 @@ C. Keep Epoch 5 research pause otherwise
 | Date | Change |
 |------|--------|
 | 2026-07-22 | BDR_CID_002_V0_1 · Bindable GRANTED（dual-surface） |
+| 2026-07-22 | Maturity upgrade WITHHELD after Mechanism Evidence Milestone |
+| 2026-07-22 | BMDR Research Maturity GRANTED · Production WITHHELD |
