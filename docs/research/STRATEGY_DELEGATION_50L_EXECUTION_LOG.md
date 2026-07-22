@@ -38,7 +38,7 @@ so they are not confused with “more KEEP EXPs”.
 | 1 | Path lock A+C | **LOCKED** |
 | 2–12 | CXSD Implementation Charter | **CHARTERED** |
 | 13–17 | Production Bindable Residual Roadmap | **DESIGNED** |
-| 18–20 | E6 pointers · commit · STOP | **STOP** |
+| 18–20 | E6 pointers · commit · STOP | **COMMITTED** `9239cf7` · **STOP** |
 
 ## Revision record
 
