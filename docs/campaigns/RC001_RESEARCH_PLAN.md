@@ -7,10 +7,10 @@
 > **Type**: Scientific Investigation  
 > **Parent**: Epoch 2.0 — Evidence-driven Knowledge Growth  
 > **Method**: [`PAAF_RESEARCH_METHOD.md`](../research/PAAF_RESEARCH_METHOD.md)（PRM v1.0 + Campaign Lifecycle）  
-> **P0 Gate**: [`CONTEXT_CAPABILITY_GATE.md`](../research/CONTEXT_CAPABILITY_GATE.md)（v1；Current = **BLOCKED**）  
-> **Upstream**: CAP-CTX-001 PROMOTED · Fill Confirmation PASS · Execution Auth **GRANTED WITH CONDITIONS** · CP3 OPEN；Observation 未执行；Gate **BLOCKED**  
+> **P0 Gate**: 历史 Gate v1 BLOCKED；权威现为 Gate v2 [`CONTEXT_CAPABILITY_GATE_V2_REEVALUATION.md`](../research/CONTEXT_CAPABILITY_GATE_V2_REEVALUATION.md) v3.0 **CONDITIONAL**  
+> **Upstream**: NARROW Infrastructure Candidate · A1 PASS · Decision 019  
 > **Path**: `docs/campaigns/RC001_RESEARCH_PLAN.md`  
-> **Implementation**: ⏸ 未授权（Gate 非 PASS 前不 Ready / Accepted、不写 Run Spec、不写代码、不跑回测）
+> **Implementation**: ⏸ 本 Plan v0.2 仍 **Not Accepted**；**当前活跃轨道** = [`RC001_A_CONTEXT_FILTER_DESIGN.md`](../research/RC001_A_CONTEXT_FILTER_DESIGN.md)（Design COMPLETE）— 不自动升格本 Plan  
 
 ---
 

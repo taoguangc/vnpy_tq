@@ -65,16 +65,21 @@ Status: BLOCKED
 Reasons:
   1) ContextEngine still publishes market_state = UNKNOWN only
      (engineering signal not yet a research-usable first-level state)
-  2) K001 is ACCEPT WITH QUALIFICATION only
+  2) K001 is Strengthened Qualified Knowledge only
+     — with Independence Narrow（RUN005 Partial）
      — not unconditional Capability Knowledge
-     — Gate does not auto-open from RUN001
+     — ≠ Capability Candidate
+
+Gate v2 Review（separate）:
+  Decision CONDITIONAL — see CONTEXT_CAPABILITY_GATE_V2_REVIEW.md
+  CONDITIONAL ≠ v1 PASS
+  CONDITIONAL ≠ RC001 / Trading
 ```
 
 此 Verdict 本身可作为 **Process Evidence**：Framework 存在、Signal 未就绪。  
-**不**因此自动关闭 RC001；RC001 保持 Review Passed，等待 Capability 或 early-close 授权。
+**不**因此自动关闭 RC001；RC001 保持既有状态，等待另授。
 
 ---
-
 ## Gate Criteria
 
 ### G0 — Ownership
@@ -274,3 +279,4 @@ RC001 Ready → Accepted → EXP001 …
 | 日期 | 版本 | 说明 |
 |------|------|------|
 | 2026-07-20 | 1.0 | 初稿：G0–G4；Verdict 量表；Current = BLOCKED；非 Spec |
+| 2026-07-21 | 1.1 | K001 → Strengthened Qualified；Gate 仍 BLOCKED（Strengthen ≠ PASS） |

@@ -1,23 +1,30 @@
-# Epoch 2.0 — Evidence-driven Knowledge Growth
+# Epoch 3 / 4 — Capability Expansion
 
-**Status:** Active  
-**Research focus:** RUN002 Auth **Draft** · Auth **NOT GRANTED** · Observation **NONE**
+```text
+RC001-B Exec Auth Confirmation   PASS ✓
+C-ENV                            SATISFIED ✓
+C-BIND                           UNSATISFIED
+RC001-B EXP001                   BLOCKED — NO VALID STRATEGY PAIR
+Observation / Backtest           NONE
+```
 
-## Current
+## State
+
+```text
+Gate worked: no fabrication
+BLOCKED ≠ K001 false ≠ Context useless
+Next: Decision on Path A（restore pair）/ B（close BLOCKED）/ C（new id）
+```
 
 | Item | Status |
 |------|--------|
-| K001 | Qualified |
-| Gate / RC001 | BLOCKED / unchanged |
-| RUN002 Spec | v0.2 **Review PASS** |
-| RUN002 Fill | v0.2 **Confirmation PASS** |
-| RUN002 Auth | **Draft v0.1** — [Auth](../research/CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md) |
-| Auth / Observation | NOT GRANTED / NONE |
+| Confirmation | [PASS · BLOCKED](../research/RC001_B_EXECUTION_AUTHORIZATION_CONFIRMATION.md) ✓ |
+| Manifest | `research/output/evidence/RC001_B_EXP001/RC001_B_RUN_MANIFEST.json` |
+| Bind | UNBOUND · attempt report present |
 
 ## Next
 
 ```text
-Execution Authorization Review
-  → Confirmation
-  →（另授）Observation
+Authorize RC001-B EXP001 Closure（BLOCKED）
+  or restore existing orthogonal S1/S2 then re-bind（另授）
 ```

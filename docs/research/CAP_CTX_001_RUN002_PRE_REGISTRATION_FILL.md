@@ -17,12 +17,13 @@ Fill v0.1 Review: PASS ✓
 Fill v0.2 Confirmation: PASS ✓
 O1–O5: CLOSED ✓
 Pre-Registration: COMPLETE ✓
-Execution Authorization: NOT GRANTED（见 Draft Auth 文档）
-Observation: NONE
+Execution Authorization: GRANTED WITH CONDITIONS ✓（见 Auth）
+CP3: OPEN
+Observation: NOT EXECUTED
 K001 / Gate / RC001: unchanged by this document
 ```
 
-**Auth Draft**: [`CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md`](CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md)
+**Auth**: [`CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md`](CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md) v1.0
 
 ### Boundary
 

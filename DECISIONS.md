@@ -390,5 +390,32 @@ Draft | Accepted | Deprecated | Archived
 - **实现门禁**：本 ADR **不授权**改 Python、不授权实现 Dashboard UI。  
 - **重申**：Decision 001 / 011 / 015 / 016 / 017 仍有效。
 
+## Decision 019 — Published State consumption boundary（A1）
+
+- **日期**：2026-07-21
+- **状态**：Accepted（A1 Fill 引用；**不**授权实现 / RC001 / 交易）
+- **主题**：ADR-A1-001 — Published State consumption boundary
+- **背景**：CAP-CTX A1 建立 Context Capability Runtime Contract。需防止 `ContextState`
+  被策略层当作 signal / sizing alpha，并支撑未来 RC001-A（Context as filter）边界。
+- **决策**：
+
+```text
+Context Engine 输出：ContextState（Published State）
+
+允许消费者：
+  filter · risk modifier · monitoring / attribution
+
+禁止消费者用途：
+  signal generation · position sizing alpha · buy()/sell() from Context alone
+```
+
+- `confidence` = computational confidence only（≠ win probability）。  
+- `descriptive_state` / `context_state` tags ≠ Spec `MarketState` 基线静默扩展
+  （Decision 002 / `CONTEXT_ENGINE_SPEC` 仍约束 UNKNOWN|TREND|RANGE）。  
+- A1 验证 **operational reliability**，不验证 Alpha / effectiveness。  
+- **原因**：冻结 Research → Capability → Strategy 三层隔离的消费契约。  
+- **后果**：RC001-A 设计必须遵守本边界；违反 → Engineering/RC INVALID，非“调参”。  
+- **实现门禁**：本 ADR **不授权**写代码、不授权回测、不授权 RC001 Accepted。  
+- **重申**：Decision 009 / 011 / 017 / 018 仍有效。
 
 

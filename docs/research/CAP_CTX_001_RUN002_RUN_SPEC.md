@@ -1,7 +1,7 @@
 # CAP_CTX_001_RUN002 — Cross Evidence Run Specification（v0.2）
 
 > **Type**: Cross Evidence Run Specification  
-> **Status**: **Review PASS** ✓ — Fill **Confirmation PASS** ✓  
+> **Status**: **Review PASS** ✓ — Fill **Confirmation PASS** ✓ — Auth **GRANTED** ✓ — Observation **COMPLETE**  
 > **Version**: 0.2  
 > **Date**: 2026-07-21  
 > **Path**: `docs/research/CAP_CTX_001_RUN002_RUN_SPEC.md`  
@@ -9,17 +9,21 @@
 > **Parent Knowledge**: K001 (Qualified) — [`K001_KNOWLEDGE_REVIEW.md`](K001_KNOWLEDGE_REVIEW.md)  
 > **Lineage**: `parent=CAP_CTX_001_RUN001`（Closed；不可改写）  
 > **Fill**: [`CAP_CTX_001_RUN002_PRE_REGISTRATION_FILL.md`](CAP_CTX_001_RUN002_PRE_REGISTRATION_FILL.md) v0.2 **Confirmation PASS**  
+> **Auth**: [`CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md`](CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md)  
+> **Report**: [`CAP_CTX_001_RUN002_EXECUTION_REPORT.md`](CAP_CTX_001_RUN002_EXECUTION_REPORT.md)  
 > **Purpose**: Strengthen / stress-test K001 — **not** Gate · **not** RC001 · **not** Alpha
 
 ### Review
 
 ```text
 v0.1 Spec Review: PASS ✓
-R1 Cross Evidence Boundary: applied
-R2 Decision Mapping: applied / frozen
 Fill v0.2 Confirmation: PASS ✓
-Execution: NOT AUTHORIZED
-Observation: NONE
+Execution Authorization: GRANTED WITH CONDITIONS ✓
+Observation: COMPLETE
+Evidence Review: PASS ✓
+cross_evidence_result: SUPPORTED
+registered_knowledge_action: STRENGTHEN（Ready for Knowledge Review）
+Knowledge Decision: NOT PERFORMED
 ```
 
 ### Positioning
@@ -31,7 +35,9 @@ RUN002 Spec Review PASS ✓
         ↓
 Fill Confirmation PASS ✓
         ↓
-Auth → Observation（另授）
+Auth GRANTED WITH CONDITIONS ✓ · CP3 OPEN
+        ↓
+（Manifest + 显式指令）Observation
         ↓
 Cross Evidence vs RUN001 → K001 Update Decision
 ```
@@ -216,8 +222,8 @@ the probability of supporting K001.
 | Spec Draft | done |
 | Spec Review | **PASS** |
 | Fill | **Confirmation PASS**（v0.2） |
-| Execution Auth | **Draft** — NOT GRANTED（见 Auth 文档） |
-| Observation | NONE |
+| Observation | **COMPLETE** — see Execution Report |
+| Evidence artifacts | written（Review pending） |
 
 ---
 
@@ -227,3 +233,4 @@ the probability of supporting K001.
 |------|------|------|
 | 2026-07-21 | 0.1 | Draft：Temporal OOS；协议继承 |
 | 2026-07-21 | 0.2 | Review PASS；R1；R2；Fill Confirmation PASS；Integrity Constraint |
+| 2026-07-21 | 0.2.1 | Auth Confirmation：GRANTED WITH CONDITIONS；CP3 OPEN |

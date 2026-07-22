@@ -1,14 +1,15 @@
-# CAP_CTX_001_RUN002 — Execution Authorization Review（Draft）
+# CAP_CTX_001_RUN002 — Execution Authorization Review
 
 > **Type**: Execution Authorization Review（Cross Evidence Governance）  
-> **Status**: **Draft** — awaiting Review / Confirmation  
-> **Version**: 0.1  
+> **Status**: **GRANTED WITH CONDITIONS** ✓ — CP3 OPEN · Observation NOT EXECUTED  
+> **Version**: 1.0  
 > **Date**: 2026-07-21  
 > **Path**: `docs/research/CAP_CTX_001_RUN002_EXECUTION_AUTHORIZATION.md`  
 > **Object**: CAP-CTX-001 / `CAP_CTX_001_RUN002`  
 > **Parent Knowledge**: K001 (Qualified)  
 > **Lineage**: `parent=CAP_CTX_001_RUN001`（Closed；不可改写）  
-> **Prerequisite**: Spec v0.2 Review PASS · Fill v0.2 **Confirmation PASS**
+> **Prerequisite**: Spec v0.2 Review PASS · Fill v0.2 **Confirmation PASS**  
+> **Prior**: Draft v0.1 → Review Confirmation（2026-07-21）
 
 ### Authorization 含义
 
@@ -31,37 +32,37 @@ Observation start still requires:
 
 ```text
 ❌ Observation executed
-❌ Evidence / Knowledge update
+❌ Evidence / Knowledge Decision
 ❌ Gate / RC001 变更
-❌ 自动 GRANTED（须 Review Confirmation）
+❌ 自动启动 Observation（须显式指令）
 ```
 
 ---
 
-## Proposed Aggregate Decision（Draft）
+## Aggregate Decision — Confirmation
 
 ```text
 ================================================
 
 CAP_CTX_001_RUN002 EXECUTION AUTHORIZATION
 
-Proposed Result:
-GRANTED WITH CONDITIONS
+Decision:
+GRANTED WITH CONDITIONS ✓
 
-Actual Authorization:
-NOT GRANTED（awaiting Review Confirmation）
-
-EA1 Dataset Fingerprint:     PASS（proposed）
-EA2 Run Manifest:            PASS（proposed）
-EA3 Pre-Registration lock:   PASS（proposed）
-EA4 Environment:             PASS WITH CONDITION (C-ENV)
-EA5 Scope non-expansion:     PASS（proposed）
-EA6 Evidence path:           PASS（proposed）
-EA7 Cross Evidence integrity: PASS（proposed）
+EA1 Dataset Fingerprint:      PASS
+EA2 Run Manifest:             PASS
+EA3 Pre-Registration lock:    PASS
+EA4 Environment:              PASS WITH CONDITION (C-ENV)
+EA5 Scope non-expansion:      PASS
+EA6 Evidence path:            PASS
+EA7 Cross Evidence integrity: PASS
 
 Fill Confirmation: PASS ✓
-CP3: CLOSED until Confirmation
-Observation: NONE
+Conditions accepted:
+  C-ENV · C-SCOPE · C-CLAIM · C-GATE · C-NO-DRIFT · C-XEV · C-K001
+
+CP3: OPEN
+Observation: NOT EXECUTED
 Evidence: NONE
 K001 / Gate / RC001: unchanged
 
@@ -70,7 +71,7 @@ K001 / Gate / RC001: unchanged
 
 ---
 
-## Checklist EA1–EA7
+## Checklist EA1–EA7（Confirmed）
 
 ### EA1 — Dataset Fingerprint 实例冻结？
 
@@ -82,7 +83,7 @@ K001 / Gate / RC001: unchanged
 | SHA256：manifest / dominant_windows / rollover_map（rb, i, MA） | ✓ Fill §1.1 |
 | Coverage 2022–2023 OK；Incomplete-coverage STOP | ✓ Fill §2 |
 
-**Verdict EA1: PASS（proposed）**
+**Verdict EA1: PASS**
 
 ---
 
@@ -91,12 +92,12 @@ K001 / Gate / RC001: unchanged
 | 项 | 状态 |
 |----|------|
 | Path | `research/output/evidence/CAP_CTX_001_RUN002/CAP_CTX_001_RUN_MANIFEST.json` |
-| Role | RUN002 identity artifact（非结果文件） |
+| Role | RUN002 **identity artifact**（≠ Observation Result） |
 | 实例文件 | 允许在 Observation **开始前**写出 |
 | `parent` | `CAP_CTX_001_RUN001` |
 | `eq` | `EQ-CTX-002` |
 
-**Verdict EA2: PASS（proposed）**
+**Verdict EA2: PASS**
 
 ---
 
@@ -111,7 +112,7 @@ K001 / Gate / RC001: unchanged
 | Decision Mapping R2 | ✓ Frozen |
 | Fill Confirmation PASS | ✓ |
 
-**Verdict EA3: PASS（proposed）**
+**Verdict EA3: PASS**
 
 ---
 
@@ -119,7 +120,8 @@ K001 / Gate / RC001: unchanged
 
 | 项 | 状态 |
 |----|------|
-| `code_revision` / `environment_identity` | ⚠ 允许 **GRANTED 后、首条 Observation 处理前** 写入 Manifest |
+| `code_revision` / `environment_identity` | ⚠ **GRANTED 后、首条 Observation 处理前** 写入 Manifest |
+| Identity ≠ Result | ✓ Environment Identity 属 Run Identity Artifact |
 
 **Verdict EA4: PASS WITH CONDITION（C-ENV）**
 
@@ -136,7 +138,7 @@ K001 / Gate / RC001: unchanged
 | 无自动 Gate / RC001 / unconditional Knowledge | ✓ |
 | descriptive observations only | ✓ |
 
-**Verdict EA5: PASS（proposed）**
+**Verdict EA5: PASS**
 
 ---
 
@@ -149,7 +151,7 @@ K001 / Gate / RC001: unchanged
 | Cross note（另授） | `docs/research/CAP_CTX_001_RUN001_RUN002_CROSS_EVIDENCE.md` |
 | 不改写 RUN001 Closed 产物 | ✓ |
 
-**Verdict EA6: PASS（proposed）**
+**Verdict EA6: PASS**
 
 ---
 
@@ -157,25 +159,25 @@ K001 / Gate / RC001: unchanged
 
 | 项 | 状态 |
 |----|------|
-| Not a discovery experiment | ✓ Spec R1 / Fill |
+| Not a discovery experiment | ✓ |
 | Protocol citation frozen | ✓ |
 | Integrity Constraint frozen | ✓ |
-| K001 mapping pre-registered（Supported/Partial/Not supported） | ✓ |
+| K001 mapping pre-registered | ✓ |
 | `RUN002 PASS ≠ Gate PASS` | ✓ |
 
-**Integrity Constraint（binding）**：
+**Purpose constraint（binding）**：
 
 ```text
-RUN002 shall not introduce any post-RUN001
-methodological modification intended to improve
-the probability of supporting K001.
+The purpose of RUN002 is to evaluate
+previously qualified knowledge,
+not to improve the likelihood of supporting it.
 ```
 
-**Verdict EA7: PASS（proposed）**
+**Verdict EA7: PASS**
 
 ---
 
-## Proposed Conditions（若 Confirmation → GRANTED）
+## Conditions（绑定 GRANTED）
 
 | ID | Condition |
 |----|-----------|
@@ -184,21 +186,36 @@ the probability of supporting K001.
 | **C-CLAIM** | 禁止宣称 Capability 已证实 / Regime / Alpha / Gate PASS；仅允许 Artifact → Evaluation → Cross Evidence → K001 Review |
 | **C-GATE** | 不自动 PASS Context Capability Gate；不 ACCEPT RC001 |
 | **C-NO-DRIFT** | 禁止 Feature 选优、换 M1/M2、改 Null、改 E 顺序、静默缩 universe、加品种 |
-| **C-XEV** | Protocol inherited from RUN001 unless overridden by registered temporal scope；禁止为支持 K001 做方法学修改 |
-| **C-K001** | 结果仅可触发预注册 K001 Action（Strengthen / Narrow / Downgrade / No upgrade）；须另授 Knowledge Review |
+| **C-XEV** | Protocol inherited from RUN001 unless overridden by registered temporal scope。**Purpose rule**：No methodological modification shall be introduced **for the purpose of** increasing support for existing knowledge.（治理必要修改 ≠ 结果导向修改；后续 Cross Evidence Run 通用） |
+| **C-K001** | 结果仅可触发预注册 **Registered Knowledge Actions**（Strengthen / Narrow / Downgrade / No upgrade）；**不是**最终 Knowledge Decision。真正 Knowledge Review 须另授 |
 
-### What GRANTED would / would not
+### What GRANTED does / does not
 
 | 允许 | 禁止（仍） |
 |------|------------|
-| 打开 CP3 | 自动 Strengthen K001 |
-| 按 Appendix A 生成 Observation | 扩大 Family / 改协议 |
+| CP3 OPEN | 自动 Strengthen K001 |
+| 按 Appendix A 生成 Observation | 扩大 Family / 结果导向改协议 |
 | 写出 Manifest + Evaluation | 未满足 C-ENV 即开跑 |
 | Cross Evidence vs RUN001 | 修改 Gate / RC001 / RUN001 artifacts |
 
 ---
 
-## Controlled Observation Window（Confirmation 后）
+## Confirmation — Authorization Status（2026-07-21）
+
+```text
+================================================
+CAP_CTX_001_RUN002
+Execution Authorization: GRANTED WITH CONDITIONS ✓
+CP3: OPEN (Authorized)
+Observation: NOT EXECUTED
+Observation start: AWAITING Run Manifest + explicit execution instruction
+Evidence: NONE
+Gate / RC001: unchanged
+K001: ACCEPT WITH QUALIFICATION（unchanged）
+================================================
+```
+
+### Controlled Observation Execution Window
 
 ```text
 Run Manifest Generation
@@ -214,7 +231,19 @@ Cross Evidence note（另授）
 K001 Update Review（另授）
 ```
 
-**显式指令模板**（尚未发出；Confirmation 后仍须单独发出）：
+### Manifest status
+
+| 项 | 状态 |
+|----|------|
+| Path | `research/output/evidence/CAP_CTX_001_RUN002/CAP_CTX_001_RUN_MANIFEST.json` |
+| Role | **Run Identity Artifact**（≠ Execution Result） |
+| Status | **WRITTEN** · C-ENV SATISFIED · Observation **COMPLETE** |
+| Manifest Confirmation | CONFIRMED |
+| C-ENV | SATISFIED |
+| `observation_status` | `OBSERVATION_COMPLETE` |
+| Report | [`CAP_CTX_001_RUN002_EXECUTION_REPORT.md`](CAP_CTX_001_RUN002_EXECUTION_REPORT.md) |
+
+**显式指令**（已执行）：
 
 ```text
 Authorize Observation Execution for CAP_CTX_001_RUN002
@@ -222,45 +251,45 @@ Authorize Observation Execution for CAP_CTX_001_RUN002
 
 ---
 
-## CP3 Status（Draft）
+## CP3 Status
 
 ```text
-CP3 = CLOSED（Authorization not Confirmed）
-
-After Confirmation GRANTED WITH CONDITIONS:
-  CP3 OPEN = Observation Generation authorized under C-ENV…C-K001
-  ≠ Observation has been run
-  ≠ K001 strengthened
-  ≠ Gate PASS
+CP3 was OPEN for Observation Generation.
+Observation executed: YES
+Evidence artifacts: written
+Knowledge Decision: NOT MADE（Registered Action = STRENGTHEN only）
+Gate: BLOCKED（unchanged）
 ```
 
 ---
 
-## Epoch Snapshot（Draft Auth 时）
+## Epoch Snapshot（Observation 后）
 
 ```text
-K001                          Qualified（ACCEPT WITH QUALIFICATION）
+K001                          Qualified（Decision unchanged）
 RUN001                        Completed / Closed
-RUN002 Spec                   ✓ Review PASS
-RUN002 Fill                   ✓ Confirmation PASS
-Pre-Registration              ✓ COMPLETE
-Execution Authorization       Draft — NOT GRANTED
-CP3                           CLOSED
-Observation                   NONE
-Evidence                      NONE
+RUN002 Spec / Fill / Auth     PASS / CONFIRMED / GRANTED
+RUN002 Observation            COMPLETE
+cross_evidence_result         SUPPORTED
+registered_knowledge_action   STRENGTHEN（≠ Decision）
+Evidence Review               PENDING
 Context Capability Gate       BLOCKED
 RC001                         unchanged
 ```
 
 ---
 
+## Deferred（非阻塞）
+
+`CROSS_EVIDENCE_GOVERNANCE.md`：**延期至 RUN002 Evidence/Knowledge Review 完成之后、RUN003 之前**。
+
+---
+
 ## Next
 
 ```text
-Authorization Review
-  → Confirmation（GRANTED WITH CONDITIONS / NOT GRANTED / REVISE）
-  →（若 GRANTED）Manifest + C-ENV
-  →（另授显式指令）Observation
+Evidence / Cross Evidence Review PASS ✓
+  → K001 Strengthen Review（另授 Knowledge Decision）
 ```
 
 ---
@@ -269,4 +298,8 @@ Authorization Review
 
 | 日期 | 版本 | 说明 |
 |------|------|------|
-| 2026-07-21 | 0.1 | Draft：EA1–EA7；proposed GRANTED WITH CONDITIONS；含 C-XEV / C-K001；Auth 未授予 |
+| 2026-07-21 | 0.1 | Draft：EA1–EA7；proposed GRANTED WITH CONDITIONS |
+| 2026-07-21 | 1.0 | Review Confirmation：GRANTED WITH CONDITIONS；CP3 OPEN |
+| 2026-07-21 | 1.1 | Status hold：Manifest PENDING |
+| 2026-07-21 | 1.2 | Observation COMPLETE；SUPPORTED → STRENGTHEN（Action only） |
+| 2026-07-21 | 1.3 | Evidence Review PASS；STRENGTHEN ready；K001 Decision not performed |
