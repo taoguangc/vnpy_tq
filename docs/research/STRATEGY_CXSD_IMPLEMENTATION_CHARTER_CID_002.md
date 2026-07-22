@@ -1,7 +1,8 @@
 # CXSD Implementation Charter — CID_002
 
 > **Type**: Implementation Charter（≠ Implementation · ≠ Observation · ≠ Alpha）  
-> **Status**: **CHARTERED** ✓ · **Implementation NOT AUTHORIZED**  
+> **Status**: **CHARTERED** ✓ · **Implementation DELIVERED**（`CXSDID_CID_002_V0_1`）· code+tests · no Alpha  
+
 > **Charter ID**: `CXSDIC_CID_002_V0_1`  
 > **Date**: 2026-07-22  
 > **Authorization**: Delegation-50L（Theme A under Epoch 6）  
@@ -100,15 +101,15 @@ A run may claim “CXSD-CID_002-v0.1 compliant” only if:
 ## 7. Gate to implement
 
 ```text
-Authorize CXSD Implementation
-  （implies code + tests under this charter bounds）
+DONE: Authorize CXSD Implementation
+Delivery: STRATEGY_CXSD_IMPLEMENTATION_DELIVERY_CID_002.md
 ```
 
 ## Hard guarantees
 
 ```text
-✓ No code shipped under Delegation-50L
-✓ No Observation / backtest
+✓ Implementation bounded to conformance tooling
+✓ No Observation / PnL optimization under this auth
 ✓ CXSD-CID_002-v0.1 not silently rewritten
 ```
 
@@ -117,3 +118,4 @@ Authorize CXSD Implementation
 | Date | Change |
 |------|--------|
 | 2026-07-22 | CXSDIC_CID_002_V0_1 CHARTERED · Impl NOT AUTHORIZED |
+| 2026-07-22 | Implementation DELIVERED · self-check PASS |

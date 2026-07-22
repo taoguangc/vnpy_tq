@@ -1,26 +1,23 @@
-# Epoch 6 — Strategy Research（Agenda A+C）
+# Epoch 6 — Strategy Research（CXSD wired · STOP）
 
 ```text
-Phase:     Epoch 6 ACTIVE
-50L:       STOP
-Theme A:   CXSDIC CHARTERED · Impl NO
-Theme C:   PBRR DESIGNED
+CXSD contract:   FROZEN
+CXSD tooling:    DELIVERED
+Adapter wire:    COMPLETE
+Tests:           11 PASS
+Production:      WITHHELD
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CXSD Implementation Charter | [CHARTERED](../research/STRATEGY_CXSD_IMPLEMENTATION_CHARTER_CID_002.md) |
-| Production Residual Roadmap | [DESIGNED](../research/STRATEGY_PRODUCTION_BINDABLE_RESIDUAL_ROADMAP_CID_002.md) |
-| Agenda | [E6A_V0_2](../research/STRATEGY_EPOCH_6_AGENDA_NOTE.md) |
-| E6 Auth | [GRANTED](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) |
-| CXSD Contract | [FROZEN](../research/STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md) |
-| 50L Log | [STOP](../research/STRATEGY_DELEGATION_50L_EXECUTION_LOG.md) |
+| Wire decision | [STOP](../research/STRATEGY_CXSD_ADAPTER_WIRE_DECISION_CID_002.md) |
+| Implementation | [DELIVERED](../research/STRATEGY_CXSD_IMPLEMENTATION_DELIVERY_CID_002.md) |
+| Contract | [FROZEN](../research/STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md) |
 
 ## Next（须另授）
 
 ```text
-Authorize CXSD Implementation
-  — OR — Pause Epoch 6
+Production Bindable Re-review · or Pause Epoch 6
 ```

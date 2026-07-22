@@ -62,9 +62,11 @@ DONE under Delegation-50L:
   A → CXSD Implementation Charter（CXSDIC_CID_002_V0_1）
   C → Production Bindable Residual Roadmap（PBRR_CID_002_V0_1）
 
+DONE under Authorize CXSD Implementation:
+  Tooling DELIVERED · self-check PASS（CXSDID_CID_002_V0_1）
+
 Next:
-  Authorize CXSD Implementation
-  — OR — Pause Epoch 6
+  Wire CXSD into Context Filter adapter · Production Bindable Re-review · or Pause
 ```
 
 ## Revision record
@@ -73,3 +75,4 @@ Next:
 |------|--------|
 | 2026-07-22 | Epoch 6 ACTIVE · positioning |
 | 2026-07-22 | Themes A+C documented · 50L STOP |
+| 2026-07-22 | CXSD Implementation DELIVERED |

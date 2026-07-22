@@ -57,11 +57,8 @@ Alpha / Prod readiness: NONE / NO
 ## Next（须另授）
 
 ```text
-Authorize CXSD Implementation
-  — OR —
-Authorize Verified Review for Risk Surface @0.2.0
-  — OR —
-Pause Epoch 6
+DONE: Authorize CXSD Implementation → CXSDID_CID_002_V0_1 PASS
+Next: Production Bindable Re-review · adapter wire-up · or Pause
 ```
 
 ## Revision record
