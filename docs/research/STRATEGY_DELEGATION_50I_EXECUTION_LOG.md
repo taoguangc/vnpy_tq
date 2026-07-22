@@ -25,7 +25,7 @@ FORBIDDEN:
 | # | Decision | Result |
 |---|----------|--------|
 | 1 | Path lock | **LOCKED** |
-| 2–12 | Hygiene commit of Epoch 5 trail | **COMMITTED**（see log） |
+| 2–12 | Hygiene commit of Epoch 5 trail | **COMMITTED** `615899e`（+ `6ae79b9` pointer） |
 | 13–22 | Context Consumer Experiment Design | **DESIGNED** `CCED_CID_002_V0_1` |
 | 23–26 | SAR / campaigns update | **DONE** |
 | 27–30 | Bundle + STOP | **STOP** |
