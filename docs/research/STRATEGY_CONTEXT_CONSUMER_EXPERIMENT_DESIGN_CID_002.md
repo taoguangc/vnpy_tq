@@ -1,7 +1,7 @@
 # Context Consumer Experiment Design — CID_002 Bindable Asset
 
 > **Type**: Experiment Design（≠ Fill · ≠ Pre-registration · ≠ Observation · ≠ Backtest）  
-> **Status**: **DESIGNED** ✓ · **Fill / Observation NOT AUTHORIZED**  
+> **Status**: **DESIGNED** ✓ · First Fill **CLOSED KEEP**（`CTX_CID002_EXP001`）  
 > **Design ID**: `CCED_CID_002_V0_1`  
 > **Date**: 2026-07-22  
 > **Authorization**: Delegation-50I（scoped after Bindable grant）  
@@ -17,7 +17,7 @@ CCED_CID_002_V0_1
 Purpose: Define how a Bindable CID_002 surface may be consumed
          by Context under Decision 019 roles ONLY.
 
-Fill / Run / Observation: NOT AUTHORIZED by this document
+Fill / Observation: CTX_CID002_EXP001 CLOSED · KEEP（H_CTX_FILTER）
 Alpha / Trading value of Context: NOT CLAIMED
 RC001-B: NOT REOPENED
 ================================================
@@ -88,21 +88,19 @@ for the first Context Consumer EXP.
 • CC-CID_002-v1 Surface ID in metadata
 ```
 
-## 6. Explicit non-authorizations
+## 6. Explicit non-claims（still）
 
 ```text
-❌ Fill / Pre-registration of a concrete EXP
-❌ Observation / backtest
 ❌ Claim Context → Alpha / return / drawdown improvement
 ❌ Production routing
 ❌ Mutate CID_002 binding bytes to “fit” Context
 ```
 
-## 7. Gate to proceed
+## 7. First consumer EXP status
 
 ```text
-Authorize Context Consumer Experiment Fill
-  （or equivalent: Authorize CCED Fill for CCED_CID_002_V0_1）
+CTX_CID002_EXP001: CLOSED · KEEP · ER PASS
+Further Context EXPs: new experiment_id + authorization required
 ```
 
 ## Revision record
@@ -110,3 +108,5 @@ Authorize Context Consumer Experiment Fill
 | Date | Change |
 |------|--------|
 | 2026-07-22 | Design COMPLETE under Delegation-50I |
+| 2026-07-22 | Fill PRE-REGISTERED · `CTX_CID002_EXP001` |
+| 2026-07-22 | First Observation KEEP · CLOSED |

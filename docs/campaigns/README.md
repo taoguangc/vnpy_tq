@@ -1,23 +1,28 @@
-# Epoch 5 — Strategy Research（Bindable · Context Design ready）
+# Epoch 5 — Strategy Research（Context Consumer EXP001 CLOSED）
 
 ```text
-SAR:              SAR_CID_002_V0_15
+SAR:              SAR_CID_002_V0_17
 Bindable:         GRANTED
-Context Consumer: DESIGNED · Fill NOT authorized
-Delegation-50I:   STOP 30/50
+Context Fill:     CTX_CID002_EXP001 CLOSED · KEEP
+Observation:      COMPLETE
+Evidence Review:  PASS
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Bindable Designation | [GRANTED](../research/STRATEGY_BINDABLE_DESIGNATION_CID_002.md) |
-| Context Consumer Design | [CCED_CID_002_V0_1](../research/STRATEGY_CONTEXT_CONSUMER_EXPERIMENT_DESIGN_CID_002.md) |
-| Delegation-50I | [STOP](../research/STRATEGY_DELEGATION_50I_EXECUTION_LOG.md) |
-| Asset Review | [SAR_CID_002_V0_15](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| Context Eval | [CTX_CID002_EXP001 KEEP](../research/STRATEGY_CONTEXT_CONSUMER_EVALUATION_CTX_CID002_EXP001.md) |
+| Context ER | [CCER PASS](../research/STRATEGY_CONTEXT_CONSUMER_EVIDENCE_REVIEW_CTX_CID002_EXP001.md) |
+| Context Fill | [CTX_CID002_EXP001](../research/STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID002_EXP001.md) |
+| Context Design | [CCED_CID_002_V0_1](../research/STRATEGY_CONTEXT_CONSUMER_EXPERIMENT_DESIGN_CID_002.md) |
+| Bindable | [BDR_CID_002_V0_1](../research/STRATEGY_BINDABLE_DESIGNATION_CID_002.md) |
+| Asset Review | [SAR_CID_002_V0_17](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
 
 ## Next（须另授）
 
 ```text
-Authorize Context Consumer Experiment Fill
+Any further Context Consumer EXP（new experiment_id）
+or RISK-surface Context consumption
+or multi-symbol / OOS Context filter tests
 ```
