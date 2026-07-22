@@ -40,7 +40,7 @@ Pause preserves research without consuming EXP budget.
 | 1 | Path lock → Closure not CXSD impl | **LOCKED** |
 | 2–12 | EPOCH_5_CLOSURE + Release Checkpoint | **CLOSED** |
 | 13–16 | SAR / campaigns / positioning | **DONE** |
-| 17–18 | Hygiene commit + STOP | **STOP** |
+| 17–18 | Hygiene commit + STOP | **COMMITTED** `325588c` · **STOP** |
 
 ## Revision record
 
