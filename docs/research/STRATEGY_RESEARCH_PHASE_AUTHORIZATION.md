@@ -16,7 +16,8 @@ Authorize Strategy Research Phase
 
 Decision: GRANTED ✓
 
-Active Phase: Strategy Research（Epoch 5）
+Active Phase: Strategy Research（Epoch 5）— **CLOSED 2026-07-22**（see E5C_V0_1）
+Re-entry:     requires new Authorize Strategy Research Phase（or scoped wake）
 CAP-CTX-001: remains CLOSED（not reopened）
 RC001-B: remains PERMANENTLY CLOSED（not reopened）
 
