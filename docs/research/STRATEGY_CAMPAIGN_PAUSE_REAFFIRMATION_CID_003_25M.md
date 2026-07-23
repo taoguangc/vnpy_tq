@@ -52,6 +52,7 @@ CTX MECH 001–003 KEEP · CTX RISK 004–005 KEEP
 
 ```text
 Preferred default while silent: D — remain paused.
+Delegation-25N selected Option B → see NSAD_CID_004_V0_1（CID_003 Pause retained）.
 ```
 
 ## Explicit non-grants（this reaffirmation）

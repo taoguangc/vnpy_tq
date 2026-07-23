@@ -1,21 +1,22 @@
-# Campaigns pointer — CID_003 PAUSED（reaffirmed）
+# Campaigns pointer — CID_003 PAUSED · CID_004 Design opened
 
 ```text
-Campaign: PAUSED（CPD_CID_003_V0_1 · R1 reaffirm）
-Research Bindable: YES · Alpha: NONE · Production: WITHHELD
-Delegation-25M: STOP（no Resume）
+CID_003: PAUSED（CPD · R1）
+CID_004: NSAD_CID_004_V0_1 DESIGNED（OPP12 seed · no Freeze）
+Delegation-25N: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_003.md) |
-| Reaffirmation | [R1](../research/STRATEGY_CAMPAIGN_PAUSE_REAFFIRMATION_CID_003_25M.md) |
-| Asset Review | [SAR_CID_003_V1_15](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| CID_003 Pause | [PAUSED](../research/STRATEGY_CAMPAIGN_PAUSE_CID_003.md) |
+| CID_004 Design | [NSAD](../research/STRATEGY_NEW_ASSET_DESIGN_CID_004.md) |
+| Delegation-25N | [STOP](../research/STRATEGY_DELEGATION_25N_EXECUTION_LOG.md) |
 
-## Wake（须明确授权）
+## Next（须新授权）
 
 ```text
-Resume CID_003 · Authorize new strategy asset design · Production Re-review
+CID_004 Identity Freeze / OPP12 Detector impl design
+  — OR — remain paused on both code paths
 ```
