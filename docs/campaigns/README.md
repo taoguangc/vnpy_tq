@@ -1,25 +1,24 @@
-# Campaigns pointer — CID_003–010 PAUSED · CID_011 H_MECH KEEP
+# Campaigns pointer — CID_003–011 PAUSED
 
 ```text
-CID_003–010: PAUSED · Alpha NONE
-CID_011: Candidate · H_MECH KEEP（STRAT_SO19R_EXP001 · n=124）· Alpha NONE
-Delegation-25AS: STOP
+CID_003–011: PAUSED · Alpha NONE
+CID_011: H_MECH KEEP · H_EDGE REVERT×2 · AERC CLOSED
+Legacy opp/ preferred shelf: EXHAUSTED
+Delegation-25AT: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CID_011 SIF | [FROZEN](../research/STRATEGY_IDENTITY_FREEZE_CID_011.md) |
-| CID_011 EXP001 | [KEEP](../research/STRATEGY_SEVF_FILL_CID_011_EXP001.md) |
-| CID_011 SAR | [V0.2](../research/STRATEGY_ASSET_REVIEW_CID_011.md) |
+| CID_011 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_011.md) |
+| CID_011 AERC | [NONE](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_011.md) |
+| CID_011 EXP003 | [REVERT](../research/STRATEGY_SEVF_FILL_CID_011_EXP003.md) |
 | CID_010 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_010.md) |
 
 ## Wake（须明确授权）
 
 ```text
-Authorize H_EDGE diagnostic for CID_011 / STRAT_SO19R_EXP002
-Authorize H_MECH multi-symbol / OOS for CID_011
-Pause CID_011
-Resume CID_003–010（scoped）
+Authorize new strategy asset design（new Spec · beyond opp/ shelf）
+Resume CID_003–011（scoped）
 ```
