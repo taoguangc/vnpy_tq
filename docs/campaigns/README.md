@@ -1,21 +1,20 @@
-# Campaigns pointer — CID_004 H_MECH EXP001 KEEP
+# Campaigns pointer — CID_004 Alpha NONE
 
 ```text
-CID_004: STRAT_RO12_EXP001 KEEP（H_MECH · rb/2024）
-Lifecycle: Testing（narrow）· Alpha: NONE
+H_MECH: KEEP · H_EDGE: REVERT×2 · Alpha: NONE（AERC CLOSED）
 CID_003: PAUSED
-Delegation-25P: STOP
+Delegation-25Q: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| EXP001 | [KEEP](../research/STRATEGY_SEVF_FILL_CID_004_EXP001.md) |
-| Asset Review | [SAR_CID_004_V0_2](../research/STRATEGY_ASSET_REVIEW_CID_004.md) |
+| Alpha Closure | [AERC](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_004.md) |
+| Asset Review | [SAR_CID_004_V0_3](../research/STRATEGY_ASSET_REVIEW_CID_004.md) |
 
 ## Next（须新授权）
 
 ```text
-H_MECH OOS/multi-symbol · H_EDGE diagnostic · Pause
+Pause CID_004 · H_MECH robustness · new asset
 ```
