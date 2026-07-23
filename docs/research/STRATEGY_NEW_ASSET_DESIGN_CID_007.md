@@ -173,9 +173,8 @@ Prior CID RISK / Bindable does not transfer to CID_007.
 ## 9. Next（须另授 · pick）
 
 ```text
-Authorize Identity Freeze · OPP19 OD-Breakout Detector + orchestrator @0.1.0
-  — OR — leave CID_007 at Design-only
-NOT: auto-implement · H_EDGE before Freeze · Resume paused campaigns
+DONE: Identity Freeze · OPP19 OD-Breakout Detector + orchestrator @0.1.0（Delegation-25AE）
+Next: Authorize SEVF Spec + Fill for STRAT_SO19_EXP001（H_MECH）
 ```
 
 ## Revision record
@@ -183,3 +182,4 @@ NOT: auto-implement · H_EDGE before Freeze · Resume paused campaigns
 | Date | Change |
 |------|--------|
 | 2026-07-23 | NSAD_CID_007_V0_1 DESIGNED · OPP19 OD-Breakout preferred seed · Delegation-25AD |
+| 2026-07-23 | Identity FROZEN · STRAT_SESS_OPP19_01@0.1.0 · Delegation-25AE |

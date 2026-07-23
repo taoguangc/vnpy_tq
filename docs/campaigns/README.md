@@ -1,22 +1,22 @@
-# Campaigns pointer — CID_003–006 PAUSED · CID_007 DESIGNED
+# Campaigns pointer — CID_003–006 PAUSED · CID_007 Identity FROZEN
 
 ```text
 CID_003–006: PAUSED · Alpha NONE
-CID_007: NSAD DESIGNED（OPP19 OD-Breakout）· no Freeze / no code
-Delegation-25AD: STOP
+CID_007: Candidate Identity FROZEN（STRAT_SESS_OPP19_01@0.1.0 OD-Breakout）· Testing NOT STARTED
+Delegation-25AE: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CID_006 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_006.md) |
 | CID_007 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_007.md) |
-| CID_007 SAR | [V0.1](../research/STRATEGY_ASSET_REVIEW_CID_007.md) |
+| CID_007 SIF | [FROZEN](../research/STRATEGY_IDENTITY_FREEZE_CID_007.md) |
+| CID_007 SAR | [V0.2](../research/STRATEGY_ASSET_REVIEW_CID_007.md) |
 
 ## Wake（须明确授权）
 
 ```text
-Authorize Identity Freeze for CID_007
+Authorize SEVF Spec + Fill for CID_007 H_MECH
 Resume CID_003–006（scoped）
 ```

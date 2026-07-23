@@ -1,24 +1,23 @@
-# Strategy Asset Review — CID_007（V0.1 · NSAD DESIGNED）
+# Strategy Asset Review — CID_007（V0.2 · Identity FROZEN）
 
-> **Review ID**: `SAR_CID_007_V0_1`  
+> **Review ID**: `SAR_CID_007_V0_2`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25AD STOP
+> **Authorization**: Delegation-25AE STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_007_V0_1
+SAR_CID_007_V0_2
 
-Campaign: DESIGNED only（NSAD_CID_007_V0_1）
-Seed:     OPP19 Opening Drive Breakout（e2bfc0c… opp19.py）
-Provisional: STRAT_SESS_OPP19_01
-Family:   session / opening / breakout
-Scope note: OD_REV OUT for @0.1.0
-Identity Freeze: NOT YET
+Identity: STRAT_SESS_OPP19_01@0.1.0 FROZEN（SIF_CID_007_V0_1）
+Detector: OPP19@1.0.0 OD-Breakout · OPP19_MS_V0_1
+source_hash: f7cbcb3f…3d90d6
+parameter_hash: 3f9793fe…762a05
+OD_REV: OUT
 H_MECH / H_EDGE / Alpha: NONE
 CID_003–006: PAUSED
-Delegation-25AD: STOP
+Delegation-25AE: STOP
 ================================================
 ```
 
@@ -27,14 +26,15 @@ Delegation-25AD: STOP
 | Item | Status |
 |------|--------|
 | NSAD | [DESIGNED](STRATEGY_NEW_ASSET_DESIGN_CID_007.md) |
-| Delegation-25AD | [STOP](STRATEGY_DELEGATION_25AD_EXECUTION_LOG.md) |
+| Morphology | [OPP19_MS](STRATEGY_OPP19_MORPHOLOGY_SPEC_CID_007.md) |
+| Identity Freeze | [SIF](STRATEGY_IDENTITY_FREEZE_CID_007.md) |
+| Delegation-25AE | [STOP](STRATEGY_DELEGATION_25AE_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-Identity Freeze · OPP19 OD-Breakout Detector + orchestrator @0.1.0
-  — OR — leave Design-only
-NOT: Resume CID_003–006 · H_EDGE before Freeze · auto-code · bundle OD_REV
+SEVF Spec + Fill · H_MECH EXP001
+NOT: H_EDGE before H_MECH · Resume paused · PnL chase · bundle OD_REV
 ```
 
 ## Revision record
@@ -42,3 +42,4 @@ NOT: Resume CID_003–006 · H_EDGE before Freeze · auto-code · bundle OD_REV
 | Date | Change |
 |------|--------|
 | 2026-07-23 | V0.1 NSAD DESIGNED · 25AD STOP |
+| 2026-07-23 | V0.2 Identity FROZEN · 25AE STOP |
