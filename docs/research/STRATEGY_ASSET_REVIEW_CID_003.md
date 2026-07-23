@@ -1,21 +1,24 @@
-# Strategy Asset Review — CID_003（V1.14 · Context×RISK OOS KEEP）
+# Strategy Asset Review — CID_003（V1.15 · Campaign PAUSED）
 
-> **Review ID**: `SAR_CID_003_V1_14`  
+> **Review ID**: `SAR_CID_003_V1_15`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25K STOP
+> **Authorization**: Delegation-25L STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V1_14
+SAR_CID_003_V1_15
 
-MECH CTX: EXP001–003 KEEP
-RISK CTX: EXP004 KEEP · EXP005 OOS KEEP
-Alpha: NONE
-Production: WITHHELD · chase PAUSED
+Campaign:     PAUSED（CPD_CID_003_V0_1）
+MECH @0.1.1:  Verified H_MECH · E3 · Research Bindable
+RISK @0.2.0:  Verified H_CAPITAL_GATE · E3 · Research Bindable
+CTX MECH:     EXP001–003 KEEP
+CTX RISK:     EXP004 KEEP · EXP005 OOS KEEP
+Alpha:        NONE
+Production:   WITHHELD
 Context routing: NOT GRANTED
-Delegation-25K: STOP
+Delegation-25L: STOP
 ================================================
 ```
 
@@ -23,22 +26,21 @@ Delegation-25K: STOP
 
 | Item | Status |
 |------|--------|
-| CTX EXP004 | [KEEP](STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP004.md) |
-| CTX EXP005 | [KEEP](STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP005.md) |
-| Delegation-25K | [STOP](STRATEGY_DELEGATION_25K_CID_003_EXECUTION_LOG.md) |
+| Campaign Pause | [PAUSED](STRATEGY_CAMPAIGN_PAUSE_CID_003.md) |
+| PBDR | [WITHHELD](STRATEGY_PRODUCTION_BINDABLE_REVIEW_CID_003.md) |
+| Delegation-25L | [STOP](STRATEGY_DELEGATION_25L_CID_003_EXECUTION_LOG.md) |
 
-## Next（须新授权 · outside 25K）
+## Next（须新授权 · wake）
 
 ```text
-Pause CID_003（recommended — composition continuity stack sufficient for research）
-  — OR — CTX×RISK multi-symbol EXP
-  — OR — new asset
-NOT: Production chase · H_EDGE retune · claim live routing
+Resume CID_003 · CTX×RISK multi-symbol · new asset
+  · or Production Re-review after residual work
+NOT: agent auto-resume · H_EDGE retune
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V1.13 CTX EXP004 KEEP · 25J STOP |
 | 2026-07-23 | V1.14 CTX EXP005 KEEP · 25K STOP |
+| 2026-07-23 | V1.15 Campaign PAUSED · 25L STOP |
