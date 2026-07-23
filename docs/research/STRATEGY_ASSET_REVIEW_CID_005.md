@@ -1,22 +1,22 @@
-# Strategy Asset Review — CID_005（V0.2 · Identity FROZEN）
+# Strategy Asset Review — CID_005（V0.3 · H_MECH KEEP）
 
-> **Review ID**: `SAR_CID_005_V0_2`  
+> **Review ID**: `SAR_CID_005_V0_3`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25T STOP
+> **Authorization**: Delegation-25U STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_005_V0_2
+SAR_CID_005_V0_3
 
-Identity: STRAT_REV_OPP17_01@0.1.0 FROZEN（SIF_CID_005_V0_1）
-Detector: OPP17@1.0.0 · OPP17_MS_V0_1
-source_hash: 9d85cf96…5cb576
-parameter_hash: 40ef1e1d…9b0816
-H_MECH / H_EDGE / Alpha: NONE
+Identity: STRAT_REV_OPP17_01@0.1.0 FROZEN
+H_MECH:   EXP001 KEEP（rb/2024 · attributed=35）
+H_EDGE:   NOT STARTED
+Alpha:    NONE
+Bindable: NO
 CID_003 / CID_004: PAUSED
-Delegation-25T: STOP
+Delegation-25U: STOP
 ================================================
 ```
 
@@ -24,21 +24,22 @@ Delegation-25T: STOP
 
 | Item | Status |
 |------|--------|
-| NSAD | [DESIGNED](STRATEGY_NEW_ASSET_DESIGN_CID_005.md) |
-| Morphology | [OPP17_MS](STRATEGY_OPP17_MORPHOLOGY_SPEC_CID_005.md) |
-| Identity Freeze | [SIF](STRATEGY_IDENTITY_FREEZE_CID_005.md) |
-| Delegation-25T | [STOP](STRATEGY_DELEGATION_25T_EXECUTION_LOG.md) |
+| SEVF Spec | [SPEC](STRATEGY_SEVF_SPECIFICATION_CID_005.md) |
+| EXP001 Fill | [KEEP](STRATEGY_SEVF_FILL_CID_005_EXP001.md) |
+| ER | [PASS](STRATEGY_SEVF_EVIDENCE_REVIEW_CID_005_EXP001.md) |
+| Delegation-25U | [STOP](STRATEGY_DELEGATION_25U_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-SEVF Spec + Fill · H_MECH EXP001
-NOT: H_EDGE before H_MECH · Resume paused campaigns · PnL chase
+H_EDGE diagnostic Fill（recommended · early falsification）
+  — OR — H_MECH OOS/multi-symbol（mechanism only）
+NOT: claim Alpha from H_MECH · parameter shopping
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.1 NSAD DESIGNED · 25S STOP |
 | 2026-07-23 | V0.2 Identity FROZEN · 25T STOP |
+| 2026-07-23 | V0.3 EXP001 H_MECH KEEP · 25U STOP |
