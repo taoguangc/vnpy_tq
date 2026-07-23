@@ -153,9 +153,8 @@ CID_003 RISK Verified does not transfer to CID_004.
 ## 9. Next（须另授 · pick）
 
 ```text
-Authorize Identity Freeze + PAAF OPP12 Detector Implementation Design
-  — OR — Authorize OPP12 morphology Spec only（still no code）
-  — OR — remain with CID_003 paused / no CID_004 work
+DONE: Identity Freeze · OPP12 Detector + orchestrator @0.1.0（Delegation-25O）
+Next: Authorize SEVF Spec + Fill for STRAT_RO12_EXP001（H_MECH）
 ```
 
 ## Revision record
@@ -163,3 +162,4 @@ Authorize Identity Freeze + PAAF OPP12 Detector Implementation Design
 | Date | Change |
 |------|--------|
 | 2026-07-23 | NSAD_CID_004_V0_1 DESIGNED · OPP12 preferred seed · Delegation-25N |
+| 2026-07-23 | Identity FROZEN · STRAT_REV_OPP12_01@0.1.0 · Delegation-25O |
