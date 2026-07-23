@@ -21,7 +21,8 @@ Surface:              RISK only（@0.2.0）
 Hypothesis admitted:  H_CAPITAL_GATE
                       （survival · capital protection · operational safety）
 Lifecycle stamp:      Verified ✓（narrow）
-Evidence level:       E2（multi-symbol portability EXP010）· NOT E3/E4
+Evidence level:       E3（see amendment `VR_CID_002_RISK_V0_2_0_E3` · EXP012）· NOT E4
+
 
 Mechanism @0.1.1:     NOT RE-OPENED（separate VR_MECH）
 Production Bindable:  STILL WITHHELD（PBDR）
@@ -70,8 +71,10 @@ H_CAPITAL_GATE:
 | EXP008 | H_CAPITAL_GATE | i/2024 · cost-blind equity | **REVERT** | Negative evidence（first-class） |
 | EXP009 | H_CAPITAL_GATE | i/2024 · cost-aware kill | **KEEP** | Same-hash repair smoke |
 | EXP010 | H_CAPITAL_GATE | {rb,i,MA}/2024 | **KEEP** | Multi-symbol portability（E2） |
+| EXP012 | H_CAPITAL_GATE | {rb,i,MA}/2025 | **KEEP** | Temporal OOS（E3）· amendment |
 
-Evidence Review EXP010: **PASS**（`SEVF_ER_CID_002_EXP010_V0_1`）.
+Evidence Review EXP010: **PASS**（`SEVF_ER_CID_002_EXP010_V0_1`）.  
+Evidence Review EXP012: **PASS**（`SEVF_ER_CID_002_EXP012_V0_1`）.
 
 ```text
 EXP008 REVERT is retained and required for integrity.
@@ -83,13 +86,13 @@ Verified is not “all green” storytelling.
 | Gate | Result | Note |
 |------|--------|------|
 | Identity frozen | PASS | `SIF_CID_002_V0_2_0` |
-| Same-hash Closed EXPs | PASS | EXP008–010 lineage on `@0.2.0` |
+| Same-hash Closed EXPs | PASS | EXP008–010 + EXP012 on `@0.2.0` |
 | Pre-registered non-PnL rules | PASS | capital≤0 / kill semantics |
 | Surface=RISK citation | PASS | CC-CID_002-v1 |
 | Negative evidence retained | PASS | EXP008 |
 | Multi-symbol（docs/03 跨品种） | PASS | EXP010 |
 | H_MECH not smuggled | PASS | dual-surface held |
-| E3 same-hash OOS year for RISK | **FAIL / residual R-RISK-OOS** | no `@0.2.0` 2025 capital OOS |
+| E3 same-hash OOS year for RISK | **PASS** | EXP012 KEEP · `VR_CID_002_RISK_V0_2_0_E3` |
 | Production Bindable | **N/A · withheld** | PBDR still WITHHELD |
 | Alpha / E4 | FAIL（not claimed） | explicit non-grant |
 
@@ -98,10 +101,9 @@ Verified is not “all green” storytelling.
 ```text
 GRANT:  Lifecycle status Verified on Risk Surface @0.2.0
         for hypothesis H_CAPITAL_GATE only
-        at evidence maturity E2（multi-symbol portability）.
+        at evidence maturity E3（multi-symbol + temporal OOS）.
 
-HOLD:   E3（needs same-hash temporal OOS capital-gate EXP）
-        E4 / Production Bindable / Alpha / live.
+HOLD:   E4 / Production Bindable / Alpha / live.
 ```
 
 ### Explicit non-grants
@@ -119,7 +121,8 @@ HOLD:   E3（needs same-hash temporal OOS capital-gate EXP）
 
 | ID | Residual | Effect |
 |----|----------|--------|
-| **R-RISK-OOS** | No same-hash `@0.2.0` capital OOS year | Blocks E3；does not block E2-Verified |
+| **R-RISK-OOS** | CLOSED via EXP012 | Was blocking E3；now closed |
+
 | **R-EI** | Deploy identity still research pin | Blocks Production Bindable |
 | **R-ACL-live** | Live path hard ACL | Blocks Production Bindable |
 | **R-VMP-live** | Live drift / restart / session | Blocks Production Bindable |
@@ -132,27 +135,25 @@ When citing “Verified RISK / capital gate”:
   · identity = STRAT_TREND_BROOKS_SCALP_02@0.2.0
   · freeze  = SIF_CID_002_V0_2_0
   · surface = RISK
-  · claim   = H_CAPITAL_GATE · E2
+  · claim   = H_CAPITAL_GATE · E3
   · MUST NOT cite as Alpha / Production / MECH Verified / live-safe
 ```
 
 ## 7. Next（须另授）
 
 ```text
-A. Same-hash RISK capital OOS（E3 attempt · new experiment_id）
-B. EI production-grade deploy identity freeze
-C. Production Bindable Re-review（only after more residuals close）
-D. Pause Epoch 6
+A. FILLED venue pack / container digest（R-EI）
+B. Live ACL / VMP / CXSD enforcement
+C. Production Bindable Re-review（only after residuals）
+D. remain paused
 ```
 
 ## Hard guarantees
 
 ```text
-✓ No new Observation / backtest under this authorization
-✓ No code / parameter change
-✓ No Production Bindable / Alpha / E4 grant
-✓ MECH Verified untouched
 ✓ EXP008 negative evidence retained
+✓ No Production Bindable / Alpha / E4 grant under this amendment
+✓ MECH Verified untouched
 ```
 
 ## Revision record
@@ -160,3 +161,4 @@ D. Pause Epoch 6
 | Date | Change |
 |------|--------|
 | 2026-07-22 | VR_CID_002_RISK_V0_2_0 COMPLETE · Verified GRANTED（narrow H_CAPITAL_GATE · E2） |
+| 2026-07-23 | E3 amendment via EXP012 · see `VR_CID_002_RISK_V0_2_0_E3` |

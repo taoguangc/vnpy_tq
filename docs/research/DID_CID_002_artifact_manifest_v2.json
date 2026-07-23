@@ -1,0 +1,47 @@
+{
+  "artifact_set_id": "DID_CID_002_V0_2_ARTIFACT_SET",
+  "kind": "content_addressed_source_and_lock_bundle",
+  "not_kind": [
+    "oci_image_digest",
+    "signed_release_tag"
+  ],
+  "generated_at": "2026-07-23T02:00:54.715340+00:00",
+  "delegation": "Delegation-50M",
+  "files": [
+    {
+      "path": "requirements.lock",
+      "sha256": "2880f5673b96e0df47a66b3d10839b3fe1f09bf53a243bcee2f45dc0545a0dc8"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "53a3f3f5b2fafb7e7da2f4df5f7944e7ea5a2f183a326893b02fb6f0cec35530"
+    },
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy.py",
+      "sha256": "5cdc3c4fa47e70ae524e3225cbce04787341f227f0c47ad7d9fc95fccb3dfaef"
+    },
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy_v011.py",
+      "sha256": "dec3b51eb326e3bfeb9930752fb945aee9275f58375bee1dc48b7d58843b2bd5"
+    },
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy_v020.py",
+      "sha256": "3723f01a24b139495587744b77f4b031751926e1fbca2c588b4c8347c9e79b1c"
+    },
+    {
+      "path": "strategies/paaf/context_consumer/brooks_scalp_ctx_filter_v011.py",
+      "sha256": "12188957912dfd2a7b7931e0176ee8b7023c9cd51354a6dd4f4ea134aa8fee26"
+    },
+    {
+      "path": "strategies/paaf/cxsd/__init__.py",
+      "sha256": "31e2bd3df75099ebc0c4e6a3ab00b8ce208dcee6c9509651c8eee46008dca959"
+    },
+    {
+      "path": "strategies/paaf/detectors/brooks_scalp_first_pullback.py",
+      "sha256": "3ffd6a027d92a914e438ccc0e6cc797aa319c9d2a79ec779a29fc74ec8126fad"
+    }
+  ],
+  "artifact_set_hash": "f3d68ada7f49aa647b81b2163fd061f64f4179510ab3c353a1ad8ea4b0db8051",
+  "docker_available": false,
+  "notes": "P1 strengthened packaging; container digest still OPEN"
+}

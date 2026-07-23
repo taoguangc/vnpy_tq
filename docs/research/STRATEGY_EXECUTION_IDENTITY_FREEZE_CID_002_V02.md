@@ -56,7 +56,8 @@ Before any future Production Bindable grant, consumers MUST present:
 | P2 | Full dependency lockfile | **CLOSED**（`requirements.lock`） |
 | P3 | Runtime image or reproducible env cert | **PARTIAL**（host attestation only） |
 | P4 | Deploy revision ≠ research tip alone | **PARTIAL**（delivery commit · not signed tag） |
-| P5 | Brokerage/runtime contract ≠ backtest fills | **CLOSED**（`LRC-CID_002-v0.1`）· venue evidence pack still **OPEN** |
+| P5 | Brokerage/runtime contract ≠ backtest fills | **CLOSED**（`LRC-CID_002-v0.1` + `VBP-CID_002-v0.1`）· FILLED venue still **OPEN** |
+
 
 
 ```text
@@ -82,7 +83,9 @@ Production Bindable:          STILL WITHHELD
 ## Next（须另授）
 
 ```text
-Container digest · LRC freeze · RISK OOS E3 · or remain paused
+DONE: LRC freeze · VBP protocol · RISK E3（EXP012）· DID v2 packaging
+Still open: FILLED venue · Docker · live ACL/VMP
+Default: remain paused
 ```
 
 ## Revision record

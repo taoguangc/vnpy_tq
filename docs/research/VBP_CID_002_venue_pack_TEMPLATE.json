@@ -1,0 +1,22 @@
+{
+  "protocol_id": "VBP-CID_002-v0.1",
+  "kind": "TEMPLATE",
+  "filled": false,
+  "lrc_contract_id": "LRC-CID_002-v0.1",
+  "ei_artifact_set_id": null,
+  "venue_id": null,
+  "broker_legal_name": null,
+  "account_class": null,
+  "order_types": [],
+  "session_calendar_ref": null,
+  "fee_schedule_source": null,
+  "slippage_policy_source": null,
+  "failover_policy": null,
+  "disconnect_policy": null,
+  "fill_binding_id": null,
+  "fill_binding_must_not_equal": "VNPY_CTA_BACKTEST_ENGINE_DEFAULTS_AT_EXP_REGISTRATION",
+  "declared_by": null,
+  "declared_at": null,
+  "evidence_paths": [],
+  "notes": "TEMPLATE only. Do not cite as FILLED venue evidence."
+}
