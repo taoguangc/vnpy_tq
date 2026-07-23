@@ -8,6 +8,7 @@ from pathlib import Path
 
 from vnpy.trader.constant import Exchange, Interval
 from vnpy.trader.object import BarData
+from vnpy.trader.utility import ArrayManager
 
 from strategies.paaf.adapters import (
     PaafBar,
@@ -16,6 +17,7 @@ from strategies.paaf.adapters import (
     bars_from_am,
     last_bar,
 )
+from strategies.paaf.adapters.vnpy_adapter import _series_len
 
 
 class _FakeAM:
@@ -96,6 +98,42 @@ class TestVnpyAdapter(unittest.TestCase):
         self.assertFalse(am_is_inited(am))
         self.assertEqual(bars_from_am(am), [])
         self.assertIsNone(last_bar(am))
+
+    def test_array_manager_count_exceeds_size(self) -> None:
+        """CID_003 zero-trade regression: count ≫ size must not yield zero OHLC."""
+
+        am = ArrayManager(size=10)
+
+        def _mk(i: int) -> BarData:
+            return BarData(
+                gateway_name="TEST",
+                symbol="rb",
+                exchange=Exchange.SHFE,
+                datetime=datetime(2024, 1, 1, 9, i % 60),
+                interval=Interval.MINUTE,
+                volume=1.0,
+                turnover=0.0,
+                open_interest=0.0,
+                open_price=100.0 + i,
+                high_price=101.0 + i,
+                low_price=99.0 + i,
+                close_price=100.5 + i,
+            )
+
+        for i in range(25):
+            am.update_bar(_mk(i))
+
+        self.assertGreater(am.count, am.size)
+        self.assertEqual(_series_len(am), am.size)
+        tip = last_bar(am)
+        assert tip is not None
+        self.assertAlmostEqual(tip.close, float(am.close[-1]))
+        bars = bars_from_am(am, lookback=2)
+        self.assertEqual(len(bars), 2)
+        self.assertAlmostEqual(bars[0].close, float(am.close[-2]))
+        self.assertAlmostEqual(bars[1].close, float(am.close[-1]))
+        self.assertGreater(bars[0].close, 0.0)
+        self.assertGreater(bars[1].close, 0.0)
 
     def test_domain_has_no_vnpy_import(self) -> None:
         domain_path = (

@@ -1,10 +1,10 @@
-# Campaigns pointer — CID_003 zero-trade Engineering Review
+# Campaigns pointer — CID_003 @0.1.1 repair ready
 
 ```text
-EXP001 H_MECH rb/2024: HOLD（0 exits）· IMMUTABLE
-Engineering Review:    COMPLETE · adapter window defect
-Repair @0.1.1:         DESIGNED ONLY
-CID_003:               Candidate · Testing not advanced
+EXP001 @0.1.0:         HOLD · IMMUTABLE
+Engineering Review:    COMPLETE
+@0.1.1 Identity:       FROZEN · ready for Fill
+Observation @0.1.1:    NOT STARTED
 Alpha:                 NONE
 ```
 
@@ -12,15 +12,14 @@ Alpha:                 NONE
 
 | Item | Status |
 |------|--------|
-| Engineering Review | [COMPLETE](../research/STRATEGY_ENGINEERING_REVIEW_CID_003_ZERO_TRADE.md) |
-| Evaluation | [HOLD](../research/STRATEGY_SEVF_EVALUATION_CID_003_EXP001.md) |
-| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP001.md) |
-| Asset Review | [SAR_CID_003_V0_6](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Implementation | [DONE](../research/STRATEGY_IMPLEMENTATION_CID_003_ADAPTER_REPAIR_V011.md) |
+| Identity @0.1.1 | [SIF_CID_003_V0_1_1](../research/STRATEGY_IDENTITY_FREEZE_CID_003_V011.md) |
+| Eng Review | [COMPLETE](../research/STRATEGY_ENGINEERING_REVIEW_CID_003_ZERO_TRADE.md) |
+| Asset Review | [SAR_CID_003_V0_7](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
 
 ## Next（须新授权）
 
 ```text
-A. Authorize Implementation of CID_003 adapter repair lineage @0.1.1
-B. SEVF Fill STRAT_RO16_EXP002（after @0.1.1）
-C. Pause CID_003
+Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP002（H_MECH @0.1.1）
+  — OR — Pause CID_003
 ```

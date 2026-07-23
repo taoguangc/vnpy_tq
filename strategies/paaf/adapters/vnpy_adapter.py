@@ -60,14 +60,37 @@ def am_is_inited(am: Any) -> bool:
     return isinstance(close, Sequence) and len(close) > 0
 
 
+def _array_window_len(am: Any) -> int:
+    """固定缓冲长度（ArrayManager.size 窗口），兼容 list 与 numpy.ndarray。"""
+
+    for name in ("close", "close_array"):
+        series = getattr(am, name, None)
+        if series is None:
+            continue
+        try:
+            return int(len(series))
+        except TypeError:
+            continue
+    return 0
+
+
 def _series_len(am: Any) -> int:
+    """可用 Bar 窗口长度。
+
+    vn.py ``ArrayManager`` 的 ``count`` 可超过固定 ``size``；正下标只在
+    ``0 .. len(close)-1`` 有效。长度取 ``min(count, array_len)``，避免
+    ``bars_from_am`` 在 warmup 后读到越界默认 0.0（CID_003 zero-trade 根因）。
+
+    注意：``numpy.ndarray`` 不是 ``typing.Sequence``，不可用 ``isinstance(..., Sequence)``。
+    """
+
+    array_len = _array_window_len(am)
     count = getattr(am, "count", None)
     if isinstance(count, int) and count >= 0:
+        if array_len > 0:
+            return min(count, array_len)
         return count
-    close = getattr(am, "close", None)
-    if isinstance(close, Sequence):
-        return len(close)
-    return 0
+    return array_len
 
 
 def last_bar(am: Any) -> Optional[PaafBar]:
@@ -84,6 +107,7 @@ def last_bar(am: Any) -> Optional[PaafBar]:
 def bars_from_am(am: Any, lookback: Optional[int] = None) -> list[PaafBar]:
     """从只读行情窗口提取最近 ``lookback`` 根 Bar（默认全部可用）。
 
+    使用负下标（``-lookback .. -1``），与 ArrayManager 环形缓冲一致。
     ArrayManager 通常不保留逐 bar datetime；缺失时 ``PaafBar.datetime`` 为 None。
     """
 
@@ -96,8 +120,7 @@ def bars_from_am(am: Any, lookback: Optional[int] = None) -> list[PaafBar]:
         lookback = n
     if lookback <= 0:
         return []
-    start = n - lookback
-    return [_bar_at(am, i) for i in range(start, n)]
+    return [_bar_at(am, i) for i in range(-lookback, 0)]
 
 
 def _bar_at(am: Any, index: int) -> PaafBar:

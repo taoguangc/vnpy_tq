@@ -6,7 +6,7 @@
 > **Date**: 2026-07-23  
 > **Authorization**: `Authorize Engineering Review for CID_003 zero-trade path`  
 > **Parents**: `SAR_CID_003_V0_5` · `SIF_CID_003_V0_1`（@0.1.0）· `STRAT_RO16_EXP001` HOLD  
-> **Implementation**: **NOT AUTHORIZED** by this review
+> **Implementation**: **AUTHORIZED + DONE** under user option **A**（2026-07-23）· see [`STRATEGY_IMPLEMENTATION_CID_003_ADAPTER_REPAIR_V011.md`](STRATEGY_IMPLEMENTATION_CID_003_ADAPTER_REPAIR_V011.md) · Identity `SIF_CID_003_V0_1_1`
 
 ## Review record
 
@@ -19,7 +19,7 @@ Primary class:        ENGINEERING DEFECT（adapter window length）
 Secondary:            entry/fill path NOT reached after AM warm-up
 @0.1.0 binding bytes: NOT MUTATED
 Closed EXP001:        IMMUTABLE（HOLD retained）
-Repair lineage:       DESIGNED ONLY（@0.1.1 + adapter fix）
+Repair lineage:       IMPLEMENTED @0.1.1（adapter + SIF_CID_003_V0_1_1）
 Bindable / Alpha:     NOT GRANTED
 ================================================
 ```
@@ -161,10 +161,9 @@ Optional hardening: `bars_from_am` may prefer negative indices (`-lookback .. -1
 ## 6. Next（须新授权 · pick）
 
 ```text
-A. Authorize Implementation of CID_003 adapter repair lineage @0.1.1
-   （fix + tests + Identity Freeze；then separate Fill for new EXP）
-B. Authorize SEVF Fill for STRAT_RO16_EXP002（only after @0.1.1 exists）
-C. Pause CID_003 Testing
+DONE: A. Authorize Implementation of CID_003 adapter repair lineage @0.1.1
+A'. Authorize SEVF Fill for STRAT_RO16_EXP002（H_MECH @0.1.1）
+C.  Pause CID_003 Testing
 NOT: retune @0.1.0 · flip Closed EXP001 · Alpha claim
 ```
 
@@ -173,3 +172,4 @@ NOT: retune @0.1.0 · flip Closed EXP001 · Alpha claim
 | Date | Change |
 |------|--------|
 | 2026-07-23 | Engineering Review COMPLETE · root cause documented · repair design-only |
+| 2026-07-23 | Implementation A DONE · @0.1.1 FROZEN |

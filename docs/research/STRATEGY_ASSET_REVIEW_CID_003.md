@@ -1,25 +1,24 @@
-# Strategy Asset Review — CID_003（V0.6 · Zero-Trade Engineering Review）
+# Strategy Asset Review — CID_003（V0.7 · @0.1.1 repair implemented）
 
-> **Review ID**: `SAR_CID_003_V0_6`  
+> **Review ID**: `SAR_CID_003_V0_7`  
 > **Date**: 2026-07-23  
-> **Authorization**: `Authorize Engineering Review for CID_003 zero-trade path`
+> **Authorization**: Implementation **A** · adapter repair `@0.1.1`
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V0_6
+SAR_CID_003_V0_7
 
-Identity:     FROZEN @0.1.0（immutable）
-SEVF Spec:    SPECIFIED
-EXP001 H_MECH rb/2024: HOLD（0 auditable exits）· IMMUTABLE
-Engineering:  ENG_REV_CID_003_ZERO_TRADE_V0_1 COMPLETE
-Root cause:   bars_from_am / _series_len uses am.count > ArrayManager.size
-              → OPP16 OHLC zeros after warm-up
-Lifecycle:    Candidate（Testing not advanced）
-Repair @0.1.1: DESIGNED ONLY（not implemented）
-Alpha:        NONE
-Bindable:     NO
+@0.1.0 Identity:     FROZEN · IMMUTABLE
+EXP001 H_MECH:       HOLD（0 exits）· IMMUTABLE
+Engineering Review:  COMPLETE（zero-trade root cause）
+@0.1.1 Identity:     FROZEN · SIF_CID_003_V0_1_1
+@0.1.1 Implementation: DONE（adapter + v011 stamp）
+Observation @0.1.1:  NOT STARTED
+Lifecycle:           Candidate（Testing not advanced under repair）
+Alpha:               NONE
+Bindable:            NO
 ================================================
 ```
 
@@ -27,22 +26,22 @@ Bindable:     NO
 
 | Item | Status |
 |------|--------|
-| Engineering Review | [`ENG_REV_CID_003_ZERO_TRADE_V0_1`](STRATEGY_ENGINEERING_REVIEW_CID_003_ZERO_TRADE.md) |
-| EXP001 Evaluation | [HOLD](STRATEGY_SEVF_EVALUATION_CID_003_EXP001.md) |
-| EXP001 Evidence Review | [PASS · HOLD retained](STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP001.md) |
+| Eng Review | [COMPLETE](STRATEGY_ENGINEERING_REVIEW_CID_003_ZERO_TRADE.md) |
+| Implementation | [DONE](STRATEGY_IMPLEMENTATION_CID_003_ADAPTER_REPAIR_V011.md) |
+| Identity @0.1.1 | [SIF_CID_003_V0_1_1](STRATEGY_IDENTITY_FREEZE_CID_003_V011.md) |
+| EXP001 | [HOLD](STRATEGY_SEVF_EVALUATION_CID_003_EXP001.md) |
 
 ## Next（须新授权）
 
 ```text
-A. Authorize Implementation of CID_003 adapter repair lineage @0.1.1
-B. Authorize SEVF Fill for STRAT_RO16_EXP002（after @0.1.1）
-C. Pause CID_003 Testing
+Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP002（H_MECH @0.1.1）
+  — OR — Pause CID_003
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.4 EXP001 Fill |
-| 2026-07-23 | V0.5 EXP001 Observation HOLD |
-| 2026-07-23 | V0.6 Zero-trade Engineering Review COMPLETE |
+| 2026-07-23 | V0.5 EXP001 HOLD |
+| 2026-07-23 | V0.6 Zero-trade Eng Review |
+| 2026-07-23 | V0.7 @0.1.1 repair implemented + Identity Freeze |
