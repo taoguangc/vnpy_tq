@@ -116,6 +116,7 @@ Kill-switch trips are descriptive attribution · not Alpha.
 ```text
 DESIGN: FROZEN · CCRD_CID_003_V0_1
 CTX_CID003_EXP004: CLOSED · KEEP（rb/2024 · RISK · F1）
+CTX_CID003_EXP005: CLOSED · KEEP（rb/2025 temporal OOS · RISK · F1）
 Further composition EXPs: new experiment_id + authorization required
 Production chase: PAUSED（PBDR_CID_003_V0_1）
 ```
@@ -126,3 +127,4 @@ Production chase: PAUSED（PBDR_CID_003_V0_1）
 |------|--------|
 | 2026-07-23 | Design FROZEN under Delegation-25I |
 | 2026-07-23 | CTX_CID003_EXP004 KEEP · CLOSED（Delegation-25J） |
+| 2026-07-23 | CTX_CID003_EXP005 KEEP · CLOSED（Delegation-25K） |
