@@ -227,7 +227,8 @@ New experiment_id for every Observation；never reuse Closed IDs
 ## 13. Next gate
 
 ```text
-Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP001（H_MECH）
+DONE: STRAT_RO16_EXP001 Fill PRE-REGISTERED（H_MECH）
+Next: Authorize Offline Observation for STRAT_RO16_EXP001
 ```
 
 ## Revision record

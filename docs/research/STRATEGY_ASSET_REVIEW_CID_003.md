@@ -1,34 +1,33 @@
-# Strategy Asset Review — CID_003（V0.3 · SEVF Spec）
+# Strategy Asset Review — CID_003（V0.4 · EXP001 Fill）
 
-> **Review ID**: `SAR_CID_003_V0_3`  
-> **Status**: **COMPLETE** ✓  
+> **Review ID**: `SAR_CID_003_V0_4`  
 > **Date**: 2026-07-23  
-> **Spec**: [`STRATEGY_SEVF_SPECIFICATION_CID_003.md`](STRATEGY_SEVF_SPECIFICATION_CID_003.md)
+> **Authorization**: SEVF Fill for `STRAT_RO16_EXP001`
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V0_3
+SAR_CID_003_V0_4
 
-Identity:     STRAT_REV_OPP16_01@0.1.0 · SIF_CID_003_V0_1 FROZEN
-SEVF Spec:    SEVF_SPEC_CID_003_V0_1 SPECIFIED
-EXPs:         NONE
-Lifecycle:    Candidate（Testing not started）
+Identity:     FROZEN @0.1.0
+SEVF Spec:    SPECIFIED
+EXP001:       PRE-REGISTERED（H_MECH · rb/2024）
+Observation:  NOT AUTHORIZED
+Lifecycle:    Candidate → Testing pending Observation
 Alpha:        NONE
-Bindable:     NO
 ================================================
 ```
 
 ## Next（须新授权）
 
 ```text
-Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP001（H_MECH）
+Authorize Offline Observation for STRAT_RO16_EXP001
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.2 Identity FROZEN |
-| 2026-07-23 | V0.3 SEVF Spec SPECIFIED |
+| 2026-07-23 | V0.3 SEVF Spec |
+| 2026-07-23 | V0.4 EXP001 Fill PRE-REGISTERED |
