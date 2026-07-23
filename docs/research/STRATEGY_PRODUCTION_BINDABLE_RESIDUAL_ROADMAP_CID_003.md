@@ -24,7 +24,7 @@ PBDR must be re-run after material residual closure.
 | R-VMP-live | YES | Live-ops VMP package for CID_003 |
 | R-CSD | YES | Physical Strategy/Risk split implementation |
 | R-CTX-ROUTE | YES | Explicit Context live routing grant（≠ EXP KEEP） |
-| R-CTX-RISK | YES | Authorized Context×RISK composition EXP lineage |
+| R-CTX-RISK | YES | Authorized Context×RISK composition EXP lineage（design: `CCRD_CID_003_V0_1`） |
 
 ## Non-goals
 
@@ -38,3 +38,4 @@ PBDR must be re-run after material residual closure.
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PBRR_CID_003_V0_1 FROZEN |
+| 2026-07-23 | R-CTX-RISK → PARTIAL（CCRD design · Delegation-25I） |
