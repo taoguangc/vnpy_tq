@@ -107,8 +107,8 @@ rollover:             on_rollover_adjust + detector.adjust_or_levels
 ## 6. Next（须另授）
 
 ```text
-Authorize SEVF Spec + Fill for H_MECH EXP001
-  — OR — leave Candidate idle
+DONE: STRAT_SO19_EXP001 H_MECH KEEP（rb/2024 · attributed=374）
+Next: H_EDGE diagnostic Fill · OR · H_MECH OOS/multi-symbol · OR · Pause
 ```
 
 ## Revision record
@@ -116,4 +116,5 @@ Authorize SEVF Spec + Fill for H_MECH EXP001
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_007_V0_1 FROZEN · Delegation-25AE |
-| 2026-07-23 | `source_revision` → pending first binding commit |
+| 2026-07-23 | `source_revision` → `2dd5bf94db62f49ef670ba284b2ac51f62f238eb` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25AF |
