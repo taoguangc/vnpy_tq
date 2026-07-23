@@ -1,22 +1,22 @@
-# Campaigns pointer — CID_003–005 PAUSED · CID_006 Identity FROZEN
+# Campaigns pointer — CID_006 H_MECH KEEP · prior PAUSED
 
 ```text
 CID_003–005: PAUSED · Alpha NONE
-CID_006: Candidate Identity FROZEN（STRAT_TREND_OPP08_01@0.1.0）· Testing NOT STARTED
-Delegation-25Z: STOP
+CID_006: Testing · H_MECH EXP001 KEEP（rb/2024 · n=1456）· Alpha NONE
+Delegation-25AA: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CID_006 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_006.md) |
 | CID_006 SIF | [FROZEN](../research/STRATEGY_IDENTITY_FREEZE_CID_006.md) |
-| CID_006 SAR | [V0.2](../research/STRATEGY_ASSET_REVIEW_CID_006.md) |
+| CID_006 EXP001 | [KEEP](../research/STRATEGY_SEVF_FILL_CID_006_EXP001.md) |
+| CID_006 SAR | [V0.3](../research/STRATEGY_ASSET_REVIEW_CID_006.md) |
 
 ## Wake（须明确授权）
 
 ```text
-Authorize SEVF Spec + Fill for CID_006 H_MECH
-Resume CID_003–005（scoped）
+Authorize H_EDGE diagnostic for CID_006
+Authorize H_MECH OOS / multi-symbol（mechanism only）
 ```
