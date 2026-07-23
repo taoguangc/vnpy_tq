@@ -1,9 +1,9 @@
-# Campaigns pointer — CID_003–008 PAUSED
+# Campaigns pointer — CID_003–008 PAUSED · CID_009 DESIGNED
 
 ```text
 CID_003–008: PAUSED · Alpha NONE
-CID_008: H_MECH KEEP · H_EDGE REVERT×2 · AERC CLOSED
-Delegation-25AK: STOP
+CID_009: NSAD DESIGNED（OPP15 Wedge Path A）· no Freeze / no code
+Delegation-25AL: STOP
 ```
 
 ## Pointers
@@ -11,13 +11,12 @@ Delegation-25AK: STOP
 | Item | Status |
 |------|--------|
 | CID_008 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_008.md) |
-| CID_008 AERC | [NONE](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_008.md) |
-| CID_008 EXP003 | [REVERT](../research/STRATEGY_SEVF_FILL_CID_008_EXP003.md) |
-| CID_007 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_007.md) |
+| CID_009 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_009.md) |
+| CID_009 SAR | [V0.1](../research/STRATEGY_ASSET_REVIEW_CID_009.md) |
 
 ## Wake（须明确授权）
 
 ```text
-Authorize new strategy asset design
+Authorize Identity Freeze for CID_009
 Resume CID_003–008（scoped）
 ```
