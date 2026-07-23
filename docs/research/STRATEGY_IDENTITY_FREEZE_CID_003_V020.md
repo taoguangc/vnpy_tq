@@ -111,8 +111,9 @@ rollover:             inherited on_rollover_adjust
 ## 6. Next（须另授）
 
 ```text
-Authorize SEVF Fill for STRAT_RO16_EXP007（H_CAPITAL_GATE · e.g. i/2024 @0.2.0）
-  — OR — Pause
+DONE: SEVF Spec V0_2_0 + Fill STRAT_RO16_EXP007 PRE-REGISTERED
+Next: Authorize Offline Observation for STRAT_RO16_EXP007
+  — OR — Pause CID_003
 ```
 
 ## Revision record
@@ -120,3 +121,5 @@ Authorize SEVF Fill for STRAT_RO16_EXP007（H_CAPITAL_GATE · e.g. i/2024 @0.2.0
 | Date | Change |
 |------|--------|
 | 2026-07-23 | @0.2.0 Candidate Identity Freeze |
+| 2026-07-23 | `source_revision` → `120e604dd1fc2cb5dda85a69264e2ae10b537de3` |
+| 2026-07-23 | Next updated · EXP007 Fill PRE-REGISTERED |
