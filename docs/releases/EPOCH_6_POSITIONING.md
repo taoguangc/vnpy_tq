@@ -1,12 +1,11 @@
 # Epoch 6 Positioning — Strategy Research
 
-> **Status**: **PAUSED** ✓ · see [`EPOCH_6_PAUSE.md`](EPOCH_6_PAUSE.md) · EI_CID_002_V0_2 FROZEN · Production WITHHELD  
-> **Date**: 2026-07-22  
+> **Status**: **CLOSED**（Research Toolkit）✓ · see [`EPOCH_6_CLOSURE.md`](EPOCH_6_CLOSURE.md)  
+> **Date**: 2026-07-22 · **Closure**: 2026-07-23  
 > **Path**: `docs/releases/EPOCH_6_POSITIONING.md`  
-> **Authorization**: [`STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md`](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) — **GRANTED**  
-> **Prior**: [`EPOCH_5_CLOSURE.md`](EPOCH_5_CLOSURE.md) — **CLOSED** · [`EPOCH_5_RELEASE_CHECKPOINT.md`](EPOCH_5_RELEASE_CHECKPOINT.md)  
-> **CXSD**: [`STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md`](../research/STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md) — **CXSD-CID_002-v0.1 FROZEN**  
-> **CID_002 terminal**: [`STRATEGY_ASSET_REVIEW_CID_002.md`](../research/STRATEGY_ASSET_REVIEW_CID_002.md) — **SAR_CID_002_V0_27**
+> **Authorization**: [`STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md`](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) — **GRANTED**（phase complete）  
+> **Prior**: [`EPOCH_5_CLOSURE.md`](EPOCH_5_CLOSURE.md) — **CLOSED**  
+> **Successor**: [`EPOCH_7_POSITIONING.md`](EPOCH_7_POSITIONING.md) — **POSITIONED**（not active）
 
 ## One-sentence definition
 
@@ -19,6 +18,7 @@
 | 4 | Context 是否可作为受限基础设施候选？ |
 | 5 | 何种策略资产可被安全消费并升为 Research Bindable？ |
 | 6 | 在 CXSD 约束下，下一步研究什么才不滑向 Alpha？ |
+| 7 | 部署/券商残差如何用真实环境证据关闭？ |
 
 ## Inherited（do not reopen as Epoch 5 work）
 
@@ -26,45 +26,34 @@
 CID_002 Research Asset ✓
 Research Bindable ✓
 CXSD-CID_002-v0.1 FROZEN ✓
-Implementation NONE
 Production Bindable WITHHELD
 Alpha NONE
 ```
 
-## Candidate agenda themes（design only · pick later）
+## Agenda outcome
 
 ```text
-A. CXSD conformance tooling（needs separate Implementation Charter）
-B. Next strategy family / CID under SAC-SEVF（not PnL hunt）
-C. Production Bindable residual roadmap（EI deploy · CSD split · RISK Verified）
-D. Multi-symbol Context filter as capability-only（question A · not returns）
+A. CXSD conformance tooling     → COMPLETE
+C. Production residual roadmap  → COMPLETE（documentary）
+RISK Verified                   → E3 COMPLETE
+LEP / LRC / VBP / VMP-Live      → FROZEN + toolkits
+CSDIC                           → CHARTERED（impl deferred）
+PBDR                            → WITHHELD
 ```
 
-```text
-Default stance until user picks a theme:
-  Agenda Design · no Observation · no code
-```
-
-## Hard boundaries
+## Hard boundaries（held through closure）
 
 ```text
 CXSD ≠ Context Alpha
-CXSD ≠ Strategy Improvement
-CXSD ≠ Risk Model
-CXSD ≠ Production Approval
+Epoch 6 Research Toolkit Closure ≠ Production Closure
 Epoch 6 ≠ silent rewrite of Epoch 5 Closed EXPs
 ```
 
-## Next（须另授或点名主题）
+## Next
 
 ```text
-DONE:
-  CXSD Implementation + adapter wire
-  PBDR → Production WITHHELD
-  RISK Verified Review → H_CAPITAL_GATE E2 GRANTED
-
-Next:
-  RISK capital OOS（E3 attempt）· EI deploy freeze · or Pause Epoch 6
+Epoch 6 Research Toolkit: CLOSED（E6C_RT_V0_1）
+Epoch 7: POSITIONED — requires separate phase/theme authorization
 ```
 
 ## Revision record
@@ -74,3 +63,4 @@ Next:
 | 2026-07-22 | Epoch 6 ACTIVE · positioning |
 | 2026-07-22 | Themes A+C · CXSD impl · PBDR WITHHELD |
 | 2026-07-22 | VR_CID_002_RISK_V0_2_0 GRANTED（E2） |
+| 2026-07-23 | Research Toolkit CLOSED · hand-off Epoch 7 |

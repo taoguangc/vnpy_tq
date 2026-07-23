@@ -1,41 +1,39 @@
-# Strategy Asset Review — CID_002（V0.35 · Delegation-50O）
+# Strategy Asset Review — CID_002（V0.36 · Delegation-50P）
 
-> **Review ID**: `SAR_CID_002_V0_35`  
-> **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
+> **Review ID**: `SAR_CID_002_V0_36`  
+> **Status**: **COMPLETE** ✓  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-50O
+> **Authorization**: Delegation-50P
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_002_V0_35
+SAR_CID_002_V0_36
 
 MECH / RISK:           Verified E3 / E3
-CXSD/LRC/VBP/LEP:      FROZEN + toolkits
-CSDIC_CID_002_V0_1:    CHARTERED（impl deferred）
-PBDR_CID_002_V0_2:     Production Bindable WITHHELD
-E6MC_V0_1:             Mid-checkpoint COMPLETE（≠ Epoch Closure）
+Research toolkits:     CXSD · LRC · VBP · LEP · VMP-Live
+CSDIC:                 CHARTERED（impl deferred）
+PBDR v0.2:             Production Bindable WITHHELD
 
-FILLED venue / Docker / brokerage LEP: OPEN
-R-CSD impl:            OPEN
+Epoch 6:               Research Toolkit CLOSED（E6C_RT_V0_1）
+Epoch 7:               POSITIONED（not active · SRPA_E7 DRAFT）
 
+External blockers:     Docker · FILLED venue · brokerage LEP
 Production Bindable:   WITHHELD
 Alpha / Prod readiness: NONE / NO
-Epoch 6:               PAUSED（not closed）
 ================================================
 ```
 
 ## Next（须新授权）
 
 ```text
-FILLED venue · OCI host · brokerage LEP · Authorize CSD Implementation ·
-or remain paused
+Authorize Epoch 7 · or supply external prerequisites · or idle
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.34 Delegation-50N |
-| 2026-07-23 | V0.35 Delegation-50O · PBDR v0.2 · CSDIC · re-pause |
+| 2026-07-23 | V0.35 Delegation-50O |
+| 2026-07-23 | V0.36 Epoch 6 RT closure · Epoch 7 positioned |

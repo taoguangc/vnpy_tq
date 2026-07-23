@@ -15,7 +15,10 @@
 | [releases/EPOCH_3_POSITIONING.md](releases/EPOCH_3_POSITIONING.md) | **Epoch 3** — Capability Expansion（**CLOSED at Gate CONDITIONAL**） |
 | [releases/EPOCH_3_SUMMARY.md](releases/EPOCH_3_SUMMARY.md) | Epoch 3 Summary — Closure · Route A · Phase 3.6 pointer |
 | [releases/EPOCH_4_CLOSURE.md](releases/EPOCH_4_CLOSURE.md) | **Epoch 4 Closure** — CAP-CTX-001 **CLOSED** · Narrow Candidate · Trading Value NOT PROVEN |
-| [releases/EPOCH_5_POSITIONING.md](releases/EPOCH_5_POSITIONING.md) | **Epoch 5** — Strategy Research **ACTIVE** · Asset Layer · ≠ RC001-B reopen |
+| [releases/EPOCH_5_POSITIONING.md](releases/EPOCH_5_POSITIONING.md) | **Epoch 5** — Strategy Research（see Epoch 5 Closure） |
+| [releases/EPOCH_6_CLOSURE.md](releases/EPOCH_6_CLOSURE.md) | **Epoch 6** Research Toolkit **CLOSED** · ≠ Production Closure |
+| [releases/EPOCH_7_POSITIONING.md](releases/EPOCH_7_POSITIONING.md) | **Epoch 7** Deploy Reality **POSITIONED** · not active |
+
 | [releases/EPOCH_1_POSITIONING.md](releases/EPOCH_1_POSITIONING.md) | Epoch 1 范式定位（Evidence-centric / Research Governance） |
 | [reviews/EPOCH_1_MIDPOINT_REVIEW.md](reviews/EPOCH_1_MIDPOINT_REVIEW.md) | Epoch 1 Midpoint Review（**Completed**；Stable Window） |
 | [development/PLATFORM_CONSTRUCTION_PHASE.md](development/PLATFORM_CONSTRUCTION_PHASE.md) | Platform Construction Phase 定位与纪律 |
@@ -114,7 +117,8 @@
 | [research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md) | RUN002 Observation **COMPLETE** — SUPPORTED → STRENGTHEN（Action only） |
 | [research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md) | RUN002 Evidence Review **PASS** · SUPPORTED |
 | [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
-| [campaigns/README.md](campaigns/README.md) | **Epoch 5** — Strategy Research active · Contract Design DRAFT |
+| [campaigns/README.md](campaigns/README.md) | Epoch 6 RT **CLOSED** · Epoch 7 **POSITIONED** · Production WITHHELD |
+
 | [research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md](research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md) | Strategy Research Phase — **GRANTED** ✓ |
 | [research/STRATEGY_ASSET_CONTRACT_DESIGN.md](research/STRATEGY_ASSET_CONTRACT_DESIGN.md) | Strategy Asset Contract Design — **CONFIRMED** v0.1 |
 | [research/STRATEGY_ASSET_CONTRACT_CONFIRMATION.md](research/STRATEGY_ASSET_CONTRACT_CONFIRMATION.md) | Strategy Asset Contract Confirmation — **PASS** ✓ |
