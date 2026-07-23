@@ -119,8 +119,8 @@
 | [research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md) | RUN002 Observation **COMPLETE** — SUPPORTED → STRENGTHEN（Action only） |
 | [research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md) | RUN002 Evidence Review **PASS** · SUPPORTED |
 | [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
-| [campaigns/README.md](campaigns/README.md) | CID_003 **CTX EXP001–003 KEEP** · Research Bindable · Alpha **NONE** |
-| [research/STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP003.md](research/STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP003.md) | CTX_CID003_EXP003 · multi-symbol H_CTX_FILTER · KEEP |
+| [campaigns/README.md](campaigns/README.md) | CID_003 **Production WITHHELD** · Research Bindable · CTX KEEP · Alpha **NONE** |
+| [research/STRATEGY_PRODUCTION_BINDABLE_REVIEW_CID_003.md](research/STRATEGY_PRODUCTION_BINDABLE_REVIEW_CID_003.md) | `PBDR_CID_003_V0_1` · Production Bindable WITHHELD |
 
 | [research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md](research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md) | Strategy Research Phase — **GRANTED** ✓ |
 | [research/STRATEGY_ASSET_CONTRACT_DESIGN.md](research/STRATEGY_ASSET_CONTRACT_DESIGN.md) | Strategy Asset Contract Design — **CONFIRMED** v0.1 |

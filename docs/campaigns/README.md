@@ -1,22 +1,23 @@
-# Campaigns pointer — CID_003 Context Filter continuity KEEP
+# Campaigns pointer — CID_003 Production Bindable WITHHELD
 
 ```text
-CTX EXP001: KEEP（rb/2024）
-CTX EXP002: KEEP（rb/2025 OOS）
-CTX EXP003: KEEP（{rb,i,MA}/2024）
-Alpha: NONE · Production: NO · Context routing: NOT GRANTED
-Delegation-50G: STOP
+Research Bindable: YES（MECH+RISK）
+CTX EXP001–003:    KEEP（research only）
+Alpha:             NONE
+Production:        WITHHELD（PBDR_CID_003_V0_1）
+Delegation-25H:    STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CTX EXP003 | [KEEP](../research/STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP003.md) |
-| Asset Review | [SAR_CID_003_V1_10](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| PBDR | [WITHHELD](../research/STRATEGY_PRODUCTION_BINDABLE_REVIEW_CID_003.md) |
+| Residual | [PBRR](../research/STRATEGY_PRODUCTION_BINDABLE_RESIDUAL_ROADMAP_CID_003.md) |
+| Asset Review | [SAR_CID_003_V1_11](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
 
 ## Next（须新授权）
 
 ```text
-Production Pre-Review · Context+RISK composition · Pause / new asset
+Pause · Context+RISK composition design · new asset
 ```

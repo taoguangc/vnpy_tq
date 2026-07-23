@@ -101,8 +101,14 @@ GRANT:  Research Bindable on MECH @0.1.1 and RISK @0.2.0
 WITHHOLD: Production · Alpha · Context routing permission
 ```
 
+```text
+Superseding Production review（does not amend this BDR）:
+  PBDR_CID_003_V0_1 · Production Bindable WITHHELD（Delegation-25H）
+```
+
 ## Revision record
 
 | Date | Change |
 |------|--------|
 | 2026-07-23 | BDR_CID_003_V0_1 COMPLETE · GRANTED（scoped） |
+| 2026-07-23 | Pointer to PBDR_CID_003_V0_1 WITHHOLD（Delegation-25H） |
