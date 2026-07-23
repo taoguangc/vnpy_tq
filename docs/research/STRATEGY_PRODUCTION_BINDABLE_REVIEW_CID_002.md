@@ -132,3 +132,4 @@ Next:
 | Date | Change |
 |------|--------|
 | 2026-07-22 | PBDR_CID_002_V0_1 COMPLETE · Production WITHHELD |
+| 2026-07-23 | Successor `PBDR_CID_002_V0_2` · still WITHHELD |
