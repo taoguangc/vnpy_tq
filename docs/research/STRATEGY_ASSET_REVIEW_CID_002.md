@@ -1,27 +1,26 @@
-# Strategy Asset Review — CID_002（V0.33 · Delegation-50M）
+# Strategy Asset Review — CID_002（V0.34 · Delegation-50N）
 
-> **Review ID**: `SAR_CID_002_V0_33`  
+> **Review ID**: `SAR_CID_002_V0_34`  
 > **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-50M
+> **Authorization**: Delegation-50N
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_002_V0_33
+SAR_CID_002_V0_34
 
 MECH @0.1.1:           Verified H_MECH · E3
-RISK @0.2.0:           Verified H_CAPITAL_GATE · E3（EXP012）
-CXSD-CID_002-v0.1:     FROZEN + wired
-LRC-CID_002-v0.1:      FROZEN
-VBP-CID_002-v0.1:      FROZEN（TEMPLATE only）
-DID:                   V0.1 PARTIAL + V0.2 packaging refresh
+RISK @0.2.0:           Verified H_CAPITAL_GATE · E3
+CXSD / LRC / VBP:      FROZEN
+LEP-CID_002-v0.1:      FROZEN + toolkit DELIVERED
+VMP_LIVE_CID_002_V0_1: FROZEN
 
 R-RISK-OOS:            CLOSED
-P2 + P5 contract/VBP:  CLOSED
-P1/P3/P4 / FILLED venue: PARTIAL / OPEN
-Docker:                unavailable on host
+R-ACL/VMP/CXSD-live:   PARTIAL（toolkit · no brokerage）
+FILLED venue / Docker: OPEN
+R-CSD:                 OPEN（design-only）
 
 Production Bindable:   WITHHELD
 Alpha / Prod readiness: NONE / NO
@@ -32,14 +31,13 @@ Epoch 6:               PAUSED
 ## Next（须新授权）
 
 ```text
-FILLED venue pack · container host · live ACL/VMP ·
-or Production Bindable re-review（will still WITHHOLD without residuals）·
-or remain paused
+FILLED venue · Docker host · brokerage-attached LEP evidence ·
+CSD implementation · or remain paused
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.32 LRC freeze |
-| 2026-07-23 | V0.33 Delegation-50M · RISK E3 · VBP · DID v2 · re-pause |
+| 2026-07-23 | V0.33 Delegation-50M |
+| 2026-07-23 | V0.34 Delegation-50N LEP · re-pause |

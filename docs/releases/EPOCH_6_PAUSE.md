@@ -1,21 +1,19 @@
 # Epoch 6 Pause — Strategy Research
 
-> **Type**: Phase Pause / Checkpoint（≠ Epoch Closure rewrite · ≠ Alpha · ≠ Production）  
+> **Type**: Phase Pause / Checkpoint  
 > **Status**: **PAUSED** ✓  
 > **Pause ID**: `E6P_V0_1`（held）  
 > **Date**: 2026-07-23  
-> **Last wake**: Delegation-50M
+> **Last wake**: Delegation-50N
 
 ## Checkpoint record
 
 ```text
 ================================================
-EPOCH 6 PAUSE（post Delegation-50M）
+EPOCH 6 PAUSE（post Delegation-50N）
 
-MECH @0.1.1:           Verified H_MECH · E3
-RISK @0.2.0:           Verified H_CAPITAL_GATE · E3
-CXSD / LRC / VBP:      FROZEN（VBP = TEMPLATE）
-DID:                   PARTIAL（no Docker · no FILLED venue）
+MECH / RISK:           Verified E3 / E3
+CXSD / LRC / VBP / LEP: FROZEN（LEP toolkit delivered）
 Production Bindable:   WITHHELD
 Alpha / Prod readiness: NONE / NO
 
@@ -26,8 +24,8 @@ Active work:           PAUSED
 ## Next（须新授权）
 
 ```text
-DONE: VBP freeze · DID v2 packaging · RISK OOS EXP012 KEEP · E3 amendment
-Still open: FILLED venue · container digest · live ACL/VMP/CXSD · CSD
+DONE: LEP-CID_002-v0.1 + VMP-Live checklist + validators/tests
+Still open: FILLED venue · Docker · brokerage attachment · CSD
 Default: remain paused
 ```
 
@@ -35,5 +33,5 @@ Default: remain paused
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | E6P_V0_1 PAUSED after EI_CID_002_V0_2 |
 | 2026-07-23 | Re-paused after Delegation-50M |
+| 2026-07-23 | Re-paused after Delegation-50N |
