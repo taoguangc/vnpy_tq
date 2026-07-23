@@ -36,8 +36,8 @@ CID_007:     NOT merged · OD-Breakout remains CLOSED
 |-------|--------------|
 | `strategy_id` | `STRAT_SESS_OPP19_REV_01` |
 | `version` | `0.1.0` |
-| `source_revision` | *(set on binding commit)* |
-| `git_anchor_head` | *(same)* |
+| `source_revision` | `2ac494a9aa9c5fc67daa934f730109e0349bfa9f`（binding bytes first committed） |
+| `git_anchor_head` | `2ac494a9aa9c5fc67daa934f730109e0349bfa9f` |
 | `source_manifest` | §2 |
 | `source_hash` | `731c908d810d6c5f61400ceaeb06beb37a8436bc2f8503261ba2fecd86060593` |
 | `parameter_manifest` | §3 |
@@ -104,10 +104,11 @@ rollover:             on_rollover_adjust + detector.adjust_levels
 ❌ OD-Breakout under this identity
 ```
 
-## 6. Next
+## 6. Next（须另授）
 
 ```text
-SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
+DONE: STRAT_SO19R_EXP001 H_MECH KEEP（rb/2024 · attributed=124）
+Next: H_EDGE diagnostic Fill · OR · H_MECH OOS/multi-symbol · OR · Pause
 ```
 
 ## Revision record
@@ -115,3 +116,5 @@ SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_011_V0_1 FROZEN · Delegation-25AS |
+| 2026-07-23 | `source_revision` → `2ac494a9aa9c5fc67daa934f730109e0349bfa9f` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25AS |
