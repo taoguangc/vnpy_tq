@@ -1,24 +1,23 @@
-# Campaigns pointer — CID_003 Bindable WITHHOLD
+# Campaigns pointer — CID_003 @0.2.0 ready for capital Fill
 
 ```text
-H_MECH:        Verified E3
-Bindable:      WITHHELD（BPR）
-@0.2.0:        designed only
+MECH @0.1.1:   Verified E3
+RISK @0.2.0:   FROZEN Candidate · impl DONE
+Capital EXP:   pending Fill auth
+Bindable:      WITHHELD
 Alpha:         NONE
-Delegation-50B: STOP（10/50）
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Bindable Pre-Review | [WITHHOLD](../research/STRATEGY_BINDABLE_PRE_REVIEW_CID_003.md) |
-| Positioning Review | [design-only](../research/STRATEGY_ENGINEERING_REVIEW_CID_003_POSITIONING.md) |
-| Asset Review | [SAR_CID_003_V1_2](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
-| Delegation-50B | [STOP](../research/STRATEGY_DELEGATION_50B_CID_003_EXECUTION_LOG.md) |
+| Delivery | [DONE](../research/STRATEGY_POSITIONING_IMPL_DELIVERY_CID_003_V020.md) |
+| Identity @0.2.0 | [SIF](../research/STRATEGY_IDENTITY_FREEZE_CID_003_V020.md) |
+| Asset Review | [SAR_CID_003_V1_3](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
 
 ## Next（须新授权）
 
 ```text
-Implement @0.2.0 · CC-CID_003-v1 · or Pause
+SEVF Fill STRAT_RO16_EXP007（H_CAPITAL_GATE）· or Pause
 ```

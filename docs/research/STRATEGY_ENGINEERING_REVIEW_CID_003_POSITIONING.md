@@ -6,7 +6,7 @@
 > **Date**: 2026-07-23  
 > **Authorization**: Delegation-50B  
 > **Parents**: `BPR_CID_003_V0_1` · `SIF_CID_003_V0_1_1` · EXP005  
-> **Implementation**: **NOT AUTHORIZED**（design only）
+> **Implementation**: **AUTHORIZED + DELIVERED**（user **A** · 2026-07-23）· see [`STRATEGY_POSITIONING_IMPL_DELIVERY_CID_003_V020.md`](STRATEGY_POSITIONING_IMPL_DELIVERY_CID_003_V020.md) · Identity `SIF_CID_003_V0_2_0`
 
 ## Review record
 
@@ -17,7 +17,7 @@ ENG_REV_CID_003_POSITIONING_V0_1
 H_MECH Verified: UNCHANGED（E3 retained）
 Capital safety:  OPEN RISK confirmed（i · EXP005）
 @0.1.1 bytes:    NOT MUTATED
-@0.2.0 lineage:  DESIGNED ONLY
+@0.2.0 lineage:  IMPLEMENTED · SIF_CID_003_V0_2_0 FROZEN
 Alpha / Bindable: NOT GRANTED
 ================================================
 ```
@@ -109,27 +109,16 @@ KEEP = no capital≤0 · ≥1 auditable exit · hash echo
 ## 6. Decision
 
 ```text
-DO NOT edit @0.1.1
-CREATE design-only charter pointer for @0.2.0
-Implementation / Identity Freeze @0.2.0: NOT in this review
-Bindable: still WITHHELD
-```
-
-## Non-goals
-
-```text
-❌ PnL improvement claim
-❌ H_EDGE reopen
-❌ Production Bindable
-❌ Silent size change on @0.1.1
+DONE: @0.2.0 implemented under user A
+@0.1.1: NOT mutated
+Bindable: still WITHHELD until capital evidence + consumer contract
 ```
 
 ## Next（须新授权）
 
 ```text
-A. Authorize Implementation of Positioning Lineage 0.2.0
-B. Authorize Consumer Contract freeze CC-CID_003-v1（docs only）
-C. Pause CID_003
+DONE: A. Authorize Implementation of Positioning Lineage 0.2.0
+Next: SEVF Fill STRAT_RO16_EXP007（H_CAPITAL_GATE）· or Pause
 ```
 
 ## Revision record
@@ -137,3 +126,4 @@ C. Pause CID_003
 | Date | Change |
 |------|--------|
 | 2026-07-23 | Positioning Eng Review COMPLETE · design-only |
+| 2026-07-23 | Implementation A DELIVERED · SIF_CID_003_V0_2_0 |

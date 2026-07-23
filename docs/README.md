@@ -119,8 +119,8 @@
 | [research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md) | RUN002 Observation **COMPLETE** — SUPPORTED → STRENGTHEN（Action only） |
 | [research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md) | RUN002 Evidence Review **PASS** · SUPPORTED |
 | [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
-| [campaigns/README.md](campaigns/README.md) | CID_003 MECH **Verified** · Bindable **WITHHELD** · @0.2.0 design-only · Alpha **CLOSED** |
-| [research/STRATEGY_BINDABLE_PRE_REVIEW_CID_003.md](research/STRATEGY_BINDABLE_PRE_REVIEW_CID_003.md) | CID_003 Bindable Pre-Review · WITHHOLD · Open Capital Risk |
+| [campaigns/README.md](campaigns/README.md) | CID_003 RISK `@0.2.0` **IMPLEMENTED** · MECH Verified · Bindable WITHHELD · Alpha CLOSED |
+| [research/STRATEGY_IDENTITY_FREEZE_CID_003_V020.md](research/STRATEGY_IDENTITY_FREEZE_CID_003_V020.md) | CID_003 `SIF_CID_003_V0_2_0` · positioning lineage |
 
 | [research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md](research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md) | Strategy Research Phase — **GRANTED** ✓ |
 | [research/STRATEGY_ASSET_CONTRACT_DESIGN.md](research/STRATEGY_ASSET_CONTRACT_DESIGN.md) | Strategy Asset Contract Design — **CONFIRMED** v0.1 |
