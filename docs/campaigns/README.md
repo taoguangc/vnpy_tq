@@ -1,10 +1,10 @@
-# Campaigns pointer — STRAT_RO16_EXP002 PRE-REGISTERED
+# Campaigns pointer — STRAT_RO16_EXP002 KEEP
 
 ```text
 EXP001 @0.1.0:         HOLD · IMMUTABLE
-@0.1.1 repair:         FROZEN
-EXP002 H_MECH Fill:    PRE-REGISTERED
-Observation EXP002:    NOT AUTHORIZED
+EXP002 @0.1.1 H_MECH:  KEEP（rb/2024 · 1920 attributed exits）
+Lifecycle:             Testing
+Verified / Bindable:   NO / NO
 Alpha:                 NONE
 ```
 
@@ -12,14 +12,13 @@ Alpha:                 NONE
 
 | Item | Status |
 |------|--------|
-| Fill EXP002 | [PRE-REGISTERED](../research/STRATEGY_SEVF_FILL_CID_003_EXP002.md) |
-| Spec @0.1.1 | [SPECIFIED](../research/STRATEGY_SEVF_SPECIFICATION_CID_003_V011.md) |
-| Runner | `scripts/run_strat_ro16_exp002.py`（prepared · not run） |
-| Asset Review | [SAR_CID_003_V0_8](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Evaluation | [KEEP](../research/STRATEGY_SEVF_EVALUATION_CID_003_EXP002.md) |
+| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP002.md) |
+| Asset Review | [SAR_CID_003_V0_9](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Artifacts | `research/output/evidence/STRAT_RO16_EXP002/`（local） |
 
 ## Next（须新授权）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP002
-  — OR — Pause CID_003
+Next SEVF Fill（OOS / H_EDGE / H_ROBUST）· or Pause CID_003
 ```

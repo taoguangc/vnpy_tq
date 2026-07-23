@@ -9,18 +9,18 @@
 > **Design**: [`STRATEGY_SEVF_DESIGN_CID_003_EXP002.md`](STRATEGY_SEVF_DESIGN_CID_003_EXP002.md)  
 > **Identity**: `SIF_CID_003_V0_1_1` · `STRAT_REV_OPP16_01@0.1.1`  
 > **Parent evidence**: `STRAT_RO16_EXP001` HOLD（@0.1.0）· IMMUTABLE  
-> **Observation**: **NOT AUTHORIZED** by this Fill
+> **Observation**: **EXECUTED** · Evaluation **KEEP** · see [`STRATEGY_SEVF_EVALUATION_CID_003_EXP002.md`](STRATEGY_SEVF_EVALUATION_CID_003_EXP002.md)
 
 ## Record
 
 ```text
 ================================================
-STRAT_RO16_EXP002 — PRE-REGISTERED ✓
+STRAT_RO16_EXP002 — PRE-REGISTERED ✓ · OBSERVATION CLOSED
 
 Hypothesis family: H_MECH
 Identity:          STRAT_REV_OPP16_01@0.1.1
-Scope:             rb · 2024（continuity with EXP001）
-Observation:       NOT AUTHORIZED
+Scope:             rb · 2024
+Observation:       EXECUTED 2026-07-23 → KEEP（1920 attributed exits）
 Alpha / Bindable:  NONE / NO
 ================================================
 ```
@@ -152,20 +152,18 @@ research/output/evidence/STRAT_RO16_EXP002/
   trades_audit.csv
 ```
 
-## 8. Runner（prepared · not executed）
+## 8. Runner（prepared · executed under Observation auth）
 
 `scripts/run_strat_ro16_exp002.py`
 
 ```text
-Requires separate:
-  Authorize Offline Observation for STRAT_RO16_EXP002
+DONE: Authorize Offline Observation for STRAT_RO16_EXP002 → KEEP
 ```
 
 ## 9. Explicit non-grants
 
 ```text
-❌ Observation / backtest under this Fill
-❌ Alpha / Bindable / Verified
+❌ Alpha / Bindable / Verified（still）
 ❌ Parameter change
 ❌ Reopen / mutate Closed EXP001
 ❌ CID_002 H_EDGE reopen
@@ -174,8 +172,8 @@ Requires separate:
 ## Next（须另授）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP002
-  — OR — Pause CID_003
+DONE: Observation → KEEP
+Next: Lifecycle Review · next EXP Fill · or pause
 ```
 
 ## Revision record
@@ -183,3 +181,4 @@ Authorize Offline Observation for STRAT_RO16_EXP002
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED · Observation NOT authorized |
+| 2026-07-23 | Observation CLOSED · KEEP |
