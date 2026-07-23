@@ -1,26 +1,24 @@
-# Campaigns pointer — idle on Epoch 7 positioning
+# Campaigns pointer — Epoch 6.5 Alpha Evidence（Design）
 
 ```text
 Epoch 6 Research Toolkit: CLOSED
-Epoch 7:                  POSITIONED · NOT ACTIVE
-Delegation-50Q:           BLOCKED HALT
-Production Bindable:      WITHHELD
+Epoch 6.5 Alpha Validation: ACTIVE（Design）
+Epoch 7 Deploy Reality:     DEFERRED
+Alpha / Production:         NONE / WITHHELD
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Blocked halt log | [50Q](../research/STRATEGY_DELEGATION_50Q_EXECUTION_LOG.md) |
-| External prerequisites | [E7EP](../releases/EPOCH_7_EXTERNAL_PREREQUISITES.md) |
-| Epoch 7 Positioning | [POSITIONED](../releases/EPOCH_7_POSITIONING.md) |
-| Epoch 6 Closure | [E6C_RT](../releases/EPOCH_6_CLOSURE.md) |
+| Epoch 6.5 Positioning | [ACTIVE](../releases/EPOCH_6_5_POSITIONING.md) |
+| Phase auth E6.5 | [GRANTED Design](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E65.md) |
+| Alpha Evidence Design | [AERD](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_DESIGN_CID_002.md) |
+| Asset Review | [SAR_CID_002_V0_37](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| Epoch 7 | [DEFERRED](../releases/EPOCH_7_POSITIONING.md) |
 
-## Next（须新授权 · 非空转）
+## Next（须新授权）
 
 ```text
-Authorize Epoch 7 Strategy Research Phase（+ Theme A–E）
-  — OR — provide Docker / FILLED venue / brokerage evidence
-  — OR — Authorize CSD Implementation
-  — OR — name a non-deploy research theme（e.g. new CID）
+Authorize SEVF Fill for STRAT_BS02_EXP013（H_EDGE）
 ```

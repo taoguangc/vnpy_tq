@@ -1,9 +1,10 @@
 # Epoch 7 Positioning — Deploy Reality / Production Residuals
 
-> **Status**: **POSITIONED** ✓ · **NOT ACTIVE** until phase authorization wake  
+> **Status**: **POSITIONED** ✓ · **NOT ACTIVE** · **DEFERRED** until Alpha Evidence path resolves  
 > **Date**: 2026-07-23  
 > **Path**: `docs/releases/EPOCH_7_POSITIONING.md`  
-> **Authorization**: Delegation-50P（positioning only）  
+> **Deferral**: Epoch 6.5 Alpha Evidence is the active research phase  
+> **Authorization**: Delegation-50P（positioning only）· **not woken**  
 > **Prior**: [`EPOCH_6_CLOSURE.md`](EPOCH_6_CLOSURE.md) — Research Toolkit **CLOSED**  
 > **PBDR**: `PBDR_CID_002_V0_2` — Production Bindable **WITHHELD**
 
@@ -61,8 +62,8 @@ See [`EPOCH_7_EXTERNAL_PREREQUISITES.md`](EPOCH_7_EXTERNAL_PREREQUISITES.md).
 ## Next
 
 ```text
-Authorize Epoch 7 Phase / pick theme A–E
-  — OR — remain idle on positioning
+DEFERRED: do not wake Epoch 7 while Epoch 6.5 Alpha Evidence is active
+unless user explicitly Authorize Epoch 7 despite missing Alpha term.
 ```
 
 ## Revision record
@@ -70,3 +71,4 @@ Authorize Epoch 7 Phase / pick theme A–E
 | Date | Change |
 |------|--------|
 | 2026-07-23 | Epoch 7 POSITIONED under Delegation-50P |
+| 2026-07-23 | Marked DEFERRED · Epoch 6.5 takes priority |
