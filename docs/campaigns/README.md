@@ -19,5 +19,5 @@ Delegation-50C: STOP（18/50）
 ## Next（须新授权）
 
 ```text
-Bindable / CC-CID_003-v1 · or Pause
+CC-CID_003-v1 · Bindable Designation · or Pause
 ```

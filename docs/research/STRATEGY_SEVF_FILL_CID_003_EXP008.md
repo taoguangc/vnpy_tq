@@ -41,3 +41,4 @@ PnL not a driver · H_MECH not re-tested
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED under Delegation-50C |
+| 2026-07-23 | Observation CLOSED · KEEP |

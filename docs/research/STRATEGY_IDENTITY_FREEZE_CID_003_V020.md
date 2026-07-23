@@ -39,7 +39,7 @@ MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
 | `market_scope` | `UNBOUND_AT_ASSET` |
 | `detector_binding` | `OPP16@1.0.0` |
 | `lineage_parent` | `SIF_CID_003_V0_1_1` |
-| `evidence_lineage` | `["STRAT_RO16_EXP007"]` |
+| `evidence_lineage` | `["STRAT_RO16_EXP007","STRAT_RO16_EXP008","STRAT_RO16_EXP009"]` |
 | `class_tags` | `["mean_reversion","reversal","positioning"]` |
 | `context_independence` | `true` |
 | `consumer_surface` | `RISK`（capital）· do not cite as MECH Verified |
@@ -111,8 +111,8 @@ rollover:             inherited on_rollover_adjust
 ## 6. Next（须另授）
 
 ```text
-DONE: Fill + Observation STRAT_RO16_EXP007 → KEEP
-Next: multi-symbol H_CAPITAL_GATE · Risk Verified Review · or Pause
+DONE: H_CAPITAL_GATE Verified E3（EXP007/008/009）
+Next: Consumer Contract / Bindable Designation · or Pause
 ```
 
 ## Revision record
@@ -123,3 +123,4 @@ Next: multi-symbol H_CAPITAL_GATE · Risk Verified Review · or Pause
 | 2026-07-23 | `source_revision` → `120e604dd1fc2cb5dda85a69264e2ae10b537de3` |
 | 2026-07-23 | Next updated · EXP007 Fill PRE-REGISTERED |
 | 2026-07-23 | Lifecycle → Testing · EXP007 KEEP |
+| 2026-07-23 | Lifecycle → Verified H_CAPITAL_GATE E3 · Delegation-50C |

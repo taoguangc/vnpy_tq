@@ -11,9 +11,10 @@
 SAR_CID_003_V1_6
 
 MECH @0.1.1:     Verified H_MECH · E3
-RISK @0.2.0:     Verified H_CAPITAL_GATE · E3（EXP007/008/009）
-Alpha:           NONE · path CLOSED
-Bindable:        WITHHELD（no Consumer Contract / dual Bindable docket yet）
+RISK @0.2.0:     Verified H_CAPITAL_GATE · E3
+EXP007/008/009:  KEEP · KEEP · KEEP
+Alpha:           NONE（path CLOSED）
+Bindable:        WITHHELD（BPR gaps · no CC yet）
 Production:      NO
 Delegation-50C:  STOP
 ================================================
@@ -25,13 +26,13 @@ Delegation-50C:  STOP
 |------|--------|
 | RISK Verified | [VR_CID_003_RISK_V0_2_0](STRATEGY_VERIFIED_REVIEW_CID_003_RISK_V020.md) |
 | MECH Verified | [VR_CID_003_MECH_V0_1_1](STRATEGY_VERIFIED_REVIEW_CID_003_MECHANISM_V011.md) |
-| EXP008 / EXP009 | [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP008.md) / [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP009.md) |
+| EXP008/009 | [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP008.md) / [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP009.md) |
 | Delegation-50C | [STOP](STRATEGY_DELEGATION_50C_CID_003_EXECUTION_LOG.md) |
 
 ## Next（须新授权 · outside 50C）
 
 ```text
-Bindable Designation / Consumer Contract CC-CID_003-v1
+Consumer Contract CC-CID_003-v1 · Bindable Designation Review
   — OR — Pause
 NOT: Alpha reopen · Production · Epoch 7
 ```
@@ -41,4 +42,4 @@ NOT: Alpha reopen · Production · Epoch 7
 | Date | Change |
 |------|--------|
 | 2026-07-23 | V1.5 EXP007 KEEP |
-| 2026-07-23 | V1.6 RISK Verified E3 · dual-surface · 50C STOP |
+| 2026-07-23 | V1.6 dual-surface Verified · 50C STOP |

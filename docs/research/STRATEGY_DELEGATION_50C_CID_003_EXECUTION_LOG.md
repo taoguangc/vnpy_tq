@@ -19,11 +19,11 @@ No Alpha · no Bindable · no @0.1.1 mutation
 | 2–4 | Fill+runner EXP008 | PRE-REGISTERED |
 | 5 | Observe EXP008 | **KEEP**（rb/i/MA 2024） |
 | 6–7 | Eval+ER EXP008 | PASS |
-| 8–10 | Fill+runner EXP009 | PRE-REGISTERED |
-| 11 | Observe EXP009 | **KEEP**（rb/i/MA 2025） |
-| 12–13 | Eval+ER EXP009 | PASS |
-| 14–16 | Verified RISK Review | **GRANTED** · E3 |
-| 17–18 | SAR V1.6 + STOP | DONE |
+| 8–9 | Fill+runner EXP009 | PRE-REGISTERED |
+| 10 | Observe EXP009 | **KEEP**（rb/i/MA 2025） |
+| 11–12 | Eval+ER EXP009 | PASS |
+| 13–15 | Verified Review RISK | **GRANTED** · E3 |
+| 16–18 | SAR V1.6 + campaigns + STOP | DONE |
 
 ## Final ledger
 
@@ -43,4 +43,4 @@ Alpha NONE · Bindable WITHHELD
 | Date | Change |
 |------|--------|
 | 2026-07-23 | Opened · path lock |
-| 2026-07-23 | STOP at 18/50 · RISK Verified E3 |
+| 2026-07-23 | STOP at 18/50 |

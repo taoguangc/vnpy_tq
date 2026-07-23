@@ -17,7 +17,7 @@ Bundle: KEEP — all {rb,i,MA}/2024 no capital≤0 under @0.2.0
 | i | KEEP | ≈102998 | 1 |
 | MA | KEEP | ≈153169 | 0 |
 
-PnL not a driver. H_MECH not re-tested.
+PnL descriptive only · ≠ Alpha · ≠ Bindable
 
 ## Revision record
 

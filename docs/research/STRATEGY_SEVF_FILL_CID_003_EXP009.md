@@ -30,3 +30,4 @@ Identical to EXP008（per-symbol no capital≤0 → KEEP；bundle all KEEP）.
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED under Delegation-50C |
+| 2026-07-23 | Observation CLOSED · KEEP |

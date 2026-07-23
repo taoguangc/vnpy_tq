@@ -4,6 +4,8 @@
 > **Review ID**: `SEVF_ER_CID_003_EXP008_V0_1`  
 > **Identity**: `SIF_CID_003_V0_2_0`
 
+## Admitted / rejected
+
 | Claim | Decision |
 |-------|----------|
 | H_CAPITAL_GATE portability {rb,i,MA}/2024 @0.2.0 | **ADMITTED** |

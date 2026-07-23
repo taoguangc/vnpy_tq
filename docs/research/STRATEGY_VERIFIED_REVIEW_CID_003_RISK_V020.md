@@ -19,10 +19,9 @@ Hypothesis admitted:  H_CAPITAL_GATE
 Lifecycle stamp:      Verified ✓（narrow）
 Evidence level:       E3（multi-symbol EXP008 + OOS EXP009）
 
-MECH @0.1.1:          NOT RE-OPENED（VR_CID_003_MECH_V0_1_1 retained）
-Alpha:                NONE（path CLOSED）
-Bindable:             WITHHELD
-Production:           NO
+MECH @0.1.1:          NOT RE-OPENED（separate VR_MECH）
+Bindable:             STILL WITHHELD
+Alpha / Production:   NONE / NO
 ================================================
 ```
 
@@ -31,7 +30,8 @@ Production:           NO
 ```text
 Verified = capital death path avoided OR kill engages before wipe
            under frozen @0.2.0 hashes on declared scopes.
-Verified ≠ profitable · Alpha · Production Bindable · MECH upgrade
+
+Verified ≠ profitable · Alpha · Production Bindable · H_MECH upgrade
 ```
 
 ## 2. Same-hash evidence package
@@ -48,19 +48,32 @@ Verified ≠ profitable · Alpha · Production Bindable · MECH upgrade
 | EXP008 | {rb,i,MA}/2024 | KEEP | E2 multi-symbol |
 | EXP009 | {rb,i,MA}/2025 | KEEP | E3 temporal OOS |
 
-## 3. Decision
+## 3. Gate checklist
+
+| Gate | Result |
+|------|--------|
+| Identity frozen | PASS |
+| Same-hash Closed KEEP | PASS（007/008/009） |
+| Evidence Review fidelity | PASS |
+| PnL not promotion gate | PASS |
+| MECH surface isolated | PASS |
+| Bindable | WITHHELD |
+
+## 4. Decision
 
 ```text
-GRANT: Verified on RISK surface @0.2.0 · H_CAPITAL_GATE · E3 · narrow
-WITHHOLD: Bindable · Alpha · Production · MECH stamp transfer
+GRANT: Lifecycle Verified on Risk Surface @0.2.0
+       hypothesis H_CAPITAL_GATE · evidence E3 · narrow
+
+WITHHOLD: Bindable · Alpha · Production · MECH claims
 ```
 
-## 4. Citation rules
+## 5. Citation rules
 
 ```text
 ✓ Cite as RISK Verified · H_CAPITAL_GATE · E3 · @0.2.0
-❌ Cite as Alpha / edge / Production
-❌ Collapse into MECH Verified PnL story
+❌ Cite as Alpha / MECH Verified / live-safe / Production Bindable
+❌ Merge RISK KEEP into H_EDGE or PnL story
 ```
 
 ## Revision record

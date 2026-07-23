@@ -3,6 +3,8 @@
 > **Status**: **PASS** ✓ · KEEP admitted  
 > **Review ID**: `SEVF_ER_CID_003_EXP009_V0_1`
 
+## Admitted / rejected
+
 | Claim | Decision |
 |-------|----------|
 | H_CAPITAL_GATE temporal OOS {rb,i,MA}/2025 @0.2.0 | **ADMITTED** |
