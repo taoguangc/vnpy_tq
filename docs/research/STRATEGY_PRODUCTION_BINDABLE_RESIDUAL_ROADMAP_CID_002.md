@@ -1,23 +1,23 @@
 # Production Bindable Residual Roadmap — CID_002
 
-> **Roadmap ID**: `PBRR_CID_002_V0_5`  
+> **Roadmap ID**: `PBRR_CID_002_V0_6`  
 > **Date**: 2026-07-23  
-> **DID**: `DID_CID_002_V0_1` PARTIAL
+> **LRC**: `LRC-CID_002-v0.1` FROZEN
 
 ## Residual board
 
 | ID | Status | Note |
 |----|--------|------|
-| R-EI | **PARTIAL** | P2 CLOSED · P1/P3/P4 PARTIAL · P5 DRAFT |
+| R-EI | **PARTIAL** | P2+P5 contract CLOSED · P1/P3/P4 PARTIAL · venue pack OPEN |
 | R-RISK | **PARTIAL** | E2 Verified · E3 OOS OPEN |
-| R-CXSD | **PARTIAL** | research tooling CLOSED · live OPEN |
+| R-CXSD | **PARTIAL** | research CLOSED · live OPEN |
 | R-ACL | **OPEN** | live hard enforcement |
-| R-VMP | **OPEN** | live ops package |
+| R-VMP | **OPEN** | live ops |
 | R-CSD | **OPEN** | Component Split |
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | PBRR v0.4 Pause |
-| 2026-07-23 | PBRR v0.5 after DID PARTIAL |
+| 2026-07-23 | PBRR v0.5 DID |
+| 2026-07-23 | PBRR v0.6 LRC freeze |

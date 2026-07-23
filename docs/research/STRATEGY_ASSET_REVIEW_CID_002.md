@@ -1,40 +1,40 @@
-# Strategy Asset Review — CID_002（V0.31 · Deploy Identity Delivery）
+# Strategy Asset Review — CID_002（V0.32 · LRC Freeze）
 
-> **Review ID**: `SAR_CID_002_V0_31`  
-> **Status**: **COMPLETE** ✓ · Epoch 6 remains **PAUSED** after delivery  
+> **Review ID**: `SAR_CID_002_V0_32`  
+> **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
 > **Date**: 2026-07-23  
-> **Delivery**: [`STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md`](STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md) · `DID_CID_002_V0_1`
+> **LRC**: [`STRATEGY_LIVE_RUNTIME_CONTRACT_CID_002.md`](STRATEGY_LIVE_RUNTIME_CONTRACT_CID_002.md) · `LRC-CID_002-v0.1`
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_002_V0_31
+SAR_CID_002_V0_32
 
-MECH / RISK Verified:    E3 / E2
-CXSD:                    FROZEN + wired
-EI checklist:            V0_2
-Deploy Identity:         DID_CID_002_V0_1 PARTIAL
-  P2 lockfile:           CLOSED
-  P1/P3/P4:              PARTIAL
-  P5 live contract:      DRAFT
+MECH / RISK Verified:  E3 / E2
+CXSD:                  FROZEN + wired
+DID:                   PARTIAL
+LRC:                   v0.1 FROZEN（P5 contract CLOSED）
 
-Production Bindable:     WITHHELD
-Alpha / Prod readiness:  NONE / NO
-Epoch 6:                 PAUSED（re-pause after DID）
-RISK OOS E3:             NOT STARTED
+P2 lockfile:           CLOSED
+P5 contract:           CLOSED
+P1/P3/P4 / venue pack: OPEN or PARTIAL
+
+Production Bindable:   WITHHELD
+Alpha / Prod readiness: NONE / NO
+Epoch 6:               PAUSED
 ================================================
 ```
 
 ## Next（须新授权）
 
 ```text
-Container/image digest · LRC freeze · RISK OOS E3 · or remain paused
+Venue binding pack · container digest · RISK OOS E3 · or remain paused
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.30 Epoch 6 Pause |
-| 2026-07-23 | V0.31 DID PARTIAL · re-pause |
+| 2026-07-23 | V0.31 DID PARTIAL |
+| 2026-07-23 | V0.32 LRC FROZEN · re-pause |

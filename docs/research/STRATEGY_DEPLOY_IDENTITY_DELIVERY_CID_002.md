@@ -31,11 +31,12 @@ RISK OOS E3:         NOT STARTED（deferred）
 | P2 | Full dependency lockfile | `requirements.lock`（pip freeze · 150 lines） | **CLOSED**（research lock · not hashed pip-tools lock） |
 | P3 | Runtime image / env cert | Host attestation only（no container digest） | **PARTIAL** |
 | P4 | Deploy revision | Delivery commit becomes deploy-identity tip（not signed release tag） | **PARTIAL** |
-| P5 | Live runtime ≠ backtest fills | [`STRATEGY_LIVE_RUNTIME_CONTRACT_DRAFT_CID_002.md`](STRATEGY_LIVE_RUNTIME_CONTRACT_DRAFT_CID_002.md) | **DRAFT**（not frozen live brokerage） |
+| P5 | Live runtime ≠ backtest fills | [`STRATEGY_LIVE_RUNTIME_CONTRACT_CID_002.md`](STRATEGY_LIVE_RUNTIME_CONTRACT_CID_002.md) · `LRC-CID_002-v0.1` | **CLOSED**（contract）· venue pack still OPEN |
 
 ```text
-Aggregate R-EI: still PARTIAL
-Production Bindable: still WITHHELD
+Aggregate R-EI: still PARTIAL（P1/P3/P4 · venue pack）
+P2 + P5 contract: CLOSED
+Production Bindable: STILL WITHHELD
 ```
 
 ## Artifacts
@@ -82,10 +83,8 @@ satisfy P1/P3/P5 — and Pause preferred maturity over EXP stacking.
 ## Next（须另授）
 
 ```text
-Container/image digest delivery（complete P1/P3）
-  — OR — Freeze live runtime contract（promote P5 draft）
-  — OR — RISK capital OOS E3
-  — OR — remain paused
+DONE: LRC-CID_002-v0.1 FROZEN（P5 contract）
+Next: venue pack · container digest · RISK OOS E3 · or remain paused
 ```
 
 ## Revision record
@@ -93,3 +92,4 @@ Container/image digest delivery（complete P1/P3）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | DID_CID_002_V0_1 DELIVERED · PARTIAL |
+| 2026-07-23 | P5 contract CLOSED via LRC freeze |

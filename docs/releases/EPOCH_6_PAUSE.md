@@ -55,8 +55,8 @@ Production Bindable Re-review would still WITHHOLD.
 ## Next（须新授权）
 
 ```text
-DONE（2026-07-23 wake）: Deploy Identity Delivery → DID_CID_002_V0_1 PARTIAL
-Still open: container digest · LRC freeze · RISK OOS E3
+DONE: Deploy Identity Delivery PARTIAL · LRC-CID_002-v0.1 FROZEN
+Still open: venue pack · container digest · RISK OOS E3
 Default: remain paused
 ```
 

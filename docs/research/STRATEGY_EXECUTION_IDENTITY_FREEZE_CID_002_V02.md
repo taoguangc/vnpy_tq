@@ -56,7 +56,8 @@ Before any future Production Bindable grant, consumers MUST present:
 | P2 | Full dependency lockfile | **CLOSED**（`requirements.lock`） |
 | P3 | Runtime image or reproducible env cert | **PARTIAL**（host attestation only） |
 | P4 | Deploy revision ≠ research tip alone | **PARTIAL**（delivery commit · not signed tag） |
-| P5 | Brokerage/runtime contract ≠ backtest fills | **DRAFT**（`LRC-CID_002-v0.1-DRAFT`） |
+| P5 | Brokerage/runtime contract ≠ backtest fills | **CLOSED**（`LRC-CID_002-v0.1`）· venue evidence pack still **OPEN** |
+
 
 ```text
 See STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md
