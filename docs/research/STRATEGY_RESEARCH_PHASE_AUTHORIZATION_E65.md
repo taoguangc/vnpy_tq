@@ -67,9 +67,8 @@ Does NOT authorize（this command alone）:
 ## 4. Next command（when Design accepted）
 
 ```text
-Authorize SEVF Fill for H_EDGE / STRAT_BS02_EXP0xx
-  — OR — Authorize Offline Alpha Evidence Observation
-  — OR — revise Design first
+DONE: Authorize SEVF Fill for STRAT_BS02_EXP013 → PRE-REGISTERED
+Next: Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
 ```
 
 ## Revision record

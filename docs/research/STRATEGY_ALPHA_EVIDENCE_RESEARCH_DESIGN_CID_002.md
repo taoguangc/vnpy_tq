@@ -78,10 +78,10 @@ H_EDGE:
 
 | Planned ID | Role | Note |
 |------------|------|------|
-| `STRAT_BS02_EXP013` | H_EDGE diagnostic（rb/2024） | MAE/MFE/expectancy structure · first Fill target |
-| `STRAT_BS02_EXP014` | H_EDGE temporal check | Prefer held-out year not used as sole forming sample |
-| `STRAT_BS02_EXP015` | H_EDGE multi-symbol | {rb,i,MA} or predeclared expansion |
-| `STRAT_BS02_EXP016+` | Cost sensitivity | Fee/slippage stress · still non-PnL-tuning |
+| `STRAT_BS02_EXP013` | H_EDGE diagnostic（rb/2024） | **PRE-REGISTERED** · Observation NOT authorized |
+| `STRAT_BS02_EXP014` | H_EDGE temporal check | reserved |
+| `STRAT_BS02_EXP015` | H_EDGE multi-symbol | reserved |
+| `STRAT_BS02_EXP016+` | Cost sensitivity | reserved |
 
 ```text
 Exact Fill scopes / decision rules: require separate SEVF Fill auth.
@@ -146,9 +146,9 @@ When reporting edge:
 ## Next（须另授）
 
 ```text
-Authorize SEVF Fill for STRAT_BS02_EXP013（H_EDGE）
-  — OR — revise AERD gates / family
-  — OR — pause Epoch 6.5
+DONE: SEVF Fill PRE-REGISTERED for STRAT_BS02_EXP013
+Next: Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
+  — OR — revise Fill decision rules before run
 ```
 
 ## Revision record
@@ -156,3 +156,4 @@ Authorize SEVF Fill for STRAT_BS02_EXP013（H_EDGE）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | AERD_CID_002_V0_1 DESIGNED |
+| 2026-07-23 | EXP013 Fill PRE-REGISTERED |
