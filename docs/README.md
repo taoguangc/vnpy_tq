@@ -17,7 +17,8 @@
 | [releases/EPOCH_4_CLOSURE.md](releases/EPOCH_4_CLOSURE.md) | **Epoch 4 Closure** — CAP-CTX-001 **CLOSED** · Narrow Candidate · Trading Value NOT PROVEN |
 | [releases/EPOCH_5_POSITIONING.md](releases/EPOCH_5_POSITIONING.md) | **Epoch 5** — Strategy Research（see Epoch 5 Closure） |
 | [releases/EPOCH_6_CLOSURE.md](releases/EPOCH_6_CLOSURE.md) | **Epoch 6** Research Toolkit **CLOSED** · ≠ Production Closure |
-| [releases/EPOCH_6_5_POSITIONING.md](releases/EPOCH_6_5_POSITIONING.md) | **Epoch 6.5** Strategy Alpha Validation **ACTIVE**（Design） |
+| [releases/EPOCH_6_5_POSITIONING.md](releases/EPOCH_6_5_POSITIONING.md) | **Epoch 6.5** Strategy Alpha Validation **CLOSED** |
+| [releases/EPOCH_6_5_CLOSURE.md](releases/EPOCH_6_5_CLOSURE.md) | Epoch 6.5 Closure · Alpha NONE on CID_002 H_EDGE |
 | [releases/EPOCH_7_POSITIONING.md](releases/EPOCH_7_POSITIONING.md) | **Epoch 7** Deploy Reality **DEFERRED** |
 
 | [releases/EPOCH_1_POSITIONING.md](releases/EPOCH_1_POSITIONING.md) | Epoch 1 范式定位（Evidence-centric / Research Governance） |

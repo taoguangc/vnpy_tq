@@ -67,9 +67,17 @@ Does NOT authorize（this command alone）:
 ## 4. Next command（when Design accepted）
 
 ```text
-DONE: Authorize SEVF Fill for STRAT_BS02_EXP013 → PRE-REGISTERED
-Next: Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
+DONE: Fill+Observe EXP013/014 → both REVERT
+DONE: Authorize Close CID_002 Alpha Evidence Research → AERC CLOSED
+Next: Authorize New Strategy Asset Design · or idle
 ```
+
+## Revision record
+
+| Date | Change |
+|------|--------|
+| 2026-07-23 | GRANTED · Design scope |
+| 2026-07-23 | Phase completed via AERC / E65C closure |
 
 ## Revision record
 

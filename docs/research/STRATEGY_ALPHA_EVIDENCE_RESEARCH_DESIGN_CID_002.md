@@ -146,11 +146,18 @@ When reporting edge:
 ## Next（须另授）
 
 ```text
-DONE: EXP013 REVERT retained · EXP014 Fill PRE-REGISTERED（OOS completeness）
-Next: Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP014
-Then fork: close Alpha research · new asset · or portfolio（only if warranted）
-NOT: Production · CSD · rescue retune
+DONE: Alpha Evidence Research CLOSED（AERC_CID_002_V0_1）
+H_EDGE temporal negative chain retained · Alpha NONE
+Next: Authorize New Strategy Asset Design · or idle
 ```
+
+## Revision record
+
+| Date | Change |
+|------|--------|
+| 2026-07-23 | AERD_CID_002_V0_1 DESIGNED |
+| 2026-07-23 | EXP013 Fill PRE-REGISTERED |
+| 2026-07-23 | EXP013+014 REVERT · path CLOSED |
 
 ## Revision record
 

@@ -1,24 +1,24 @@
-# Campaigns pointer — H_EDGE temporal chain closed（REVERT×2）
+# Campaigns pointer — CID_002 Alpha Evidence CLOSED
 
 ```text
-EXP013 rb/2024 H_EDGE: REVERT
-EXP014 rb/2025 H_EDGE: REVERT
+Epoch 6.5:             CLOSED
+Alpha Evidence path:   CLOSED（AERC_CID_002_V0_1）
 H_MECH:                VERIFIED
+H_EDGE:                REVERT×2（retained）
 Alpha:                 NONE
+Production:            WITHHELD
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| EXP014 Eval | [REVERT](../research/STRATEGY_SEVF_EVALUATION_CID_002_EXP014.md) |
-| EXP014 ER | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_002_EXP014.md) |
-| Asset Review | [SAR_CID_002_V0_41](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| Alpha path closure | [AERC](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_002.md) |
+| Epoch 6.5 Closure | [E65C](../releases/EPOCH_6_5_CLOSURE.md) |
+| Asset Review | [SAR_CID_002_V0_42](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
 
 ## Next（须新授权）
 
 ```text
-Close CID_002 Alpha Evidence Research
-  — OR — New Strategy Asset Design
-  — NOT Production / CSD / rescue retune
+Authorize New Strategy Asset Design · or idle
 ```
