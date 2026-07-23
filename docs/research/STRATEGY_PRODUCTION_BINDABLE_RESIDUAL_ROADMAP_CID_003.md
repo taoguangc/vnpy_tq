@@ -29,9 +29,9 @@ PBDR must be re-run after material residual closure.
 ## Status notes（≠ clearance）
 
 ```text
-R-CTX-RISK: PARTIAL — design gap closed under Delegation-25I;
-            Production still blocked until composition EXP lineage exists
-            AND other residuals remain.
+R-CTX-RISK: PARTIAL — design FROZEN + CTX_CID003_EXP004 KEEP（rb/2024）;
+            Production still blocked（OOS/multi-symbol composition optional;
+            other residuals remain）
 ```
 
 ## Non-goals
@@ -47,3 +47,4 @@ R-CTX-RISK: PARTIAL — design gap closed under Delegation-25I;
 |------|--------|
 | 2026-07-23 | PBRR_CID_003_V0_1 FROZEN |
 | 2026-07-23 | R-CTX-RISK → PARTIAL（CCRD design · Delegation-25I） |
+| 2026-07-23 | R-CTX-RISK note · EXP004 KEEP（Delegation-25J） |

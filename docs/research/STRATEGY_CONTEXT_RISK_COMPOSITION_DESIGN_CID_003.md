@@ -18,7 +18,7 @@ Purpose: Define how Filter F1 may compose with RISK @0.2.0
          under Decision 019 — without collapsing surfaces
          or claiming Alpha / Production.
 
-Observation: NOT authorized by this design alone
+Observation: CTX_CID003_EXP004 CLOSED KEEP（first composition EXP）
 Production chase: remains PAUSED（PBDR WITHHOLD）
 ================================================
 ```
@@ -115,7 +115,8 @@ Kill-switch trips are descriptive attribution · not Alpha.
 
 ```text
 DESIGN: FROZEN · CCRD_CID_003_V0_1
-FILL / Observation: requires new authorization
+CTX_CID003_EXP004: CLOSED · KEEP（rb/2024 · RISK · F1）
+Further composition EXPs: new experiment_id + authorization required
 Production chase: PAUSED（PBDR_CID_003_V0_1）
 ```
 
@@ -124,3 +125,4 @@ Production chase: PAUSED（PBDR_CID_003_V0_1）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | Design FROZEN under Delegation-25I |
+| 2026-07-23 | CTX_CID003_EXP004 KEEP · CLOSED（Delegation-25J） |

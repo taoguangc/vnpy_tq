@@ -1,22 +1,21 @@
-# Campaigns pointer — CID_003 Context×RISK design frozen
+# Campaigns pointer — CID_003 Context×RISK EXP004 KEEP
 
 ```text
-Research Bindable: YES
-CTX MECH path:     EXP001–003 KEEP
-CCRD:              FROZEN（composition design）
-Production:        WITHHELD · chase PAUSED
-Delegation-25I:    STOP
+CTX MECH EXP001–003: KEEP
+CTX RISK EXP004:     KEEP（H_CTX_RISK_COMP）
+Production:          WITHHELD · chase PAUSED
+Delegation-25J:      STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| CCRD | [FROZEN](../research/STRATEGY_CONTEXT_RISK_COMPOSITION_DESIGN_CID_003.md) |
-| Asset Review | [SAR_CID_003_V1_12](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| EXP004 | [KEEP](../research/STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP004.md) |
+| Asset Review | [SAR_CID_003_V1_13](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
 
 ## Next（须新授权）
 
 ```text
-CTX_CID003_EXP004 Fill/Observation · Pause · new asset
+CTX×RISK OOS/multi-symbol · Pause · new asset
 ```
