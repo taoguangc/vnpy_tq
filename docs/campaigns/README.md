@@ -1,20 +1,21 @@
-# Campaigns pointer — CID_004 Alpha NONE
+# Campaigns pointer — CID_003 & CID_004 PAUSED
 
 ```text
-H_MECH: KEEP · H_EDGE: REVERT×2 · Alpha: NONE（AERC CLOSED）
-CID_003: PAUSED
-Delegation-25Q: STOP
+CID_003: PAUSED · Research Bindable · Alpha NONE · Production WITHHELD
+CID_004: PAUSED · H_MECH KEEP · Alpha NONE
+Delegation-25R: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Alpha Closure | [AERC](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_004.md) |
-| Asset Review | [SAR_CID_004_V0_3](../research/STRATEGY_ASSET_REVIEW_CID_004.md) |
+| CID_003 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_003.md) |
+| CID_004 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_004.md) |
+| CID_004 AERC | [NONE](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_004.md) |
 
-## Next（须新授权）
+## Wake（须明确授权）
 
 ```text
-Pause CID_004 · H_MECH robustness · new asset
+Resume CID_003 / CID_004 · Authorize new strategy asset design
 ```
