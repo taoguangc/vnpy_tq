@@ -1,9 +1,9 @@
-# Campaigns pointer — CID_003–006 PAUSED
+# Campaigns pointer — CID_003–006 PAUSED · CID_007 DESIGNED
 
 ```text
 CID_003–006: PAUSED · Alpha NONE
-CID_006: H_MECH KEEP · H_EDGE REVERT×2 · AERC CLOSED
-Delegation-25AC: STOP
+CID_007: NSAD DESIGNED（OPP19 OD-Breakout）· no Freeze / no code
+Delegation-25AD: STOP
 ```
 
 ## Pointers
@@ -11,12 +11,12 @@ Delegation-25AC: STOP
 | Item | Status |
 |------|--------|
 | CID_006 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_006.md) |
-| CID_006 AERC | [NONE](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_006.md) |
-| CID_006 EXP003 | [REVERT](../research/STRATEGY_SEVF_FILL_CID_006_EXP003.md) |
+| CID_007 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_007.md) |
+| CID_007 SAR | [V0.1](../research/STRATEGY_ASSET_REVIEW_CID_007.md) |
 
 ## Wake（须明确授权）
 
 ```text
+Authorize Identity Freeze for CID_007
 Resume CID_003–006（scoped）
-Authorize new strategy asset design
 ```
