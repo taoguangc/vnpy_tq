@@ -1,0 +1,234 @@
+"""CTX_CID003_EXP003 — H_CTX_FILTER multi-symbol continuity {rb,i,MA}/2024.
+
+Identical Filter F1 and MECH @0.1.1 as EXP001; symbol set is the continuity dimension.
+Universe policy mirrors STRAT_RO16_EXP005（CAP_CTX_CONTINUITY）.
+Does not mutate G5 binding strategy bytes.
+"""
+from __future__ import annotations
+
+import csv
+import hashlib
+import io
+import json
+import sys
+from contextlib import redirect_stdout
+from datetime import datetime
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from vnpy.trader.constant import Exchange, Interval
+
+from scripts.rollover_backtest_engine import RolloverBacktestingEngine
+from scripts.tq_rollover_data import build_rollover_events, load_stitched_raw_bars
+from strategies.paaf.context_consumer.opp16_ctx_filter_v011 import Opp16CtxFilterV011
+from strategies.paaf.strat_rev_opp16_01_v011 import StratRevOpp1601StrategyV011
+
+EXPERIMENT_ID = "CTX_CID003_EXP003"
+EXPECTED_SOURCE_HASH = (
+    "6dee22fe6c1eaf5958defa3f94db614ece5991bdbc58abc93d281bbd7b1164b5"
+)
+EXPECTED_PARAMETER_HASH = (
+    "76b124f47414af2da2e0cdfdc6afcd5025d2cca8ae3a5583ba667cc7e1e31c57"
+)
+BINDING_PATHS = [
+    "strategies/paaf/adapters/vnpy_adapter.py",
+    "strategies/paaf/detectors/opp16_two_bar_reversal.py",
+    "strategies/paaf/strat_rev_opp16_01.py",
+    "strategies/paaf/strat_rev_opp16_01_v011.py",
+]
+DETECTOR_BINDING = "OPP16@1.0.0"
+OUT_DIR = ROOT / "research" / "output" / "evidence" / EXPERIMENT_ID
+
+WARMUP = datetime(2023, 12, 1)
+PERIOD_START = datetime(2024, 1, 1)
+PERIOD_END = datetime(2024, 12, 31)
+
+SYMBOL_SPEC = {
+    "rb": {"exchange": Exchange.SHFE, "size": 10, "pricetick": 1.0},
+    "i": {"exchange": Exchange.DCE, "size": 100, "pricetick": 0.5},
+    "MA": {"exchange": Exchange.CZCE, "size": 10, "pricetick": 1.0},
+}
+
+
+class Opp16CtxFilterV011Exp003(Opp16CtxFilterV011):
+    experiment_id = EXPERIMENT_ID
+
+
+def _source_hash() -> tuple[str, list[dict[str, str]]]:
+    manifest = []
+    for rel in sorted(BINDING_PATHS):
+        digest = hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()
+        manifest.append({"path": rel, "sha256": digest})
+    canon = json.dumps(manifest, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return hashlib.sha256(canon.encode()).hexdigest(), manifest
+
+
+def _parameter_hash() -> str:
+    params = {
+        "body_ratio": {"type": "float", "unit": "fraction", "value": 0.5},
+        "fixed_size": {"type": "int", "unit": "contracts", "value": 1},
+        "max_hold_bars": {"type": "int", "unit": "bars_1m", "value": 50},
+        "risk_reward": {"type": "float", "unit": "dimensionless", "value": 1.0},
+    }
+    canon = json.dumps(params, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    return hashlib.sha256(canon.encode("utf-8")).hexdigest()
+
+
+def _period_rows(trade_log: list[dict]) -> list[dict]:
+    rows = []
+    allowed = {"STOP", "TARGET", "TIME_STOP"}
+    for item in trade_log:
+        et = item.get("exit_time")
+        if et is None:
+            continue
+        exit_cmp = et.replace(tzinfo=None) if getattr(et, "tzinfo", None) else et
+        if exit_cmp < PERIOD_START or exit_cmp > PERIOD_END:
+            continue
+        if item.get("exit_reason") not in allowed:
+            continue
+        rows.append(item)
+    return rows
+
+
+def _run_arm(symbol: str, strategy_cls) -> tuple[int, int, float | None]:
+    spec = SYMBOL_SPEC[symbol]
+    exchange = spec["exchange"]
+    bars = load_stitched_raw_bars(symbol, exchange, start=WARMUP, end=PERIOD_END)
+    if not bars:
+        return 0, 0, None
+    events = build_rollover_events(symbol, start=bars[0].datetime, end=bars[-1].datetime)
+    engine = RolloverBacktestingEngine()
+    engine.set_parameters(
+        vt_symbol=f"{symbol}.{exchange.value}",
+        interval=Interval.MINUTE,
+        start=bars[0].datetime,
+        end=bars[-1].datetime,
+        rate=0.00003,
+        slippage=1.0,
+        size=spec["size"],
+        pricetick=spec["pricetick"],
+        capital=200_000,
+    )
+    engine.history_data = bars
+    engine.set_rollover_events(events)
+    engine.add_strategy(strategy_cls, {})
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        engine.run_backtesting()
+        df = engine.calculate_result()
+        stats = engine.calculate_statistics(df, output=False)
+    trade_log = list(getattr(engine.strategy, "_trade_log", []) or [])
+    rows = _period_rows(trade_log)
+    denials = list(getattr(engine.strategy, "_permission_denials", []) or [])
+    return len(rows), len(denials), stats.get("total_net_pnl")
+
+
+def _eval_symbol(n0: int, n1: int, d: int) -> tuple[str, str]:
+    if n0 < 1:
+        return "HOLD", "baseline N0 < 1"
+    if n1 == n0 and d == 0:
+        return "HOLD", "filter inert"
+    if n1 != n0 or d >= 1:
+        return "KEEP", f"filter active N0={n0} N1={n1} D={d}"
+    return "HOLD", "inconclusive"
+
+
+def _run_one(symbol: str) -> dict:
+    print(f"  {symbol} B0...")
+    n0, _, pnl0 = _run_arm(symbol, StratRevOpp1601StrategyV011)
+    print(f"  {symbol} B1...")
+    n1, d, pnl1 = _run_arm(symbol, Opp16CtxFilterV011Exp003)
+    status, reason = _eval_symbol(n0, n1, d)
+    return {
+        "symbol": symbol,
+        "status": status,
+        "reason": reason,
+        "N0": n0,
+        "N1": n1,
+        "D": d,
+        "B0_pnl_descriptive": pnl0,
+        "B1_pnl_descriptive": pnl1,
+    }
+
+
+def _aggregate(per: list[dict]) -> tuple[str, str]:
+    if any(p["status"] == "REVERT" for p in per):
+        return "REVERT", "symbol_level_revert"
+    if all(p["status"] == "KEEP" for p in per):
+        return "KEEP", "all_symbols_KEEP"
+    return "HOLD", "mixed_or_partial_HOLD"
+
+
+def main() -> int:
+    source_hash, manifest = _source_hash()
+    parameter_hash = _parameter_hash()
+    source_ok = source_hash == EXPECTED_SOURCE_HASH
+    param_ok = parameter_hash == EXPECTED_PARAMETER_HASH
+    print(f"experiment_id={EXPERIMENT_ID}")
+    print(f"source_hash match={source_ok} parameter_hash match={param_ok}")
+    if not source_ok or not param_ok:
+        print("ABORT", source_hash, parameter_hash)
+        return 2
+
+    per = [_run_one(s) for s in ("rb", "i", "MA")]
+    outcome, reason = _aggregate(per)
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    with (OUT_DIR / "per_symbol.csv").open("w", newline="", encoding="utf-8") as fh:
+        fields = [
+            "symbol",
+            "status",
+            "reason",
+            "N0",
+            "N1",
+            "D",
+            "B0_pnl_descriptive",
+            "B1_pnl_descriptive",
+        ]
+        w = csv.DictWriter(fh, fieldnames=fields)
+        w.writeheader()
+        for row in per:
+            w.writerow({k: row.get(k) for k in fields})
+
+    run_meta = {
+        "experiment_id": EXPERIMENT_ID,
+        "status": "OBSERVATION_COMPLETE",
+        "authorization": "Delegation-50G（Authorize multi-symbol Context Consumer Observation）",
+        "hypothesis_family": "H_CTX_FILTER",
+        "continuity_of": ["CTX_CID003_EXP001"],
+        "universe_policy": "CAP_CTX_CONTINUITY",
+        "consumer_surface": "MECH",
+        "consumer_contract": "CC-CID_003-v1",
+        "freeze_id": "SIF_CID_003_V0_1_1",
+        "source_hash": source_hash,
+        "parameter_hash": parameter_hash,
+        "source_manifest": manifest,
+        "source_ok": source_ok,
+        "param_ok": param_ok,
+        "period": "2024",
+        "symbols": ["rb", "i", "MA"],
+        "per_symbol": per,
+        "outcome": outcome,
+        "reason": reason,
+        "pnl_not_decision_metric": True,
+        "alpha_claim": False,
+        "production_claim": False,
+        "g5_bytes_mutated": False,
+        "design_id": "CCED_CID_003_V0_1",
+        "filter_id": "F1_EXPANSION_ONLY",
+    }
+    (OUT_DIR / "run_metadata.json").write_text(
+        json.dumps(run_meta, indent=2, ensure_ascii=False, default=str) + "\n",
+        encoding="utf-8",
+    )
+    print(f"outcome={outcome}")
+    print(f"reason={reason}")
+    print(json.dumps(per, indent=2, default=str))
+    return 0 if outcome != "REVERT" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

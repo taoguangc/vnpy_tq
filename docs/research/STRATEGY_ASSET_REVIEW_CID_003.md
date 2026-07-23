@@ -1,25 +1,24 @@
-# Strategy Asset Review — CID_003（V1.9 · Context OOS EXP002 KEEP）
+# Strategy Asset Review — CID_003（V1.10 · Context multi-symbol KEEP）
 
-> **Review ID**: `SAR_CID_003_V1_9`  
+> **Review ID**: `SAR_CID_003_V1_10`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-50F STOP
+> **Authorization**: Delegation-50G STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V1_9
+SAR_CID_003_V1_10
 
 MECH @0.1.1:  Verified H_MECH · E3 · Research Bindable ✓
 RISK @0.2.0:  Verified H_CAPITAL_GATE · E3 · Research Bindable ✓
-Contract:     CC-CID_003-v1 FROZEN
-CTX design:   CCED_CID_003_V0_1
 CTX EXP001:   KEEP（rb/2024）
-CTX EXP002:   KEEP（rb/2025 temporal OOS）
+CTX EXP002:   KEEP（rb/2025 OOS）
+CTX EXP003:   KEEP（{rb,i,MA}/2024 multi-symbol）
 Alpha:        NONE
 Production:   NO
 Context routing permission: NOT GRANTED
-Delegation-50F: STOP
+Delegation-50G: STOP
 ================================================
 ```
 
@@ -27,15 +26,14 @@ Delegation-50F: STOP
 
 | Item | Status |
 |------|--------|
-| CTX_CID003_EXP001 | [KEEP](STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP001.md) |
-| CTX_CID003_EXP002 | [KEEP](STRATEGY_CONTEXT_CONSUMER_FILL_CTX_CID003_EXP002.md) |
-| Delegation-50F | [STOP](STRATEGY_DELEGATION_50F_CID_003_EXECUTION_LOG.md) |
+| CTX EXP001–003 | KEEP · KEEP · KEEP |
+| Delegation-50G | [STOP](STRATEGY_DELEGATION_50G_CID_003_EXECUTION_LOG.md) |
 
-## Next（须新授权 · outside 50F）
+## Next（须新授权 · outside 50G）
 
 ```text
-Multi-symbol Context filter continuity
-  — OR — Production Bindable Pre-Review（仍应 WITHHOLD）
+Production Bindable Pre-Review（预期 WITHHOLD）
+  — OR — Context + RISK composition design（new id · separate auth）
   — OR — Pause / new asset
 NOT: claim Context Alpha · H_EDGE reopen · Epoch 7 without Alpha
 ```
@@ -44,5 +42,5 @@ NOT: claim Context Alpha · H_EDGE reopen · Epoch 7 without Alpha
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V1.8 CTX_CID003_EXP001 KEEP · 50E STOP |
-| 2026-07-23 | V1.9 CTX_CID003_EXP002 KEEP · 50F STOP |
+| 2026-07-23 | V1.9 CTX EXP002 KEEP · 50F STOP |
+| 2026-07-23 | V1.10 CTX EXP003 KEEP · 50G STOP |

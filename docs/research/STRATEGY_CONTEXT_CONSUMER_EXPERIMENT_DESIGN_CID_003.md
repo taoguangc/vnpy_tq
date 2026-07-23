@@ -98,6 +98,7 @@ PnL / Sharpe MUST NOT be the primary KEEP/REVERT gate.
 ```text
 CTX_CID003_EXP001: CLOSED · KEEP（rb/2024 · MECH · F1）
 CTX_CID003_EXP002: CLOSED · KEEP（rb/2025 temporal OOS · MECH · F1）
+CTX_CID003_EXP003: CLOSED · KEEP（{rb,i,MA}/2024 multi-symbol · MECH · F1）
 Further Context EXPs: new experiment_id + authorization required
 ```
 
@@ -108,3 +109,4 @@ Further Context EXPs: new experiment_id + authorization required
 | 2026-07-23 | Design COMPLETE under Delegation-50E |
 | 2026-07-23 | CTX_CID003_EXP001 KEEP · CLOSED |
 | 2026-07-23 | CTX_CID003_EXP002 KEEP · CLOSED（Delegation-50F） |
+| 2026-07-23 | CTX_CID003_EXP003 KEEP · CLOSED（Delegation-50G） |
