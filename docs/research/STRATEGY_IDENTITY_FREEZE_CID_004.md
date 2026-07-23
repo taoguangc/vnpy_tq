@@ -106,7 +106,8 @@ rollover:             on_rollover_adjust
 ## 6. Next（须另授）
 
 ```text
-Authorize SEVF Spec + Fill for STRAT_RO12_EXP001（H_MECH）
+DONE: STRAT_RO12_EXP001 H_MECH KEEP（rb/2024）
+Next: H_MECH OOS/multi-symbol · OR · H_EDGE diagnostic Fill · OR · Pause
 ```
 
 ## Revision record
@@ -114,3 +115,5 @@ Authorize SEVF Spec + Fill for STRAT_RO12_EXP001（H_MECH）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_004_V0_1 FROZEN · Delegation-25O |
+| 2026-07-23 | `source_revision` → `80e26f111d0009535ef8fa6268dda2a779036399` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25P |
