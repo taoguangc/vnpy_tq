@@ -34,7 +34,7 @@ CID_002–012: NOT forks · Alpha paths remain CLOSED / PAUSED
 |-------|--------------|
 | `strategy_id` | `STRAT_SMC_OB_LONG_01` |
 | `version` | `0.1.0` |
-| `source_revision` | *(binding tip — set at STOP commit)* |
+| `source_revision` | c0fb19f8297f6d885f575f432044b0ea5bfc5f61 |
 | `source_hash` | `a835a8bb8c1dfa6a18e610e323351cd4620070ce1b8ac4f410e72c5de833d42d` |
 | `parameter_hash` | `8ea775b14b6f4a44eaaf494aa39aa650f6da4d44ff408e3dedb6f762a4e06214` |
 | `class_tags` | `["smc","order_block","structure","long_only"]` |
