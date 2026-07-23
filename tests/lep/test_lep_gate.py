@@ -131,5 +131,26 @@ class TestGate(unittest.TestCase):
         self.assertEqual(result.reason, "acl_hard_deny")
 
 
+class TestExport(unittest.TestCase):
+    def test_export_bundle_writes_files(self) -> None:
+        import tempfile
+
+        from strategies.paaf.lep import build_and_export
+
+        pack = json.loads(TEMPLATE_PATH.read_text(encoding="utf-8"))
+        with tempfile.TemporaryDirectory() as tmp:
+            meta = build_and_export(
+                Path(tmp),
+                vbp_pack=pack,
+                vmp_checklist={},
+                claim_live=True,
+                run_id="TEST_LEP_BUNDLE",
+            )
+            self.assertFalse(meta["gate_ok"])
+            self.assertFalse(meta["production_bindable"])
+            self.assertTrue((Path(tmp) / "run_metadata.json").is_file())
+            self.assertTrue((Path(tmp) / "gate_result.json").is_file())
+
+
 if __name__ == "__main__":
     unittest.main()

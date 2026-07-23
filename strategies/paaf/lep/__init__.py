@@ -14,6 +14,11 @@ from strategies.paaf.lep.constants import (
     VBP_PROTOCOL_ID,
     VMP_LIVE_CHECKLIST_ID,
 )
+from strategies.paaf.lep.export_evidence import (
+    build_and_export,
+    default_evidence_dir,
+    export_lep_bundle,
+)
 from strategies.paaf.lep.gate_live import LiveGateResult, gate_live
 from strategies.paaf.lep.validate_vbp_pack import VbpCheck, validate_vbp_pack
 
@@ -28,8 +33,11 @@ __all__ = [
     "LiveGateResult",
     "VbpCheck",
     "VmpLiveCheck",
+    "build_and_export",
     "check_call_edge",
+    "default_evidence_dir",
     "denied_edges",
+    "export_lep_bundle",
     "gate_live",
     "validate_vbp_pack",
     "validate_vmp_live_checklist",

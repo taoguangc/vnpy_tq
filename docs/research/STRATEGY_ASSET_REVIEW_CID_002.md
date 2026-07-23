@@ -1,43 +1,41 @@
-# Strategy Asset Review — CID_002（V0.34 · Delegation-50N）
+# Strategy Asset Review — CID_002（V0.35 · Delegation-50O）
 
-> **Review ID**: `SAR_CID_002_V0_34`  
+> **Review ID**: `SAR_CID_002_V0_35`  
 > **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-50N
+> **Authorization**: Delegation-50O
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_002_V0_34
+SAR_CID_002_V0_35
 
-MECH @0.1.1:           Verified H_MECH · E3
-RISK @0.2.0:           Verified H_CAPITAL_GATE · E3
-CXSD / LRC / VBP:      FROZEN
-LEP-CID_002-v0.1:      FROZEN + toolkit DELIVERED
-VMP_LIVE_CID_002_V0_1: FROZEN
+MECH / RISK:           Verified E3 / E3
+CXSD/LRC/VBP/LEP:      FROZEN + toolkits
+CSDIC_CID_002_V0_1:    CHARTERED（impl deferred）
+PBDR_CID_002_V0_2:     Production Bindable WITHHELD
+E6MC_V0_1:             Mid-checkpoint COMPLETE（≠ Epoch Closure）
 
-R-RISK-OOS:            CLOSED
-R-ACL/VMP/CXSD-live:   PARTIAL（toolkit · no brokerage）
-FILLED venue / Docker: OPEN
-R-CSD:                 OPEN（design-only）
+FILLED venue / Docker / brokerage LEP: OPEN
+R-CSD impl:            OPEN
 
 Production Bindable:   WITHHELD
 Alpha / Prod readiness: NONE / NO
-Epoch 6:               PAUSED
+Epoch 6:               PAUSED（not closed）
 ================================================
 ```
 
 ## Next（须新授权）
 
 ```text
-FILLED venue · Docker host · brokerage-attached LEP evidence ·
-CSD implementation · or remain paused
+FILLED venue · OCI host · brokerage LEP · Authorize CSD Implementation ·
+or remain paused
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.33 Delegation-50M |
-| 2026-07-23 | V0.34 Delegation-50N LEP · re-pause |
+| 2026-07-23 | V0.34 Delegation-50N |
+| 2026-07-23 | V0.35 Delegation-50O · PBDR v0.2 · CSDIC · re-pause |

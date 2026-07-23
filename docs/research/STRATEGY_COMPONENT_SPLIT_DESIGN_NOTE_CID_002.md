@@ -38,16 +38,15 @@ Cost:
 ## Decision now
 
 ```text
-DO NOT implement split in Delegation-50D.
-KEEP versioned surfaces + CC-v1 until Bindable path requires split.
-Deferred vs CXSD: Component Split is not the recommended next step;
-Context Safety Definition（CXSD）is.
+DO NOT implement split in Delegation-50D / 50O.
+KEEP versioned surfaces + CC-v1 until Authorize CSD Implementation.
+Charter: CSDIC_CID_002_V0_1（rules frozen · code not authorized）.
 ```
 
 ## Name note
 
-> **Component Split** remains `CSD_CID_002_V0_1`（design only · deferred）.  
-> **Context Safety Definition** uses `CXSD_CID_002_*`（chartered · design not authorized）.
+> **Component Split** remains `CSD_CID_002_V0_1`（design）+ `CSDIC_CID_002_V0_1`（charter）.  
+> **Context Safety Definition** uses `CXSD_CID_002_*`.
 
 ## Revision record
 
@@ -55,3 +54,4 @@ Context Safety Definition（CXSD）is.
 |------|--------|
 | 2026-07-22 | Design note recorded |
 | 2026-07-22 | Disambiguate vs CXSD · defer impl |
+| 2026-07-23 | Link CSDIC_CID_002_V0_1 · still deferred |

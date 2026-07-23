@@ -4,18 +4,20 @@
 > **Status**: **PAUSED** ✓  
 > **Pause ID**: `E6P_V0_1`（held）  
 > **Date**: 2026-07-23  
-> **Last wake**: Delegation-50N
+> **Last wake**: Delegation-50O  
+> **Mid-checkpoint**: [`EPOCH_6_MID_CHECKPOINT.md`](EPOCH_6_MID_CHECKPOINT.md)
 
 ## Checkpoint record
 
 ```text
 ================================================
-EPOCH 6 PAUSE（post Delegation-50N）
+EPOCH 6 PAUSE（post Delegation-50O）
 
-MECH / RISK:           Verified E3 / E3
-CXSD / LRC / VBP / LEP: FROZEN（LEP toolkit delivered）
-Production Bindable:   WITHHELD
-Alpha / Prod readiness: NONE / NO
+MECH / RISK Verified:  E3 / E3
+Contracts/toolkits:    CXSD · LRC · VBP · LEP · VMP-Live
+CSDIC:                 CHARTERED（impl deferred）
+PBDR v0.2:             Production Bindable WITHHELD
+Epoch Closure:         NOT claimed（mid-checkpoint only）
 
 Active work:           PAUSED
 ================================================
@@ -24,8 +26,8 @@ Active work:           PAUSED
 ## Next（须新授权）
 
 ```text
-DONE: LEP-CID_002-v0.1 + VMP-Live checklist + validators/tests
-Still open: FILLED venue · Docker · brokerage attachment · CSD
+DONE: CSDIC · LEP exporter · PBDR v0.2 WITHHOLD · E6MC
+Still open: FILLED venue · OCI · brokerage LEP · CSD impl
 Default: remain paused
 ```
 
@@ -33,5 +35,5 @@ Default: remain paused
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | Re-paused after Delegation-50M |
 | 2026-07-23 | Re-paused after Delegation-50N |
+| 2026-07-23 | Re-paused after Delegation-50O |
