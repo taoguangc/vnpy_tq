@@ -1,23 +1,27 @@
-# Strategy Asset Review — CID_009（V0.1 · NSAD DESIGNED）
+# Strategy Asset Review — CID_009（V0.2 · H_MECH KEEP）
 
-> **Review ID**: `SAR_CID_009_V0_1`  
+> **Review ID**: `SAR_CID_009_V0_2`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25AL STOP
+> **Authorization**: Delegation-25AM STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_009_V0_1
+SAR_CID_009_V0_2
 
-Campaign: DESIGNED only（NSAD_CID_009_V0_1）
-Seed:     OPP15 Wedge Path A（e2bfc0c… opp15.py）
-Provisional: STRAT_REV_OPP15_01
-Family:   exhaustion / wedge / reversal
-Identity Freeze: NOT YET
-H_MECH / H_EDGE / Alpha: NONE
+Campaign:     ACTIVE Candidate
+Identity:     SIF_CID_009_V0_1 · STRAT_REV_OPP15_01@0.1.0
+Detector:     OPP15@1.0.0 · OPP15_MS_V0_1（Path A only）
+source_hash:  1b0f5858d8d22371906085cdf974b8378e60d6bdb8c3924a509bfce62e9cb8a1
+parameter_hash: 960b1ae8abdf5011f6d7977bf99c4bae7a8f8264721afca0488e687b539af9f6
+binding tip:  8e3acd15b953ef8d3f8640e21711d4265e42abc8
+
+H_MECH: STRAT_RO15_EXP001 KEEP（rb/2024 · attributed=435）
+H_EDGE: NOT STARTED
+Alpha:  NONE
 CID_003–008: PAUSED
-Delegation-25AL: STOP
+Delegation-25AM: STOP
 ================================================
 ```
 
@@ -25,19 +29,22 @@ Delegation-25AL: STOP
 
 | Item | Status |
 |------|--------|
-| NSAD | [DESIGNED](STRATEGY_NEW_ASSET_DESIGN_CID_009.md) |
-| Delegation-25AL | [STOP](STRATEGY_DELEGATION_25AL_EXECUTION_LOG.md) |
+| SIF | [FROZEN](STRATEGY_IDENTITY_FREEZE_CID_009.md) |
+| EXP001 | [KEEP](STRATEGY_SEVF_FILL_CID_009_EXP001.md) |
+| Delegation-25AM | [STOP](STRATEGY_DELEGATION_25AM_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-Identity Freeze · OPP15 Path-A Detector + orchestrator @0.1.0
-  — OR — leave Design-only
-NOT: Resume CID_003–008 · H_EDGE before Freeze · auto-code · Path B'/MTF expand
+H_EDGE diagnostic Fill · STRAT_RO15_EXP002（SAME gates as prior AERC）
+  — OR — H_MECH multi-symbol / OOS
+  — OR — Pause CID_009
+NOT: Alpha from H_MECH · Path B'/MTF expand · Resume CID_003–008 as substitute
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.1 NSAD DESIGNED · 25AL STOP |
+| 2026-07-23 | V0.1 NSAD DESIGNED |
+| 2026-07-23 | V0.2 H_MECH KEEP · 25AM STOP |
