@@ -1,27 +1,26 @@
-# Strategy Asset Review — CID_008（V0.2 · H_MECH KEEP）
+# Strategy Asset Review — CID_008（V0.3 · PAUSED · Alpha NONE）
 
-> **Review ID**: `SAR_CID_008_V0_2`  
+> **Review ID**: `SAR_CID_008_V0_3`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25AJ STOP
+> **Authorization**: Delegation-25AK STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_008_V0_2
+SAR_CID_008_V0_3
 
-Campaign:     ACTIVE Candidate
+Campaign:     PAUSED
 Identity:     SIF_CID_008_V0_1 · STRAT_TREND_OPP02_01@0.1.0
 Detector:     OPP02@1.0.0 · OPP02_MS_V0_1
-source_hash:  c6e47760e11290b171aec8d50c7f727606ed5df147ecb6eaa3b660fa62de9f99
-parameter_hash: 06b64730fa61b0b1c9411feb332140d5a7b4911339c035ac30f0ede406db7a86
 binding tip:  81c90b4d6e20fa560c4b5052cf6af8eeb2b5c8d3
 
-H_MECH: STRAT_TO02_EXP001 KEEP（rb/2024 · attributed=2834）
-H_EDGE: NOT STARTED
-Alpha:  NONE
+H_MECH: STRAT_TO02_EXP001 KEEP（rb/2024 · n=2834）
+H_EDGE: EXP002 REVERT · EXP003 OOS REVERT
+Alpha:  NONE（AERC_CID_008_V0_1 CLOSED）
+Pause:  CPD_CID_008_V0_1
 CID_003–007: PAUSED
-Delegation-25AJ: STOP
+Delegation-25AK: STOP
 ================================================
 ```
 
@@ -29,17 +28,19 @@ Delegation-25AJ: STOP
 
 | Item | Status |
 |------|--------|
-| SIF | [FROZEN](STRATEGY_IDENTITY_FREEZE_CID_008.md) |
-| EXP001 | [KEEP](STRATEGY_SEVF_FILL_CID_008_EXP001.md) |
-| Delegation-25AJ | [STOP](STRATEGY_DELEGATION_25AJ_EXECUTION_LOG.md) |
+| Pause | [CPD](STRATEGY_CAMPAIGN_PAUSE_CID_008.md) |
+| AERC | [NONE](STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_008.md) |
+| EXP002 | [REVERT](STRATEGY_SEVF_FILL_CID_008_EXP002.md) |
+| EXP003 | [REVERT](STRATEGY_SEVF_FILL_CID_008_EXP003.md) |
+| Delegation-25AK | [STOP](STRATEGY_DELEGATION_25AK_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-H_EDGE diagnostic Fill · STRAT_TO02_EXP002（SAME gates as prior AERC）
-  — OR — H_MECH multi-symbol / OOS
-  — OR — Pause CID_008
-NOT: Alpha from H_MECH · parameter retune · Resume CID_003–007 as substitute
+Authorize new strategy asset design
+  — OR — Resume CID_003–008（scoped）
+  — OR — leave all paused
+NOT: H_EDGE retune · claim Alpha from H_MECH · auto-Resume
 ```
 
 ## Revision record
@@ -47,4 +48,5 @@ NOT: Alpha from H_MECH · parameter retune · Resume CID_003–007 as substitute
 | Date | Change |
 |------|--------|
 | 2026-07-23 | V0.1 NSAD DESIGNED |
-| 2026-07-23 | V0.2 H_MECH KEEP · 25AJ STOP |
+| 2026-07-23 | V0.2 H_MECH KEEP |
+| 2026-07-23 | V0.3 AERC NONE · PAUSED · 25AK STOP |
