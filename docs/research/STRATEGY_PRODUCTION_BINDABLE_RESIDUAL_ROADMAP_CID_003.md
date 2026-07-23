@@ -24,7 +24,15 @@ PBDR must be re-run after material residual closure.
 | R-VMP-live | YES | Live-ops VMP package for CID_003 |
 | R-CSD | YES | Physical Strategy/Risk split implementation |
 | R-CTX-ROUTE | YES | Explicit Context live routing grant（≠ EXP KEEP） |
-| R-CTX-RISK | YES | Authorized Context×RISK composition EXP lineage（design: `CCRD_CID_003_V0_1`） |
+| R-CTX-RISK | YES | Design FROZEN（`CCRD_CID_003_V0_1`）· composition EXP still required |
+
+## Status notes（≠ clearance）
+
+```text
+R-CTX-RISK: PARTIAL — design gap closed under Delegation-25I;
+            Production still blocked until composition EXP lineage exists
+            AND other residuals remain.
+```
 
 ## Non-goals
 
