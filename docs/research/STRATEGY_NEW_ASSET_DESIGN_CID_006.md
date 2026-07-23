@@ -164,9 +164,8 @@ Prior CID RISK / Bindable does not transfer to CID_006.
 ## 9. Next（须另授 · pick）
 
 ```text
-Authorize Identity Freeze · OPP08 Detector + orchestrator @0.1.0
-  — OR — leave CID_006 at Design-only
-NOT: auto-implement · H_EDGE before Freeze · Resume paused campaigns
+DONE: Identity Freeze · OPP08 Detector + orchestrator @0.1.0（Delegation-25Z）
+Next: Authorize SEVF Spec + Fill for STRAT_TO08_EXP001（H_MECH）
 ```
 
 ## Revision record
@@ -174,3 +173,4 @@ NOT: auto-implement · H_EDGE before Freeze · Resume paused campaigns
 | Date | Change |
 |------|--------|
 | 2026-07-23 | NSAD_CID_006_V0_1 DESIGNED · OPP08 preferred seed · Delegation-25Y |
+| 2026-07-23 | Identity FROZEN · STRAT_TREND_OPP08_01@0.1.0 · Delegation-25Z |
