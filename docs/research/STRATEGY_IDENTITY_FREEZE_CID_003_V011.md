@@ -16,12 +16,12 @@ SIF_CID_003_V0_1_1
 
 strategy_id: STRAT_REV_OPP16_01
 version:     0.1.1
-lifecycle:   Testing（H_MECH · rb/2024 KEEP via EXP002）
+lifecycle:   Verified（H_MECH · E3）· Bindable WITHHELD · Alpha NONE
 change:      adapter window length（_series_len / bars_from_am）
 detector:    OPP16@1.0.0（morphology unchanged）
 Bindable:    NO
-Verified:    NO
-Alpha:       NONE
+Verified:    YES（narrow H_MECH · VR_CID_003_MECH_V0_1_1）
+Alpha:       NONE（AERC_CID_003_V0_1 CLOSED）
 EXP001@0.1.0 HOLD: IMMUTABLE（not reopened）
 ================================================
 ```
@@ -40,7 +40,7 @@ EXP001@0.1.0 HOLD: IMMUTABLE（not reopened）
 | `parameter_hash` | `76b124f47414af2da2e0cdfdc6afcd5025d2cca8ae3a5583ba667cc7e1e31c57` |
 | `market_scope` | `UNBOUND_AT_ASSET` |
 | `execution_model` | same as `SIF_CID_003_V0_1` §4 |
-| `evidence_lineage` | `["STRAT_RO16_EXP002"]` |
+| `evidence_lineage` | `["STRAT_RO16_EXP002","STRAT_RO16_EXP005","STRAT_RO16_EXP006"]` |
 | `class_tags` | `["mean_reversion","reversal"]` |
 | `context_independence` | `true` |
 | `not_fabricated_for_context` | `true` |
@@ -109,8 +109,9 @@ IS NOT: parameter search
 ## 6. Next（须另授）
 
 ```text
-DONE: SEVF Spec V0_1_1 + Fill + Observation STRAT_RO16_EXP002 → KEEP
-Next: further SEVF Fill（OOS / H_EDGE / H_ROBUST）· or Pause CID_003
+DONE: H_MECH Verified E3（EXP002/005/006）
+DONE: Alpha path CLOSED
+Next: Bindable Pre-Review · capital lineage · new asset · or Pause
 ```
 
 ## Revision record
@@ -121,3 +122,4 @@ Next: further SEVF Fill（OOS / H_EDGE / H_ROBUST）· or Pause CID_003
 | 2026-07-23 | `source_revision` → `7706213fe997189eeb9e1c9c6cfa9a4aecfd4f05` |
 | 2026-07-23 | Next updated · EXP002 Fill PRE-REGISTERED |
 | 2026-07-23 | Lifecycle → Testing · evidence_lineage EXP002 KEEP |
+| 2026-07-23 | Lifecycle → Verified H_MECH E3 · Delegation-50 |
