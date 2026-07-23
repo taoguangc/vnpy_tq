@@ -80,3 +80,5 @@ NOT sufficient as wake alone after this posture:
 | Date | Change |
 |------|--------|
 | 2026-07-24 | RPP_BEYOND_OPP_V0_1 DECLARED · Delegation-25AY |
+| 2026-07-24 | R1–R3 reaffirm bare ≠ A–E · Delegation-25AZ/BA/BB |
+| 2026-07-24 | Repeated bare “授权你决定” → agent pick **Option A** · NSAD_CID_013 · Delegation-25BC |

@@ -1,27 +1,23 @@
-# Campaigns pointer — CID_003–012 PAUSED · beyond-opp posture RETAINED
+# Campaigns pointer — CID_003–012 PAUSED · CID_013 NSAD（smc）
 
 ```text
 CID_003–012: PAUSED · Alpha NONE
-Beyond-opp posture: RPP_BEYOND_OPP_V0_1（R1–R3）
-Delegation-25BB: STOP（bare #4 ≠ A–E）
+CID_013: NSAD_CID_013 DESIGNED（smc OB-long · RPP Option A）· no Freeze
+Delegation-25BC: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Posture R3 | [RETAINED](../research/STRATEGY_POSTURE_BEYOND_OPP_REAFFIRMATION_25BB.md) |
-| Posture R2 | [RETAINED](../research/STRATEGY_POSTURE_BEYOND_OPP_REAFFIRMATION_25BA.md) |
+| CID_013 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_013.md) |
 | Beyond-opp posture | [RPP](../research/STRATEGY_POSTURE_BEYOND_OPP_SHELF.md) |
-| Portfolio Pause reaffirm | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_REAFFIRMATION_003_012_25AY.md) |
 | CID_012 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_012.md) |
 
-## Wake（须明确句 · A–E）
+## Wake（须明确授权）
 
 ```text
-Authorize NSAD seed: smc_orderflow_vwap
-Authorize Morphology Spec recovery for OPP0X + source bytes
-Resume CID_012（scoped）
-Resume CID_010（scoped）
-Leave shelf-exhausted posture
+Authorize Identity Freeze · SMC OB-long Detector + orchestrator @0.1.0
+Leave CID_013 at Design-only
+Resume CID_003–012（scoped）
 ```
