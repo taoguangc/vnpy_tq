@@ -227,8 +227,8 @@ New experiment_id for every Observation；never reuse Closed IDs
 ## 13. Next gate
 
 ```text
-DONE: STRAT_RO16_EXP001 Fill PRE-REGISTERED（H_MECH）
-Next: Authorize Offline Observation for STRAT_RO16_EXP001
+DONE: STRAT_RO16_EXP001 Observation → HOLD
+Next: Engineering Review · EXP002 · or pause
 ```
 
 ## Revision record

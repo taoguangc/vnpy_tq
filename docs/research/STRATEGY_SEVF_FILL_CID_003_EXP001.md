@@ -14,12 +14,11 @@
 
 ```text
 ================================================
-STRAT_RO16_EXP001 — PRE-REGISTERED ✓
+STRAT_RO16_EXP001 — PRE-REGISTERED ✓ · OBSERVATION CLOSED
 
-Hypothesis family: H_MECH（first Testing EXP on CID_003）
-Scope:             rb · 2024（continuity year · not return-picked）
-Identity:          @0.1.0 frozen hashes
-Observation:       NOT YET AUTHORIZED
+Hypothesis family: H_MECH
+Scope:             rb · 2024
+Observation:       EXECUTED 2026-07-23 → HOLD（0 auditable exits）
 Alpha / Bindable:  NONE / NO
 ================================================
 ```
@@ -161,7 +160,8 @@ Requires separate:
 ## Next（须另授）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP001
+DONE: Observation → HOLD（0 trades / 0 attributed exits）
+Next: Engineering Review · or EXP002 alternate scope · or pause
 ```
 
 ## Revision record
@@ -169,3 +169,4 @@ Authorize Offline Observation for STRAT_RO16_EXP001
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED |
+| 2026-07-23 | Observation CLOSED · HOLD |
