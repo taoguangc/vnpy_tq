@@ -9,18 +9,19 @@
 > **Design**: [`STRATEGY_SEVF_DESIGN_CID_003_EXP007.md`](STRATEGY_SEVF_DESIGN_CID_003_EXP007.md)  
 > **Identity**: `SIF_CID_003_V0_2_0` · `@0.2.0`  
 > **Contrast parent**: EXP005 `i` @0.1.1 capital breach（descriptive）  
-> **Observation**: **NOT AUTHORIZED** by this Fill
+> **Observation**: **EXECUTED** · Evaluation **KEEP** · see [`STRATEGY_SEVF_EVALUATION_CID_003_EXP007.md`](STRATEGY_SEVF_EVALUATION_CID_003_EXP007.md)
 
 ## Record
 
 ```text
 ================================================
-STRAT_RO16_EXP007 — PRE-REGISTERED ✓
+STRAT_RO16_EXP007 — PRE-REGISTERED ✓ · OBSERVATION CLOSED
 
 Hypothesis family: H_CAPITAL_GATE
 Surface:           RISK @0.2.0
 Scope:             i · 2024
-Observation:       NOT AUTHORIZED
+Observation:       EXECUTED 2026-07-23 → KEEP
+                   （kill_events=1 · no capital≤0 · end_balance≈102998）
 Alpha / Bindable:  NONE / NO
 MECH @0.1.1:       NOT re-tested
 ================================================
@@ -151,19 +152,17 @@ research/output/evidence/STRAT_RO16_EXP007/
   capital_gate_log.json
 ```
 
-## 8. Runner（prepared · not executed）
+## 8. Runner（prepared · executed under Observation auth）
 
 `scripts/run_strat_ro16_exp007.py`
 
 ```text
-Requires separate:
-  Authorize Offline Observation for STRAT_RO16_EXP007
+DONE: Authorize Offline Observation for STRAT_RO16_EXP007 → KEEP
 ```
 
 ## 9. Explicit non-grants
 
 ```text
-❌ Observation / backtest under this Fill
 ❌ Alpha / Bindable / Production
 ❌ Parameter change
 ❌ Reopen H_EDGE · mutate @0.1.1
@@ -172,8 +171,8 @@ Requires separate:
 ## Next（须另授）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP007
-  — OR — Pause CID_003
+DONE: Observation → KEEP（kill_events=1 · no capital≤0）
+Next: multi-symbol capital Fill · Risk Verified Review · or Pause
 ```
 
 ## Revision record
@@ -181,3 +180,4 @@ Authorize Offline Observation for STRAT_RO16_EXP007
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED · Observation NOT authorized |
+| 2026-07-23 | Observation CLOSED · KEEP |

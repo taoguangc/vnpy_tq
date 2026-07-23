@@ -16,11 +16,11 @@ SIF_CID_003_V0_2_0
 
 strategy_id: STRAT_REV_OPP16_01
 version:     0.2.0
-lifecycle:   Candidate（positioning / capital）
+lifecycle:   Testing（H_CAPITAL_GATE · i/2024 KEEP via EXP007）
 change:      risk-fraction sizing · hard_max_lots · equity kill-switch
 detector:    OPP16@1.0.0（unchanged）
 Bindable:    NO
-Verified:    NO on RISK surface yet（needs H_CAPITAL_GATE EXP）
+Verified:    NO on RISK surface yet（single-symbol smoke only）
 Alpha:       NONE
 MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
 ================================================
@@ -39,7 +39,7 @@ MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
 | `market_scope` | `UNBOUND_AT_ASSET` |
 | `detector_binding` | `OPP16@1.0.0` |
 | `lineage_parent` | `SIF_CID_003_V0_1_1` |
-| `evidence_lineage` | `[]` |
+| `evidence_lineage` | `["STRAT_RO16_EXP007"]` |
 | `class_tags` | `["mean_reversion","reversal","positioning"]` |
 | `context_independence` | `true` |
 | `consumer_surface` | `RISK`（capital）· do not cite as MECH Verified |

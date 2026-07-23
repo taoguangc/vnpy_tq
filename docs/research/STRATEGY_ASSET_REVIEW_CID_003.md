@@ -1,21 +1,21 @@
-# Strategy Asset Review — CID_003（V1.4 · EXP007 PRE-REGISTERED）
+# Strategy Asset Review — CID_003（V1.5 · EXP007 KEEP）
 
-> **Review ID**: `SAR_CID_003_V1_4`  
+> **Review ID**: `SAR_CID_003_V1_5`  
 > **Date**: 2026-07-23  
-> **Authorization**: SEVF Fill `STRAT_RO16_EXP007`
+> **Authorization**: Observation `STRAT_RO16_EXP007`
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V1_4
+SAR_CID_003_V1_5
 
-MECH @0.1.1:         Verified H_MECH · E3（immutable）
-RISK @0.2.0:         FROZEN Candidate · SIF_CID_003_V0_2_0
-SEVF Spec @0.2.0:    SEVF_SPEC_CID_003_V0_2_0 SPECIFIED
-EXP007 H_CAPITAL_GATE: PRE-REGISTERED · Observation NOT AUTHORIZED
-Bindable:            WITHHELD
-Alpha:               NONE
+MECH @0.1.1:              Verified H_MECH · E3（immutable）
+RISK @0.2.0:              Testing（H_CAPITAL_GATE）
+EXP007 H_CAPITAL_GATE i/2024: KEEP ✓（kill_events=1 · no capital≤0）
+Bindable:                 WITHHELD
+Alpha:                    NONE
+Production:               NO
 ================================================
 ```
 
@@ -23,20 +23,22 @@ Alpha:               NONE
 
 | Item | Status |
 |------|--------|
-| Fill EXP007 | [PRE-REGISTERED](STRATEGY_SEVF_FILL_CID_003_EXP007.md) |
-| Spec @0.2.0 | [SPECIFIED](STRATEGY_SEVF_SPECIFICATION_CID_003_V020.md) |
+| Evaluation EXP007 | [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP007.md) |
+| Evidence Review | [PASS](STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP007.md) |
+| Fill EXP007 | [Observation CLOSED](STRATEGY_SEVF_FILL_CID_003_EXP007.md) |
 | Identity @0.2.0 | [SIF_CID_003_V0_2_0](STRATEGY_IDENTITY_FREEZE_CID_003_V020.md) |
 
 ## Next（须新授权）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP007
-  — OR — Pause CID_003
+A. Multi-symbol H_CAPITAL_GATE Fill
+B. Risk-surface Verified Review（可能偏早）
+C. Pause
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V1.3 @0.2.0 implemented |
 | 2026-07-23 | V1.4 EXP007 Fill PRE-REGISTERED |
+| 2026-07-23 | V1.5 EXP007 Observation KEEP |

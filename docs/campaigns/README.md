@@ -1,25 +1,23 @@
-# Campaigns pointer — STRAT_RO16_EXP007 PRE-REGISTERED
+# Campaigns pointer — STRAT_RO16_EXP007 KEEP
 
 ```text
-RISK @0.2.0:           FROZEN
-EXP007 H_CAPITAL_GATE: PRE-REGISTERED（i/2024）
-Observation:           NOT AUTHORIZED
-MECH Verified:         unchanged
-Alpha / Bindable:      NONE / WITHHELD
+EXP007 H_CAPITAL_GATE i/2024 @0.2.0: KEEP
+RISK surface: Testing
+MECH @0.1.1:  Verified E3（unchanged）
+Bindable:     WITHHELD
+Alpha:        NONE
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Fill EXP007 | [PRE-REGISTERED](../research/STRATEGY_SEVF_FILL_CID_003_EXP007.md) |
-| Spec @0.2.0 | [SPECIFIED](../research/STRATEGY_SEVF_SPECIFICATION_CID_003_V020.md) |
-| Runner | `scripts/run_strat_ro16_exp007.py`（prepared · not run） |
-| Asset Review | [SAR_CID_003_V1_4](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Evaluation | [KEEP](../research/STRATEGY_SEVF_EVALUATION_CID_003_EXP007.md) |
+| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP007.md) |
+| Asset Review | [SAR_CID_003_V1_5](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
 
 ## Next（须新授权）
 
 ```text
-Authorize Offline Observation for STRAT_RO16_EXP007
-  — OR — Pause CID_003
+Multi-symbol capital Fill · Risk Verified Review · or Pause
 ```
