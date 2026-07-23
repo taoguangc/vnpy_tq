@@ -149,11 +149,8 @@ CID_002 RISK Verified does not transfer to CID_003.
 ## 9. Next（须另授 · pick）
 
 ```text
-A. Authorize Strategy Identity Freeze for CID_003 / STRAT_REV_OPP16_01@0.1.0
-   （implies implementation of thin orchestrator + freeze hashes）
-B. Authorize SEVF Specification for CID_003（after or with Freeze）
-C. Revise NSAD（different seed than OPP16）
-D. Idle
+DONE: Strategy Identity Freeze SIF_CID_003_V0_1
+Next: Authorize SEVF Specification for CID_003
 ```
 
 ## Revision record
@@ -161,3 +158,4 @@ D. Idle
 | Date | Change |
 |------|--------|
 | 2026-07-23 | NSAD_CID_003_V0_1 DESIGNED · OPP16 preferred seed |
+| 2026-07-23 | Identity FROZEN · STRAT_REV_OPP16_01@0.1.0 |
