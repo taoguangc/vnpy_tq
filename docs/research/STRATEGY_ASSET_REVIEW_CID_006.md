@@ -1,22 +1,23 @@
-# Strategy Asset Review — CID_006（V0.4 · H_EDGE REVERT）
+# Strategy Asset Review — CID_006（V0.5 · Alpha NONE · PAUSED）
 
-> **Review ID**: `SAR_CID_006_V0_4`  
+> **Review ID**: `SAR_CID_006_V0_5`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25AB STOP
+> **Authorization**: Delegation-25AC STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_006_V0_4
+SAR_CID_006_V0_5
 
+Campaign: PAUSED（CPD_CID_006_V0_1）
 Identity: STRAT_TREND_OPP08_01@0.1.0
-H_MECH:   EXP001 KEEP（rb/2024 · n=1456）
-H_EDGE:   EXP002 REVERT（rb/2024）
-Alpha:    NONE
+H_MECH:   EXP001 KEEP
+H_EDGE:   EXP002 REVERT · EXP003 OOS REVERT
+Alpha:    NONE（AERC_CID_006_V0_1 CLOSED）
 Bindable: NO
 CID_003–005: PAUSED
-Delegation-25AB: STOP
+Delegation-25AC: STOP
 ================================================
 ```
 
@@ -24,22 +25,21 @@ Delegation-25AB: STOP
 
 | Item | Status |
 |------|--------|
-| EXP001 | [KEEP](STRATEGY_SEVF_FILL_CID_006_EXP001.md) |
-| EXP002 | [REVERT](STRATEGY_SEVF_FILL_CID_006_EXP002.md) |
-| Delegation-25AB | [STOP](STRATEGY_DELEGATION_25AB_EXECUTION_LOG.md) |
+| EXP003 | [REVERT](STRATEGY_SEVF_FILL_CID_006_EXP003.md) |
+| AERC | [NONE](STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_006.md) |
+| Pause | [CPD](STRATEGY_CAMPAIGN_PAUSE_CID_006.md) |
+| Delegation-25AC | [STOP](STRATEGY_DELEGATION_25AC_EXECUTION_LOG.md) |
 
-## Next（须新授权）
+## Next（须新授权 · wake）
 
 ```text
-H_EDGE OOS rb/2025（same gates · recommended before AERC）
-  — OR — Alpha NONE close（AERC）now
-  — OR — Pause CID_006
-NOT: retune strong_bar_* · reopen Closed EXP · claim Alpha from H_MECH
+Resume CID_006 · H_MECH robustness · new asset
+NOT: H_EDGE retune · agent auto-resume · claim Alpha from H_MECH
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.3 EXP001 H_MECH KEEP · 25AA STOP |
-| 2026-07-23 | V0.4 EXP002 H_EDGE REVERT · 25AB STOP |
+| 2026-07-23 | V0.4 EXP002 REVERT · 25AB STOP |
+| 2026-07-23 | V0.5 EXP003 REVERT · AERC NONE · PAUSED · 25AC STOP |
