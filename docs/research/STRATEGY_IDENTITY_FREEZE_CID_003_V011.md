@@ -100,10 +100,10 @@ IS NOT: parameter search
 ## 5. Explicit non-grants
 
 ```text
-❌ SEVF Fill / Observation（须另授）
-❌ H_MECH KEEP claim
-❌ Bindable / Production / Epoch 7
+❌ Alpha / Bindable / Verified / Production / Epoch 7
+❌ H_EDGE from H_MECH KEEP alone
 ❌ CID_002 H_EDGE reopen
+❌ Rewrite Closed EXP001
 ```
 
 ## 6. Next（须另授）
