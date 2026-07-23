@@ -1,23 +1,24 @@
-# Epoch 6 — Strategy Research（CXSD wired · STOP）
+# Epoch 6 — PAUSED
 
 ```text
-CXSD contract:   FROZEN
-CXSD tooling:    DELIVERED
-Adapter wire:    COMPLETE
-Tests:           11 PASS
-Production:      WITHHELD
+Pause:               E6P_V0_1
+EI production spec:  EI_CID_002_V0_2 FROZEN
+Production Bindable: WITHHELD
+Active work:         NO
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Wire decision | [STOP](../research/STRATEGY_CXSD_ADAPTER_WIRE_DECISION_CID_002.md) |
-| Implementation | [DELIVERED](../research/STRATEGY_CXSD_IMPLEMENTATION_DELIVERY_CID_002.md) |
-| Contract | [FROZEN](../research/STRATEGY_CONTEXT_EXECUTION_SAFETY_CONTRACT_CID_002.md) |
+| Epoch 6 Pause | [PAUSED](../releases/EPOCH_6_PAUSE.md) |
+| EI v0.2 | [FROZEN](../research/STRATEGY_EXECUTION_IDENTITY_FREEZE_CID_002_V02.md) |
+| Risk Verified | [E2](../research/STRATEGY_VERIFIED_REVIEW_CID_002_RISK_V020.md) |
+| Asset Review | [SAR_CID_002_V0_30](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| Decision log | [STOP](../research/STRATEGY_DECISION_E6_PAUSE_LOG.md) |
 
-## Next（须另授）
+## Next（须新授权）
 
 ```text
-Production Bindable Re-review · or Pause Epoch 6
+RISK capital OOS（E3）· Deploy Identity Delivery · or remain paused
 ```

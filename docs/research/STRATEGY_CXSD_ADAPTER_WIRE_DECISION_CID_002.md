@@ -31,8 +31,8 @@ G5 strategy/detector bytes untouched.
 ## Next（须另授）
 
 ```text
-Production Bindable Re-review
-  — OR — Pause Epoch 6
+DONE: Production Bindable Re-review → WITHHELD
+Next: Risk Verified @0.2.0 · or Pause Epoch 6
 ```
 
 ## Revision record

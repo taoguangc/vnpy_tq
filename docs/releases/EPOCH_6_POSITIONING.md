@@ -1,6 +1,6 @@
 # Epoch 6 Positioning — Strategy Research
 
-> **Status**: **ACTIVE** ✓ · Themes A+C docs complete under Delegation-50L · Impl NOT AUTHORIZED  
+> **Status**: **PAUSED** ✓ · see [`EPOCH_6_PAUSE.md`](EPOCH_6_PAUSE.md) · EI_CID_002_V0_2 FROZEN · Production WITHHELD  
 > **Date**: 2026-07-22  
 > **Path**: `docs/releases/EPOCH_6_POSITIONING.md`  
 > **Authorization**: [`STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md`](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md) — **GRANTED**  
@@ -58,15 +58,13 @@ Epoch 6 ≠ silent rewrite of Epoch 5 Closed EXPs
 ## Next（须另授或点名主题）
 
 ```text
-DONE under Delegation-50L:
-  A → CXSD Implementation Charter（CXSDIC_CID_002_V0_1）
-  C → Production Bindable Residual Roadmap（PBRR_CID_002_V0_1）
-
-DONE under Authorize CXSD Implementation:
-  Tooling DELIVERED · self-check PASS（CXSDID_CID_002_V0_1）
+DONE:
+  CXSD Implementation + adapter wire
+  PBDR → Production WITHHELD
+  RISK Verified Review → H_CAPITAL_GATE E2 GRANTED
 
 Next:
-  Wire CXSD into Context Filter adapter · Production Bindable Re-review · or Pause
+  RISK capital OOS（E3 attempt）· EI deploy freeze · or Pause Epoch 6
 ```
 
 ## Revision record
@@ -74,5 +72,5 @@ Next:
 | Date | Change |
 |------|--------|
 | 2026-07-22 | Epoch 6 ACTIVE · positioning |
-| 2026-07-22 | Themes A+C documented · 50L STOP |
-| 2026-07-22 | CXSD Implementation DELIVERED |
+| 2026-07-22 | Themes A+C · CXSD impl · PBDR WITHHELD |
+| 2026-07-22 | VR_CID_002_RISK_V0_2_0 GRANTED（E2） |

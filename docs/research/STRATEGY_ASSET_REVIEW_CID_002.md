@@ -1,40 +1,40 @@
-# Strategy Asset Review — CID_002（V0.27 · Epoch 5 Closure）
+# Strategy Asset Review — CID_002（V0.30 · Epoch 6 Pause）
 
-> **Review ID**: `SAR_CID_002_V0_27`  
-> **Status**: **COMPLETE** ✓ · **TERMINAL for Epoch 5**  
-> **Date**: 2026-07-22  
-> **Closure**: [`EPOCH_5_CLOSURE.md`](../releases/EPOCH_5_CLOSURE.md) · `E5C_V0_1`  
-> **Checkpoint**: [`EPOCH_5_RELEASE_CHECKPOINT.md`](../releases/EPOCH_5_RELEASE_CHECKPOINT.md)
+> **Review ID**: `SAR_CID_002_V0_30`  
+> **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
+> **Date**: 2026-07-23  
+> **Pause**: [`EPOCH_6_PAUSE.md`](../releases/EPOCH_6_PAUSE.md) · `E6P_V0_1`  
+> **EI**: [`STRATEGY_EXECUTION_IDENTITY_FREEZE_CID_002_V02.md`](STRATEGY_EXECUTION_IDENTITY_FREEZE_CID_002_V02.md) · `EI_CID_002_V0_2`
 
-## Ledger（authoritative · archived）
+## Ledger（authoritative）
 
 ```text
 ================================================
-SAR_CID_002_V0_27 ≡ Epoch 5 terminal
+SAR_CID_002_V0_30
 
-Mechanism Asset:       Research Asset ✓
-Research Bindable:     ✓
-CXSD:                  v0.1 FROZEN ✓
-Implementation:        NONE
-Production Bindable:   WITHHELD
-Alpha:                 NONE
-Production Readiness:  NO
+MECH:                  Verified H_MECH · E3
+RISK:                  Verified H_CAPITAL_GATE · E2
+CXSD:                  FROZEN + wired
+EI research:           V0_1
+EI production checklist: V0_2 FROZEN（P1–P5 unsatisfied）
 
-Epoch 5:               CLOSED
-Active phase:          NO
+Research Asset / Bindable: ✓ / ✓
+Production Bindable:       WITHHELD
+Alpha / Prod readiness:    NONE / NO
+
+Epoch 6:               PAUSED（E6P_V0_1）
 ================================================
 ```
 
-## Next（须新阶段授权）
+## Next（须新授权）
 
 ```text
-DONE: Epoch 6 Strategy Research Phase GRANTED
-See: STRATEGY_RESEARCH_PHASE_AUTHORIZATION_E6.md
+RISK OOS E3 · Deploy Identity Delivery · or remain paused
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-22 | V0.26 CXSD freeze |
-| 2026-07-22 | V0.27 Epoch 5 CLOSED · terminal ledger |
+| 2026-07-22 | V0.29 RISK Verified E2 |
+| 2026-07-23 | V0.30 EI v0.2 + Epoch 6 PAUSED |

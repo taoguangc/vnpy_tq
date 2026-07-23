@@ -77,21 +77,16 @@ They do NOT auto-satisfy Production verification.
 | PnL used as primary gate | **REVERT** methodological · discard maturity claim |
 | Closed EXP rewrite | **FORBIDDEN**（Decision 017） |
 
-## 4. RISK Verified scope decision（frozen）
+## 4. RISK Verified scope decision
 
 ```text
-DECISION R-V0:
-  RISK surface @0.2.0 is NOT granted Lifecycle Verified under this pack.
+DECISION R-V0（historical · BMGCP pack time）:
+  RISK @0.2.0 was NOT Verified under the pack alone.
 
-Rationale:
-  EXP009/010 KEEP support H_CAPITAL_GATE / portability as research evidence.
-  That is insufficient for a Verified lifecycle stamp parallel to
-  VR_CID_002_MECH_V0_1_1 without a dedicated Verified Review auth.
-
-DECISION R-V1（gate）:
-  “Authorize Verified Review for Risk Surface @0.2.0”
-  remains a separate authorization.
-  Until then: cite RISK only under CC Surface=RISK · no “Verified RISK”.
+DECISION R-V2（2026-07-22）:
+  VR_CID_002_RISK_V0_2_0 GRANTED — H_CAPITAL_GATE · E2 only.
+  See STRATEGY_VERIFIED_REVIEW_CID_002_RISK_V020.md
+  E3 OOS and Production Bindable remain separate.
 ```
 
 ## 5. Closure verdict（M3）
