@@ -1,23 +1,23 @@
-# Campaigns pointer — STRAT_RO16_EXP007 KEEP
+# Campaigns pointer — CID_003 dual-surface Verified
 
 ```text
-EXP007 H_CAPITAL_GATE i/2024 @0.2.0: KEEP
-RISK surface: Testing
-MECH @0.1.1:  Verified E3（unchanged）
-Bindable:     WITHHELD
-Alpha:        NONE
+MECH @0.1.1: Verified H_MECH · E3
+RISK @0.2.0: Verified H_CAPITAL_GATE · E3
+Alpha:       NONE
+Bindable:    WITHHELD
+Delegation-50C: STOP（18/50）
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Evaluation | [KEEP](../research/STRATEGY_SEVF_EVALUATION_CID_003_EXP007.md) |
-| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP007.md) |
-| Asset Review | [SAR_CID_003_V1_5](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| RISK Verified | [VR](../research/STRATEGY_VERIFIED_REVIEW_CID_003_RISK_V020.md) |
+| Asset Review | [SAR_CID_003_V1_6](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Delegation-50C | [STOP](../research/STRATEGY_DELEGATION_50C_CID_003_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-Multi-symbol capital Fill · Risk Verified Review · or Pause
+Bindable / CC-CID_003-v1 · or Pause
 ```

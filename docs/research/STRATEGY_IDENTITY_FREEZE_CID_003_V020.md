@@ -16,11 +16,11 @@ SIF_CID_003_V0_2_0
 
 strategy_id: STRAT_REV_OPP16_01
 version:     0.2.0
-lifecycle:   Testing（H_CAPITAL_GATE · i/2024 KEEP via EXP007）
+lifecycle:   Verified（H_CAPITAL_GATE · E3）· Bindable WITHHELD · Alpha NONE
 change:      risk-fraction sizing · hard_max_lots · equity kill-switch
 detector:    OPP16@1.0.0（unchanged）
 Bindable:    NO
-Verified:    NO on RISK surface yet（single-symbol smoke only）
+Verified:    YES（narrow H_CAPITAL_GATE · VR_CID_003_RISK_V0_2_0）
 Alpha:       NONE
 MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
 ================================================
@@ -111,9 +111,8 @@ rollover:             inherited on_rollover_adjust
 ## 6. Next（须另授）
 
 ```text
-DONE: SEVF Spec V0_2_0 + Fill STRAT_RO16_EXP007 PRE-REGISTERED
-Next: Authorize Offline Observation for STRAT_RO16_EXP007
-  — OR — Pause CID_003
+DONE: Fill + Observation STRAT_RO16_EXP007 → KEEP
+Next: multi-symbol H_CAPITAL_GATE · Risk Verified Review · or Pause
 ```
 
 ## Revision record
@@ -123,3 +122,4 @@ Next: Authorize Offline Observation for STRAT_RO16_EXP007
 | 2026-07-23 | @0.2.0 Candidate Identity Freeze |
 | 2026-07-23 | `source_revision` → `120e604dd1fc2cb5dda85a69264e2ae10b537de3` |
 | 2026-07-23 | Next updated · EXP007 Fill PRE-REGISTERED |
+| 2026-07-23 | Lifecycle → Testing · EXP007 KEEP |
