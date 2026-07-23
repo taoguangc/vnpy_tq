@@ -1,24 +1,23 @@
-# Campaigns pointer — CID_002 Alpha Evidence CLOSED
+# Campaigns pointer — CID_003 Design open
 
 ```text
-Epoch 6.5:             CLOSED
-Alpha Evidence path:   CLOSED（AERC_CID_002_V0_1）
-H_MECH:                VERIFIED
-H_EDGE:                REVERT×2（retained）
-Alpha:                 NONE
-Production:            WITHHELD
+CID_002 Alpha path: CLOSED
+CID_003 NSAD:       DESIGNED（OPP16 seed）
+Identity Freeze:    pending authorization
+Alpha / Production: NONE / WITHHELD
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Alpha path closure | [AERC](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_002.md) |
-| Epoch 6.5 Closure | [E65C](../releases/EPOCH_6_5_CLOSURE.md) |
-| Asset Review | [SAR_CID_002_V0_42](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| New Asset Design | [NSAD_CID_003](../research/STRATEGY_NEW_ASSET_DESIGN_CID_003.md) |
+| Phase auth | [GRANTED Design](../research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION_NEW_ASSET.md) |
+| CID_002 Alpha closure | [AERC](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_002.md) |
+| Asset Review | [SAR_CID_002_V0_43](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
 
 ## Next（须新授权）
 
 ```text
-Authorize New Strategy Asset Design · or idle
+Authorize Strategy Identity Freeze for CID_003 / STRAT_REV_OPP16_01@0.1.0
 ```
