@@ -35,8 +35,8 @@ CID_002–006: NOT forks · Alpha paths remain CLOSED / PAUSED
 |-------|--------------|
 | `strategy_id` | `STRAT_SESS_OPP19_01` |
 | `version` | `0.1.0` |
-| `source_revision` | `PENDING_FIRST_BINDING_COMMIT` |
-| `git_anchor_head` | `PENDING_FIRST_BINDING_COMMIT` |
+| `source_revision` | `2dd5bf94db62f49ef670ba284b2ac51f62f238eb`（binding bytes first committed） |
+| `git_anchor_head` | `2dd5bf94db62f49ef670ba284b2ac51f62f238eb` |
 | `source_manifest` | §2 |
 | `source_hash` | `f7cbcb3f9b556af5478d7f88fa9d7f51627887250273b4bd4c153e38e43d90d6` |
 | `parameter_manifest` | §3 |
