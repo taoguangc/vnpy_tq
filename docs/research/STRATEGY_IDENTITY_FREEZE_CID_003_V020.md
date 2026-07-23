@@ -32,7 +32,8 @@ MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
 |-------|--------------|
 | `strategy_id` | `STRAT_REV_OPP16_01` |
 | `version` | `0.2.0` |
-| `source_revision` | *pin after binding commit tip* |
+| `source_revision` | `120e604dd1fc2cb5dda85a69264e2ae10b537de3`（@0.2.0 positioning impl tip） |
+| `git_anchor_head` | `120e604dd1fc2cb5dda85a69264e2ae10b537de3` |
 | `source_hash` | `0e796e226b5906f22bdc4ce622f522788985a05525d2f65ae05e40fb2c474012` |
 | `parameter_hash` | `fce3f995d1421ada2152e591362700ed2a24d93c7ff3259394261f254cd7aa22` |
 | `market_scope` | `UNBOUND_AT_ASSET` |
