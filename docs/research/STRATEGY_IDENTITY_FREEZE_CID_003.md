@@ -34,7 +34,8 @@ CID_002:     NOT a fork · Alpha path remains CLOSED
 |-------|--------------|
 | `strategy_id` | `STRAT_REV_OPP16_01` |
 | `version` | `0.1.0` |
-| `source_revision` | `CONTENT_ADDRESSED`（see tip after first commit of binding bytes） |
+| `source_revision` | `966d7cab0d11c3f835b39533872cb8ead6f26e62`（binding bytes first committed；source_hash unchanged） |
+| `git_anchor_head` | `966d7cab0d11c3f835b39533872cb8ead6f26e62` |
 | `source_manifest` | §2 |
 | `source_hash` | `f87cdcc43e74060f23c08fa06364f0be90c538a1576566a0034ba096f0adc220` |
 | `parameter_manifest` | §3 |
