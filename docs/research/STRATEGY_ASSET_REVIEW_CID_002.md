@@ -1,40 +1,40 @@
-# Strategy Asset Review — CID_002（V0.30 · Epoch 6 Pause）
+# Strategy Asset Review — CID_002（V0.31 · Deploy Identity Delivery）
 
-> **Review ID**: `SAR_CID_002_V0_30`  
-> **Status**: **COMPLETE** ✓ · Epoch 6 **PAUSED**  
+> **Review ID**: `SAR_CID_002_V0_31`  
+> **Status**: **COMPLETE** ✓ · Epoch 6 remains **PAUSED** after delivery  
 > **Date**: 2026-07-23  
-> **Pause**: [`EPOCH_6_PAUSE.md`](../releases/EPOCH_6_PAUSE.md) · `E6P_V0_1`  
-> **EI**: [`STRATEGY_EXECUTION_IDENTITY_FREEZE_CID_002_V02.md`](STRATEGY_EXECUTION_IDENTITY_FREEZE_CID_002_V02.md) · `EI_CID_002_V0_2`
+> **Delivery**: [`STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md`](STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md) · `DID_CID_002_V0_1`
 
-## Ledger（authoritative）
+## Ledger
 
 ```text
 ================================================
-SAR_CID_002_V0_30
+SAR_CID_002_V0_31
 
-MECH:                  Verified H_MECH · E3
-RISK:                  Verified H_CAPITAL_GATE · E2
-CXSD:                  FROZEN + wired
-EI research:           V0_1
-EI production checklist: V0_2 FROZEN（P1–P5 unsatisfied）
+MECH / RISK Verified:    E3 / E2
+CXSD:                    FROZEN + wired
+EI checklist:            V0_2
+Deploy Identity:         DID_CID_002_V0_1 PARTIAL
+  P2 lockfile:           CLOSED
+  P1/P3/P4:              PARTIAL
+  P5 live contract:      DRAFT
 
-Research Asset / Bindable: ✓ / ✓
-Production Bindable:       WITHHELD
-Alpha / Prod readiness:    NONE / NO
-
-Epoch 6:               PAUSED（E6P_V0_1）
+Production Bindable:     WITHHELD
+Alpha / Prod readiness:  NONE / NO
+Epoch 6:                 PAUSED（re-pause after DID）
+RISK OOS E3:             NOT STARTED
 ================================================
 ```
 
 ## Next（须新授权）
 
 ```text
-RISK OOS E3 · Deploy Identity Delivery · or remain paused
+Container/image digest · LRC freeze · RISK OOS E3 · or remain paused
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-22 | V0.29 RISK Verified E2 |
-| 2026-07-23 | V0.30 EI v0.2 + Epoch 6 PAUSED |
+| 2026-07-23 | V0.30 Epoch 6 Pause |
+| 2026-07-23 | V0.31 DID PARTIAL · re-pause |

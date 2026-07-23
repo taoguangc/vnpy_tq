@@ -50,17 +50,17 @@ Production Bindable still requires a full dep lock（§3）.
 
 Before any future Production Bindable grant, consumers MUST present:
 
-| # | Artifact | Status now |
-|---|----------|------------|
-| P1 | Immutable build artifact ID（wheel/container digest） | **MISSING** |
-| P2 | Full dependency lockfile（e.g. `uv.lock` / `requirements.lock` with hashes） | **MISSING** |
-| P3 | Runtime image or reproducible env cert（OS + Python + vn.py stack） | **MISSING**（only research pin） |
-| P4 | Deploy revision ≠ research tip alone（tagged release / signed commit） | **MISSING** |
-| P5 | Brokerage/runtime contract distinct from CTA backtest fill_binding | **MISSING** |
+| # | Artifact | Status after `DID_CID_002_V0_1` |
+|---|----------|----------------------------------|
+| P1 | Immutable build artifact ID（wheel/container digest） | **PARTIAL**（content-addressed source+lock set · not image） |
+| P2 | Full dependency lockfile | **CLOSED**（`requirements.lock`） |
+| P3 | Runtime image or reproducible env cert | **PARTIAL**（host attestation only） |
+| P4 | Deploy revision ≠ research tip alone | **PARTIAL**（delivery commit · not signed tag） |
+| P5 | Brokerage/runtime contract ≠ backtest fills | **DRAFT**（`LRC-CID_002-v0.1-DRAFT`） |
 
 ```text
-EI_CID_002_V0_2 freezes the checklist.
-Satisfying P1–P5 requires separate delivery auth + evidence.
+See STRATEGY_DEPLOY_IDENTITY_DELIVERY_CID_002.md
+Production Bindable still WITHHELD.
 ```
 
 ## 4. Runtime contract（unchanged research path）
@@ -73,26 +73,15 @@ Production path MUST NOT silently reuse backtest fill_binding as live truth.
 ## 5. Closure verdict（R-EI）
 
 ```text
-R-EI documentary spec:     CLOSED（this freeze）
-R-EI production satisfaction: OPEN（P1–P5 missing）
+R-EI documentary spec:        CLOSED（EI_CID_002_V0_2）
+R-EI production satisfaction: PARTIAL（DID_CID_002_V0_1 · P2 closed · others partial/draft）
 Production Bindable:          STILL WITHHELD
-```
-
-## Explicit non-grants
-
-```text
-❌ Production Bindable / Production Readiness
-❌ Deploy certificate
-❌ Alpha / E4 / live trading
-❌ RISK/MECH Verified upgrade
-❌ Observation / backtest
 ```
 
 ## Next（须另授）
 
 ```text
-Deliver P1–P5 under a Deploy Identity Delivery auth
-  — OR — remain paused（recommended after Epoch 6 Pause）
+Container digest · LRC freeze · RISK OOS E3 · or remain paused
 ```
 
 ## Revision record
@@ -100,3 +89,4 @@ Deliver P1–P5 under a Deploy Identity Delivery auth
 | Date | Change |
 |------|--------|
 | 2026-07-23 | EI_CID_002_V0_2 FROZEN · Production MUST checklist |
+| 2026-07-23 | Linked DID_CID_002_V0_1 PARTIAL delivery |

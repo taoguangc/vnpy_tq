@@ -55,10 +55,9 @@ Production Bindable Re-review would still WITHHOLD.
 ## Next（须新授权）
 
 ```text
-Authorize RISK capital OOS Fill（E3）
-  — OR — Authorize Deploy Identity Delivery（P1–P5）
-  — OR — Authorize Production Bindable Re-review（expect WITHHOLD until P1–P5）
-  — OR — remain paused
+DONE（2026-07-23 wake）: Deploy Identity Delivery → DID_CID_002_V0_1 PARTIAL
+Still open: container digest · LRC freeze · RISK OOS E3
+Default: remain paused
 ```
 
 ## Revision record

@@ -1,0 +1,50 @@
+{
+  "artifact_set_id": "DID_CID_002_V0_1_ARTIFACT_SET",
+  "kind": "content_addressed_source_and_lock_bundle",
+  "not_a_container_image": true,
+  "python": "3.13.13",
+  "platform": "Windows-10-10.0.19044-SP0",
+  "files": [
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy.py",
+      "sha256": "5cdc3c4fa47e70ae524e3225cbce04787341f227f0c47ad7d9fc95fccb3dfaef",
+      "bytes": 8420
+    },
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy_v011.py",
+      "sha256": "dec3b51eb326e3bfeb9930752fb945aee9275f58375bee1dc48b7d58843b2bd5",
+      "bytes": 1470
+    },
+    {
+      "path": "strategies/paaf/brooks_scalp_paaf_strategy_v020.py",
+      "sha256": "3723f01a24b139495587744b77f4b031751926e1fbca2c588b4c8347c9e79b1c",
+      "bytes": 8631
+    },
+    {
+      "path": "strategies/paaf/detectors/brooks_scalp_first_pullback.py",
+      "sha256": "3ffd6a027d92a914e438ccc0e6cc797aa319c9d2a79ec779a29fc74ec8126fad",
+      "bytes": 10919
+    },
+    {
+      "path": "strategies/paaf/cxsd/__init__.py",
+      "sha256": "31e2bd3df75099ebc0c4e6a3ab00b8ce208dcee6c9509651c8eee46008dca959",
+      "bytes": 1258
+    },
+    {
+      "path": "strategies/paaf/context_consumer/brooks_scalp_ctx_filter_v011.py",
+      "sha256": "12188957912dfd2a7b7931e0176ee8b7023c9cd51354a6dd4f4ea134aa8fee26",
+      "bytes": 4234
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "53a3f3f5b2fafb7e7da2f4df5f7944e7ea5a2f183a326893b02fb6f0cec35530",
+      "bytes": 121
+    },
+    {
+      "path": "requirements.lock",
+      "sha256": "2880f5673b96e0df47a66b3d10839b3fe1f09bf53a243bcee2f45dc0545a0dc8",
+      "bytes": 2872
+    }
+  ],
+  "artifact_set_hash": "708281e652495df452948f896dc80e0ab249031bac9735ab7c45d1a18b6458c1"
+}
