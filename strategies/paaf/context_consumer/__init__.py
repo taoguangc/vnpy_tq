@@ -1,1 +1,1 @@
-"""Context consumer adapters for Bindable CID_002 experiments."""
+"""Context consumer adapters for Bindable research assets（CID_002 / CID_003）."""

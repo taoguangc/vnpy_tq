@@ -54,6 +54,12 @@ FORBIDDEN inside CID_003 signal path:
   Context score → sizing alpha
 ```
 
+```text
+Evidence pointer（does not amend this freeze）:
+  CTX_CID003_EXP001 KEEP — see SAR_CID_003_V1_8 / CCED_CID_003_V0_1
+  ≠ Context routing permission · ≠ Production
+```
+
 ## 4. Outcome semantics
 
 ```text
