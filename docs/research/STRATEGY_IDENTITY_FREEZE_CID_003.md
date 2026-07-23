@@ -117,8 +117,8 @@ fill_binding:         research EXPs use CEMB-v1 / docs/07 defaults at EXP regist
 ## 7. Next（须另授）
 
 ```text
-Authorize SEVF Specification for CID_003
-  — OR — Authorize SEVF Fill for first H_MECH EXP（if Spec bundled）
+DONE: SEVF Specification SEVF_SPEC_CID_003_V0_1
+Next: Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP001（H_MECH）
 ```
 
 ## Revision record

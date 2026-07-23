@@ -149,8 +149,8 @@ CID_002 RISK Verified does not transfer to CID_003.
 ## 9. Next（须另授 · pick）
 
 ```text
-DONE: Strategy Identity Freeze SIF_CID_003_V0_1
-Next: Authorize SEVF Specification for CID_003
+DONE: Identity Freeze · SEVF Spec
+Next: Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP001（H_MECH）
 ```
 
 ## Revision record
