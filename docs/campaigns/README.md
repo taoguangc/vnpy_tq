@@ -2,17 +2,16 @@
 
 ```text
 CID_003–012: PAUSED · Alpha NONE
-Beyond-opp posture: RPP_BEYOND_OPP_V0_1（R1 · R2）
-CID_013: NOT opened
-Delegation-25BA: STOP（third bare grant ≠ A–E）
+Beyond-opp posture: RPP_BEYOND_OPP_V0_1（R1–R3）
+Delegation-25BB: STOP（bare #4 ≠ A–E）
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
+| Posture R3 | [RETAINED](../research/STRATEGY_POSTURE_BEYOND_OPP_REAFFIRMATION_25BB.md) |
 | Posture R2 | [RETAINED](../research/STRATEGY_POSTURE_BEYOND_OPP_REAFFIRMATION_25BA.md) |
-| Posture R1 | [RETAINED](../research/STRATEGY_POSTURE_BEYOND_OPP_REAFFIRMATION_25AZ.md) |
 | Beyond-opp posture | [RPP](../research/STRATEGY_POSTURE_BEYOND_OPP_SHELF.md) |
 | Portfolio Pause reaffirm | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_REAFFIRMATION_003_012_25AY.md) |
 | CID_012 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_012.md) |
