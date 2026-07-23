@@ -118,7 +118,7 @@
 | [research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md](research/CAP_CTX_001_RUN002_EXECUTION_REPORT.md) | RUN002 Observation **COMPLETE** — SUPPORTED → STRENGTHEN（Action only） |
 | [research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md](research/CAP_CTX_001_RUN002_EVIDENCE_REVIEW.md) | RUN002 Evidence Review **PASS** · SUPPORTED |
 | [research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md](research/CAP_CTX_001_PRE_REGISTRATION_FILL_PROPOSAL.md) | Fill Proposal v0.2 — **Confirmation PASS** |
-| [campaigns/README.md](campaigns/README.md) | Epoch 6 RT **CLOSED** · Epoch 7 **POSITIONED** · Production WITHHELD |
+| [campaigns/README.md](campaigns/README.md) | Epoch 6.5 Alpha Evidence **ACTIVE**（Design）· Epoch 7 deferred |
 
 | [research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md](research/STRATEGY_RESEARCH_PHASE_AUTHORIZATION.md) | Strategy Research Phase — **GRANTED** ✓ |
 | [research/STRATEGY_ASSET_CONTRACT_DESIGN.md](research/STRATEGY_ASSET_CONTRACT_DESIGN.md) | Strategy Asset Contract Design — **CONFIRMED** v0.1 |
