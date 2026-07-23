@@ -1,22 +1,22 @@
-# Strategy Asset Review — CID_005（V0.3 · H_MECH KEEP）
+# Strategy Asset Review — CID_005（V0.4 · H_EDGE HOLD）
 
-> **Review ID**: `SAR_CID_005_V0_3`  
+> **Review ID**: `SAR_CID_005_V0_4`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25U STOP
+> **Authorization**: Delegation-25V STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_005_V0_3
+SAR_CID_005_V0_4
 
-Identity: STRAT_REV_OPP17_01@0.1.0 FROZEN
-H_MECH:   EXP001 KEEP（rb/2024 · attributed=35）
-H_EDGE:   NOT STARTED
+Identity: STRAT_REV_OPP17_01@0.1.0
+H_MECH:   EXP001 KEEP（rb/2024 · n=35）
+H_EDGE:   EXP002 HOLD（n_gate=32 < 50）
 Alpha:    NONE
 Bindable: NO
 CID_003 / CID_004: PAUSED
-Delegation-25U: STOP
+Delegation-25V: STOP
 ================================================
 ```
 
@@ -24,22 +24,22 @@ Delegation-25U: STOP
 
 | Item | Status |
 |------|--------|
-| SEVF Spec | [SPEC](STRATEGY_SEVF_SPECIFICATION_CID_005.md) |
-| EXP001 Fill | [KEEP](STRATEGY_SEVF_FILL_CID_005_EXP001.md) |
-| ER | [PASS](STRATEGY_SEVF_EVIDENCE_REVIEW_CID_005_EXP001.md) |
-| Delegation-25U | [STOP](STRATEGY_DELEGATION_25U_EXECUTION_LOG.md) |
+| EXP001 | [KEEP](STRATEGY_SEVF_FILL_CID_005_EXP001.md) |
+| EXP002 | [HOLD](STRATEGY_SEVF_FILL_CID_005_EXP002.md) |
+| Delegation-25V | [STOP](STRATEGY_DELEGATION_25V_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-H_EDGE diagnostic Fill（recommended · early falsification）
-  — OR — H_MECH OOS/multi-symbol（mechanism only）
-NOT: claim Alpha from H_MECH · parameter shopping
+H_EDGE multi-year sample EXP（same gates · new experiment_id）recommended
+  — OR — Pause CID_005
+  — OR — H_MECH OOS（mechanism only）
+NOT: lower MIN_N · retune climax_range_atr · claim Alpha
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V0.2 Identity FROZEN · 25T STOP |
 | 2026-07-23 | V0.3 EXP001 H_MECH KEEP · 25U STOP |
+| 2026-07-23 | V0.4 EXP002 H_EDGE HOLD · 25V STOP |
