@@ -34,8 +34,8 @@ CID_002–007: NOT forks · Alpha paths remain CLOSED / PAUSED
 |-------|--------------|
 | `strategy_id` | `STRAT_TREND_OPP02_01` |
 | `version` | `0.1.0` |
-| `source_revision` | *(binding commit; set on first binding commit)* |
-| `git_anchor_head` | *(same as source_revision)* |
+| `source_revision` | `81c90b4d6e20fa560c4b5052cf6af8eeb2b5c8d3`（binding bytes first committed） |
+| `git_anchor_head` | `81c90b4d6e20fa560c4b5052cf6af8eeb2b5c8d3` |
 | `source_manifest` | §2 |
 | `source_hash` | `c6e47760e11290b171aec8d50c7f727606ed5df147ecb6eaa3b660fa62de9f99` |
 | `parameter_manifest` | §3 |
@@ -101,10 +101,11 @@ rollover:             on_rollover_adjust
 ❌ Bit-identical pa_cta OPP02 claim · BROOKS identity merge
 ```
 
-## 6. Next（须另授 / in-grant Observation）
+## 6. Next（须另授）
 
 ```text
-SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
+DONE: STRAT_TO02_EXP001 H_MECH KEEP（rb/2024 · attributed=2834）
+Next: H_EDGE diagnostic Fill · OR · H_MECH OOS/multi-symbol · OR · Pause
 ```
 
 ## Revision record
@@ -112,3 +113,5 @@ SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_008_V0_1 FROZEN · Delegation-25AJ |
+| 2026-07-23 | `source_revision` → `81c90b4d6e20fa560c4b5052cf6af8eeb2b5c8d3` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25AJ |

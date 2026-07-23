@@ -1,22 +1,25 @@
-# Campaigns pointer — CID_003–007 PAUSED · CID_008 DESIGNED
+# Campaigns pointer — CID_003–007 PAUSED · CID_008 H_MECH KEEP
 
 ```text
 CID_003–007: PAUSED · Alpha NONE
-CID_008: NSAD DESIGNED（OPP02 EMA pullback）· no Freeze / no code
-Delegation-25AI: STOP
+CID_008: Candidate · H_MECH KEEP（STRAT_TO02_EXP001 · n=2834）· Alpha NONE
+Delegation-25AJ: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
+| CID_008 SIF | [FROZEN](../research/STRATEGY_IDENTITY_FREEZE_CID_008.md) |
+| CID_008 EXP001 | [KEEP](../research/STRATEGY_SEVF_FILL_CID_008_EXP001.md) |
+| CID_008 SAR | [V0.2](../research/STRATEGY_ASSET_REVIEW_CID_008.md) |
 | CID_007 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_007.md) |
-| CID_008 NSAD | [DESIGNED](../research/STRATEGY_NEW_ASSET_DESIGN_CID_008.md) |
-| CID_008 SAR | [V0.1](../research/STRATEGY_ASSET_REVIEW_CID_008.md) |
 
 ## Wake（须明确授权）
 
 ```text
-Authorize Identity Freeze for CID_008
+Authorize H_EDGE diagnostic for CID_008 / STRAT_TO02_EXP002
+Authorize H_MECH multi-symbol / OOS for CID_008
+Pause CID_008
 Resume CID_003–007（scoped）
 ```
