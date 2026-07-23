@@ -78,7 +78,7 @@ H_EDGE:
 
 | Planned ID | Role | Note |
 |------------|------|------|
-| `STRAT_BS02_EXP013` | H_EDGE diagnostic（rb/2024） | **PRE-REGISTERED** · Observation NOT authorized |
+| `STRAT_BS02_EXP013` | H_EDGE diagnostic（rb/2024） | **CLOSED · REVERT**（negative evidence） |
 | `STRAT_BS02_EXP014` | H_EDGE temporal check | reserved |
 | `STRAT_BS02_EXP015` | H_EDGE multi-symbol | reserved |
 | `STRAT_BS02_EXP016+` | Cost sensitivity | reserved |

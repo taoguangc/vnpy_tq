@@ -143,7 +143,13 @@ def main() -> int:
     mfe_vals = [float(item.get("mfe_ticks") or 0.0) for item in log_rows]
     mae_vals = [float(item.get("mae_ticks") or 0.0) for item in log_rows]
 
-    round_trips = pair_round_trips(engine.get_all_trades(), size=10, capital=200_000)
+    round_trips = pair_round_trips(
+        engine.get_all_trades(),
+        size=10,
+        rate=0.00003,
+        slippage=1.0,
+        capital=200_000,
+    )
     rt_in_window = [trip for trip in round_trips if _in_window(trip.exit_time)]
     net_pnls = [float(trip.net_pnl) for trip in rt_in_window]
     n = len(net_pnls)

@@ -1,24 +1,21 @@
-# Campaigns pointer — EXP013 Fill ready
+# Campaigns pointer — EXP013 H_EDGE REVERT
 
 ```text
-Epoch 6.5:     ACTIVE
-EXP013 H_EDGE: PRE-REGISTERED
-Observation:   waiting authorization
-Alpha:         NONE
+EXP013 H_EDGE rb/2024: REVERT（negative evidence retained）
+H_MECH Verified:       unchanged
+Alpha Candidate:       NOT admitted
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Fill | [PRE-REGISTERED](../research/STRATEGY_SEVF_FILL_CID_002_EXP013.md) |
-| Design | [EXP013](../research/STRATEGY_SEVF_DESIGN_CID_002_EXP013.md) |
-| AERD | [AERD](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_DESIGN_CID_002.md) |
-| Runner | `scripts/run_strat_bs02_exp013.py`（do not run without Observation auth） |
-| Asset Review | [SAR_CID_002_V0_38](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
+| Evaluation | [REVERT](../research/STRATEGY_SEVF_EVALUATION_CID_002_EXP013.md) |
+| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_002_EXP013.md) |
+| Asset Review | [SAR_CID_002_V0_39](../research/STRATEGY_ASSET_REVIEW_CID_002.md) |
 
 ## Next（须新授权）
 
 ```text
-Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
+EXP014 temporal H_EDGE · pause Alpha path · or new asset Design
 ```

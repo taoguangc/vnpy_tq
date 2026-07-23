@@ -8,19 +8,18 @@
 > **Design**: [`STRATEGY_SEVF_DESIGN_CID_002_EXP013.md`](STRATEGY_SEVF_DESIGN_CID_002_EXP013.md)  
 > **Parent design**: [`STRATEGY_ALPHA_EVIDENCE_RESEARCH_DESIGN_CID_002.md`](STRATEGY_ALPHA_EVIDENCE_RESEARCH_DESIGN_CID_002.md) · `AERD_CID_002_V0_1`  
 > **Identity**: `SIF_CID_002_V0_1_1` · `@0.1.1` · surface **MECH**  
-> **Observation**: **NOT AUTHORIZED** by this Fill
+> **Observation**: **EXECUTED** · Evaluation **REVERT** · see [`STRATEGY_SEVF_EVALUATION_CID_002_EXP013.md`](STRATEGY_SEVF_EVALUATION_CID_002_EXP013.md)
 
 ## Record
 
 ```text
 ================================================
-STRAT_BS02_EXP013 — PRE-REGISTERED ✓
+STRAT_BS02_EXP013 — PRE-REGISTERED ✓ · OBSERVATION CLOSED
 
 Hypothesis family: H_EDGE（diagnostic screen）
-Scope:             rb · 2024（continuity with EXP001/002 forming year）
-Identity:          @0.1.1 frozen hashes
-Observation:       NOT YET AUTHORIZED
-Alpha Candidate:   NOT CLAIMABLE from this EXP alone
+Scope:             rb · 2024
+Observation:       EXECUTED 2026-07-23 → REVERT
+Alpha Candidate:   NOT CLAIMABLE
 ================================================
 ```
 
@@ -191,8 +190,8 @@ Running this script requires:
 ## Next（须另授）
 
 ```text
-Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
-  — OR — revise Fill decision rules before run
+DONE: Observation EXP013 → REVERT（negative evidence retained）
+Next: EXP014 temporal H_EDGE · or pause Alpha path · or new asset
 ```
 
 ## Revision record
@@ -200,3 +199,4 @@ Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP013
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED under SEVF Fill auth |
+| 2026-07-23 | Observation CLOSED · REVERT |
