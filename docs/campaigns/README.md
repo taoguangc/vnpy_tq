@@ -1,24 +1,23 @@
-# Campaigns pointer — STRAT_RO16_EXP002 KEEP
+# Campaigns pointer — CID_003 Alpha path CLOSED
 
 ```text
-EXP001 @0.1.0:         HOLD · IMMUTABLE
-EXP002 @0.1.1 H_MECH:  KEEP（rb/2024 · 1920 attributed exits）
-Lifecycle:             Testing
-Verified / Bindable:   NO / NO
-Alpha:                 NONE
+H_MECH EXP002:         KEEP（rb/2024 @0.1.1）
+H_EDGE EXP003+EXP004:  REVERT · REVERT
+Alpha:                 NONE · path CLOSED
+Lifecycle:             Testing（mechanism）· not Verified/Bindable
+Delegation-20:         STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
-| Evaluation | [KEEP](../research/STRATEGY_SEVF_EVALUATION_CID_003_EXP002.md) |
-| Evidence Review | [PASS](../research/STRATEGY_SEVF_EVIDENCE_REVIEW_CID_003_EXP002.md) |
-| Asset Review | [SAR_CID_003_V0_9](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
-| Artifacts | `research/output/evidence/STRAT_RO16_EXP002/`（local） |
+| Alpha Closure | [CLOSED](../research/STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_003.md) |
+| Asset Review | [SAR_CID_003_V1_0](../research/STRATEGY_ASSET_REVIEW_CID_003.md) |
+| Delegation-20 | [STOP](../research/STRATEGY_DELEGATION_20_CID_003_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-Next SEVF Fill（OOS / H_EDGE / H_ROBUST）· or Pause CID_003
+mechanism multi-symbol · new asset · or Pause
 ```
