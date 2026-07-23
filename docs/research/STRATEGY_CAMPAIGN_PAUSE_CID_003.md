@@ -68,3 +68,4 @@ Authorize Production Bindable Re-review（after residual work）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | CID_003 PAUSED under Delegation-25L |
+| 2026-07-23 | Reaffirmed PAUSED · `CPD_CID_003_V0_1_R1`（Delegation-25M） |
