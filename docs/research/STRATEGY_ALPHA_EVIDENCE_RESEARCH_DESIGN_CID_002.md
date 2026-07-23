@@ -79,7 +79,7 @@ H_EDGE:
 | Planned ID | Role | Note |
 |------------|------|------|
 | `STRAT_BS02_EXP013` | H_EDGE diagnostic（rb/2024） | **CLOSED · REVERT**（negative evidence） |
-| `STRAT_BS02_EXP014` | H_EDGE temporal OOS（rb/2025） | **PRE-REGISTERED** · completeness not rescue |
+| `STRAT_BS02_EXP014` | H_EDGE temporal OOS（rb/2025） | **CLOSED · REVERT**（with EXP013 → temporal negative chain） |
 | `STRAT_BS02_EXP015` | H_EDGE multi-symbol | reserved |
 | `STRAT_BS02_EXP016+` | Cost sensitivity | reserved |
 
@@ -146,9 +146,10 @@ When reporting edge:
 ## Next（须另授）
 
 ```text
-DONE: EXP013 Observation → REVERT
-Next: EXP014 temporal · pause Alpha · or new asset
-Do NOT petition Alpha Candidate from EXP013
+DONE: EXP013 REVERT retained · EXP014 Fill PRE-REGISTERED（OOS completeness）
+Next: Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP014
+Then fork: close Alpha research · new asset · or portfolio（only if warranted）
+NOT: Production · CSD · rescue retune
 ```
 
 ## Revision record

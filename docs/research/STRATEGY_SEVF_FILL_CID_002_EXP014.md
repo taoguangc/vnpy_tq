@@ -9,20 +9,19 @@
 > **Parent design**: `AERD_CID_002_V0_1`  
 > **Prior Closed**: `STRAT_BS02_EXP013` · H_EDGE rb/2024 · **REVERT**（immutable）  
 > **Identity**: `SIF_CID_002_V0_1_1` · `@0.1.1` · surface **MECH**  
-> **Observation**: **NOT AUTHORIZED** by this Fill
+> **Observation**: **EXECUTED** · Evaluation **REVERT** · see [`STRATEGY_SEVF_EVALUATION_CID_002_EXP014.md`](STRATEGY_SEVF_EVALUATION_CID_002_EXP014.md)
 
 ## Record
 
 ```text
 ================================================
-STRAT_BS02_EXP014 — PRE-REGISTERED ✓
+STRAT_BS02_EXP014 — PRE-REGISTERED ✓ · OBSERVATION CLOSED
 
-Hypothesis family: H_EDGE_OOS（temporal completeness · not rescue）
+Hypothesis family: H_EDGE_OOS
 Scope:             rb · 2025
-Identity:          identical to EXP013（@0.1.1）
-Gates:             identical to EXP013（no metric change）
-Observation:       NOT YET AUTHORIZED
-Alpha Candidate:   NOT CLAIMABLE from KEEP alone
+Observation:       EXECUTED 2026-07-23 → REVERT
+Prior EXP013:      REVERT retained
+Alpha Candidate:   NOT ESTABLISHED
 ================================================
 ```
 
@@ -148,7 +147,9 @@ NOT: Production · CSD
 ## Next（须另授）
 
 ```text
-Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP014
+DONE: Observation EXP014 → REVERT
+Temporal H_EDGE chain（rb 2024+2025）: both REVERT
+Fork: Close Alpha Research · or New Asset Design
 ```
 
 ## Revision record
@@ -156,3 +157,4 @@ Authorize Offline Alpha Evidence Observation for STRAT_BS02_EXP014
 | Date | Change |
 |------|--------|
 | 2026-07-23 | PRE-REGISTERED · OOS completeness framing |
+| 2026-07-23 | Observation CLOSED · REVERT |
