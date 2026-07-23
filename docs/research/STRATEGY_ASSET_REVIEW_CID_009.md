@@ -1,27 +1,26 @@
-# Strategy Asset Review — CID_009（V0.2 · H_MECH KEEP）
+# Strategy Asset Review — CID_009（V0.3 · PAUSED · Alpha NONE）
 
-> **Review ID**: `SAR_CID_009_V0_2`  
+> **Review ID**: `SAR_CID_009_V0_3`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-25AM STOP
+> **Authorization**: Delegation-25AN STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_009_V0_2
+SAR_CID_009_V0_3
 
-Campaign:     ACTIVE Candidate
+Campaign:     PAUSED
 Identity:     SIF_CID_009_V0_1 · STRAT_REV_OPP15_01@0.1.0
-Detector:     OPP15@1.0.0 · OPP15_MS_V0_1（Path A only）
-source_hash:  1b0f5858d8d22371906085cdf974b8378e60d6bdb8c3924a509bfce62e9cb8a1
-parameter_hash: 960b1ae8abdf5011f6d7977bf99c4bae7a8f8264721afca0488e687b539af9f6
+Detector:     OPP15@1.0.0 · OPP15_MS_V0_1
 binding tip:  8e3acd15b953ef8d3f8640e21711d4265e42abc8
 
-H_MECH: STRAT_RO15_EXP001 KEEP（rb/2024 · attributed=435）
-H_EDGE: NOT STARTED
-Alpha:  NONE
+H_MECH: STRAT_RO15_EXP001 KEEP（rb/2024 · n=435）
+H_EDGE: EXP002 REVERT · EXP003 OOS REVERT
+Alpha:  NONE（AERC_CID_009_V0_1 CLOSED）
+Pause:  CPD_CID_009_V0_1
 CID_003–008: PAUSED
-Delegation-25AM: STOP
+Delegation-25AN: STOP
 ================================================
 ```
 
@@ -29,17 +28,19 @@ Delegation-25AM: STOP
 
 | Item | Status |
 |------|--------|
-| SIF | [FROZEN](STRATEGY_IDENTITY_FREEZE_CID_009.md) |
-| EXP001 | [KEEP](STRATEGY_SEVF_FILL_CID_009_EXP001.md) |
-| Delegation-25AM | [STOP](STRATEGY_DELEGATION_25AM_EXECUTION_LOG.md) |
+| Pause | [CPD](STRATEGY_CAMPAIGN_PAUSE_CID_009.md) |
+| AERC | [NONE](STRATEGY_ALPHA_EVIDENCE_RESEARCH_CLOSURE_CID_009.md) |
+| EXP002 | [REVERT](STRATEGY_SEVF_FILL_CID_009_EXP002.md) |
+| EXP003 | [REVERT](STRATEGY_SEVF_FILL_CID_009_EXP003.md) |
+| Delegation-25AN | [STOP](STRATEGY_DELEGATION_25AN_EXECUTION_LOG.md) |
 
 ## Next（须新授权）
 
 ```text
-H_EDGE diagnostic Fill · STRAT_RO15_EXP002（SAME gates as prior AERC）
-  — OR — H_MECH multi-symbol / OOS
-  — OR — Pause CID_009
-NOT: Alpha from H_MECH · Path B'/MTF expand · Resume CID_003–008 as substitute
+Authorize new strategy asset design
+  — OR — Resume CID_003–009（scoped）
+  — OR — leave all paused
+NOT: H_EDGE retune · Path B' rescue · claim Alpha from H_MECH · auto-Resume
 ```
 
 ## Revision record
@@ -47,4 +48,5 @@ NOT: Alpha from H_MECH · Path B'/MTF expand · Resume CID_003–008 as substitu
 | Date | Change |
 |------|--------|
 | 2026-07-23 | V0.1 NSAD DESIGNED |
-| 2026-07-23 | V0.2 H_MECH KEEP · 25AM STOP |
+| 2026-07-23 | V0.2 H_MECH KEEP |
+| 2026-07-23 | V0.3 AERC NONE · PAUSED · 25AN STOP |

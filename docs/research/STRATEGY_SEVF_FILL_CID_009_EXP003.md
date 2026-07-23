@@ -1,0 +1,31 @@
+# SEVF Fill — STRAT_RO15_EXP003（H_EDGE OOS）
+
+> **Status**: **CLOSED** ✓ · Observation **COMPLETE** · Outcome **REVERT**  
+> **Experiment ID**: `STRAT_RO15_EXP003`  
+> **Authorization**: Delegation-25AN  
+> **Eval**: [`STRATEGY_SEVF_EVALUATION_CID_009_EXP003.md`](STRATEGY_SEVF_EVALUATION_CID_009_EXP003.md)  
+> **ER**: [`STRATEGY_SEVF_EVIDENCE_REVIEW_CID_009_EXP003.md`](STRATEGY_SEVF_EVIDENCE_REVIEW_CID_009_EXP003.md)  
+> **Machine**: `research/output/evidence/STRAT_RO15_EXP003/`
+
+## Record
+
+```text
+================================================
+STRAT_RO15_EXP003 — CLOSED · REVERT
+
+Hypothesis:     H_EDGE temporal OOS
+Identity:       STRAT_REV_OPP15_01@0.1.0
+Scope:          rb · 2025
+n_gate:         398
+share≈0.399 · mean_net≈−28.5 · p_one≈1.0
+Alpha claim:    NONE
+H_MECH KEEP:    RETAINED
+================================================
+```
+
+## Revision record
+
+| Date | Change |
+|------|--------|
+| 2026-07-23 | PRE-REGISTERED |
+| 2026-07-23 | CLOSED · REVERT |
