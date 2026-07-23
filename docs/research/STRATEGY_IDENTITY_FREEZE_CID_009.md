@@ -107,10 +107,11 @@ rollover:             on_rollover_adjust + detector.adjust_levels
 ❌ Bit-identical pa_cta OPP15 claim
 ```
 
-## 6. Next
+## 6. Next（须另授）
 
 ```text
-SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
+DONE: STRAT_RO15_EXP001 H_MECH KEEP（rb/2024 · attributed=435）
+Next: H_EDGE diagnostic Fill · OR · H_MECH OOS/multi-symbol · OR · Pause
 ```
 
 ## Revision record
@@ -118,3 +119,5 @@ SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_009_V0_1 FROZEN · Delegation-25AM |
+| 2026-07-23 | `source_revision` → `8e3acd15b953ef8d3f8640e21711d4265e42abc8` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25AM |
