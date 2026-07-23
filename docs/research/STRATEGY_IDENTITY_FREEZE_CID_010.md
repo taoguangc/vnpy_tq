@@ -34,8 +34,8 @@ CID_002–009: NOT forks · Alpha paths remain CLOSED / PAUSED
 |-------|--------------|
 | `strategy_id` | `STRAT_REV_OPP13_01` |
 | `version` | `0.1.0` |
-| `source_revision` | *(set on binding commit)* |
-| `git_anchor_head` | *(same)* |
+| `source_revision` | `445b5a7ee0d61e9abd85d4560f32247312e4cea7`（binding bytes first committed） |
+| `git_anchor_head` | `445b5a7ee0d61e9abd85d4560f32247312e4cea7` |
 | `source_manifest` | §2 |
 | `source_hash` | `d20147d23918edac9d94cdea5572155dacc8375218b62c0aa4a822eac303d1de` |
 | `parameter_manifest` | §3 |
@@ -99,10 +99,11 @@ rollover:             on_rollover_adjust + detector.adjust_levels
 ❌ Double-top path under this identity
 ```
 
-## 6. Next
+## 6. Next（须另授）
 
 ```text
-SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
+DONE: STRAT_RO13_EXP001 H_MECH KEEP（rb/2024 · attributed=41）
+Next: H_EDGE diagnostic Fill · OR · H_MECH OOS/multi-symbol · OR · Pause
 ```
 
 ## Revision record
@@ -110,3 +111,5 @@ SEVF Spec → H_MECH Fill → Offline Observation（rb/2024）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | SIF_CID_010_V0_1 FROZEN · Delegation-25AP |
+| 2026-07-23 | `source_revision` → `445b5a7ee0d61e9abd85d4560f32247312e4cea7` |
+| 2026-07-23 | Lifecycle note · EXP001 KEEP · Delegation-25AP |
