@@ -34,7 +34,8 @@ CID_002/003: NOT forks · Alpha paths remain CLOSED / PAUSED
 |-------|--------------|
 | `strategy_id` | `STRAT_REV_OPP12_01` |
 | `version` | `0.1.0` |
-| `source_revision` | （pin to binding commit tip · see revision record） |
+| `source_revision` | `80e26f111d0009535ef8fa6268dda2a779036399`（binding bytes first committed） |
+| `git_anchor_head` | `80e26f111d0009535ef8fa6268dda2a779036399` |
 | `source_manifest` | §2 |
 | `source_hash` | `2efd2112a7ffd6eae70ac2761c0ba3559a07a3e0f6ef7f13ae4e35caba42de4d` |
 | `parameter_manifest` | §3 |
