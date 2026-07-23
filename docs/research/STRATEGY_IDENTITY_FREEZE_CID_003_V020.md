@@ -16,10 +16,10 @@ SIF_CID_003_V0_2_0
 
 strategy_id: STRAT_REV_OPP16_01
 version:     0.2.0
-lifecycle:   Verified（H_CAPITAL_GATE · E3）· Bindable WITHHELD · Alpha NONE
+lifecycle:   Verified（H_CAPITAL_GATE · E3）· Research Bindable（BDR_CID_003_V0_1）· Alpha NONE
 change:      risk-fraction sizing · hard_max_lots · equity kill-switch
 detector:    OPP16@1.0.0（unchanged）
-Bindable:    NO
+Bindable:    YES（Research Risk Asset · ≠ Production）
 Verified:    YES（narrow H_CAPITAL_GATE · VR_CID_003_RISK_V0_2_0）
 Alpha:       NONE
 MECH @0.1.1: UNCHANGED（Verified H_MECH · E3 retained）
@@ -102,17 +102,16 @@ rollover:             inherited on_rollover_adjust
 ## 5. Explicit non-grants
 
 ```text
-❌ H_CAPITAL_GATE KEEP / Verified（needs new EXP）
-❌ Bindable / Alpha / Production
+❌ Alpha / Production Bindable / Epoch 7
 ❌ Rewrite @0.1.1 MECH Verified package
-❌ Observation under this Freeze alone
+❌ Collapse MECH + RISK into one Alpha story
 ```
 
 ## 6. Next（须另授）
 
 ```text
-DONE: H_CAPITAL_GATE Verified E3（EXP007/008/009）
-Next: Consumer Contract / Bindable Designation · or Pause
+DONE: H_CAPITAL_GATE Verified E3 · Research Bindable（BDR_CID_003_V0_1 · RISK surface）
+Next: Context Consumer design · or Pause
 ```
 
 ## Revision record
@@ -124,3 +123,4 @@ Next: Consumer Contract / Bindable Designation · or Pause
 | 2026-07-23 | Next updated · EXP007 Fill PRE-REGISTERED |
 | 2026-07-23 | Lifecycle → Testing · EXP007 KEEP |
 | 2026-07-23 | Lifecycle → Verified H_CAPITAL_GATE E3 · Delegation-50C |
+| 2026-07-23 | Research Bindable GRANTED（RISK）· Delegation-50D |

@@ -1,22 +1,22 @@
-# Strategy Asset Review — CID_003（V1.6 · dual-surface Verified）
+# Strategy Asset Review — CID_003（V1.7 · Research Bindable GRANTED）
 
-> **Review ID**: `SAR_CID_003_V1_6`  
+> **Review ID**: `SAR_CID_003_V1_7`  
 > **Date**: 2026-07-23  
-> **Authorization**: Delegation-50C STOP
+> **Authorization**: Delegation-50D STOP
 
 ## Ledger
 
 ```text
 ================================================
-SAR_CID_003_V1_6
+SAR_CID_003_V1_7
 
-MECH @0.1.1:     Verified H_MECH · E3
-RISK @0.2.0:     Verified H_CAPITAL_GATE · E3
-EXP007/008/009:  KEEP · KEEP · KEEP
-Alpha:           NONE（path CLOSED）
-Bindable:        WITHHELD（BPR gaps · no CC yet）
-Production:      NO
-Delegation-50C:  STOP
+MECH @0.1.1:  Verified H_MECH · E3 · Research Bindable ✓
+RISK @0.2.0:  Verified H_CAPITAL_GATE · E3 · Research Bindable ✓
+Contract:     CC-CID_003-v1 FROZEN
+Pipeline:     CPA_CID_003_V0_1 ATTESTED
+Alpha:        NONE（AERC CLOSED）
+Production:   NO
+Delegation-50D: STOP
 ================================================
 ```
 
@@ -24,22 +24,23 @@ Delegation-50C:  STOP
 
 | Item | Status |
 |------|--------|
-| RISK Verified | [VR_CID_003_RISK_V0_2_0](STRATEGY_VERIFIED_REVIEW_CID_003_RISK_V020.md) |
-| MECH Verified | [VR_CID_003_MECH_V0_1_1](STRATEGY_VERIFIED_REVIEW_CID_003_MECHANISM_V011.md) |
-| EXP008/009 | [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP008.md) / [KEEP](STRATEGY_SEVF_EVALUATION_CID_003_EXP009.md) |
-| Delegation-50C | [STOP](STRATEGY_DELEGATION_50C_CID_003_EXECUTION_LOG.md) |
+| Bindable Designation | [GRANTED](STRATEGY_BINDABLE_DESIGNATION_CID_003.md) |
+| Consumer Contract | [CC-CID_003-v1](STRATEGY_CONSUMER_CONTRACT_CID_003.md) |
+| Pipeline | [CPA](STRATEGY_CONSUMPTION_PIPELINE_ATTESTATION_CID_003.md) |
+| Delegation-50D | [STOP](STRATEGY_DELEGATION_50D_CID_003_EXECUTION_LOG.md) |
 
-## Next（须新授权 · outside 50C）
+## Next（须新授权 · outside 50D）
 
 ```text
-Consumer Contract CC-CID_003-v1 · Bindable Designation Review
-  — OR — Pause
-NOT: Alpha reopen · Production · Epoch 7
+Context Consumer Experiment design（new id）
+  — OR — Production Bindable Pre-Review（仍应 WITHHOLD）
+  — OR — Pause / new asset
+NOT: H_EDGE retune · Epoch 7 without Alpha
 ```
 
 ## Revision record
 
 | Date | Change |
 |------|--------|
-| 2026-07-23 | V1.5 EXP007 KEEP |
-| 2026-07-23 | V1.6 dual-surface Verified · 50C STOP |
+| 2026-07-23 | V1.6 dual-surface Verified |
+| 2026-07-23 | V1.7 Research Bindable GRANTED · 50D STOP |

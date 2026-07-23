@@ -16,10 +16,10 @@ SIF_CID_003_V0_1_1
 
 strategy_id: STRAT_REV_OPP16_01
 version:     0.1.1
-lifecycle:   Verified（H_MECH · E3）· Bindable WITHHELD · Alpha NONE
+lifecycle:   Verified（H_MECH · E3）· Research Bindable（BDR_CID_003_V0_1）· Alpha NONE
 change:      adapter window length（_series_len / bars_from_am）
 detector:    OPP16@1.0.0（morphology unchanged）
-Bindable:    NO
+Bindable:    YES（Research Mechanism Asset · ≠ Production）
 Verified:    YES（narrow H_MECH · VR_CID_003_MECH_V0_1_1）
 Alpha:       NONE（AERC_CID_003_V0_1 CLOSED）
 EXP001@0.1.0 HOLD: IMMUTABLE（not reopened）
@@ -100,7 +100,7 @@ IS NOT: parameter search
 ## 5. Explicit non-grants
 
 ```text
-❌ Alpha / Bindable / Verified / Production / Epoch 7
+❌ Alpha / Production Bindable / Epoch 7
 ❌ H_EDGE from H_MECH KEEP alone
 ❌ CID_002 H_EDGE reopen
 ❌ Rewrite Closed EXP001
@@ -109,9 +109,8 @@ IS NOT: parameter search
 ## 6. Next（须另授）
 
 ```text
-DONE: H_MECH Verified E3（EXP002/005/006）
-DONE: Alpha path CLOSED
-Next: Bindable Pre-Review · capital lineage · new asset · or Pause
+DONE: H_MECH Verified E3 · Research Bindable（BDR_CID_003_V0_1 · MECH surface）
+Next: Context Consumer design · or Pause
 ```
 
 ## Revision record
@@ -123,3 +122,4 @@ Next: Bindable Pre-Review · capital lineage · new asset · or Pause
 | 2026-07-23 | Next updated · EXP002 Fill PRE-REGISTERED |
 | 2026-07-23 | Lifecycle → Testing · evidence_lineage EXP002 KEEP |
 | 2026-07-23 | Lifecycle → Verified H_MECH E3 · Delegation-50 |
+| 2026-07-23 | Research Bindable GRANTED（MECH）· Delegation-50D |

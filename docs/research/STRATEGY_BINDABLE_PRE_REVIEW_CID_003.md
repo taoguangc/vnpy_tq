@@ -103,34 +103,35 @@ EXP005 i: 爆仓 under size=100 × 1 lot × 200k（OPEN RISK）
 
 ## 5. Gaps blocking Bindable designation
 
-| ID | Gap | Severity |
-|----|-----|----------|
-| G1 | No RISK / positioning lineage（@0.2.0 absent） | **Blocker** for dual-surface Bindable |
-| G2 | No Consumer Contract `CC-CID_003-v*` | Blocker |
-| G3 | Open Capital Risk on continuity universe（i） | Blocker for Standalone Trading language |
-| G4 | Alpha NONE（expected · not a mech gap） | Blocks Alpha-flavored Bindable only |
-| G5 | Registry wiring（direct detector construct） | Accepted deviation（declare） |
+| ID | Gap | Severity | Status（post-50D） |
+|----|-----|----------|-------------------|
+| G1 | No RISK / positioning lineage（@0.2.0 absent） | **Blocker** for dual-surface Bindable | **CLOSED**（`SIF_CID_003_V0_2_0` · VR RISK E3） |
+| G2 | No Consumer Contract `CC-CID_003-v*` | Blocker | **CLOSED**（`CC-CID_003-v1`） |
+| G3 | Open Capital Risk on continuity universe（i） | Blocker for Standalone Trading language | **Mitigated** for research Bindable only（≠ Standalone Trading） |
+| G4 | Alpha NONE（expected · not a mech gap） | Blocks Alpha-flavored Bindable only | Unchanged · Alpha path CLOSED |
+| G5 | Registry wiring（direct detector construct） | Accepted deviation（declare） | Unchanged · declared in BDR |
 
 ## 6. Interim consumption language（authorized wording）
 
 ```text
-MAY cite as:
+MAY cite as（superseded for research Bindable by BDR_CID_003_V0_1）:
   “Verified Research Mechanism Asset（H_MECH · E3 · @0.1.1）
-   with Open Capital Risk”
+   with Open Capital Risk”  — historical Pre-Review language
 
 MUST NOT cite as:
-  Bindable trading strategy
   Alpha asset
-  capital-safe / Production-ready
-  portfolio default component
+  Production-ready / E4
+  portfolio default / Standalone Trading Asset
 ```
 
 ## 7. Decision
 
 ```text
-Bindable designation: WITHHELD
-Next engineering:     Positioning lineage design（@0.2.0）— separate review
-Implementation:       NOT authorized by this Pre-Review
+Bindable designation（this Pre-Review）: WITHHELD
+Superseding designation:               BDR_CID_003_V0_1 GRANTED
+                                       （research dual-surface · ≠ Production）
+Next engineering（at Pre-Review time）: Positioning lineage @0.2.0 — DONE
+Implementation:                        NOT authorized by this Pre-Review alone
 ```
 
 ## Revision record
@@ -138,3 +139,4 @@ Implementation:       NOT authorized by this Pre-Review
 | Date | Change |
 |------|--------|
 | 2026-07-23 | BPR_CID_003_V0_1 COMPLETE · WITHHOLD |
+| 2026-07-23 | G1/G2 CLOSED note · superseded by BDR_CID_003_V0_1（Delegation-50D） |
