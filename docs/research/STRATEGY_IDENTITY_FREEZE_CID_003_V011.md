@@ -108,7 +108,8 @@ IS NOT: parameter search
 ## 6. Next（须另授）
 
 ```text
-Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP002（H_MECH @0.1.1）
+DONE: SEVF Spec V0_1_1 + Fill STRAT_RO16_EXP002 PRE-REGISTERED
+Next: Authorize Offline Observation for STRAT_RO16_EXP002
   — OR — Pause CID_003
 ```
 
@@ -117,3 +118,5 @@ Authorize SEVF Fill / Pre-registration for STRAT_RO16_EXP002（H_MECH @0.1.1）
 | Date | Change |
 |------|--------|
 | 2026-07-23 | @0.1.1 Candidate Identity Freeze |
+| 2026-07-23 | `source_revision` → `7706213fe997189eeb9e1c9c6cfa9a4aecfd4f05` |
+| 2026-07-23 | Next updated · EXP002 Fill PRE-REGISTERED |

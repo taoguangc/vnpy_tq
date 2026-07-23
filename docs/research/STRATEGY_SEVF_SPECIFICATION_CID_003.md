@@ -228,7 +228,9 @@ New experiment_id for every Observation；never reuse Closed IDs
 
 ```text
 DONE: STRAT_RO16_EXP001 Observation → HOLD
-Next: Engineering Review · EXP002 · or pause
+DONE: Engineering Review + @0.1.1 repair（see SEVF_SPEC_CID_003_V0_1_1）
+@0.1.0 Spec: remains binding for Closed EXP001 only
+New EXPs on repair identity: use SEVF_SPEC_CID_003_V0_1_1
 ```
 
 ## Revision record
@@ -236,3 +238,4 @@ Next: Engineering Review · EXP002 · or pause
 | Date | Change |
 |------|--------|
 | 2026-07-23 | `SEVF_SPEC_CID_003_V0_1` SPECIFIED |
+| 2026-07-23 | Next pointer · repair Spec V0_1_1 / EXP002 |
