@@ -31,8 +31,8 @@ EXP001@0.1.0 HOLD: IMMUTABLE（not reopened）
 |-------|--------------|
 | `strategy_id` | `STRAT_REV_OPP16_01` |
 | `version` | `0.1.1` |
-| `source_revision` | *pin after binding commit tip* |
-| `git_anchor_head` | *same as source_revision when pinned* |
+| `source_revision` | `7706213fe997189eeb9e1c9c6cfa9a4aecfd4f05`（@0.1.1 binding + adapter repair commit） |
+| `git_anchor_head` | `7706213fe997189eeb9e1c9c6cfa9a4aecfd4f05` |
 | `source_manifest` | §2 |
 | `source_hash` | `6dee22fe6c1eaf5958defa3f94db614ece5991bdbc58abc93d281bbd7b1164b5` |
 | `parameter_manifest` | §3（unchanged vs @0.1.0） |
