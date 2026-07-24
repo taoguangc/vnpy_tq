@@ -1,16 +1,17 @@
-# Campaigns pointer — CID_003–014 PAUSED · I008 EXHAUSTED（R2）
+# Campaigns pointer — CID_003–014 PAUSED · I008 EXHAUSTED（R3）
 
 ```text
 CID_003–014: PAUSED · Alpha NONE
 CID_015: NOT opened
-I008: EXHAUSTED（V0_1 + R1 + R2 · bare ≠ A–E）
-Delegation-25BK: STOP
+I008: EXHAUSTED（V0_1 + R1–R3 · bare ≠ A–E）
+Delegation-25BL: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
+| I008 R3 | [REAFFIRM](../research/STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BL.md) |
 | I008 R2 | [REAFFIRM](../research/STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BK.md) |
 | I008 R1 | [REAFFIRM](../research/STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BJ.md) |
 | I008 posture | [EXHAUSTED](../research/STRATEGY_POSTURE_I008_RESIDUAL_EXHAUSTED.md) |
@@ -26,5 +27,5 @@ Leave shelf-exhausted posture
 ```
 
 ```text
-裸「授权你决定N次」alone ≠ 上表任一选项（R1–R2）
+裸「授权你决定N次」alone ≠ 上表任一选项（R1–R3 已记）
 ```
