@@ -11,6 +11,8 @@ CID_014 / STRAT_SMC_ZSCORE_LONG_01@0.1.0
 ## Next
 
 ```text
-Authorize NSAD_CID_015 (inventory-backed)
+See RPP_I008_EXHAUSTED_V0_1 menu（A–E）
+Authorize NSAD Setup C (explicit multi-axis)
 Resume CID_014 (scoped)
+Leave shelf-exhausted posture
 ```
