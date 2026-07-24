@@ -23,3 +23,10 @@ Authorize NSAD Setup C (explicit multi-axis)
 Authorize scoped extract from pa_minimal
 Resume CID_0XX (scoped)
 ```
+
+## 旁路设计稿（≠ 重开策略战役）
+
+| Item | Status |
+|------|--------|
+| AI 交接简报 | [2026-07-24](../research/AI_HANDOFF_PROJECT_BRIEF_2026-07-24.md) |
+| 大周期偏多 + 站上均线 20 | [草案待确认](../research/STRATEGY_CONTEXT_FILTER_SPEC_HTF_MA20_LONG_DRAFT.md) |
