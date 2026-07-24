@@ -9,7 +9,7 @@ lifecycle:   Candidate · Bindable NO · Alpha NONE
 detector:    SMC_ZSCORE_LONG@1.0.0
 source_hash: d7b250179147bf61f6b55c0197abcb8deb6bb4db1a3b987e3b12e7c55830ec14
 parameter_hash: de4e92d2e55be6526c6452ed1dbea4d11b99a9f09ea6de855980045967109836
-source_revision: (binding tip — set at STOP commit)
+source_revision: e56f3226c14a3bc34758402721cc532be42160cf
 ≠ CID_013 OB fork
 ```
 
