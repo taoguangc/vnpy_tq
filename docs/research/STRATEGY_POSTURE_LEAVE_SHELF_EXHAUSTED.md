@@ -84,3 +84,4 @@ Posture: LEAVE_SHELF_EXHAUSTED（Option E）
 |------|--------|
 | 2026-07-24 | RPP_LEAVE_SHELF_EXHAUSTED_V0_1 · Delegation-25BM · Option E |
 | 2026-07-24 | L1 bare ≠ reopen · Delegation-25BN · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BN.md` |
+| 2026-07-24 | L2 bare ≠ reopen · Delegation-25BO · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BO.md` |
