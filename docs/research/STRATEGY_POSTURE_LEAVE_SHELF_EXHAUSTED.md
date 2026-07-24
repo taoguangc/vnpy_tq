@@ -89,3 +89,4 @@ Posture: LEAVE_SHELF_EXHAUSTED（Option E）
 | 2026-07-24 | L2 bare ≠ reopen · Delegation-25BO · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BO.md` |
 | 2026-07-24 | L3 bare ≠ reopen · Delegation-25BP · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BP.md` |
 | 2026-07-24 | L4 standing · Delegation-25BQ · further bare ≠ menu-pick · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BQ.md` |
+| 2026-07-24 | Compact reaffirm · Delegation-25BR · see `STRATEGY_DELEGATION_25BR_EXECUTION_LOG.md` |
