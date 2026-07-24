@@ -1,20 +1,20 @@
 # Campaigns pointer — LEAVE（standing L4）· CID_003–014 PAUSED
 
 ```text
-Posture: LEAVE_SHELF_EXHAUSTED（standing · bare ≠ reopen · 25BR compact）
+Posture: LEAVE_SHELF_EXHAUSTED（standing · bare ≠ reopen · 25BS compact）
 CID_003–014: PAUSED · Alpha NONE
 CID_015: NOT opened
-Delegation-25BR: STOP
+Delegation-25BS: STOP
 ```
 
 ## Pointers
 
 | Item | Status |
 |------|--------|
+| 25BS compact | [STOP](../research/STRATEGY_DELEGATION_25BS_EXECUTION_LOG.md) |
 | 25BR compact | [STOP](../research/STRATEGY_DELEGATION_25BR_EXECUTION_LOG.md) |
 | Leave L4 | [STANDING](../research/STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BQ.md) |
 | Leave posture | [ACTIVE](../research/STRATEGY_POSTURE_LEAVE_SHELF_EXHAUSTED.md) |
-| CID_014 Pause | [CPD](../research/STRATEGY_CAMPAIGN_PAUSE_CID_014.md) |
 
 ## Reopen（须明确唤醒句）
 
