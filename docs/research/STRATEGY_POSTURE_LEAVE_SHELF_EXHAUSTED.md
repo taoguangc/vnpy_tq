@@ -57,7 +57,9 @@ Strategy-asset Alpha campaigns: idle until explicit reopen wake
 ```text
 Bare “授权你决定N次” while Leave is ACTIVE:
   → reaffirm Leave（do not auto-open NSAD）
-  unless a future labeled decision explicitly reverses Leave
+  → after L1–L3, further bares are standing compact reaffirmations（L4+）
+  → NOT interpreted as post-trilogy menu-pick（Leave already is Option E）
+  unless a future labeled decision explicitly reverses Leave via reopen wake
 ```
 
 ## Explicit non-grants
@@ -86,3 +88,4 @@ Posture: LEAVE_SHELF_EXHAUSTED（Option E）
 | 2026-07-24 | L1 bare ≠ reopen · Delegation-25BN · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BN.md` |
 | 2026-07-24 | L2 bare ≠ reopen · Delegation-25BO · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BO.md` |
 | 2026-07-24 | L3 bare ≠ reopen · Delegation-25BP · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BP.md` |
+| 2026-07-24 | L4 standing · Delegation-25BQ · further bare ≠ menu-pick · see `STRATEGY_POSTURE_LEAVE_REAFFIRMATION_25BQ.md` |
