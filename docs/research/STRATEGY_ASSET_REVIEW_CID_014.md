@@ -1,15 +1,16 @@
-# Strategy Asset Review — CID_014（post H_MECH）
+# Strategy Asset Review — CID_014（at Pause）
 
-> `SAR_CID_014_V0_1` · Delegation-25BG
+> `SAR_CID_014_V0_2` · Delegation-25BH
 
 ```text
 CID_014 / STRAT_SMC_ZSCORE_LONG_01@0.1.0
-  Identity FROZEN · H_MECH KEEP（n=123）· H_EDGE NOT STARTED · Alpha NONE
+  Identity FROZEN · H_MECH KEEP（n=123）
+  H_EDGE REVERT×2 · Alpha NONE · PAUSED
 ```
 
 ## Next
 
 ```text
-Authorize H_EDGE for CID_014
-Pause CID_014
+Authorize NSAD_CID_015 (inventory-backed)
+Resume CID_014 (scoped)
 ```
