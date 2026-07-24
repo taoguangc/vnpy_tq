@@ -90,3 +90,4 @@ NOT sufficient as wake alone after this posture:
 |------|--------|
 | 2026-07-24 | RPP_I008_EXHAUSTED_V0_1 DECLARED · Delegation-25BI · refuse thin NSAD_015 |
 | 2026-07-24 | R1 bare ≠ A–E · Delegation-25BJ · see `STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BJ.md` |
+| 2026-07-24 | R2 bare ≠ A–E · Delegation-25BK · see `STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BK.md` |
