@@ -92,3 +92,4 @@ NOT sufficient as wake alone after this posture:
 | 2026-07-24 | R1 bare ≠ A–E · Delegation-25BJ · see `STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BJ.md` |
 | 2026-07-24 | R2 bare ≠ A–E · Delegation-25BK · see `STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BK.md` |
 | 2026-07-24 | R3 bare ≠ A–E · Delegation-25BL · see `STRATEGY_POSTURE_I008_EXHAUSTED_REAFFIRMATION_25BL.md` |
+| 2026-07-24 | Post-R3 bare → agent **Option E** Leave · `RPP_LEAVE_SHELF_EXHAUSTED_V0_1` · Delegation-25BM |
